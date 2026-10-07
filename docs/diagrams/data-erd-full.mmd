@@ -1,0 +1,241 @@
+erDiagram
+    AUTH_USERS {
+        uuid id PK
+    }
+    AUTH_IDENTITIES {
+        uuid id PK
+        uuid user_id FK
+        text provider
+    }
+    AUTH_SESSIONS {
+        uuid id PK
+        uuid user_id FK
+    }
+    APP_USERS {
+        uuid id PK, FK
+        text account_status
+        text timezone
+        timestamptz adult_confirmed_at
+        text registration_policy_version
+        timestamptz created_at
+        timestamptz deactivated_at "nullable"
+    }
+    PROFILES {
+        uuid user_id PK, FK
+        varchar nickname
+        text avatar_key
+        timestamptz updated_at
+    }
+    GOALS {
+        uuid id PK
+        uuid owner_user_id FK
+        varchar title
+        text private_description "nullable"
+        text status
+        int revision
+        timestamptz created_at
+        timestamptz completed_at "nullable"
+        timestamptz archived_at "nullable"
+        timestamptz deleted_at "nullable"
+        timestamptz purge_after "nullable"
+    }
+    BOARDS {
+        uuid id PK
+        uuid goal_id FK
+        uuid owner_user_id FK
+        text kind
+        smallint next_target_count
+        text next_rule_code
+        uuid current_bunch_id FK "nullable"
+        int revision
+        timestamptz created_at
+    }
+    SHARED_BOARD_PROFILES {
+        uuid board_id PK, FK
+        varchar public_title
+        text public_description "nullable"
+        timestamptz updated_at
+    }
+    BUNCHES {
+        uuid id PK
+        uuid board_id FK
+        int cycle_no
+        smallint target_count
+        text rule_code
+        int valid_count
+        text progress_state
+        timestamptz created_at
+        timestamptz completed_at "nullable"
+    }
+    PRAISES {
+        uuid id PK
+        uuid board_id FK
+        uuid bunch_id FK
+        uuid actor_user_id FK "nullable after erasure"
+        uuid recipient_user_id FK
+        uuid request_receipt_id FK, UK
+        text source
+        text message "nullable"
+        date occurred_on "nullable"
+        timestamptz recorded_at
+        timestamptz cancelled_at "nullable"
+        timestamptz hidden_at "nullable"
+        timestamptz excluded_at "nullable"
+        timestamptz author_erased_at "nullable"
+    }
+    CONNECTIONS {
+        uuid id PK
+        uuid user_low_id FK
+        uuid user_high_id FK
+        text status
+        int generation
+        timestamptz created_at
+        timestamptz connected_at "nullable"
+        timestamptz disconnected_at "nullable"
+    }
+    BLOCKS {
+        uuid id PK
+        uuid blocker_user_id FK
+        uuid blocked_user_id FK
+        timestamptz created_at
+        timestamptz revoked_at "nullable"
+    }
+    CONNECTION_INVITES {
+        uuid id PK
+        uuid inviter_user_id FK
+        text link_hash UK
+        text code_hash UK
+        timestamptz expires_at
+        timestamptz redeemed_at "nullable"
+        uuid redeemed_by_user_id FK "nullable"
+        timestamptz revoked_at "nullable"
+        timestamptz created_at
+    }
+    CONNECTION_REQUESTS {
+        uuid id PK
+        uuid connection_id FK
+        uuid invite_id FK, UK
+        uuid requester_user_id FK
+        uuid approver_user_id FK
+        text status
+        timestamptz expires_at
+        timestamptz resolved_at "nullable"
+        timestamptz created_at
+    }
+    BOARD_MEMBERS {
+        uuid board_id PK, FK
+        uuid user_id PK, FK
+        uuid connection_id FK
+        int connection_generation
+        text role
+        text status
+        uuid granted_by_user_id FK
+        timestamptz granted_at
+        timestamptz revoked_at "nullable"
+    }
+    NOTIFICATIONS {
+        uuid id PK
+        uuid recipient_user_id FK
+        uuid actor_user_id FK "nullable"
+        text type
+        text dedupe_key
+        uuid praise_id FK "nullable"
+        uuid bunch_id FK "nullable"
+        uuid connection_request_id FK "nullable"
+        uuid connection_id FK "nullable"
+        timestamptz created_at
+        timestamptz read_at "nullable"
+    }
+    REQUEST_RECEIPTS {
+        uuid id PK
+        uuid actor_user_id FK "nullable after erasure"
+        text operation
+        uuid request_key
+        text input_hash "nullable after erasure"
+        text result_kind
+        uuid result_id "logical reference"
+        timestamptz created_at
+        timestamptz erased_at "nullable"
+    }
+    AUDIT_EVENTS {
+        uuid id PK
+        uuid actor_user_id FK "nullable"
+        text action
+        text result_code
+        text object_kind
+        uuid object_id "logical reference"
+        uuid request_id
+        timestamptz created_at
+    }
+    REAUTH_GRANTS {
+        uuid id PK
+        uuid user_id FK
+        uuid session_id "logical reference"
+        text scope
+        timestamptz verified_at
+        timestamptz expires_at
+        timestamptz consumed_at "nullable"
+    }
+    RATE_USAGE {
+        uuid id PK
+        uuid actor_user_id FK
+        text scope_key
+        timestamptz window_start
+        timestamptz window_end
+        int used_count
+        timestamptz updated_at
+    }
+    ACCOUNT_DELETION_REQUESTS {
+        uuid id PK
+        uuid user_id FK "nullable; unregistered or erased"
+        uuid subject_auth_user_id "logical reference"
+        text status
+        text checkpoint
+        text last_error_code "nullable"
+        timestamptz requested_at
+        timestamptz started_at "nullable"
+        timestamptz completed_at "nullable"
+    }
+
+    AUTH_USERS ||--o| APP_USERS : has_app_account
+    AUTH_USERS ||..o{ AUTH_IDENTITIES : has_identities
+    AUTH_USERS ||..o{ AUTH_SESSIONS : has_sessions
+    APP_USERS ||--o| PROFILES : has_profile
+    APP_USERS ||..o{ GOALS : owns
+    APP_USERS ||..o{ BOARDS : owns
+    GOALS ||..|{ BOARDS : has
+    BOARDS ||--o| SHARED_BOARD_PROFILES : has_public_profile
+    BOARDS ||..o{ BUNCHES : contains
+    BUNCHES o|..o| BOARDS : is_current_for
+    BOARDS ||..o{ PRAISES : receives
+    BUNCHES ||..o{ PRAISES : contains
+    APP_USERS o|..o{ PRAISES : writes
+    APP_USERS ||..o{ PRAISES : receives
+    REQUEST_RECEIPTS ||..o| PRAISES : creates_once
+    APP_USERS ||..o{ CONNECTIONS : is_low_party
+    APP_USERS ||..o{ CONNECTIONS : is_high_party
+    APP_USERS ||..o{ BLOCKS : blocks
+    APP_USERS ||..o{ BLOCKS : is_blocked
+    APP_USERS ||..o{ CONNECTION_INVITES : issues
+    APP_USERS o|..o{ CONNECTION_INVITES : redeems
+    CONNECTION_INVITES ||..o| CONNECTION_REQUESTS : opens_once
+    CONNECTIONS ||..o{ CONNECTION_REQUESTS : has_requests
+    APP_USERS ||..o{ CONNECTION_REQUESTS : requests
+    APP_USERS ||..o{ CONNECTION_REQUESTS : approves
+    CONNECTIONS ||..o{ BOARD_MEMBERS : supports
+    BOARDS ||--o{ BOARD_MEMBERS : has_members
+    APP_USERS ||--o{ BOARD_MEMBERS : participates
+    APP_USERS ||..o{ BOARD_MEMBERS : grants
+    APP_USERS ||..o{ NOTIFICATIONS : receives_news
+    APP_USERS o|..o{ NOTIFICATIONS : causes_news
+    PRAISES o|..o{ NOTIFICATIONS : is_subject
+    BUNCHES o|..o{ NOTIFICATIONS : is_subject
+    CONNECTION_REQUESTS o|..o{ NOTIFICATIONS : is_subject
+    CONNECTIONS o|..o{ NOTIFICATIONS : is_subject
+    APP_USERS o|..o{ REQUEST_RECEIPTS : owns_receipts
+    APP_USERS o|..o{ AUDIT_EVENTS : acts
+    APP_USERS ||..o{ REAUTH_GRANTS : reauthenticates
+    AUTH_SESSIONS o|..o{ REAUTH_GRANTS : logical_session_scope
+    APP_USERS ||..o{ RATE_USAGE : uses_quota
+    APP_USERS o|..o{ ACCOUNT_DELETION_REQUESTS : requests_deletion
+    AUTH_USERS o|..o{ ACCOUNT_DELETION_REQUESTS : logical_deletion_subject

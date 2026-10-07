@@ -1,0 +1,104 @@
+erDiagram
+    APP_USERS {
+        uuid id PK, FK
+    }
+    BOARDS {
+        uuid id PK
+    }
+    BUNCHES {
+        uuid id PK
+    }
+    PRAISES {
+        uuid id PK
+    }
+    CONNECTIONS {
+        uuid id PK
+        uuid user_low_id FK
+        uuid user_high_id FK
+        text status
+        int generation
+        timestamptz created_at
+        timestamptz connected_at "nullable"
+        timestamptz disconnected_at "nullable"
+    }
+    BLOCKS {
+        uuid id PK
+        uuid blocker_user_id FK
+        uuid blocked_user_id FK
+        timestamptz created_at
+        timestamptz revoked_at "nullable"
+    }
+    CONNECTION_INVITES {
+        uuid id PK
+        uuid inviter_user_id FK
+        text link_hash UK
+        text code_hash UK
+        timestamptz expires_at
+        timestamptz redeemed_at "nullable"
+        uuid redeemed_by_user_id FK "nullable"
+        timestamptz revoked_at "nullable"
+        timestamptz created_at
+    }
+    CONNECTION_REQUESTS {
+        uuid id PK
+        uuid connection_id FK
+        uuid invite_id FK, UK
+        uuid requester_user_id FK
+        uuid approver_user_id FK
+        text status
+        timestamptz expires_at
+        timestamptz resolved_at "nullable"
+        timestamptz created_at
+    }
+    BOARD_MEMBERS {
+        uuid board_id PK, FK
+        uuid user_id PK, FK
+        uuid connection_id FK
+        int connection_generation
+        text role
+        text status
+        uuid granted_by_user_id FK
+        timestamptz granted_at
+        timestamptz revoked_at "nullable"
+    }
+    NOTIFICATIONS {
+        uuid id PK
+        uuid recipient_user_id FK
+        uuid actor_user_id FK "nullable"
+        text type
+        text dedupe_key
+        uuid praise_id FK "nullable"
+        uuid bunch_id FK "nullable"
+        uuid connection_request_id FK "nullable"
+        uuid connection_id FK "nullable"
+        timestamptz created_at
+        timestamptz read_at "nullable"
+    }
+
+    APP_USERS ||..o{ BOARDS : owns
+    BOARDS ||..o{ BUNCHES : contains
+    BUNCHES o|..o| BOARDS : is_current_for
+    BOARDS ||..o{ PRAISES : receives
+    BUNCHES ||..o{ PRAISES : contains
+    APP_USERS o|..o{ PRAISES : writes
+    APP_USERS ||..o{ PRAISES : receives
+    APP_USERS ||..o{ CONNECTIONS : is_low_party
+    APP_USERS ||..o{ CONNECTIONS : is_high_party
+    APP_USERS ||..o{ BLOCKS : blocks
+    APP_USERS ||..o{ BLOCKS : is_blocked
+    APP_USERS ||..o{ CONNECTION_INVITES : issues
+    APP_USERS o|..o{ CONNECTION_INVITES : redeems
+    CONNECTION_INVITES ||..o| CONNECTION_REQUESTS : opens_once
+    CONNECTIONS ||..o{ CONNECTION_REQUESTS : has_requests
+    APP_USERS ||..o{ CONNECTION_REQUESTS : requests
+    APP_USERS ||..o{ CONNECTION_REQUESTS : approves
+    CONNECTIONS ||..o{ BOARD_MEMBERS : supports
+    BOARDS ||--o{ BOARD_MEMBERS : has_members
+    APP_USERS ||--o{ BOARD_MEMBERS : participates
+    APP_USERS ||..o{ BOARD_MEMBERS : grants
+    APP_USERS ||..o{ NOTIFICATIONS : receives_news
+    APP_USERS o|..o{ NOTIFICATIONS : causes_news
+    PRAISES o|..o{ NOTIFICATIONS : is_subject
+    BUNCHES o|..o{ NOTIFICATIONS : is_subject
+    CONNECTION_REQUESTS o|..o{ NOTIFICATIONS : is_subject
+    CONNECTIONS o|..o{ NOTIFICATIONS : is_subject

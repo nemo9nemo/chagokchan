@@ -1,0 +1,753 @@
+{
+  "version": "0.2.0",
+  "phase": "planned_not_executed",
+  "cases": [
+    {
+      "id": "TC-AUTH-001",
+      "requirement_ids": [
+        "REQ-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-001"
+      ],
+      "level": "integration",
+      "title": "최초 계정 생성과 실패 재시도",
+      "steps": [
+        "검증된 Auth A와 adult_confirmed=true·현재 registration_policy_version으로 bootstrap 수행",
+        "프로필 생성 중 오류를 주입하고 재시도",
+        "같은 UUID로 다시 수행하고 최초 확인 시각·버전을 비교"
+      ],
+      "expected": "계정·프로필 각 한 건, 부분 생성 없음, deleting 계정은 재활성화하지 않음; 최초 확인 시각·버전은 재시도로 변경되지 않음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-AUTH-002",
+      "requirement_ids": [
+        "REQ-001",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-SEC-001"
+      ],
+      "level": "integration_e2e",
+      "title": "로그인·갱신·로그아웃·동시 갱신",
+      "steps": [
+        "Google/OTP로 A 로그인",
+        "병렬 요청 중 쿠키 갱신",
+        "현재/전체 로그아웃 후 기존 JWT·쿠키로 접근"
+      ],
+      "expected": "서버 HttpOnly 쿠키 유지, 토큰 JSON 노출 없음, 로그아웃 세션의 API·직접 DB 접근 거절, 다른 기기 정책 일치",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-AUTH-003",
+      "requirement_ids": [
+        "REQ-001",
+        "REQ-010"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-001",
+        "POL-ACCOUNT-002"
+      ],
+      "level": "integration",
+      "title": "다른 사용자·만료 재인증 거절",
+      "steps": [
+        "A 세션에 B의 재인증 결과 제출",
+        "10분 초과/다른 세션 grant 제출",
+        "유효 A grant로 삭제 접수 후 재사용"
+      ],
+      "expected": "잘못된 UUID·세션·범위·만료 grant 거절, 유효 grant 한 번 소비",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-AUTH-004",
+      "requirement_ids": [
+        "REQ-001",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-AUDIENCE-001",
+        "POL-ACCOUNT-001",
+        "POL-DELETE-003"
+      ],
+      "level": "integration",
+      "title": "성인 가입 확인 우회·기록 덮어쓰기·미완료 정리 경합",
+      "steps": [
+        "신규 Google/OTP Auth 인증 후 signup_required·/signup 안내와 app_users 없음 확인",
+        "확인 전에 /me·목표·초대·연결·칭찬 API 및 직접 RPC 호출",
+        "bootstrap에서 adult_confirmed 누락/false, 이전 정책 버전, 생년월일·사용자 지정 확인 시각 등 금지 필드 전송",
+        "현재 버전과 true로 bootstrap 수행, 같은 UUID 재시도·재로그인 후 최초 확인 시각/버전 비교",
+        "공개 프로필·공유판·보낸함·소식에 확인 메타데이터가 없는지 확인",
+        "가입 취소 후 세션·임시 초대 정리, 미완료 Auth 정리와 bootstrap을 양 순서로 경합시켜 확인",
+        "정리 중 실패·재시도와 기존 active/deleting 계정이 미완료 정리 대상에서 제외되는지 확인"
+      ],
+      "expected": "확인 전 제품 접근은 거절됨. 누락/false/금지 필드는 400, 새 가입의 이전 정책 버전은 409. 성공 시 계정·프로필·서버 UTC 확인 기록 각 한 건이며 최초 값 불변. 확인 정보는 본인 전용. 정리 표시가 먼저면 bootstrap 거절, 가입이 먼저면 정리 생략하며 기존 앱 계정을 정리하지 않음.",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-GOAL-001",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-004"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-LIMIT-001"
+      ],
+      "level": "db_integration",
+      "title": "목표·판 필수 생성과 상한 경합",
+      "steps": [
+        "목표 생성 중 판 생성 실패 주입",
+        "목표당 공유판 동시 생성",
+        "상한 직전에 서로 다른 생성 요청"
+      ],
+      "expected": "부분 목표 없음, 개인판 한 개·공유판 최대 한 개, 상한 초과 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-GOAL-002",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-GOAL-002",
+        "POL-CYCLE-001"
+      ],
+      "level": "integration_e2e",
+      "title": "완료·보관·재개와 설정 revision",
+      "steps": [
+        "미완성 목표 complete/archive",
+        "칭찬 입력 시도 후 resume",
+        "오래된 revision으로 수정"
+      ],
+      "expected": "완료·보관에는 새 부여 거절, 미완성 기록 유지, 재개 때 같은 회차, revision 충돌 409",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CYCLE-001",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-004"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001",
+        "POL-PRAISE-001"
+      ],
+      "level": "db_integration",
+      "title": "개인/공유 독립 집계",
+      "steps": [
+        "A 목표 개인 7/20·공유 3/10 준비",
+        "A 셀프 칭찬",
+        "허용된 B의 공유 칭찬"
+      ],
+      "expected": "각각 개인 8/20·공유 4/10, 합산·다른 판 변경 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CYCLE-002",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-004",
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001",
+        "POL-API-001"
+      ],
+      "level": "db_concurrency",
+      "title": "중복 요청·입력 충돌·롤백",
+      "steps": [
+        "동일 키·동일 입력을 병렬 10회 전송",
+        "같은 키에 다른 본문/판 전송",
+        "칭찬·소식 생성 중 오류 주입"
+      ],
+      "expected": "하나의 praise ID·개수 증가·소식, 다른 입력 409, 실패는 전체 롤백",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CYCLE-003",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-004",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001"
+      ],
+      "level": "db_concurrency",
+      "title": "완성 직전 동시 부여와 과거 취소",
+      "steps": [
+        "현재 회차 목표보다 1알 부족",
+        "다른 키 두 요청 동시 부여",
+        "이전 회차 기록 취소"
+      ],
+      "expected": "첫 회차 완성·다음 회차 1알, 모든 입력 한 번 반영, 이전 취소가 현재 포인터/기록을 옮기지 않음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CYCLE-004",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001"
+      ],
+      "level": "db_integration",
+      "title": "설정 변경의 다음 회차 적용",
+      "steps": [
+        "현재 15/20 회차의 설정을 10으로 변경",
+        "기존 회차 완성 후 새 부여"
+      ],
+      "expected": "기존 회차 목표 20 유지, 새 회차 목표 10, 범위 밖 입력 거절",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-PRAISE-001",
+      "requirement_ids": [
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-002"
+      ],
+      "level": "integration_e2e",
+      "title": "수정·취소·숨김·제외 구분",
+      "steps": [
+        "self 문구·실천일 수정",
+        "peer 문구/타인 문구 수정 시도",
+        "숨김→숨김 해제→제외→작성자 취소 반복"
+      ],
+      "expected": "self 수정은 개수 유지, peer 편집 거절, 숨김 유지/제외 감소/취소 본문 파기, 반복 감소 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-PRAISE-002",
+      "requirement_ids": [
+        "REQ-007",
+        "REQ-009"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-002",
+        "POL-ACCESS-001"
+      ],
+      "level": "integration",
+      "title": "해제 이후 취소와 보낸함 최소 응답",
+      "steps": [
+        "B가 A에게 칭찬 후 연결 해제·차단",
+        "B 보낸함 조회와 취소",
+        "A 판 직접 조회"
+      ],
+      "expected": "B 자기 내용·취소만 허용, 현재 목표/개수/수신자 정리 정보 없음, 직접 판 조회 거절",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-TIME-001",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-007",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-TIME-001",
+        "POL-LIMIT-001"
+      ],
+      "level": "db_integration",
+      "title": "날짜·시간대·UTC 제한 경계",
+      "steps": [
+        "self 과거 365일 경계·미래 날짜 입력",
+        "peer 실천일 필드 제출",
+        "UTC 자정 전후·시간대 변경·새 과거 날짜로 요청"
+      ],
+      "expected": "정한 날짜 범위만 허용, peer 필드 거절, recorded_at·UTC 제한 버킷은 클라이언트로 바꾸지 못함",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CONNECT-001",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001"
+      ],
+      "level": "integration_e2e",
+      "title": "초대 미리보기·명시적 소비",
+      "steps": [
+        "초대 GET·QR/메신저 미리보기",
+        "유효 비밀 POST 미리보기",
+        "B가 연결 요청·A 수락"
+      ],
+      "expected": "미리보기로 소비 안 됨, 최소 nickname만, 생성 때 초대 한 번 소비, 수락으로 연결만 활성",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CONNECT-002",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-LIMIT-001"
+      ],
+      "level": "db_concurrency",
+      "title": "초대 재사용·만료·동시 역방향 요청",
+      "steps": [
+        "같은 초대 B/C 동시 소비",
+        "만료·폐기·자기 초대·이미 active 관계 시도",
+        "A/B 역방향 요청·수락 경합"
+      ],
+      "expected": "초대당 요청 한 건, 사용자쌍 대기/활성 중복 없음, 거절된 별도 초대는 불필요하게 소비 안 함",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CONNECT-003",
+      "requirement_ids": [
+        "REQ-005",
+        "REQ-006"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-CONNECT-002"
+      ],
+      "level": "db_integration",
+      "title": "거절·철회·만료·재연결",
+      "steps": [
+        "요청별 reject/cancel/expire",
+        "연결 수락·해제·재연결",
+        "옛 accept 요청 재시도·옛 member generation 사용"
+      ],
+      "expected": "종결 요청 수락 거절, 재연결 generation 한 번 증가, 옛 권한·옛 수락으로 재활성화 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-ACCESS-001",
+      "requirement_ids": [
+        "REQ-004",
+        "REQ-006",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "db_api_security",
+      "title": "객체 ID 변경·직접 RPC·RLS",
+      "steps": [
+        "C가 A 개인판/B 칭찬 ID로 API 호출",
+        "B가 연결만 있고 판 권한 없는 상태",
+        "anon/authenticated 직접 SELECT·DML·RPC·뷰 호출"
+      ],
+      "expected": "허용된 경로/필드만, 무권한 객체 동일 404, 직접 DML/임의 역할/다른 지인 본문 거절",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-ACCESS-002",
+      "requirement_ids": [
+        "REQ-006",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-002",
+        "POL-SEC-001"
+      ],
+      "level": "db_concurrency",
+      "title": "권한 회수와 부여 경합",
+      "steps": [
+        "B 부여와 member revoke/연결 해제/차단/탈퇴를 각각 동시 수행",
+        "해제 커밋 후 새 키 요청"
+      ],
+      "expected": "고정 잠금 순서로 앞선 완료 한 번만 기록, 해제 후 신규 요청 거절, deadlock/부분 반영 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-ACCESS-003",
+      "requirement_ids": [
+        "REQ-006",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001"
+      ],
+      "level": "api_contract",
+      "title": "주인/지인/보낸함 필드 비교",
+      "steps": [
+        "같은 board를 A/B 조회",
+        "주인·지인 칭찬 목록·보낸함 응답 비교"
+      ],
+      "expected": "개인 goal ID·설명·개수·다른 작성자/본문·수신자 숨김/제외 상태가 지인 응답에 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-NOTIFY-001",
+      "requirement_ids": [
+        "REQ-008",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001",
+        "POL-ACCESS-001"
+      ],
+      "level": "db_integration",
+      "title": "소식 중복·읽음·대상 접근",
+      "steps": [
+        "칭찬/완성/요청 재시도",
+        "수신자 읽음 변경과 C의 다른 소식 ID 접근",
+        "대상 삭제·권한 해제 후 원문 이동"
+      ],
+      "expected": "수신자당 소식 한 번, 회차 재완성 중복 없음, 다른 소식 거절, 끝난 대상 본문 비노출",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DELETE-001",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-010"
+      ],
+      "policy_ids": [
+        "POL-DELETE-001"
+      ],
+      "level": "db_concurrency",
+      "title": "휴지통·기한·복구·정리 경합",
+      "steps": [
+        "목표 삭제 후 일반/보낸함 조회",
+        "30일 경계 전후 restore와 purge 경합",
+        "복구 후 지인 권한 확인"
+      ],
+      "expected": "삭제 목표 일반 404, 기한 전 archived 복구·멤버 미복구, 기한 후 복구 불가, 복구/파기 중 하나만 완료",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DELETE-002",
+      "requirement_ids": [
+        "REQ-010"
+      ],
+      "policy_ids": [
+        "POL-DELETE-002",
+        "POL-ACCOUNT-002"
+      ],
+      "level": "db_integration",
+      "title": "작성자와 수신자 탈퇴 처리",
+      "steps": [
+        "B 작성자 탈퇴 요청",
+        "A가 받은 이벤트/개수 조회",
+        "A 수신자 탈퇴·B 보낸함/FK 정리 확인"
+      ],
+      "expected": "접수 커밋부터 B 접근 거절, 본문/작성자 제거·유효 이벤트 유지, A 목표 삭제 시 관련 기록 제거",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DELETE-003",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-002",
+        "POL-DELETE-003"
+      ],
+      "level": "integration",
+      "title": "삭제 checkpoint 실패 재시도",
+      "steps": [
+        "각 단계에서 DB/Auth API/원장 저장 실패 주입",
+        "작업자 반복 실행",
+        "완료 뒤 같은 요청 재실행"
+      ],
+      "expected": "먼저 접근 차단, 원장 확보 전 파기 진행 안 함, FK/계정 재활성화/중복 감소 없음, 실패 코드와 지연 관찰",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DELETE-004",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-003"
+      ],
+      "level": "staging_restore",
+      "title": "삭제 이후 백업 복원",
+      "steps": [
+        "삭제 전 백업을 외부 접근 차단 환경에 복원",
+        "독립 최신 삭제 원장 재적용",
+        "계정·목표·본문·프로필·권한 점검"
+      ],
+      "expected": "삭제 데이터가 다시 공개되지 않음, 메일 발송 없음, 원장 만료>최장 백업 보관, RPO/RTO 실측 기록",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-WEB-001",
+      "requirement_ids": [
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "api_security",
+      "title": "CSRF·Origin·형식·리다이렉트",
+      "steps": [
+        "변조/없는 CSRF·외부 Origin으로 로그인/쓰기/로그아웃",
+        "JSON 위장·외부 next 경로·OAuth 코드 재사용"
+      ],
+      "expected": "각 공격 거절, 순수 GET으로 제품 변경 없음, 허용된 동일출처 next만",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-WEB-002",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-LIMIT-001",
+        "POL-SEC-001"
+      ],
+      "level": "e2e_api",
+      "title": "입력 상한·XSS·CSP",
+      "steps": [
+        "다국어/emoji/NFC 길이 경계와 32KB 초과",
+        "스크립트·HTML을 제목/문구에 저장",
+        "CSP·frame·보안 헤더 검증"
+      ],
+      "expected": "서버/DB 길이 일치, 큰 본문 거절, 텍스트로만 렌더링, 필요한 인증/CAPTCHA 흐름 유지",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-RATE-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-003"
+      ],
+      "policy_ids": [
+        "POL-LIMIT-001",
+        "POL-TIME-001",
+        "POL-SEC-001"
+      ],
+      "level": "db_api",
+      "title": "공유 요청 제한·직접 호출·장애",
+      "steps": [
+        "여러 서버/직접 RPC에서 부여·초대·OTP 반복",
+        "유효 성공 재시도",
+        "Upstash 장애와 읽기 요청"
+      ],
+      "expected": "정한 제한 429·Retry-After, 업무 재시도 추가 소비 없음, 중요 쓰기 503·권한 유효 읽기 유지",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-CACHE-001",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "e2e_device",
+      "title": "기기 내 계정 전환·PWA 캐시",
+      "steps": [
+        "A 데이터 조회·PWA 사용",
+        "A 로그아웃 후 B 로그인·뒤로가기·화면 복귀",
+        "오프라인에서 기록 시도"
+      ],
+      "expected": "A HTML/RSC/API/초대 데이터 비노출, 공개 정적 파일만 캐시, 오프라인 전송 성공으로 표시 안 함",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-UX-001",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-002"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-002"
+      ],
+      "level": "manual_e2e",
+      "title": "접근성·오류·빈 상태",
+      "steps": [
+        "키보드·스크린리더·큰 글씨·작은 화면",
+        "동작 줄이기·알 구분 색 제거",
+        "전송 지연/실패·빈 목표·만료 초대"
+      ],
+      "expected": "제목/아이콘/숫자·목록 대안·버튼 접근 가능, 결과/오류와 다음 행동 명확, 중복 전송 방지",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-UX-002",
+      "requirement_ids": [
+        "REQ-001",
+        "REQ-005",
+        "REQ-011"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-SEC-001"
+      ],
+      "level": "manual_device",
+      "title": "인앱 브라우저 로그인·초대 복귀",
+      "steps": [
+        "실제 iOS/Android 메신저 링크",
+        "Google 실패 시 외부 브라우저/코드 대안",
+        "이메일 OTP 뒤 초대 복귀"
+      ],
+      "expected": "유효한 전체 링크/코드로 흐름 이어짐, 임시 비밀 처리 후 제거, 캡처·분석 로그에 비밀 없음",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-PERF-001",
+      "requirement_ids": [
+        "NFR-003"
+      ],
+      "policy_ids": [
+        "POL-LIMIT-001",
+        "POL-ACCESS-001"
+      ],
+      "level": "staging_load",
+      "title": "페이지·최대값·읽기/쓰기 부하",
+      "steps": [
+        "가상 100계정·목표 3개씩·칭찬 300건씩 데이터",
+        "최대 50건 커서 페이지·목표/연결 상한 화면",
+        "50 read/s·10 write/s 5분"
+      ],
+      "expected": "같은 정렬의 페이지 누락/중복 없음, 개인정보 누출 없음, p95 읽기800ms/쓰기1500ms·오류율1% 미만을 목표로 측정·차이 기록",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-OPS-001",
+      "requirement_ids": [
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-OPS-001"
+      ],
+      "level": "local_ci",
+      "title": "처음부터 설치·마이그레이션 재현",
+      "steps": [
+        "고정 Node/pnpm/잠금 파일로 설치·빌드",
+        "빈 로컬 DB에 마이그레이션·가상 데이터·필수 TC",
+        "관리 키/비밀 제외 검사"
+      ],
+      "expected": "같은 버전으로 재현, 일반 요청 관리 키 미사용, 실제 명령/결과/소스 식별자 기록",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-OPS-002",
+      "requirement_ids": [
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-OPS-001"
+      ],
+      "level": "staging_release",
+      "title": "환경 분리·배포·롤백",
+      "steps": [
+        "스테이징 별도 OAuth/SMTP/DB 설정",
+        "호환 마이그레이션 후 앱 배포·비파괴 확인",
+        "검증된 이전 앱으로 롤백"
+      ],
+      "expected": "운영 비밀 Preview 비노출, 자동 선행 Git 배포 없음, 환경·커밋·마이그레이션·배포 ID 일치",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-AUDIENCE-001",
+      "requirement_ids": [
+        "REQ-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-001",
+        "POL-AUDIENCE-001"
+      ],
+      "level": "manual_policy",
+      "title": "성인 개인 범위·가입 안내·공개 정책 일치",
+      "steps": [
+        "성인 개인 중심·한국 만 19세 이상 자기 확인 기준과 로그인/가입 안내 비교",
+        "생년월일·전화 본인확인·신분증 수집이 없고 최초 확인 시각/버전만 본인 전용으로 보관하는지 비교",
+        "처리방침·약관·지원 연락처·실제 제공자 설정과 가입 미완료 정리·계정 파기 범위 비교",
+        "확인 UI를 실제 연령·신원 검증으로 표시하거나 성인 확인으로 개인정보/약관 동의를 대체하는지 확인"
+      ],
+      "expected": "가입·수집·보관·공개 안내가 확정 정책 및 실제 설정과 일치하고 자기 선언의 의미가 정확함. 공개 약관·개인정보 관련 동의는 별도로 구성. 아동/보호자 계정은 첫 출시 범위에 없음.",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DEV-001",
+      "requirement_ids": [
+        "NFR-005",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-DEV-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_integration_e2e",
+      "title": "로그인 화면 없는 로컬 사용과 동일 업무 권한",
+      "steps": [
+        "빈 로컬 DB에 합성 Auth·앱 A/B/C와 판 권한을 준비하고 local_fixture 모드로 앱 실행",
+        "브라우저에서 로그인 입력 없이 A의 목표 작성·개인 칭찬 수행",
+        "서버 설정을 B/C로 바꾸어 같은 RPC·RLS의 허용·거절 결과 확인",
+        "요청 본문·쿼리·헤더에 다른 actor UUID를 넣고 직접 DB 변경 시도",
+        "삭제 중인 A와 폐기된 기존 로컬 세션으로 제품 데이터 접근 시도"
+      ],
+      "expected": "로그인 화면 없이 합성 A로 이용. B는 현재 허용 범위만, C·위조 actor·직접 DML·삭제 계정·폐기 세션은 거절. 서버의 가상 세션 준비는 실제 Google/OTP 인증 결과로 기록하지 않음.",
+      "status": "not_run",
+      "evidence": null
+    },
+    {
+      "id": "TC-DEV-002",
+      "requirement_ids": [
+        "NFR-005",
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DEV-001",
+        "POL-OPS-001"
+      ],
+      "level": "local_build_staging",
+      "title": "개발 인증 설정 오류·외부 DB·배포 포함 차단",
+      "steps": [
+        "local_fixture를 production/staging/preview 또는 NODE_ENV=production과 조합하여 빌드·시작 시도",
+        "인증 모드 누락/오타, 허용 목록 밖 actor, 외부 Supabase 주소·포트, 0.0.0.0 바인딩으로 실행 시도",
+        "supabase_session 배포에 가상 자격증명·로컬 사용자 경로가 연결된 경우 검사",
+        "정상 스테이징 설정에서 세션 없이 업무 API 호출하고 클라이언트 번들·응답의 가상 비밀과 토큰 검사"
+      ],
+      "expected": "허용 조건 밖 가상 모드는 빌드/시작/배포에서 실패하고 실제 인증 모드로 자동 전환하지 않음. 배포의 가상 자격증명·로컬 자동 로그인 연결은 거절. 정상 배포 무세션 요청은 401이며 비밀·토큰이 브라우저로 노출되지 않음.",
+      "status": "not_run",
+      "evidence": null
+    }
+  ],
+  "updated_on": "2026-10-08"
+}

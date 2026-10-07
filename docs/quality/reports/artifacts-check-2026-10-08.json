@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-10-07T15:09:36.637Z",
+  "status": "passed",
+  "runtime": "v24.19.0",
+  "scope": "artifact_structural_consistency_only",
+  "full_openapi_validator_executed": false,
+  "mermaid_render_executed": false,
+  "application_or_database_tests_executed": 0,
+  "planned_test_cases": 34,
+  "checks": [
+    {
+      "id": "json",
+      "description": "JSON parse",
+      "count": 6,
+      "status": "passed"
+    },
+    {
+      "id": "links",
+      "description": "Local Markdown links",
+      "count": 237,
+      "status": "passed"
+    },
+    {
+      "id": "openapi",
+      "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+      "count": 54,
+      "local_references": 691,
+      "status": "passed"
+    },
+    {
+      "id": "traceability",
+      "description": "REQ/NFR/POL/TC/API cross references",
+      "requirements": 16,
+      "policies": 19,
+      "test_cases": 34,
+      "status": "passed"
+    },
+    {
+      "id": "policy_consistency",
+      "description": "Policy/API numeric values, names, restore fields",
+      "status": "passed"
+    },
+    {
+      "id": "projection",
+      "description": "Contributor/sent fields and canceled-body schema constraints",
+      "status": "passed"
+    },
+    {
+      "id": "audience_consistency",
+      "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+      "status": "passed"
+    },
+    {
+      "id": "erd_sources",
+      "description": "Embedded/source consistency, full entities and relationship endpoints",
+      "embedded_blocks": 3,
+      "entities": 21,
+      "relationships": 42,
+      "rendered": false,
+      "status": "passed"
+    },
+    {
+      "id": "registry",
+      "description": "Existing registered artifact paths",
+      "count": 48,
+      "status": "passed"
+    }
+  ],
+  "errors": [],
+  "basis": {
+    "inputs": [
+      "AGENTS.md",
+      "contracts/openapi.json",
+      "docs/changes/2026-10-07-adult-audience.md",
+      "docs/contracts/api-contract.md",
+      "docs/data-erd.md",
+      "docs/decisions/ADR-0002-adult-personal-audience.md",
+      "docs/design/user-flows.md",
+      "docs/development/artifact-register.json",
+      "docs/diagrams/data-erd-connections.mmd",
+      "docs/diagrams/data-erd-core.mmd",
+      "docs/diagrams/data-erd-full.mmd",
+      "docs/diagrams/data-erd-operations.mmd",
+      "docs/policies/access-and-responses.md",
+      "docs/policies/audience-and-signup.md",
+      "docs/policies/data-lifecycle.md",
+      "docs/policies/product-rules.md",
+      "docs/quality/test-cases.json",
+      "docs/requirements/mvp-requirements.md",
+      "policies/app-policy.json",
+      "scripts/verify-artifacts.mjs"
+    ],
+    "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+    "sha256": "c7c3052008d6bfab1f9904d38f653483b5773a7c0b04986606781614a78866bf"
+  }
+}

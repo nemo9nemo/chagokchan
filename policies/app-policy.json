@@ -1,0 +1,151 @@
+{
+  "policy_version": "0.2.0",
+  "effective_for": "mvp_development_baseline",
+  "updated_on": "2026-10-07",
+  "audience": {
+    "mode": "adult_personal_beta",
+    "initial_market": "KR",
+    "minimum_age_years": 19,
+    "status": "confirmed",
+    "confirmed_on": "2026-10-07",
+    "scope_confirmation_source": "user",
+    "age_confirmation_method": "self_declaration",
+    "requires_explicit_confirmation": true,
+    "create_app_account_after_confirmation": true,
+    "collect_exact_birth_date": false,
+    "collect_phone_identity_verification": false,
+    "collect_identity_document": false,
+    "recorded_fields": [
+      "adult_confirmed_at",
+      "registration_policy_version"
+    ],
+    "minor_and_guardian_accounts_in_mvp": false
+  },
+  "product": {
+    "personal_board_per_goal": 1,
+    "shared_board_per_goal_max": 1,
+    "combine_personal_and_shared_counts": false,
+    "units_per_praise": 1,
+    "board_rule_code": "one_praise_one_unit"
+  },
+  "limits": {
+    "default_target_count": 20,
+    "target_count_min": 1,
+    "target_count_max": 100,
+    "active_goals_per_user": 20,
+    "retained_goals_per_user": 100,
+    "active_connections_per_user": 200,
+    "contributors_per_shared_board": 50,
+    "title_codepoints_max": 80,
+    "description_codepoints_max": 1000,
+    "praise_message_codepoints_max": 1000,
+    "nickname_codepoints_min": 1,
+    "nickname_codepoints_max": 20,
+    "json_body_bytes_max": 32768,
+    "page_size_default": 20,
+    "page_size_max": 50
+  },
+  "goals": {
+    "writable_status": "active",
+    "states": [
+      "active",
+      "completed",
+      "archived",
+      "deleted"
+    ],
+    "target_changes_apply_to": "next_bunch",
+    "resume_existing_current_bunch": true,
+    "create_bunch_on": "first_praise_or_first_praise_after_current_complete",
+    "historical_cancel_moves_records": false,
+    "restore_status": "archived",
+    "restore_memberships": false
+  },
+  "praise": {
+    "self_message_edit": true,
+    "peer_message_edit": false,
+    "cancel_erases_message": true,
+    "cancel_reversible": false,
+    "hide_affects_count": false,
+    "hide_reversible": true,
+    "exclude_affects_count": true,
+    "exclude_reversible_in_mvp": false,
+    "author_erasure_preserves_valid_event": true
+  },
+  "time": {
+    "storage_timezone": "UTC",
+    "default_display_timezone": "Asia/Seoul",
+    "daily_quota_timezone": "UTC",
+    "self_occurred_on_backdate_days_max": 365,
+    "peer_occurred_on_input": false
+  },
+  "auth": {
+    "providers": [
+      "google",
+      "email_otp"
+    ],
+    "otp_digits": 6,
+    "otp_ttl_seconds": 600,
+    "otp_resend_interval_seconds": 60,
+    "jwt_ttl_seconds": 900,
+    "session_max_age_seconds": 2592000,
+    "session_inactivity_seconds": 604800,
+    "reauth_ttl_seconds": 600,
+    "identity_merging_by_app": false,
+    "normal_request_service_role": false,
+    "cookie_base_name": "grape_auth"
+  },
+  "connections": {
+    "invite_link_random_bytes": 24,
+    "invite_code_crockford_base32_chars": 12,
+    "invite_ttl_seconds": 86400,
+    "request_ttl_seconds": 172800,
+    "active_invites_per_user": 5,
+    "invite_creation_per_user_per_day": 20,
+    "board_grants_on_accept": false,
+    "reconnect_restores_grants": false,
+    "unblock_reactivates_connection": false
+  },
+  "rate_limits": {
+    "otp_send_email_per_hour": 5,
+    "otp_send_ip_per_hour": 20,
+    "otp_verify_per_flow_per_10_minutes": 5,
+    "otp_verify_ip_per_10_minutes": 30,
+    "invite_use_user_per_15_minutes": 10,
+    "invite_use_ip_per_15_minutes": 30,
+    "connection_request_user_per_day": 20,
+    "praise_write_user_per_minute": 20,
+    "praise_write_user_per_day": 300,
+    "peer_praise_sender_recipient_board_per_day": 30,
+    "critical_write_limiter_failure": "deny_503",
+    "praise_state_change_user_per_minute": 60,
+    "praise_write_daily_scope": "creation_only"
+  },
+  "lifecycle": {
+    "goal_restore_window_days": 30,
+    "account_deletion_withdrawal_supported": false,
+    "account_access_revocation": "on_request_transaction_commit",
+    "account_erasure_target_hours": 24,
+    "goal_purge_target_hours_after_deadline": 24,
+    "notification_retention_days": 90,
+    "operational_log_retention_days": 30,
+    "database_backup_retention_days": 7,
+    "offsite_backup_retention_days": 30,
+    "deletion_ledger_min_days_after_erasure": 37,
+    "reauth_cleanup_hours_after_expiry": 24,
+    "rate_bucket_cleanup_hours_after_window_end": 48,
+    "receipt_retention": "until_result_purge; retain_erased_stub_when_preserved_praise_references_it",
+    "receipt_key_reuse_after_result_erasure": "never_recreates_result",
+    "account_deletion_rejoin": "new_uuid_no_relationship_restore",
+    "closed_invite_request_retention_days": 30,
+    "incomplete_registration_cleanup_target_hours": 24
+  },
+  "profile": {
+    "default_nickname": "새로운 포도",
+    "default_avatar_key": "grape",
+    "avatar_keys": [
+      "grape",
+      "leaf",
+      "star"
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+erDiagram
+    AUTH_USERS {
+        uuid id PK
+    }
+    AUTH_IDENTITIES {
+        uuid id PK
+        uuid user_id FK
+        text provider
+    }
+    AUTH_SESSIONS {
+        uuid id PK
+        uuid user_id FK
+    }
+    APP_USERS {
+        uuid id PK, FK
+    }
+    PRAISES {
+        uuid id PK
+    }
+    REQUEST_RECEIPTS {
+        uuid id PK
+        uuid actor_user_id FK "nullable after erasure"
+        text operation
+        uuid request_key
+        text input_hash "nullable after erasure"
+        text result_kind
+        uuid result_id "logical reference"
+        timestamptz created_at
+        timestamptz erased_at "nullable"
+    }
+    AUDIT_EVENTS {
+        uuid id PK
+        uuid actor_user_id FK "nullable"
+        text action
+        text result_code
+        text object_kind
+        uuid object_id "logical reference"
+        uuid request_id
+        timestamptz created_at
+    }
+    REAUTH_GRANTS {
+        uuid id PK
+        uuid user_id FK
+        uuid session_id "logical reference"
+        text scope
+        timestamptz verified_at
+        timestamptz expires_at
+        timestamptz consumed_at "nullable"
+    }
+    RATE_USAGE {
+        uuid id PK
+        uuid actor_user_id FK
+        text scope_key
+        timestamptz window_start
+        timestamptz window_end
+        int used_count
+        timestamptz updated_at
+    }
+    ACCOUNT_DELETION_REQUESTS {
+        uuid id PK
+        uuid user_id FK "nullable; unregistered or erased"
+        uuid subject_auth_user_id "logical reference"
+        text status
+        text checkpoint
+        text last_error_code "nullable"
+        timestamptz requested_at
+        timestamptz started_at "nullable"
+        timestamptz completed_at "nullable"
+    }
+
+    AUTH_USERS ||--o| APP_USERS : has_app_account
+    AUTH_USERS ||..o{ AUTH_IDENTITIES : has_identities
+    AUTH_USERS ||..o{ AUTH_SESSIONS : has_sessions
+    APP_USERS o|..o{ PRAISES : writes
+    APP_USERS ||..o{ PRAISES : receives
+    REQUEST_RECEIPTS ||..o| PRAISES : creates_once
+    APP_USERS o|..o{ REQUEST_RECEIPTS : owns_receipts
+    APP_USERS o|..o{ AUDIT_EVENTS : acts
+    APP_USERS ||..o{ REAUTH_GRANTS : reauthenticates
+    AUTH_SESSIONS o|..o{ REAUTH_GRANTS : logical_session_scope
+    APP_USERS ||..o{ RATE_USAGE : uses_quota
+    APP_USERS o|..o{ ACCOUNT_DELETION_REQUESTS : requests_deletion
+    AUTH_USERS o|..o{ ACCOUNT_DELETION_REQUESTS : logical_deletion_subject

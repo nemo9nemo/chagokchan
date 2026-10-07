@@ -1,0 +1,43 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+dist/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo
+
+# Real credentials; keep the variable template
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Tool-local state
+.vercel/
+.supabase/
+supabase/.temp/
+supabase/.branches/
+.cache/
+tmp/
+
+# Private exports and operational data
+backups/
+private-data/
+*.dump
+*.backup
+*.sqlite
+*.sqlite3
+*.log
+
+# OS/editor-local files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,385 @@
+{
+  "version": "0.2.0",
+  "updated_on": "2026-10-08",
+  "current_stage": "S04_local_foundation",
+  "next_stage": "S04_local_foundation",
+  "implementation_started": false,
+  "git_repository_connected": true,
+  "cloud_project_created": false,
+  "phase_status": [
+    {
+      "id": "S01",
+      "name": "요구사항",
+      "status": "baseline_documented"
+    },
+    {
+      "id": "S02",
+      "name": "정책",
+      "status": "development_baseline_documented"
+    },
+    {
+      "id": "S03",
+      "name": "ERD·API·화면·검증 설계",
+      "status": "baseline_structurally_checked"
+    },
+    {
+      "id": "S04",
+      "name": "개발 기반",
+      "status": "in_progress"
+    },
+    {
+      "id": "S05",
+      "name": "DB·권한·로컬 사용자",
+      "status": "not_started"
+    },
+    {
+      "id": "S06",
+      "name": "사용자 기능",
+      "status": "not_started"
+    },
+    {
+      "id": "S07",
+      "name": "실제 로그인·통합 검증",
+      "status": "not_started"
+    },
+    {
+      "id": "S08",
+      "name": "출시",
+      "status": "not_started"
+    }
+  ],
+  "unresolved_inputs": [
+    {
+      "id": "OPS-INPUT-01",
+      "subject": "운영 주체·지원 연락처·도메인·월 예산",
+      "status": "not_selected",
+      "required_before": "service_provisioning_and_release"
+    },
+    {
+      "id": "OPS-INPUT-02",
+      "subject": "독립 삭제 원장 저장 위치·암호화·만료 설정",
+      "status": "design_rule_documented_not_configured",
+      "required_before": "staging_deletion_restore_test"
+    }
+  ],
+  "environment": {
+    "default_node": "22.14.0",
+    "bundled_node": "24.19.0",
+    "pnpm": "11.19.0",
+    "docker_cli": "29.1.3",
+    "docker_engine": "connection_failed",
+    "supabase_cli": "not_verified",
+    "local_database": "not_started"
+  },
+  "verification": {
+    "artifact_check_status": "passed",
+    "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
+    "full_openapi_validator": "not_run",
+    "mermaid_render": "not_run",
+    "planned_test_cases": 36,
+    "application_tests_executed": 0
+  },
+  "artifacts": [
+    {
+      "id": "ART-001",
+      "title": "프로젝트 작업 규칙",
+      "status": "development_baseline",
+      "paths": [
+        "README.md",
+        "AGENTS.md",
+        "docs/development/README.md",
+        "docs/development/backlog.md",
+        "docs/development/git-workflow.md",
+        ".githooks/commit-msg",
+        "scripts/check-commit-message.mjs"
+      ]
+    },
+    {
+      "id": "ART-002",
+      "title": "요구·수락 기준",
+      "status": "development_baseline",
+      "paths": [
+        "docs/requirements/mvp-requirements.md"
+      ]
+    },
+    {
+      "id": "ART-003",
+      "title": "정책 수치·옵션",
+      "status": "development_baseline",
+      "paths": [
+        "policies/app-policy.json"
+      ]
+    },
+    {
+      "id": "ART-004",
+      "title": "제품 상태·기록·관계 정책",
+      "status": "development_baseline",
+      "paths": [
+        "docs/policies/product-rules.md",
+        "docs/policies/audience-and-signup.md"
+      ]
+    },
+    {
+      "id": "ART-005",
+      "title": "계정·삭제·복구 정책",
+      "status": "development_baseline",
+      "paths": [
+        "docs/policies/data-lifecycle.md"
+      ]
+    },
+    {
+      "id": "ART-006",
+      "title": "읽기·응답·강제 위치",
+      "status": "development_baseline",
+      "paths": [
+        "docs/policies/access-and-responses.md"
+      ]
+    },
+    {
+      "id": "ART-007",
+      "title": "ERD v0.3",
+      "status": "design_only",
+      "paths": [
+        "docs/data-erd.md",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/diagrams/data-erd-full.mmd"
+      ]
+    },
+    {
+      "id": "ART-008",
+      "title": "API 계약",
+      "status": "design_only",
+      "paths": [
+        "contracts/openapi.json",
+        "docs/contracts/api-contract.md"
+      ]
+    },
+    {
+      "id": "ART-009",
+      "title": "화면·상태·오류 흐름",
+      "status": "design_only",
+      "paths": [
+        "docs/design/user-flows.md"
+      ]
+    },
+    {
+      "id": "ART-010",
+      "title": "검증 설계",
+      "status": "planned_not_run",
+      "paths": [
+        "docs/quality/verification-plan.md",
+        "docs/quality/test-cases.json"
+      ]
+    },
+    {
+      "id": "ART-011",
+      "title": "개발 기준 결정·변경 기록",
+      "status": "documented",
+      "paths": [
+        "docs/decisions/ADR-0001-development-baseline.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/decisions/ADR-0003-release-name.md"
+      ]
+    },
+    {
+      "id": "ART-012",
+      "title": "환경·비밀·편집 템플릿",
+      "status": "template",
+      "paths": [
+        ".env.example",
+        ".gitignore",
+        ".gitattributes",
+        ".editorconfig"
+      ]
+    },
+    {
+      "id": "ART-013",
+      "title": "변경·릴리스 양식",
+      "status": "template",
+      "paths": [
+        "docs/templates/change-record.md",
+        "docs/templates/release-record.md"
+      ]
+    },
+    {
+      "id": "ART-014",
+      "title": "산출물 확인 도구·검사 결과",
+      "status": "static_checks_passed",
+      "paths": [
+        "scripts/verify-artifacts.mjs",
+        "docs/quality/reports/2026-10-07-baseline.md",
+        "docs/quality/reports/artifacts-check-2026-10-07.json",
+        "docs/quality/reports/artifacts-check-2026-10-08.json",
+        "docs/quality/reports/artifacts-check-2026-10-08-workspace.json",
+        "docs/quality/reports/artifacts-check-2026-10-08-development.json"
+      ]
+    },
+    {
+      "id": "ART-015",
+      "title": "기존 기획·기술 맥락",
+      "status": "reference_documents",
+      "paths": [
+        "docs/README.md",
+        "docs/product-plan-v0.1.md",
+        "docs/product-plan-v0.2.md",
+        "docs/pre-implementation-plan.md",
+        "docs/additional-considerations.md",
+        "docs/technical-architecture.md",
+        "docs/auth-and-permissions.md",
+        "docs/security-threat-model.md",
+        "docs/deployment-and-git.md",
+        "docs/feature-expansion-design.md",
+        "docs/market-research-2026-10-07.md",
+        "docs/external-tools.md"
+      ]
+    },
+    {
+      "id": "ART-016",
+      "title": "앱·로컬 개발 설정",
+      "status": "planned",
+      "paths": [
+        "package.json",
+        "pnpm-lock.yaml",
+        "tsconfig.json",
+        "supabase/config.toml",
+        "src/app/"
+      ]
+    },
+    {
+      "id": "ART-017",
+      "title": "DB·RLS·RPC·기능 검사",
+      "status": "planned",
+      "paths": [
+        "supabase/migrations/",
+        "supabase/tests/",
+        "tests/e2e/"
+      ]
+    },
+    {
+      "id": "ART-018",
+      "title": "공개 정책·운영·릴리스 기록",
+      "status": "planned",
+      "paths": [
+        "docs/legal/privacy-notice.md",
+        "docs/legal/terms-of-service.md",
+        "docs/releases/"
+      ]
+    },
+    {
+      "id": "ART-019",
+      "title": "차곡찬 브랜드·영문 표기·검토 기록",
+      "status": "name_confirmed",
+      "paths": [
+        "docs/branding/name-candidates-2026-10-07.md",
+        "docs/branding/brand-guide.md"
+      ]
+    },
+    {
+      "id": "ART-020",
+      "title": "개발 환경·무로그인·진행 규칙",
+      "status": "design_only",
+      "paths": [
+        "policies/development-policy.json",
+        "docs/development/local-development.md",
+        "docs/decisions/ADR-0004-local-development-auth.md"
+      ]
+    },
+    {
+      "id": "ART-021",
+      "title": "개발 작업 공간 이전 검사",
+      "status": "copy_hashes_verified",
+      "paths": [
+        "docs/quality/reports/workspace-transfer-2026-10-08.json"
+      ]
+    }
+  ],
+  "resolved_inputs": [
+    {
+      "id": "C01",
+      "subject": "첫 출시 사용자 범위",
+      "status": "confirmed",
+      "confirmed_on": "2026-10-07",
+      "user_decision": "성인 개인 사용자 중심",
+      "implementation_rule": "KR_19_plus_self_declaration",
+      "decision_record": "docs/decisions/ADR-0002-adult-personal-audience.md"
+    },
+    {
+      "id": "BRAND-SCOPE-001",
+      "subject": "서비스 이름과 테마의 관계",
+      "status": "confirmed",
+      "confirmed_on": "2026-10-07",
+      "user_decision": "실제 앱 출시 예정. 포도 테마는 변경 가능하므로 이름이 포도에 집중하지 않음",
+      "decision_record": "docs/branding/name-candidates-2026-10-07.md"
+    },
+    {
+      "id": "BRAND-NAME-001",
+      "subject": "출시 프로젝트명",
+      "status": "confirmed",
+      "confirmed_on": "2026-10-08",
+      "user_decision": "차곡찬으로 출시",
+      "decision_record": "docs/decisions/ADR-0003-release-name.md"
+    },
+    {
+      "id": "DEV-AUTH-001",
+      "subject": "개발 작업 공간·로그인 적용 시점",
+      "status": "confirmed",
+      "confirmed_on": "2026-10-08",
+      "user_decision": "지정 작업 공간 사용, 개발 중 로그인 없이 사용, 실제 로그인은 오픈 준비 때 테스트·실사용",
+      "decision_record": "docs/decisions/ADR-0004-local-development-auth.md"
+    }
+  ],
+  "branding": {
+    "release_name": "차곡찬",
+    "name_status": "confirmed_by_user",
+    "recommended_candidate": "차곡찬",
+    "theme_independent": true,
+    "candidate_record": "docs/branding/name-candidates-2026-10-07.md",
+    "trademark_clearance": "not_performed",
+    "store_internal_search": "not_performed",
+    "domain_availability": "not_verified",
+    "name_confirmed_on": "2026-10-08",
+    "english_display_name": "Chagokchan",
+    "english_spelling_decision_source": "brand_convention_selected_by_assistant",
+    "development_slug": "chagokchan",
+    "brand_guide": "docs/branding/brand-guide.md",
+    "english_preliminary_web_search": {
+      "checked_on": "2026-10-08",
+      "query": "Chagokchan",
+      "result": "no_indexed_results_returned",
+      "scope": "public_web_and_store_domain_search_only"
+    }
+  },
+  "workspace": {
+    "canonical_path": "C:\\Users\\love0\\nemo9Dev\\chagokchan",
+    "previous_path": "C:\\Users\\love0\\Documents\\Codex\\2026-10-07\\new-chat",
+    "transfer_status": "verified",
+    "transfer_record": "docs/quality/reports/workspace-transfer-2026-10-08.json",
+    "progress_source": "docs/development/backlog.md",
+    "verified_at": "2026-10-07T22:52:36.1488226Z"
+  },
+  "development_auth": {
+    "policy": "policies/development-policy.json",
+    "status": "designed_not_implemented",
+    "interactive_login_during_development": false,
+    "local_mode": "local_fixture",
+    "real_login_integration_and_tests": "pre_release_required",
+    "implementation_work_item": "W07",
+    "real_auth_work_items": [
+      "W12",
+      "W13"
+    ]
+  },
+  "remote_repository_connected": false,
+  "version_control": {
+    "local_repository": "initialized",
+    "default_branch": "main",
+    "remote": "not_connected",
+    "ci": "not_configured",
+    "functional_commits_required": true,
+    "commit_policy": "docs/development/git-workflow.md",
+    "hook": ".githooks/commit-msg"
+  }
+}
