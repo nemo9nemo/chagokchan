@@ -15,7 +15,8 @@ Next.js 앱의 시작 화면, 환경 검사, 빌드와 로컬 실행을 구현�
 | Tailwind CSS | 4.3.3. 기본 화면 스타일 |
 | Biome | 2.5.15. 경고를 실패 처리하는 린트 |
 | Supabase CLI | 2.120.0. 프로젝트 개발 의존성으로 설치, 실제 실행 버전 확인 |
-| PostgreSQL | 17.11 실제 연결 확인. 제품 SQL·마이그레이션은 W05 |
+| PostgreSQL | 17.11. W05 제품 SQL·기본 RLS·물리 제약 검사 완료 |
+| Supabase SDK | 2.117.3. 서버 전용 로컬 Auth 준비에 사용 |
 | Docker | CLI·엔진 29.1.3, WSL 2 확인. 차곡찬 서비스 7개 기동 |
 
 린트와 타입 검사를 분리했다. Biome은 소스·설정·스크립트를 검사하며, 기존 산출물 검사기의 정규식 공백과 일부 표현 스타일은 파일별 예외로 둔다. 타입 검사는 TypeScript와 Next.js 빌드에서 수행한다. [Biome 구성](../../biome.json), [공식 시작 안내](https://biomejs.dev/guides/getting-started/)
@@ -34,7 +35,7 @@ if (-not (Test-Path -LiteralPath .env.development.local)) {
 .\scripts\project.ps1 -Task dev
 ```
 
-이미 있는 `.env.development.local`은 복사 명령으로 덮어쓰지 않는다. 로컬 앱 URL은 `http://127.0.0.1:3000`, DB API는 `http://127.0.0.1:54321`로 설정한다. 이번 작업에서 개발용 환경 파일은 준비했다. DB 시작 성공 시 스크립트가 로컬 API 주소와 publishable 키를 이 파일에 기록하고 비밀 값을 출력하지 않는다. 실제 A/B/C Auth 계정·세션 준비는 W05/W07에서 구현한다.
+이미 있는 `.env.development.local`은 복사 명령으로 덮어쓰지 않는다. 로컬 앱 URL은 `http://127.0.0.1:3000`, DB API는 `http://127.0.0.1:54321`로 설정한다. 이번 작업에서 개발용 환경 파일은 준비했다. DB 시작 성공 시 스크립트가 로컬 API 주소와 publishable 키를 이 파일에 기록하고 비밀 값을 출력하지 않는다. A/B/C Auth 계정과 초기 데이터 준비는 W05에서 구현했다. [DB 실행 순서](database-foundation.md)의 db:migrate → db:seed → db:test를 실행한다. 사용자 세션·API 연결은 W07에서 구현한다.
 
 앱 실행 주소는 `http://127.0.0.1:3000`이다. 개발 서버는 loopback에 바인딩하며 설정한 포트가 사용 중이면 실패한다. 현재 화면은 준비 안내를 제공한다.
 
@@ -55,7 +56,7 @@ if (-not (Test-Path -LiteralPath .env.development.local)) {
 
 ## DB 기동과 다음 단계
 
-`db:init`은 실제 CLI로 설정을 생성한다. 새 테이블의 자동 공개를 끄고 JWT 만료를 900초로 설정했다. W05의 seed 파일이 생기기 전까지 자동 seed는 비활성화한다.
+`db:init`은 실제 CLI로 설정을 생성한다. 새 테이블의 자동 공개를 끄고 JWT 만료를 900초로 설정했다. 자동 seed는 계속 비활성화하며 W05의 가상 계정 준비는 db:seed로 명시적으로 실행한다.
 
 `db:start`는 Docker 엔진을 확인한 뒤 프로젝트 전용 네트워크를 사용한다. Windows Docker Desktop에서 네트워크의 기본 바인딩 설정만으로는 실제 공개 포트가 제한되지 않아, CLI 실행 동안 전용 임시 named pipe를 통해 컨테이너 생성 요청의 HostIp를 127.0.0.1로 설정한다. 전용 pipe는 시작이 끝나면 닫는다. 설정·자격증명·CLI 출력은 기록하지 않는다. 실행 후 모든 공개 포트를 다시 검사하고, 전체 인터페이스나 외부 주소에 열린 포트를 발견하면 이 프로젝트 서비스를 중지하고 실패한다. [포트 강제·검사 코드](../../scripts/docker-loopback-proxy.mjs)
 
@@ -63,4 +64,4 @@ DB·Auth·REST·Kong·Studio·DB 메타데이터·테스트 메일 서비스만 
 
 이번 환경에서는 Docker의 임시 소켓 오류를 먼저 해결해야 했다. 사용자의 실행 승인 후 0바이트 소켓만 있는 실행 폴더를 백업 이름으로 보존하고 Docker Desktop을 재시작했다. 백업 위치는 검사 JSON에 기록했다. 같은 증상에 대한 [Docker 이슈의 보고](https://github.com/docker/desktop-feedback/issues/554)를 참고했으며, 이 머신에서 엔진 정상 응답을 직접 확인했다.
 
-이제 W05에서 ERD를 물리 제약·인덱스·마이그레이션과 합성 A/B/C 초기 데이터로 옮긴다. 다음으로 W06의 RPC/RLS·동시성 검사를 통과시키고 W07의 사용자 해석기·API를 연결한다. 실제 Google/OTP 연동과 실제 로그인 검사는 오픈 준비 단계에서 수행한다.
+W05에서 ERD의 물리 제약·인덱스·마이그레이션과 합성 A/B/C 초기 데이터를 구현·검증했다. 다음으로 W06의 RPC/RLS·동시성 검사를 통과시키고 W07의 사용자 해석기·API를 연결한다. 실제 Google/OTP 연동과 실제 로그인 검사는 오픈 준비 단계에서 수행한다.

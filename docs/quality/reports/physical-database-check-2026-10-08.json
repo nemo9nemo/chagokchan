@@ -1,0 +1,170 @@
+{
+  "verified_at": "2026-10-08T01:50:04.010Z",
+  "scope": "physical_schema_fixtures_and_initial_access_only",
+  "status": "passed",
+  "parent_commit": "25abf5e7e4d71a9b0a6f3ce6b97f42fdcc6e7fa9",
+  "source_basis": {
+    "format": "sha256(path + NUL + sha256 + LF), sorted by path",
+    "digest": "4397622dd4b91f1dc93c1141aec867531bb257cda1246b24bd094bd26f7069b4",
+    "files": [
+      {
+        "path": "docs/data-erd.md",
+        "sha256": "cf69e164cf55ff00e8954e6c3aac5f55124bad0ee7fa62511b45d1f189b5c304"
+      },
+      {
+        "path": "docs/diagrams/data-erd-full.mmd",
+        "sha256": "387a992899b185922e73609edcf118193a36ecf4d8f1f6fd3f78202f51006620"
+      },
+      {
+        "path": "package.json",
+        "sha256": "e76137fb07f95e6198a0b515ba9943c137c5da94368c1bd52948e87bff44cf92"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "c8f31283595fe0e588774507d3c1194f5956f86fced036b5bb5a566ae4852539"
+      },
+      {
+        "path": "pnpm-workspace.yaml",
+        "sha256": "76947cd3ae000e86f530241152c4a70503c4362a36d45fc3431e3bef7e75b8f6"
+      },
+      {
+        "path": "policies/app-policy.json",
+        "sha256": "433f0fa3b876d47fb61fede39d03d7e9c52e6b2e2b31523c9ad8dc58cf82f77a"
+      },
+      {
+        "path": "policies/development-policy.json",
+        "sha256": "79dabf2f8a1580e5535cbfaf902ee575053f92eb7a6f83892be676d2df9d9ed8"
+      },
+      {
+        "path": "scripts/database-task.mjs",
+        "sha256": "56cb2a87d4dce1ce87cf679d8342364a16704bc8b1ab1878eb8ebded53ff9799"
+      },
+      {
+        "path": "scripts/local-database-tools.mjs",
+        "sha256": "eec69799851720de6a6015efe4e08a1125d360c23c6e6f5915c5bdbb6a7232a9"
+      },
+      {
+        "path": "scripts/local-fixture-manifest.mjs",
+        "sha256": "7e91cefd7adc950728712e8e3dd1bc59ae71d0e32ab5656f4703c045b6bd76a0"
+      },
+      {
+        "path": "scripts/local-fixture-manifest.test.mjs",
+        "sha256": "453116f15c45d59fd3e8f77221b1c599b31f9722ba5ee55d79cb1abc84d54ca6"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "934bc6d99ef1a559047f9e8c0b31b409835be2d6017707d406c395f458839660"
+      },
+      {
+        "path": "scripts/seed-local-fixtures.mjs",
+        "sha256": "01e60bf959c07e76b236e92a64a01595838b497a81df56a03d594ef31a612a25"
+      },
+      {
+        "path": "supabase/config.toml",
+        "sha256": "1d3092e411b92384944d30c06b0f85b0344462921e345fe5757edc57c8e3f5a2"
+      },
+      {
+        "path": "supabase/migrations/20261008013000_product_schema.sql",
+        "sha256": "c28e692fae7c9791a8b435b609d06ef1467754dc94b74339e7477a8d4fd6b1bc"
+      },
+      {
+        "path": "supabase/seeds/local-fixtures.sql",
+        "sha256": "92825b607eb03d57ffe7609169b078b473acfb6d3dcf4f46db867c902d537f12"
+      },
+      {
+        "path": "supabase/tests/001_physical_integrity.test.sql",
+        "sha256": "8975a121a3a2892171f7b0e48b60399d37943c5150bd0d0d1663bddb53ff719f"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "postgresql": "17.11"
+  },
+  "initial_apply": {
+    "verified_at": "2026-10-08T01:39:04.746Z",
+    "app_tables_before": 0,
+    "auth_users_before": 0,
+    "applied_to_empty_app_schema": true
+  },
+  "schema": {
+    "verified_at": "2026-10-08T01:42:54.142Z",
+    "status": "passed",
+    "columns_match_erd": true,
+    "postgres": "17.11",
+    "app_tables": 18,
+    "rls_forced": 18,
+    "foreign_keys": 38,
+    "indexes": 68,
+    "marked_fixture_accounts": 3,
+    "migrations": [
+      "20261008013000"
+    ],
+    "fixture_credentials_printed": false
+  },
+  "db_tests": {
+    "verified_at": "2026-10-08T01:42:50.312Z",
+    "scope": "physical_schema_and_initial_access_only",
+    "status": "passed",
+    "suites": [
+      {
+        "file": "001_physical_integrity.test.sql",
+        "sha256": "8975a121a3a2892171f7b0e48b60399d37943c5150bd0d0d1663bddb53ff719f",
+        "executed": 51,
+        "passed": 51,
+        "failed": 0,
+        "planned": 51,
+        "status": "passed"
+      }
+    ],
+    "executed": 51,
+    "business_rpc_tests_executed": 0,
+    "real_login_tests_executed": 0
+  },
+  "fixture_setup": {
+    "verified_at": "2026-10-08T01:43:17.290Z",
+    "status": "passed",
+    "seed_reexecution_preserved_all_app_rows": true,
+    "private_manifest_unchanged": true,
+    "rejected_before_setup": [
+      "staging",
+      "production_node",
+      "remote_database"
+    ],
+    "auth_sessions_created": 0,
+    "credential_values_printed": false
+  },
+  "private_access": {
+    "protected_acl": true,
+    "current_user_and_system_only": true,
+    "permission_rule_count": 2,
+    "credential_values_printed": false
+  },
+  "application_checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "offline_build": "passed",
+    "frozen_lockfile": "passed",
+    "windows_wrapper_db_status": "passed"
+  },
+  "resolved_test_input_failure": {
+    "case": 7,
+    "initially_expected": "23503 owner FK",
+    "observed": "23505 duplicate board",
+    "resolution": "separate empty goal to isolate owner FK",
+    "migration_modified_after_apply": false,
+    "rerun": "51/51 passed"
+  },
+  "planned_acceptance_cases": 36,
+  "business_acceptance_cases_executed": 0,
+  "business_rpc_tests_executed": 0,
+  "real_login_tests_executed": 0
+}

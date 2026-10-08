@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-S04 앱·실행 환경·로컬 DB 준비를 완료했다. 다음은 S05 제품 데이터·권한·로컬 사용자 구현이다. [실행 방법](runtime-setup.md)과 [검사 증거](../quality/reports/foundation-check-2026-10-08.json)에 현재 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
+S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. 다음은 W06 업무 RPC·권한·동시성, W07 로컬 세션·API 구현이다. [실행 방법](runtime-setup.md)과 [검사 증거](../quality/reports/foundation-check-2026-10-08.json)에 현재 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 
@@ -50,7 +50,7 @@ S03의 ERD 완료는 실제 DB 생성 완료가 아니다. S04에서 도구·로
 | Supabase CLI·로컬 DB | CLI 2.120.0, PostgreSQL 17.11. 서비스 7개·Auth/REST·공개 포트 127.0.0.1 확인 |
 | Git | 로컬 main 저장소·기능 단위 커밋·메시지 훅 적용. 원격·CI는 미연결 |
 
-앱 설치·린트·타입·환경/포트 검사·빌드·HTTP·DB 연결 증거는 [앱 기반 검사](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. 제품 SQL·마이그레이션·업무 권한 검사·수락 TC·실제 로그인 검사는 다음 단계에서 수행한다.
+앱 설치·린트·타입·환경/포트 검사·빌드·HTTP·DB 연결 증거는 [앱 기반 검사](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. W05 제품 SQL·마이그레이션·가상 데이터와 물리 제약/기본 접근 검사는 [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json)에 기록했다. 업무 권한·RPC·전체 수락 TC·실제 로그인 검사는 후속 단계에서 수행한다.
 
 ## 변경과 릴리스
 

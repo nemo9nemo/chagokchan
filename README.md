@@ -2,7 +2,7 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 모바일 웹/PWA를 개발한다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **S04 개발 기반 완료**. 앱 시작 화면·실행 설정·환경/포트 단위 검사 27개·빌드·로컬 HTTP·PostgreSQL 17.11 연결을 확인했다. 공개 DB 포트는 127.0.0.1로 제한한다. 다음 작업은 제품 SQL·권한·API 구현이다. [실행 방법](docs/development/runtime-setup.md), [실제 검사 결과](docs/quality/reports/foundation-check-2026-10-08.json).
+현재 단계: **S05 데이터 기반 구현 중 — W05 완료**. 실제 DB에 테이블 18개·제약·인덱스·기본 RLS와 합성 A/B/C 데이터를 준비했다. DB 51개·소스 단위 32개·빌드 검사를 통과했다. [DB 실행 방법](docs/development/database-foundation.md), [검사 증거](docs/quality/reports/physical-database-check-2026-10-08.json). 다음은 W06 업무 RPC·권한·동시성, W07 서버 API·로컬 세션이다.
 
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 

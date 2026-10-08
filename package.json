@@ -14,18 +14,22 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
     "db:start": "node scripts/local-db.mjs start",
     "db:status": "node scripts/local-db.mjs status",
-    "db:stop": "node scripts/local-db.mjs stop"
+    "db:stop": "node scripts/local-db.mjs stop",
+    "db:migrate": "node scripts/database-task.mjs migrate",
+    "db:seed": "node scripts/seed-local-fixtures.mjs",
+    "db:test": "node scripts/database-task.mjs test"
   },
   "dependencies": {
     "next": "16.4.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "@supabase/supabase-js": "2.117.3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
