@@ -1393,6 +1393,30 @@
       "expected": "개인 칭찬 변경은 기존 원자적 업무 RPC를 사용한다. 생성 결과의 bunch_id는 같은 트랜잭션에서 만들어진 칭찬 행에 결합되며 재시도는 ID와 회차를 재사용한다. 목록은 권한별 allowlist를 벗어나지 않고 최신 개수·토큰·미디어 개인정보를 반환하지 않는다. A/B/C actor는 서버 환경에서 결정된다.",
       "status": "passed",
       "evidence": "reports/w08-c-personal-praise-api-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-007",
+      "requirement_ids": [
+        "REQ-005",
+        "REQ-006",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-CONNECT-002",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_and_local_api_integration",
+      "title": "초대·연결 요청·차단 API 경계와 최소 응답",
+      "steps": [
+        "일회 초대 링크/코드 입력을 검증하고 초대 발급 외 목록 응답에 원문 비밀을 노출하지 않는지 검사한다",
+        "초대 미리보기·요청 생성·수락/거절/철회·연결 해제·차단 변경이 동일 출처/CSRF 경계를 거치고 허용된 RPC 인자만 전달하는지 단위 검사한다",
+        "A/B/C 실제 로컬 Auth 세션으로 연결·초대·요청·차단 목록, 페이지 오류·CSRF·잘못된 비밀/차단 입력을 검사한다"
+      ],
+      "expected": "관계 변경은 기존 세션 검증 RPC를 사용한다. 클라이언트 actor ID를 받지 않고 응답은 최소 프로필/상태 allowlist 및 no-store이며, 초대 비밀은 발급 응답에서만 제공한다. A/B/C 검사 중 제품 fixture DB 쓰기는 없다.",
+      "status": "passed",
+      "evidence": "reports/w09-a-connection-api-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

@@ -1,0 +1,170 @@
+{
+  "verified_at": "2026-10-08T10:38:22.295Z",
+  "work_item": "W09-A",
+  "status": "passed",
+  "scope": "connection_invite_request_and_block_server_api",
+  "source_basis": {
+    "base_commit": "707a2d4cb2f6b0d909decd49a01adb1fed17e601",
+    "format": "SHA-256 per OpenAPI, server routes, unit/local integration tests, requirements, progress and verification documents; excludes this report.",
+    "files": [
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "29ea0c4babced487f5fb07275fb7f4ebfa5320c8720aa05a142d08493a41bdd9"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w09-a-connection-api.md",
+        "sha256": "c6acd66307cb1ef3dae1706030992e448a8953843588ce0cadf2acab69a59595"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "26db1db2a7f3c673a75784b9e0f7718f2d645b8047460eb724882daffada7d0d"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "d1e8c5d9a3c10428a2357914bb6d066fc66df7612fd5e943e0346c738a4bfacd"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "8341e8251a94c18a96c014f17c85dc6611c2929aae3cb666707886f753bd48cd"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "184420f2c385cb8326d623e6d628c06982e62a929be4c9e6aefd12299870ca8c"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "1d951cd57b51c5b0171031dfaf4d8d6ac5599d909a26ea33d1392ce7dd1f9c10"
+      },
+      {
+        "path": "docs/development/local-development.md",
+        "sha256": "cc04b96af2fa3d49b2ca25e458ee8d191e5667d89aa8602e1ba83736de60d4a5"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "c7609ccde36bc47efbd42fe7013fdddc03dadf2460ba4462b696286a8fee46f2"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "7f4eb60e3aa3b1e162023b34e35def6687e414da1a407bf7a391ef1d37975025"
+      },
+      {
+        "path": "docs/requirements/mvp-requirements.md",
+        "sha256": "af4b3cdde947635d85fa20274119865ff8cb08ce15392d214ef5c7db7e0eb99a"
+      },
+      {
+        "path": "package.json",
+        "sha256": "4c5c12e76fe3eef2b37133f035f0d40f9ab6fec9922287458d6b0eb3817c67b3"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "7b1fc113572cde29a7672c48edebd19b7c46b0a254adf21c2f8a1a287109ce00"
+      },
+      {
+        "path": "scripts/connection-api.test.mjs",
+        "sha256": "9fa0015e83094f3bc77cf051ff2a7d1caac12b8aa76487ead128e850496d36b0"
+      },
+      {
+        "path": "scripts/test-local-connection-api.mjs",
+        "sha256": "d10c0e3bb30f1fa4ce4bb3a698f6241014761299cbec1c91c9d1772151c60591"
+      },
+      {
+        "path": "src/server/connection-api.mjs",
+        "sha256": "033b5deb9e21e14c6b6dc815845935ae0ed709cbc7637a6af907d7da4036480b"
+      },
+      {
+        "path": "src/server/local-api-route.ts",
+        "sha256": "ce0aade8f99355aa5861ed813d3ae4692b8c1cb12739904ac4f6721140aa717b"
+      },
+      {
+        "path": "src/app/api/v1/connections/route.ts",
+        "sha256": "8c0853956fb1330e139e163a56f3be4e55fa7d979bd6f495674ad024cb515a0a"
+      },
+      {
+        "path": "src/app/api/v1/connections/[connection_id]/route.ts",
+        "sha256": "d8e14cfa6ac026c120bba054a9468503b790ec0b8501f1ebe4adb0e98d844f02"
+      },
+      {
+        "path": "src/app/api/v1/connection-invites/route.ts",
+        "sha256": "bbdc0a159ce3b29b1516a00dca5e1e41d29375c10f1fcd45643911331213c179"
+      },
+      {
+        "path": "src/app/api/v1/connection-invites/[invite_id]/route.ts",
+        "sha256": "79ad5cd7f8480648cb2e4f66c33841f028c4152944a8e49d8a81dd0cc9d2f07c"
+      },
+      {
+        "path": "src/app/api/v1/connection-invites/preview/route.ts",
+        "sha256": "2451448d4ebadb97c8c73543293febeb3e8eada63314dace4088812f1d925da4"
+      },
+      {
+        "path": "src/app/api/v1/connection-requests/route.ts",
+        "sha256": "d8b87608d91b482bb4c6c1fdc8cd88de3b4282246e87a3377ff566af4fdc059a"
+      },
+      {
+        "path": "src/app/api/v1/connection-requests/[request_id]/accept/route.ts",
+        "sha256": "91ca1d6e25a7a88abd10999d760b2649e84e1a4cf71e098d6ff16846e06f34b4"
+      },
+      {
+        "path": "src/app/api/v1/connection-requests/[request_id]/reject/route.ts",
+        "sha256": "091913acf665f954b655cb86d7df0390e53df4f66f11a16ac9d06cec83a3ce12"
+      },
+      {
+        "path": "src/app/api/v1/connection-requests/[request_id]/cancel/route.ts",
+        "sha256": "2b1c4e899b3c94e1a91ba56e367552f2442852d11f888e4aa866908e1b7f8f49"
+      },
+      {
+        "path": "src/app/api/v1/blocks/route.ts",
+        "sha256": "b44a177c05cac5a17e69571b7e6f987fc5ca11dfc72bbf9fa19d2d7b516f5118"
+      },
+      {
+        "path": "src/app/api/v1/blocks/[block_id]/route.ts",
+        "sha256": "3d12457be0c2525d619958232ff69fd140701ee93dc79b53f9096ec89187e524"
+      },
+      {
+        "path": "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
+        "sha256": "e336df40f88cc96cb968888e3d281ba39b2c62547ec0a395f1ad9051e9932e3a"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "application_check",
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "runtime": "Node 24.19.0 / pnpm 11.19.0",
+      "lint": "passed (Biome 72 files)",
+      "typecheck": "passed",
+      "unit_tests": "90/90",
+      "artifact_structure": "passed (JSON 30, links 438, OpenAPI operations 54/references 691, test cases 65, registered paths 231, errors 0)"
+    },
+    {
+      "id": "production_build_check",
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "next_version": "16.4.0",
+      "route_entries_compiled": 25,
+      "added_connection_api_methods": 14
+    },
+    {
+      "id": "local_auth_api_boundary",
+      "command": "scripts/project.ps1 -Task api:connection-test",
+      "status": "passed",
+      "actor_results": {
+        "A": "12/12",
+        "B": "12/12",
+        "C": "12/12"
+      },
+      "scope": "connection/invite/request/block reads, query validation, CSRF denial, malformed preview/request/block rejection, safe missing-connection response",
+      "fixture_database_mutations": 0
+    },
+    {
+      "id": "relationship_rpc_prior_evidence",
+      "report": "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
+      "status": "referenced_prior_evidence",
+      "authenticated_session_checks": "13/13"
+    }
+  ],
+  "limitations": [
+    "Valid invite issue/consume/accept and block/connect mutations were not submitted through route-to-database success paths in this check to preserve the existing local fixtures.",
+    "W09-B board grant/revoke and peer praise routes, W09-C screens, product acceptance E2E, device/accessibility checks, and real provider login remain outside this work item."
+  ]
+}

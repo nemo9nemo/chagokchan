@@ -130,6 +130,14 @@ UI02~UI05 기본 화면을 `src/app/client-app.tsx`에 구현했다. 목표 목�
 
 다음 작업은 W09 연결·판 권한·공유 칭찬이다. 실제 UI mutation submit E2E, 제품 수락 TC, 기기/접근성 검사는 W08-D 읽기 smoke의 근거에 포함하지 않았다.
 
+## W09-A 연결·초대·요청·차단 API 후속 완료 기록
+
+14개 HTTP method endpoint를 기존 W06-C1 Auth-scoped RPC에 연결했다: 본인의 연결·초대·요청·차단 목록, 일회 초대 발급/미리보기/폐기, 초대 요청 생성/수락/거절/철회, 연결 해제, 차단/해제. 목록은 최소 프로필·상태 필드만 allowlist하고, 초대 비밀은 1회 발급 응답에만 반환한다. mutation은 동일 출처·CSRF·JSON 본문 guard 뒤 고정 RPC 인자를 전달한다. 연결 수락은 공유판 권한 부여를 자동으로 만들지 않는다.
+
+`scripts/connection-api.test.mjs` unit 8/8과 `scripts/project.ps1 -Task api:connection-test` A/B/C 각각 12/12가 통과했다. API smoke는 목록 읽기, cursor/query 검증, no-CSRF 차단, malformed 초대/요청/차단 입력, 임의 연결 404/no-store를 확인했으며 제품 fixture 쓰기 0건이다. 관계 RPC의 실제 Auth session 13/13 근거는 W06-C1 보고서를 따른다. 유효 초대 발급·소비/수락을 통한 route→DB 성공 검증은 제품 fixture를 보존하기 위해 실행하지 않았다. 전체 check/build와 SHA-256 source 근거는 [W09-A 검사 증거](../quality/reports/w09-a-connection-api-check-2026-10-08.json)에서 추적한다.
+
+W09-B 판 권한/공유 칭찬 API와 W09-C UI06~UI08 화면은 아직 남아 있다. 실제 UI mutation E2E, 제품 수락 TC, 기기/접근성 검사는 이 API smoke에 포함되지 않는다.
+
 ## 프로젝트에서 사용할 재개 메시지
 
 ```text

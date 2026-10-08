@@ -3683,7 +3683,7 @@
           "connections"
         ],
         "description": "본인의 연결 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -3769,7 +3769,7 @@
           "connections"
         ],
         "description": "사람 연결과 그 관계의 판 권한 종료",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005",
           "REQ-006"
@@ -3874,7 +3874,7 @@
           "connection-invites"
         ],
         "description": "ID·시각·상태만, 원문 링크·코드·해시는 다시 조회하지 않음.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -3958,7 +3958,7 @@
           "connection-invites"
         ],
         "description": "비밀은 발급 응답에만 제공. DB는 해시만 저장. 원문 비밀 보존을 피하려고 이 API는 결과 재생을 제공하지 않음. 실패 불확실 시 목록 확인 후 새 초대.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4051,7 +4051,7 @@
           "connection-invites"
         ],
         "description": "본인 미사용 초대 폐기",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4152,7 +4152,7 @@
           "connection-invites"
         ],
         "description": "로그인 후 비밀·차단·만료 검증, 상태 변경 없음. code는 하이픈 제거/대문자 정규화 후 정확히 12자 검사. 링크와 코드 중 하나만.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4245,7 +4245,7 @@
           "connection-requests"
         ],
         "description": "당사자의 연결 요청 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4340,7 +4340,7 @@
           "connection-requests"
         ],
         "description": "같은 키 재시도는 소비 검사보다 먼저 기존 결과를 안전하게 확인. 다른 입력 409. 초대 소비·요청·소식은 한 트랜잭션.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4436,7 +4436,7 @@
           "connection-requests"
         ],
         "description": "발급자의 연결 수락",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4538,7 +4538,7 @@
           "connection-requests"
         ],
         "description": "발급자의 연결 거절",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4640,7 +4640,7 @@
           "connection-requests"
         ],
         "description": "요청자의 연결 철회",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4742,7 +4742,7 @@
           "blocks"
         ],
         "description": "본인이 차단한 대상의 최소 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],
@@ -4826,7 +4826,7 @@
           "blocks"
         ],
         "description": "본인이 연결·요청 관계로 알 수 있는 대상만. 전체 사용자 ID 탐색 경로로 사용하지 않음.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005",
           "REQ-006"
@@ -4922,7 +4922,7 @@
           "blocks"
         ],
         "description": "차단만 해제, 연결·판 권한 자동 복구 없음.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "implemented",
         "x-requirements": [
           "REQ-005"
         ],

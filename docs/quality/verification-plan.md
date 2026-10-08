@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 61개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06 기술 TC 21개·W07 API TC 2개·W08 API TC 2개, 합계 기술 TC 25개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 65개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W09의 기술 TC 27개는 각 범위별 근거에 따라 통과 처리했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -150,6 +150,14 @@ UI02~UI05 기본 화면을 server API에 연결했다. 목록은 소유 목표 �
 로컬 Auth A 세션을 사용한 브라우저 조회 smoke에서 목표 목록·상세, 회차/칭찬 읽기, 개인/공유 전환, empty state, 선택 공유판 입력 필드, 목표·판 설정 필드를 확인했다. smoke는 GET과 폼 열기만 수행했고 기존 fixture의 제품 데이터를 쓰지 않았다. `TC-UI-003`은 이 범위로 통과 처리한다. 전체 `check`의 Biome·typecheck·unit 82/82·산출물 구조 검사와 `build:check`가 통과했다. Idempotency-Key와 요청 본문 재사용은 별도 unit 3개에서 확인한다.
 
 실제 UI 폼 submit 후 성공 화면/상태 반영, 전송 중 네트워크 단절 및 같은 키의 재시도는 브라우저 E2E로 실행하지 않았다. 제품 fixture 쓰기를 보존하기 위한 제한이다. 실제 성공 경로의 낮은 계층 근거는 W08-C Auth/RPC 3/3, 재시도 상태 helper는 W08-D unit 3/3이다. TC-UX-001/002, 실제 기기·스크린리더·PWA/캐시, 실제 Google/OTP 로그인 및 전체 제품 수락 검사는 계속 미실행이다. [W08-D 검사 증거](reports/w08-d-goal-record-ui-check-2026-10-08.json)
+
+## W09-A 초대·연결 요청·차단 API 경계 검사
+
+연결·초대·요청·차단의 14개 HTTP method 경로를 기존 W06 업무 RPC에 연결했다. 목록 응답은 connection/invite/request/block의 최소 필드만 투영하고 cursor/limit/direction 및 중복·미지원 query를 검사한다. 초대 코드는 구분자를 제거하고 대문자로 정규화한다. 비밀은 preview/request RPC에 전달하지만 목록·로그에는 저장하거나 반환하지 않는다. 초대 비밀을 포함한 새 요청은 Idempotency-Key를 사용하고, 모든 변경은 Origin·CSRF·JSON byte guard 후 RPC를 호출한다. 초대 발급에는 secret 재생을 피하기 위해 멱등성 응답을 제공하지 않는다.
+
+`scripts/connection-api.test.mjs` 8/8은 초대 secret 정규화, 응답 allowlist, query 경계, CSRF 선행 검사, request key, block 입력, 안전 오류 변환을 확인했다. `scripts/project.ps1 -Task api:connection-test`는 실제 local Auth 세션 A/B/C 각각 12/12를 통과했다. 각 actor에서 연결·초대·요청·차단 GET, 잘못된 페이지/actor query, CSRF 없는 발급 차단, malformed preview/request/block, 임의 연결 404/no-store를 확인했고 기존 fixture 쓰기는 0건이었다. 관계 업무 RPC의 실제 Auth 세션 13/13과 초대 소비·권한·재연결 경합 근거는 [W06-C1 증거](reports/w06-c1-cursor-pagination-check-2026-10-08.json)를 따른다.
+
+새 `TC-API-007`은 handler 단위 및 A/B/C 로컬 API 경계 범위만 통과한다. 유효 초대 발급/소비·실제 요청 생성의 route→DB 성공은 제품 fixture 보호를 위해 여기서 실행하지 않았고, 공유판 grant/peer praise API와 화면은 W09-B/C 작업으로 남는다. 최종 check·build·source hash는 [W09-A 검사 증거](reports/w09-a-connection-api-check-2026-10-08.json)에 기록한다.
 
 ## W05 물리 DB의 부분 검사
 
