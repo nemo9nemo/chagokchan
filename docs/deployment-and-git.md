@@ -1,8 +1,8 @@
 # 배포, 운영 환경, Git 형상관리
 
-결정일: 2026-10-07 / 갱신일: 2026-10-08 / 상태: 로컬·원격 Git 연결 완료, CI 경로 호환 수정 후 원격 재실행 대기, 브랜치 보호·운영 배포 미설정
+결정일: 2026-10-07 / 갱신일: 2026-10-08 / 상태: 로컬·원격 Git 연결 및 CI 통과, 브랜치 보호·운영 배포 미설정
 
-2026-10-08 사용자 요청으로 로컬 Git의 기능 단위 커밋과 공개 원격 저장소 연결·첫 업로드를 완료했다. 지정한 주소는 https://github.com/nemo9nemo/chagokchan.git 이며 origin/main을 추적한다. W16-C에서 `.github/workflows/ci.yml`에 GitHub Actions 검사 작업을 추가했다. 첫 원격 CI는 artifact 검증기의 개발 PC 경로 전제 오류로 실패해 수정했고, 수정본 CI 재실행과 브랜치 보호·클라우드 프로젝트·유료 서비스·실제 배포는 아직 완료하지 않았다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
+2026-10-08 사용자 요청으로 로컬 Git의 기능 단위 커밋과 공개 원격 저장소 연결·첫 업로드를 완료했다. 지정한 주소는 https://github.com/nemo9nemo/chagokchan.git 이며 origin/main을 추적한다. W16-C에서 `.github/workflows/ci.yml`에 GitHub Actions 검사 작업을 추가했다. 첫 원격 CI는 artifact 검증기의 개발 PC 경로 전제 오류로 실패했으나 수정본 원격 run `37783463500`은 check·build 모두 통과했다. 브랜치 보호·클라우드 프로젝트·유료 서비스·실제 배포는 아직 완료하지 않았다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
 
 외부 도구 사용은 허용되었다. 플러그인 설치·계정 인증·프로젝트 연결 상태와 도구별 연결 시점은 [외부 도구 연결](external-tools.md)에 기록한다. GitHub 플러그인 설치와 이 앱의 원격 저장소 연결은 구분한다.
 
@@ -92,7 +92,7 @@ Git 없이도 Vercel CLI 배포는 가능하다. 초기 배포를 할 때도 프
 
 ### W16-C GitHub Actions 품질 검사
 
-`.github/workflows/ci.yml`은 `main` 대상 PR·push와 수동 실행에서 읽기 전용 `contents` 권한으로 동작한다. Actions는 전체 커밋 SHA로 고정하고 저장소 인증정보를 checkout 이후 보존하지 않는다. `.node-version`의 Node.js 24.19.0, pnpm 11.19.0, frozen lockfile 설치를 사용한 뒤 `pnpm check`와 `pnpm build:check`를 순서대로 실행한다. `quality`는 필수 상태 검사 이름으로 사용한다. 운영 비밀·DB 자격증명은 CI에 전달하지 않는다. 첫 run `37782665722`에서 GitHub의 임시 checkout root가 개발 PC의 canonical path와 달라 artifact checker가 실패했다. checker는 GitHub Actions에서만 checkout root 일치 검사를 생략하고 transfer 기록·상태 검사는 유지한다. Actions 경로 모드를 지정한 artifact 검사는 통과했으며 원격 전체 CI 재실행과 main 보호 규칙 적용은 아직 대기 중이다.
+`.github/workflows/ci.yml`은 `main` 대상 PR·push와 수동 실행에서 읽기 전용 `contents` 권한으로 동작한다. Actions는 전체 커밋 SHA로 고정하고 저장소 인증정보를 checkout 이후 보존하지 않는다. `.node-version`의 Node.js 24.19.0, pnpm 11.19.0, frozen lockfile 설치를 사용한 뒤 `pnpm check`와 `pnpm build:check`를 순서대로 실행한다. `quality`는 필수 상태 검사 이름으로 사용한다. 운영 비밀·DB 자격증명은 CI에 전달하지 않는다. 첫 run `37782665722`에서 GitHub의 임시 checkout root가 개발 PC의 canonical path와 달라 artifact checker가 실패했다. checker는 GitHub Actions에서만 checkout root 일치 검사를 생략하고 transfer 기록·상태 검사는 유지한다. 수정본 run [37783463500](https://github.com/nemo9nemo/chagokchan/actions/runs/37783463500)은 `quality`·build가 통과했다. main 보호는 아직 적용하지 않았다.
 
 ### 포함·제외 기준
 

@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-08T13:18:41Z",
+  "checked_at": "2026-10-08T13:22:34Z",
   "work_item": "W16-C",
-  "status": "local_and_github_action_mode_checks_passed_initial_remote_ci_failed_fix_pending_rerun_and_protection",
-  "tested_parent_commit": "adbfff56d7ec5ba08d9ef46ffe98523a57b4c894",
+  "status": "local_and_remote_ci_passed_branch_protection_pending",
+  "tested_parent_commit": "bc74c8b7ad1d778037c0785efa3b677f27a45b04",
   "tested_worktree_changes": true,
   "workflow": {
     "path": ".github/workflows/ci.yml",
@@ -59,23 +59,29 @@
     }
   ],
   "remote_ci_run": {
-    "run_id": 37782665722,
-    "commit": "adbfff56d7ec5ba08d9ef46ffe98523a57b4c894",
-    "conclusion": "failure",
-    "failed_step": "Run project checks",
-    "cause": "Verified workspace differs from execution root",
-    "correction": "scripts/verify-artifacts.mjs now skips only the canonical execution-root equality check when GITHUB_ACTIONS=true; transfer-record checks remain enabled",
-    "corrected_run": "pending_push"
+    "initial_run_id": 37782665722,
+    "initial_commit": "adbfff56d7ec5ba08d9ef46ffe98523a57b4c894",
+    "initial_conclusion": "failure",
+    "initial_cause": "Verified workspace differs from execution root",
+    "correction": "scripts/verify-artifacts.mjs skips only the canonical execution-root equality check when GITHUB_ACTIONS=true; transfer-record checks remain enabled",
+    "corrected_run_id": 37783463500,
+    "corrected_commit": "bc74c8b7ad1d778037c0785efa3b677f27a45b04",
+    "corrected_conclusion": "success",
+    "check_name": "quality",
+    "checks_passed": [
+      "pnpm check",
+      "pnpm build:check"
+    ]
   },
   "remote_branch_protection_read": "GitHub API returned 404 Branch not protected for main",
   "branch_protection": "confirmed_not_configured",
   "limitations": [
-    "The first GitHub Actions run exposed the Windows canonical-path assumption; the corrected source is not pushed yet.",
+    "Branch protection was confirmed unconfigured before its planned W16-C update.",
     "CI has no staging database or product credentials; this workflow covers repository checks and production-check compilation only.",
     "GitHub API confirmed main has no protection; no branch-protection settings have been changed yet."
   ],
   "next_actions": [
-    "Commit and push the CI portability fix so GitHub can rerun the workflow.",
-    "Inspect the remote quality status, then configure main protection with PRs and the quality check, no admin bypass, and no force-push/deletion if repository access supports it."
+    "Configure main protection with PRs and the quality check, no admin bypass, and no force-push/deletion.",
+    "After branch protection is enabled, commit and merge the final status/evidence update through a PR."
   ]
 }
