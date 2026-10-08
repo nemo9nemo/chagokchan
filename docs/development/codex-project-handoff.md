@@ -38,6 +38,7 @@
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
+| W10 | IN_PROGRESS | W10-A 소식·보낸함 읽기 API 완료: unit 107/107·A/B/C API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 252/252. 다음 W10-B 목표 휴지통 API/UI. 계정 재인증은 W12/W13 |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -150,7 +151,15 @@ UI06 연결 센터에서 초대 발급(비밀은 1회 응답으로 탭 상태에
 
 검사는 `scripts/project.ps1 -Task db:migrate` 적용 성공, pgTAP 013 5/5·전체 `db:test` 252/252, 발급 Auth 세션 `db:shared-test` 8/8(기존 fixture snapshot·Auth session 수 보존), A/B/C `api:board-test` 각각 14/14(제품 fixture 쓰기 0), 전체 unit 100/100, Biome·typecheck·artifact check·`build:check`로 기록한다. 로컬 UI06 초대 진입은 불량 synthetic token을 사용한 읽기 전용 화면 smoke로 확인했다. 실제 초대 발급·연결 변경·grant/revoke·칭찬 작성을 브라우저로 전송하지 않았다. 제품 수락 E2E, UI mutation 성공/불확실 재시도 E2E, 기기/스크린리더·실제 로그인은 W13/W15에 남긴다. [W09-C 검사 증거](../quality/reports/w09-c-shared-board-ui-check-2026-10-08.json)
 
-다음 개발 작업은 W10 소식·보낸함·삭제·정리 API/UI 연결이다. W11 테마/접근성/PWA, 오픈 준비의 W12 실제 로그인, 공개 전 W13 실제 로그인 검증, W14 운영 입력, W15 제품 수락/기기/복원/부하 검사도 남아 있다.
+W09-C 완료 당시 다음 단계였던 W10에 착수해 W10-A를 완료했다. W11 테마/접근성/PWA, 오픈 준비의 W12 실제 로그인, 공개 전 W13 실제 로그인 검증, W14 운영 입력, W15 제품 수락/기기/복원/부하 검사도 남아 있다.
+
+## W10-A 소식·보낸 peer 칭찬 API 완료 기록
+
+`GET /api/v1/notifications`, `PATCH /api/v1/notifications/{notification_id}`, `GET /api/v1/sent-praises`를 W06-D1의 `list_notifications`, `mark_notification_read`, `list_sent_praises` RPC에 연결했다. 소식은 type·created_at·read_at·허용 target만, 보낸함은 작성자 본인 peer 칭찬의 본문·기록 시각·취소 상태만 반환한다. 목록은 cursor/limit 1~50과 no-store를 적용한다. 읽음 PATCH는 CSRF 검증 뒤 `{read:true}`만 허용하며 반복 실행의 `replayed` 결과를 전달한다.
+
+신규 `TC-API-010` handler unit 7/7, A/B/C 실제 local Auth API 각 11/11, W06-D1 실제 Auth session RPC 회귀 4/4, 전체 DB 252/252를 확인했다. 로컬 API 검사는 제품 fixture를 쓰지 않았고, lifecycle probe cleanup·fixture snapshot 보존을 확인했다. check/build 및 SHA-256은 [W10-A 검사 증거](../quality/reports/w10-a-news-sent-api-check-2026-10-08.json)에 기록한다. 실제 route mutation의 성공 쓰기·UI09 제품 E2E는 미실행이다.
+
+다음은 W10-B 본인 목표 휴지통·복구 API/UI다. 계정 탈퇴 API의 실제 재인증·세션 폐기는 W12/W13에 구현한다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

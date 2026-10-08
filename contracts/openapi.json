@@ -5117,7 +5117,7 @@
           "notifications"
         ],
         "description": "내 소식 목록",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "x-implementation-status": "implemented_local_session_route",
         "x-requirements": [
           "REQ-008"
         ],
@@ -5126,7 +5126,8 @@
         ],
         "x-test-cases": [
           "TC-NOTIFY-001",
-          "TC-DB-NEWS-001"
+          "TC-DB-NEWS-001",
+          "TC-API-010"
         ],
         "parameters": [
           {
@@ -5203,7 +5204,7 @@
           "notifications"
         ],
         "description": "내 소식 읽음 표시",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "x-implementation-status": "implemented_local_session_route",
         "x-requirements": [
           "REQ-008"
         ],
@@ -5212,7 +5213,8 @@
         ],
         "x-test-cases": [
           "TC-NOTIFY-001",
-          "TC-DB-NEWS-001"
+          "TC-DB-NEWS-001",
+          "TC-API-010"
         ],
         "parameters": [
           {
@@ -5305,7 +5307,7 @@
           "sent-praises"
         ],
         "description": "내가 보낸 peer 칭찬 최소 목록",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "x-implementation-status": "implemented_local_session_route",
         "x-requirements": [
           "REQ-009"
         ],
@@ -5315,7 +5317,8 @@
         ],
         "x-test-cases": [
           "TC-PRAISE-002",
-          "TC-DB-NEWS-002"
+          "TC-DB-NEWS-002",
+          "TC-API-010"
         ],
         "parameters": [
           {

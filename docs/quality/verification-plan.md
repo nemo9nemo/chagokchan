@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 67개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W09-C의 기술 TC 29개는 각 범위별 근거에 따라 통과 처리했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 68개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W10-A의 기술 TC 30개는 각 범위별 근거에 따라 통과 처리했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -172,6 +172,12 @@ UI06 연결 센터에서 일회 초대 발급/미리보기, 요청 수락·거�
 화면의 공유판 목록을 위해 `20261008024800_list_my_shared_boards_rpc.sql`과 GET `/api/v1/shared-boards`를 추가했다. DB는 호출자의 현재 연결 generation, 양방향 차단, 명시적 grant, 삭제 목표 상태를 매번 확인한다. 최대 50개 순서형 페이지와 contributor 최소 projection을 반환한다. UI 디렉터리도 이어보기 cursor를 사용한다.
 
 신규 `TC-API-009`는 pgTAP 013 5/5, 전체 DB 252/252, 실제 Auth-issued 공유 RPC 통합 8/8, A/B/C board API 경계 각 14/14, unit 100/100으로 통과 처리한다. A/B/C API 검사는 기존 제품 fixture 쓰기 없이 종료했고 합성 probe 계정/세션 정리와 fixture snapshot 보존을 확인했다. Biome·typecheck·artifact check·`build:check`는 W09-C 완료 시 다시 실행해 보고서에 결과를 기록한다. UI 검사는 invalid synthetic invite token을 이용한 읽기 전용 UI06 렌더 smoke 한 건이며, 실제 초대·관계·grant·칭찬 mutation submit, 제품 수락, 스크린리더·기기 E2E, 실제 Google/OTP 로그인은 포함하지 않는다. [W09-C 검사 증거](reports/w09-c-shared-board-ui-check-2026-10-08.json)
+
+## W10-A 소식·보낸 peer 칭찬 API 검사
+
+`GET /notifications`, `PATCH /notifications/{notification_id}`, `GET /sent-praises`를 W06-D1의 recipient-scoped `list_notifications`, `mark_notification_read`, `list_sent_praises` RPC에 연결했다. 페이지는 cursor/limit 1~50을 제한하고, 소식 응답에 허용된 type·시각·read_at·target kind/ID만, 보낸함에는 작성자 본인 peer record의 ID·본문·기록/취소 상태만 allowlist한다. 읽음 변경은 Origin/CSRF/JSON guard 뒤 `{read:true}`만 받아 RPC의 반복 요청 결과를 반환한다.
+
+신규 `TC-API-010`에 대해 handler unit 7/7, A/B/C 실제 local Auth API 각 11/11, 기존 W06-D1 실제 Auth session RPC 회귀 4/4, 전체 DB 252/252를 확인했다. A/B/C 검사는 목록 읽기·커서 입력·no-store·CSRF 없는 쓰기 거절과 임의 알림 404를 확인했고 제품 fixture를 변경하지 않았다. 전체 `check`와 `build:check` 결과 및 소스별 SHA-256은 [W10-A 검사 증거](reports/w10-a-news-sent-api-check-2026-10-08.json)에 기록한다. UI09 제출 흐름과 제품 수락 E2E는 아직 실행하지 않았으며 실제 로그인·재인증은 W12/W13이다.
 
 ## W05 물리 DB의 부분 검사
 

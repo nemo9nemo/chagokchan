@@ -1,0 +1,185 @@
+{
+  "verified_at": "2026-10-08T11:37:46Z",
+  "work_item": "W10-A",
+  "status": "passed",
+  "scope": "notification_inbox_read_and_sent_peer_praise_api",
+  "source_basis": {
+    "base_commit": "6de53bc1c4c8cfd50028aa09862b241ad552c71c",
+    "format": "SHA-256 per server API, routes, unit/integration checks, API contract, progress and handoff sources; excludes this report.",
+    "files": [
+      {
+        "path": "src/server/news-api.mjs",
+        "sha256": "5b0ca6e9d43be47324a86e62c76e1f6ae3cbabf76d0c871d72f94938fd3071ce"
+      },
+      {
+        "path": "src/server/api-security.mjs",
+        "sha256": "1016bbe1a51a84177f426c54ffa0df6fd40ff99ab4b681e015dca645679a34d4"
+      },
+      {
+        "path": "src/server/local-api-route.ts",
+        "sha256": "ce0aade8f99355aa5861ed813d3ae4692b8c1cb12739904ac4f6721140aa717b"
+      },
+      {
+        "path": "src/app/api/v1/notifications/route.ts",
+        "sha256": "d5c1dd29215bd69b55c04d3b01e2f0d4331a5cf820608cf1622fa2a6bcc5f54b"
+      },
+      {
+        "path": "src/app/api/v1/notifications/[notification_id]/route.ts",
+        "sha256": "2bb76710f4141588cfc03c8909674f51b5e10cb1b7c9b6127c8ac9e9c2ec3b84"
+      },
+      {
+        "path": "src/app/api/v1/sent-praises/route.ts",
+        "sha256": "1ad7674c97e08a236b733fce189f56ab5647cbb30b237b2d13222ee8d8c42898"
+      },
+      {
+        "path": "scripts/news-api.test.mjs",
+        "sha256": "027adbae19fe4180af720fbabe7d4927af70c40b6f762868c51488bb1819152c"
+      },
+      {
+        "path": "scripts/test-local-news-api.mjs",
+        "sha256": "94c84b1834a46ab96051fbde59ea294531d7be017cf982225a70c680fbea6749"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "d2cc45f4aa1dd67bf10f3c7c21b4328ab72e7493cbf1982668b23aca96fc68c5"
+      },
+      {
+        "path": "package.json",
+        "sha256": "8800eee7340011988405f33d330df3f574f5fd020a40ddb1e50fbb83d944c6f6"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "f3ae49426939d86b8332f9e263728db3a7558d4a335b5ab05a7cebd21bed9e52"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "57b2bef8cb1a077cb6cef6457c870cade1e7d0449262df447788e2bc17ae46fa"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w10-a-news-sent-api.md",
+        "sha256": "1fae31f8cdf379a82ccb5057ab068657216a5e24789250c9c363cd0d6bc9e782"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "9959a43733a732937a543c2fb09485238835d10dc2a5459fd146eaab2808d998"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "10459f9a81f358398e70dba73a0d57024876b6365aa72b2e2ab4f53dc10f50a5"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "a5dbe81ade8a9424beef23e9d3cafb97cb6e8f714c793a940c5f097cb9a0c8cc"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "269737dcc57a6570f8adfb95567af61b62ec95783d5cf6f9ba0b9c77fd5f7669"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "17f8112877de46de3f663af8e82466cae88295aee2cf21c0126ca6de40faaca1"
+      },
+      {
+        "path": "docs/policies/data-lifecycle.md",
+        "sha256": "665c78e8716349139e83d2700383d58771749f1cb14db1b12d427ddf0025b0e9"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "74174e6f1c165b221a3db3edf44d809cfb3f3b1fff0af119b599639e2190b897"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "supabase_cli": "2.120.0",
+    "postgresql": "17.11 local disposable Supabase database",
+    "auth_mode": "local_fixture; synthetic Auth-issued sessions",
+    "database_host_binding": "127.0.0.1"
+  },
+  "database_schema": {
+    "new_migration_applied": false,
+    "latest_applied_version": "20261008024800",
+    "regression_suite": "scripts/project.ps1 -Task db:test",
+    "regression_executed": 252,
+    "regression_passed": 252
+  },
+  "commands": {
+    "focused_unit": {
+      "command": "node --test scripts/news-api.test.mjs",
+      "status": "passed",
+      "executed": 7,
+      "passed": 7
+    },
+    "api_actor_smoke": {
+      "command": "scripts/project.ps1 -Task api:news-test",
+      "status": "passed",
+      "actors": {
+        "A": {
+          "executed": 11,
+          "passed": 11
+        },
+        "B": {
+          "executed": 11,
+          "passed": 11
+        },
+        "C": {
+          "executed": 11,
+          "passed": 11
+        }
+      },
+      "total_executed": 33,
+      "product_fixture_writes": 0
+    },
+    "lifecycle_rpc": {
+      "command": "scripts/project.ps1 -Task db:lifecycle-test",
+      "status": "passed",
+      "executed": 4,
+      "passed": 4,
+      "probe_sessions_removed": true,
+      "fixture_data_preserved": true,
+      "service_role_used_for_user_scoped_app_rpc": false
+    },
+    "database": {
+      "command": "scripts/project.ps1 -Task db:test",
+      "status": "passed",
+      "executed": 252,
+      "passed": 252,
+      "physical_integrity": 51,
+      "rpc_boundary": 21,
+      "business_rpc": 180
+    },
+    "unit_and_static": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 87,
+      "typecheck": "passed",
+      "unit_tests": 107,
+      "unit_tests_passed": 107,
+      "artifact_check": "passed",
+      "artifact_check_registered_paths": 257,
+      "local_markdown_links": 457,
+      "planned_test_cases": 68
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "route_entries": 34
+    }
+  },
+  "test_case": {
+    "id": "TC-API-010",
+    "status": "passed",
+    "product_acceptance_cases_executed": 0
+  },
+  "limitations": {
+    "api_route_successful_read_mark_to_database_cases_executed": 0,
+    "api_route_inaccessible_mark_404_cases_executed": 3,
+    "ui09_screen_or_mutation_e2e_cases_executed": 0,
+    "real_provider_login_tests_executed": 0,
+    "deployed_session_adapter_verified": false,
+    "ci_or_deployment_verified": false
+  }
+}
