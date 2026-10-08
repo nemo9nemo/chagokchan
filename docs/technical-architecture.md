@@ -1,6 +1,6 @@
 # 개발 스택과 기술 아키텍처
 
-결정일: 2026-10-07 / 상태: 개발 기준 결정, 구현·서비스 개설 전
+결정일: 2026-10-07 / 상태: 개발 기준 결정, 앱 실행·환경 검사 기반 구현. 업무 기능·서비스 개설 전
 
 적용 제품: [기획 v0.2](product-plan-v0.2.md). 목표마다 개인 포도송이와 공유 포도송이를 분리하고, 연결된 지인이 허용된 공유판에 칭찬을 준다. 이 문서의 선택을 첫 개발의 기준으로 사용한다.
 
@@ -22,7 +22,8 @@
 | 인증 메일 | Resend를 Supabase의 Custom SMTP로 연결 |
 | 봇 방어 | 이메일 인증 흐름에 Cloudflare Turnstile, Supabase Auth 검증 사용 |
 | 배포 | Vercel Pro + Supabase Pro, 서울 리전 기준 |
-| 테스트 | Vitest, Playwright, Supabase CLI·pgTAP 권한 테스트 |
+| 린트·타입 | Biome 2.5.15, TypeScript strict·Next.js 빌드 |
+| 테스트 | 현재 Node 내장 환경 단위 검사. 업무 구현 때 Vitest·Playwright·Supabase CLI/pgTAP 추가 |
 | 형상관리 | 추후 GitHub 비공개 저장소 + GitHub Actions 연결 |
 
 2026-10-07 공식 Next.js 문서에는 16.4.0이 표시되며 Node.js 24는 LTS로 안내된다. 실제 설치 시점에 이 계열의 보안 수정 여부와 호환성을 다시 확인하고 정확한 버전을 잠금 파일에 기록한다. 운영 배포에서 자동으로 latest를 설치하지 않는다. [Next.js 문서](https://nextjs.org/docs/app/guides/data-security), [Node.js 릴리스](https://nodejs.org/en/about/previous-releases)

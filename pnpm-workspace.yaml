@@ -1,0 +1,9 @@
+packages:
+  - '.'
+verifyDepsBeforeRun: error
+strictDepBuilds: true
+allowBuilds:
+  supabase@2.120.0: true
+  sharp: true
+  '@tailwindcss/oxide@4.3.3': true
+  unrs-resolver: true

@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-07T23:30:04.399Z",
+  "checked_at": "2026-10-08T01:04:03.655Z",
   "status": "passed",
   "runtime": "v24.19.0",
   "scope": "artifact_structural_consistency_only",
@@ -11,13 +11,13 @@
     {
       "id": "json",
       "description": "JSON parse",
-      "count": 10,
+      "count": 11,
       "status": "passed"
     },
     {
       "id": "links",
       "description": "Local Markdown links",
-      "count": 280,
+      "count": 300,
       "status": "passed"
     },
     {
@@ -62,7 +62,7 @@
     {
       "id": "registry",
       "description": "Existing registered artifact paths",
-      "count": 57,
+      "count": 79,
       "status": "passed"
     },
     {
@@ -104,6 +104,6 @@
       "scripts/verify-artifacts.mjs"
     ],
     "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
-    "sha256": "2c3dfdb516d4dfda784a65d7bee3fec6b8ee11ec3e8968db88c7e128e8c2da82"
+    "sha256": "edf429b04c07a86b517078918a25f6742b267babfc8c326866262a433ff2ba3f"
   }
 }

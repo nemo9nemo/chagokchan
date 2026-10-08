@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-현재 작업은 요구사항·정책·설계를 개발 산출물로 만드는 단계다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
+S04 앱·실행 환경·로컬 DB 준비를 완료했다. 다음은 S05 제품 데이터·권한·로컬 사용자 구현이다. [실행 방법](runtime-setup.md)과 [검사 증거](../quality/reports/foundation-check-2026-10-08.json)에 현재 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 
@@ -15,7 +15,7 @@
 | S01 요구사항 | 사용자·목적·MVP 범위·제외 기능 정의 | [요구사항](../requirements/mvp-requirements.md), 기존 시장조사·제품 기획 | 핵심 요구에 ID와 관찰 가능한 수락 기준이 있음 |
 | S02 정책 | 권한·상태·집계·날짜·삭제·복구 규칙 구체화 | [정책 JSON](../../policies/app-policy.json), [제품 규칙](../policies/product-rules.md), [생명주기](../policies/data-lifecycle.md), [응답 범위](../policies/access-and-responses.md) | I01~I09에 개발 기준이 있고 가정·출시 준비 입력이 구분됨 |
 | S03 설계 | 데이터·화면·API·검증 설계 | ERD·Mermaid, [화면 흐름](../design/user-flows.md), [OpenAPI](../../contracts/openapi.json), [검증 계획](../quality/verification-plan.md), ADR | 요구·정책·API·TC 참조가 이어지고 모순이 없음 |
-| S04 개발 기반 | 런타임·앱·로컬 DB 구성 | package.json·정확한 잠금 파일·타입/린트 설정·로컬 DB 설정·가상 데이터 | Node 24·pnpm·Docker 엔진·Supabase CLI로 로컬 빌드와 DB 시작이 재현됨 |
+| S04 개발 기반 | 런타임·앱·로컬 DB 구성 | package.json·정확한 잠금 파일·타입/린트 설정·로컬 DB 설정·기동 검사 | Node 24·pnpm·Docker 엔진·Supabase CLI로 로컬 빌드와 DB 시작이 재현됨 |
 | S05 데이터·권한·로컬 사용자 | 제약·RLS·RPC·로컬 세션·서버 API 구현 | SQL 마이그레이션·가상 데이터·DB 검사·로컬 사용자 해석기 | 로그인 화면 없이 사용하며 허용·거절·동시성·현재 로컬 세션 검사가 실제 통과 |
 | S06 사용자 기능 | 목표·개인 칭찬·연결·공유·소식·PWA 구현 | 화면·API·오류·접근성·핵심 E2E | REQ 수락 기준과 계약을 기능에서 확인 |
 | S07 실제 로그인·통합 검증 | Google/OTP·가입·세션·재인증 연동, 보안·여러 계정·기기·복원·성능 확인 | 인증 코드·실제 로그인 실행 결과·결함 목록·스테이징 기록 | 실제 인증으로 필수 TC 통과, 미해결 P0/P1 없음, 복원 재현 |
@@ -45,12 +45,12 @@ S03의 ERD 완료는 실제 DB 생성 완료가 아니다. S04에서 도구·로
 | --- | --- |
 | PATH 기본 Node | 22.14.0. 계획한 Node 24와 다름 |
 | 번들 Node | 24.19.0 실행 확인. 개발 시 사용할 실행 경로를 명시해야 함 |
-| pnpm | 11.19.0 실행 확인. 앱 생성 시 버전 고정·호환 검증 예정 |
-| Docker | CLI 29.1.3 확인. 현재 엔진 연결 실패와 설정 파일 접근 오류 관측 |
-| Supabase CLI·로컬 DB | 아직 실행·검증하지 않음 |
-| Git | 현재 폴더에 저장소 없음. 추후 연결 예정 |
+| pnpm | 11.19.0 고정. 설치·잠금 파일·실행 확인 |
+| Docker | CLI·엔진 29.1.3·WSL 3.0.1/WSL 2 확인. 임시 소켓 복구 후 정상 기동 |
+| Supabase CLI·로컬 DB | CLI 2.120.0, PostgreSQL 17.11. 서비스 7개·Auth/REST·공개 포트 127.0.0.1 확인 |
+| Git | 로컬 main 저장소·기능 단위 커밋·메시지 훅 적용. 원격·CI는 미연결 |
 
-Docker의 실제 실행 상태와 접근은 S04에서 다시 확인한다. 앱 설치·빌드·DB 마이그레이션 성공 증거는 현재 없다. [현재 검사 기록](../quality/reports/2026-10-07-baseline.md)
+앱 설치·린트·타입·환경/포트 검사·빌드·HTTP·DB 연결 증거는 [앱 기반 검사](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. 제품 SQL·마이그레이션·업무 권한 검사·수락 TC·실제 로그인 검사는 다음 단계에서 수행한다.
 
 ## 변경과 릴리스
 

@@ -1,0 +1,40 @@
+{
+  "name": "chagokchan",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0"
+  },
+  "scripts": {
+    "dev": "node scripts/app.mjs dev",
+    "build": "node scripts/app.mjs build",
+    "build:check": "node scripts/app.mjs build-check",
+    "start": "node scripts/app.mjs start",
+    "lint": "biome lint --error-on-warnings .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs",
+    "check:artifacts": "node scripts/verify-artifacts.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
+    "db:init": "node scripts/local-db.mjs init",
+    "db:start": "node scripts/local-db.mjs start",
+    "db:status": "node scripts/local-db.mjs status",
+    "db:stop": "node scripts/local-db.mjs stop"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "24.19.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "supabase": "2.120.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  }
+}

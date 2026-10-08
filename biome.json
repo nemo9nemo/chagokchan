@@ -1,0 +1,21 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": ["src/**", "scripts/**", "next.config.mjs", "postcss.config.mjs"]
+  },
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "linter": {
+    "enabled": true,
+    "rules": { "preset": "recommended", "style": { "useTemplate": "off" } }
+  },
+  "overrides": [{
+    "includes": ["scripts/verify-artifacts.mjs"],
+    "linter": { "rules": { "complexity": {
+      "noAdjacentSpacesInRegex": "off",
+      "useOptionalChain": "off"
+    } } }
+  }],
+  "css": { "parser": { "tailwindDirectives": true } }
+}

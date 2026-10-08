@@ -1,6 +1,6 @@
 # 로그인 없이 사용하는 로컬 개발
 
-기준일: 2026-10-08 / 상태: 설계 완료, 실행 코드 미구현
+기준일: 2026-10-08 / 상태: 환경 차단 검사 구현·단위 검증 완료, 로컬 Auth 세션·업무 API 미구현
 
 사용자는 개발 중 로그인 화면 없이 앱을 이용하고, 실제 오픈을 준비하는 시점부터 로그인 테스트와 실사용을 진행한다. [개발 환경 정책](../../policies/development-policy.json)과 [ADR-0004](../decisions/ADR-0004-local-development-auth.md)가 이 결정의 기준이다. 출시용 [계정·권한 정책](../auth-and-permissions.md)과 제품 정책 버전은 유지한다.
 
@@ -27,7 +27,7 @@ Supabase의 로컬 스택에는 PostgreSQL과 Auth가 포함되고 CLI·컨테�
 
 `NODE_ENV` 하나만으로 허용하지 않는다. 환경, 인증 모드, 실제 바인딩 주소, 앱 URL, Supabase URL과 포트를 함께 확인한다. 로컬 개발 서버와 DB를 터널·공유 URL·외부 네트워크에 공개하지 않는다. 배포용 빌드에는 로컬 사용자 해석 경로가 연결되지 않게 하고, `local_fixture` 설정이나 가상 자격증명이 있으면 배포 전에 실패시킨다. 환경 변수명에 `NEXT_PUBLIC_`를 붙이지 않는다. [Next.js 환경 변수 안내](https://nextjs.org/docs/app/guides/environment-variables)
 
-실제 `.env.local`은 앱 기반 생성 때 이 템플릿에서 준비한다. 현재 [.env.example](../../.env.example)은 설정 예시이고 기능이 실행된다는 뜻이 아니다.
+개발 설정은 `.env.development.local`에 준비했고 Git에서 제외한다. Next.js가 배포 빌드에서 읽는 환경 파일과 개발용 fixture 설정을 분리한다. [.env.example](../../.env.example)은 설정 템플릿이다. 환경 검사와 앱 기반은 [실행 방법](runtime-setup.md)·[검사 JSON](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. A/B/C 실제 세션과 목표·칭찬 API는 W05~W07에서 구현한다.
 
 ## DB와 검사 순서
 

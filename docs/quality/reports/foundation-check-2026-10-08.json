@@ -1,0 +1,389 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-10-08T01:04:02.815Z",
+  "status": "passed",
+  "scope": "app_and_local_database_foundation_only",
+  "source_basis": {
+    "format": "sha256(path + NUL + sha256 + LF), sorted by path",
+    "digest": "8893c74a55ded817d864c17199568c236b8266c0d6e6dc7653229f3fe900c4f6",
+    "files": [
+      {
+        "path": ".env.example",
+        "sha256": "a64d5ab54064c8f1f0b457e5946d4463e812154694bff5807bf9f7f2ede7862a"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "c201219cdea01f4c7b23267607d3309af206b8ea2a29a41e9c22b7c9cf3af868"
+      },
+      {
+        "path": ".node-version",
+        "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+      },
+      {
+        "path": ".npmrc",
+        "sha256": "3b88d1057add6f92ec23dc22dd017e312ded13a042deb0ba6f08bad85d936456"
+      },
+      {
+        "path": ".nvmrc",
+        "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+      },
+      {
+        "path": "biome.json",
+        "sha256": "aeb6f5e5ee70aa598f69aac272cb2e18499adb30cb214765b2bfaba12fc1f3e2"
+      },
+      {
+        "path": "next.config.mjs",
+        "sha256": "fa991fc49b2b797941eddac83370b2a4d7de3383769da515d2fca2777f8eefd0"
+      },
+      {
+        "path": "package.json",
+        "sha256": "156c84e1ab8656f2376c74ef12678979f22fc358512ce0a22f09eee76482eb61"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "57eb3991a37ea079e6c46e0e67a0ca2aae2fc436d77c8587efd766cb1622a88e"
+      },
+      {
+        "path": "pnpm-workspace.yaml",
+        "sha256": "a2406bfccd8c7dbcd24224e218878dbc6488b737d361187ab9e97868f6166e78"
+      },
+      {
+        "path": "policies/development-policy.json",
+        "sha256": "79dabf2f8a1580e5535cbfaf902ee575053f92eb7a6f83892be676d2df9d9ed8"
+      },
+      {
+        "path": "postcss.config.mjs",
+        "sha256": "b783348d5618047d0f37e12acd15c5a2c5f02809d8711e0764c9cea52750346c"
+      },
+      {
+        "path": "scripts/app.mjs",
+        "sha256": "6d765b6621f486595cebe021d4a7b478e75c6cbe697a230812ebdcde7346a174"
+      },
+      {
+        "path": "scripts/docker-loopback-proxy.mjs",
+        "sha256": "82ea25656e2b7d2eb794d4415b6a78f7ac4498dc8e60aad05f70c9bc8ec270c1"
+      },
+      {
+        "path": "scripts/docker-loopback-proxy.test.mjs",
+        "sha256": "290633a7f0b469b09a4bd527f18cb3e4ca434aa082f8261290d73602f59e1c6b"
+      },
+      {
+        "path": "scripts/local-db.mjs",
+        "sha256": "f100da4370d5ee484079b02040d5400f9299652dab817fee825c32df9b99d5ed"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "5b797d77314783a60df23fbe103fb4e1ee5b37f7dbd12591b407551188eea970"
+      },
+      {
+        "path": "scripts/runtime-environment.mjs",
+        "sha256": "1e6c0c3185340e289eca4534a986d10f25695109f3d6bfde5d7ba504006f904c"
+      },
+      {
+        "path": "scripts/runtime-environment.test.mjs",
+        "sha256": "a1c1d8e5e6c33605eb9fd4af8d1d92d861d99b3eccbd48b9ff67e571f44ef615"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "07531d153ca6fcf1f674c4fbce06b729261753c7cd5059ed2e73465fe23ab4ad"
+      },
+      {
+        "path": "src/app/layout.tsx",
+        "sha256": "bde3b9dfcfed8d8237d44d9a5602cf20d65fc734f931fc02c593ee67214b716c"
+      },
+      {
+        "path": "src/app/page.tsx",
+        "sha256": "be044e1ddaf945019e25595d46f6a6b557ad185be04cec02ac2987087d29a63b"
+      },
+      {
+        "path": "supabase/.gitignore",
+        "sha256": "507699eb91144818edf61d3a079212cacf31d8db520eae428e3b48fcf0d6919c"
+      },
+      {
+        "path": "supabase/config.toml",
+        "sha256": "af79a488f33bf85677038a592d0a014f28bc249781250a2bac42ac7278186f5e"
+      },
+      {
+        "path": "tsconfig.json",
+        "sha256": "6cb4f781d13d8fdb885d29d88007cfa55f215c5f48cd37a04b830f86a11a32a6"
+      }
+    ]
+  },
+  "baseline_commit": "56914bfb78b4bb3c10adc4b8cb50a36f7348a3b5",
+  "runtime": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "typescript": "5.9.3",
+    "biome": "2.5.15",
+    "supabase_cli": "2.120.0"
+  },
+  "application_checks": {
+    "verified_at": "2026-10-08T00:52:40.737Z",
+    "source_basis": {
+      "format": "sha256(path + NUL + sha256 + LF), sorted by path",
+      "digest": "8893c74a55ded817d864c17199568c236b8266c0d6e6dc7653229f3fe900c4f6",
+      "files": [
+        {
+          "path": ".env.example",
+          "sha256": "a64d5ab54064c8f1f0b457e5946d4463e812154694bff5807bf9f7f2ede7862a"
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "c201219cdea01f4c7b23267607d3309af206b8ea2a29a41e9c22b7c9cf3af868"
+        },
+        {
+          "path": ".node-version",
+          "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+        },
+        {
+          "path": ".npmrc",
+          "sha256": "3b88d1057add6f92ec23dc22dd017e312ded13a042deb0ba6f08bad85d936456"
+        },
+        {
+          "path": ".nvmrc",
+          "sha256": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc"
+        },
+        {
+          "path": "biome.json",
+          "sha256": "aeb6f5e5ee70aa598f69aac272cb2e18499adb30cb214765b2bfaba12fc1f3e2"
+        },
+        {
+          "path": "next.config.mjs",
+          "sha256": "fa991fc49b2b797941eddac83370b2a4d7de3383769da515d2fca2777f8eefd0"
+        },
+        {
+          "path": "package.json",
+          "sha256": "156c84e1ab8656f2376c74ef12678979f22fc358512ce0a22f09eee76482eb61"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "57eb3991a37ea079e6c46e0e67a0ca2aae2fc436d77c8587efd766cb1622a88e"
+        },
+        {
+          "path": "pnpm-workspace.yaml",
+          "sha256": "a2406bfccd8c7dbcd24224e218878dbc6488b737d361187ab9e97868f6166e78"
+        },
+        {
+          "path": "policies/development-policy.json",
+          "sha256": "79dabf2f8a1580e5535cbfaf902ee575053f92eb7a6f83892be676d2df9d9ed8"
+        },
+        {
+          "path": "postcss.config.mjs",
+          "sha256": "b783348d5618047d0f37e12acd15c5a2c5f02809d8711e0764c9cea52750346c"
+        },
+        {
+          "path": "scripts/app.mjs",
+          "sha256": "6d765b6621f486595cebe021d4a7b478e75c6cbe697a230812ebdcde7346a174"
+        },
+        {
+          "path": "scripts/docker-loopback-proxy.mjs",
+          "sha256": "82ea25656e2b7d2eb794d4415b6a78f7ac4498dc8e60aad05f70c9bc8ec270c1"
+        },
+        {
+          "path": "scripts/docker-loopback-proxy.test.mjs",
+          "sha256": "290633a7f0b469b09a4bd527f18cb3e4ca434aa082f8261290d73602f59e1c6b"
+        },
+        {
+          "path": "scripts/local-db.mjs",
+          "sha256": "f100da4370d5ee484079b02040d5400f9299652dab817fee825c32df9b99d5ed"
+        },
+        {
+          "path": "scripts/project.ps1",
+          "sha256": "5b797d77314783a60df23fbe103fb4e1ee5b37f7dbd12591b407551188eea970"
+        },
+        {
+          "path": "scripts/runtime-environment.mjs",
+          "sha256": "1e6c0c3185340e289eca4534a986d10f25695109f3d6bfde5d7ba504006f904c"
+        },
+        {
+          "path": "scripts/runtime-environment.test.mjs",
+          "sha256": "a1c1d8e5e6c33605eb9fd4af8d1d92d861d99b3eccbd48b9ff67e571f44ef615"
+        },
+        {
+          "path": "src/app/globals.css",
+          "sha256": "07531d153ca6fcf1f674c4fbce06b729261753c7cd5059ed2e73465fe23ab4ad"
+        },
+        {
+          "path": "src/app/layout.tsx",
+          "sha256": "bde3b9dfcfed8d8237d44d9a5602cf20d65fc734f931fc02c593ee67214b716c"
+        },
+        {
+          "path": "src/app/page.tsx",
+          "sha256": "be044e1ddaf945019e25595d46f6a6b557ad185be04cec02ac2987087d29a63b"
+        },
+        {
+          "path": "supabase/.gitignore",
+          "sha256": "507699eb91144818edf61d3a079212cacf31d8db520eae428e3b48fcf0d6919c"
+        },
+        {
+          "path": "supabase/config.toml",
+          "sha256": "af79a488f33bf85677038a592d0a014f28bc249781250a2bac42ac7278186f5e"
+        },
+        {
+          "path": "tsconfig.json",
+          "sha256": "6cb4f781d13d8fdb885d29d88007cfa55f215c5f48cd37a04b830f86a11a32a6"
+        }
+      ]
+    },
+    "node": "24.19.0",
+    "supabase_cli": "2.120.0",
+    "checks": {
+      "lint": "passed",
+      "typecheck": "passed",
+      "environment_unit_tests": {
+        "executed": 27,
+        "passed": 27,
+        "failed": 0
+      },
+      "artifact_structure_at_check": "passed",
+      "offline_build": "passed"
+    },
+    "log_hashes": {
+      "check": "c28d12088b207465ac45b6eeea6a7f3924b4c778441635bff5846d37ce03e4d9",
+      "build": "96454baafbe3bd795396992ccc5b9d857b17f17b65fd6c14d8dc408576738b11"
+    },
+    "business_acceptance_cases_executed": 0,
+    "database_tests_executed": 0,
+    "real_login_tests_executed": 0
+  },
+  "frozen_lockfile_install": "passed",
+  "http_smoke": {
+    "verified_at": "2026-10-08T00:54:12.461Z",
+    "source_digest": "8893c74a55ded817d864c17199568c236b8266c0d6e6dc7653229f3fe900c4f6",
+    "url": "http://127.0.0.1:3000/",
+    "checks": {
+      "status_200": true,
+      "title": true,
+      "korean_html": true,
+      "brand_present": true,
+      "nosniff": true,
+      "frame_deny": true,
+      "referrer_policy": true,
+      "no_powered_by_header": true,
+      "project_rules_not_generated": true
+    },
+    "listeners": [
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 3000
+      }
+    ]
+  },
+  "database_start": {
+    "verified_at": "2026-10-08T00:54:31.994Z",
+    "command": "pnpm run db:start",
+    "exit_code": 0,
+    "status": "started",
+    "reason": null,
+    "database_tests_executed": 0
+  },
+  "database_connectivity": {
+    "verified_at": "2026-10-08T00:55:51.650Z",
+    "status": "passed",
+    "docker_engine": "29.1.3",
+    "containers": [
+      {
+        "name": "supabase_studio_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "3000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "54323"
+            }
+          ]
+        }
+      },
+      {
+        "name": "supabase_pg_meta_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "8080/tcp": null
+        }
+      },
+      {
+        "name": "supabase_rest_chagokchan",
+        "state": "true none",
+        "port_bindings": {
+          "3000/tcp": null
+        }
+      },
+      {
+        "name": "supabase_inbucket_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "8025/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "54324"
+            }
+          ]
+        }
+      },
+      {
+        "name": "supabase_auth_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "9999/tcp": null
+        }
+      },
+      {
+        "name": "supabase_kong_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "8000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "54321"
+            }
+          ]
+        }
+      },
+      {
+        "name": "supabase_db_chagokchan",
+        "state": "true healthy",
+        "port_bindings": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "54322"
+            }
+          ]
+        }
+      }
+    ],
+    "postgres": {
+      "server_version": "17.11",
+      "auth_users_present": true,
+      "auth_sessions_present": true,
+      "auth_user_count": 0
+    },
+    "http_endpoints": [
+      {
+        "url": "http://127.0.0.1:54321/auth/v1/health",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:54321/rest/v1/",
+        "status": 200
+      }
+    ],
+    "product_database_tests_executed": 0,
+    "real_login_tests_executed": 0
+  },
+  "docker_runtime_repair": {
+    "status": "temporary_directories_preserved_engine_response_verified",
+    "backup_directories": [
+      "%LOCALAPPDATA%/Docker/run.stale-20261008",
+      "%LOCALAPPDATA%/Docker/run.stale-20261008-2",
+      "%LOCALAPPDATA%/docker-secrets-engine.stale-20261008"
+    ],
+    "database_or_container_data_deleted": false
+  },
+  "planned_acceptance_cases": 36,
+  "business_acceptance_cases_executed": 0,
+  "product_database_tests_executed": 0,
+  "real_login_tests_executed": 0
+}

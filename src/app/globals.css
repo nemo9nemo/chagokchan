@@ -1,0 +1,12 @@
+@import "tailwindcss";
+:root { color-scheme: light; background: #f8f6ef; color: #29382d; font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+body { margin: 0; }
+.welcome { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+.mark { display: flex; gap: .5rem; margin-bottom: 1.4rem; }
+.mark span { width: 1rem; height: 1rem; border-radius: 50%; background: #658066; }
+.mark span:nth-child(2) { background: #e2b568; transform: translateY(-.4rem); }
+.mark span:nth-child(3) { background: #adbd9d; }
+.brand { font-weight: 700; font-size: 1rem; letter-spacing: .06em; }
+.brand span { display: block; margin-top: .35rem; color: #536353; font-size: .7rem; }
+h1 { margin: 2rem 0 1.25rem; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1.4; font-weight: 700; letter-spacing: -.05em; }
+.intro { font-size: 1rem; line-height: 1.85; color: #536353; }
