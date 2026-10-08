@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-08T13:12:04Z",
+  "checked_at": "2026-10-08T13:18:41Z",
   "work_item": "W16-C",
-  "status": "local_checks_passed_remote_ci_and_branch_protection_pending",
-  "tested_parent_commit": "de44776fdc1cbaae65f4af7a07d8642e8aa4db68",
+  "status": "local_and_github_action_mode_checks_passed_initial_remote_ci_failed_fix_pending_rerun_and_protection",
+  "tested_parent_commit": "adbfff56d7ec5ba08d9ef46ffe98523a57b4c894",
   "tested_worktree_changes": true,
   "workflow": {
     "path": ".github/workflows/ci.yml",
@@ -32,7 +32,7 @@
       "unit_tests_passed": 115,
       "unit_tests_failed": 0,
       "artifact_json_files": 39,
-      "markdown_links": 491,
+      "markdown_links": 493,
       "openapi_paths": 55,
       "openapi_local_references": 700,
       "registered_artifact_paths": 286
@@ -45,20 +45,37 @@
       "static_page_generation": "passed"
     },
     {
+      "command": "GITHUB_ACTIONS=true node scripts/verify-artifacts.mjs",
+      "result": "passed",
+      "runtime": "Node.js 24.19.0",
+      "verification": "CI checkout root may differ; recorded canonical transfer target remains validated",
+      "artifact_json_files": 39,
+      "markdown_links": 493,
+      "registered_artifact_paths": 286
+    },
+    {
       "command": "git diff --check",
       "result": "passed"
     }
   ],
-  "remote_ci_run": "not_run_before_push",
+  "remote_ci_run": {
+    "run_id": 37782665722,
+    "commit": "adbfff56d7ec5ba08d9ef46ffe98523a57b4c894",
+    "conclusion": "failure",
+    "failed_step": "Run project checks",
+    "cause": "Verified workspace differs from execution root",
+    "correction": "scripts/verify-artifacts.mjs now skips only the canonical execution-root equality check when GITHUB_ACTIONS=true; transfer-record checks remain enabled",
+    "corrected_run": "pending_push"
+  },
   "remote_branch_protection_read": "GitHub API returned 404 Branch not protected for main",
   "branch_protection": "confirmed_not_configured",
   "limitations": [
-    "Remote workflow status will only exist after pushing this commit.",
+    "The first GitHub Actions run exposed the Windows canonical-path assumption; the corrected source is not pushed yet.",
     "CI has no staging database or product credentials; this workflow covers repository checks and production-check compilation only.",
-    "The actual protected-branch status is not claimed from local verification."
+    "GitHub API confirmed main has no protection; no branch-protection settings have been changed yet."
   ],
   "next_actions": [
-    "Commit and push the workflow so GitHub can execute it.",
+    "Commit and push the CI portability fix so GitHub can rerun the workflow.",
     "Inspect the remote quality status, then configure main protection with PRs and the quality check, no admin bypass, and no force-push/deletion if repository access supports it."
   ]
 }
