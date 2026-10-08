@@ -1,0 +1,88 @@
+{
+  "verified_at": "2026-10-08T12:22:30Z",
+  "work_item": "W11-B1",
+  "status": "passed",
+  "scope": "keyboard_skip_link_async_busy_state_and_read_error_retry",
+  "source_basis": {
+    "base_commit": "9589d852c25728f585c4e0848a0f38a820963839",
+    "format": "SHA-256 per implementation, test case, design, progress, handoff, verification plan, README and change record sources; excludes this report.",
+    "files": [
+      { "path": "src/app/client-app.tsx", "sha256": "924fa6c6f7481e74565eee881a9a2e659c5ee35d63fa3bffb05e569f7190bd35" },
+      { "path": "src/app/globals.css", "sha256": "201dde23f4dc480dbc638dbc2bbf037b0363a8b6b4fb9ae01b921fbbcc3cd0b5" },
+      { "path": "docs/quality/test-cases.json", "sha256": "e99df70e49e10a1a28407bfb16e5cf1df2ebae8db191f3ae7f0c60a57084085f" },
+      { "path": "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md", "sha256": "77b8712d8407c75fac7e90e61bac7d43180d9dab25ea5f6f2b3815d73393c26b" },
+      { "path": "docs/development/backlog.md", "sha256": "9a0f6610cf3e4bfd0761b7f2a57d3bd651f2f7ab61bc384e6e03aa649ecfaab5" },
+      { "path": "docs/development/artifact-register.json", "sha256": "22e321fd74d725697c0ea9feadb9a6085a843116e800e4c2f1ca605a69c2dc06" },
+      { "path": "docs/development/codex-project-handoff.md", "sha256": "3ad7484c595b96591b68783c4d60fdd02764fda06c5d954f5a68f3634dfe7bda" },
+      { "path": "docs/development/README.md", "sha256": "ae3f2a5913e77ad18650ea711719c9ba45b3d0d0106f7d3da58683f1a7febf27" },
+      { "path": "docs/design/user-flows.md", "sha256": "f3d7ec18a700114785262de18f64f9cbb3b6baf789818ae09fa9e83480aa595a" },
+      { "path": "docs/quality/verification-plan.md", "sha256": "0c698df7cb69a6d4cf32e551154402a57d5f202ddebe0834ac12bc4fbd2b21c8" },
+      { "path": "README.md", "sha256": "65dcafe5e8d9587bc01afe3b4de079c99f7304b8182434af99f4ba018c54ee46" }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "auth_mode": "local_fixture; actor A synthetic Auth-issued session",
+    "database_host_binding": "127.0.0.1",
+    "api_gateway": "supabase_kong_chagokchan"
+  },
+  "commands": {
+    "check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 90,
+      "typecheck": "passed",
+      "unit_tests": 109,
+      "unit_tests_passed": 109,
+      "artifact_check": "passed",
+      "planned_test_cases": 71,
+      "artifact_check_registered_paths": 272,
+      "local_markdown_links": 474,
+      "json_files": 36,
+      "traceability_cases": 71
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "route_entries": 36
+    }
+  },
+  "browser_smoke": {
+    "status": "passed",
+    "keyboard_skip_link_first_tab": "focused the 본문으로 건너뛰기 link",
+    "skip_link_destination_focus": "focused #workspace-content after Return",
+    "async_roots_aria_busy_source_checked": [
+      "nav.goal-list: loadingGoals",
+      "ConnectionsPanel section: loading || previewLoading",
+      "SharedBoardsPanel section: loading || loadingPraises",
+      "TrashPanel section: loading"
+    ],
+    "loading_status_observed": "connection request and connection list loading messages in the browser AX tree",
+    "connection_error_accessible_message_and_retry": {
+      "status": "passed",
+      "api_get_error_http_statuses": [401, 503],
+      "error_message_observed": "현재 세션이 필요합니다.",
+      "retry_button_observed": "다시 불러오기",
+      "role_alert_source_checked": true
+    },
+    "local_api_gateway_recovery_and_retry": "passed; error cleared after activating the retry button",
+    "successful_read_gets_after_retry": 5,
+    "successful_read_methods_after_retry": ["GET", "GET", "GET", "GET", "GET"],
+    "product_api_mutations": 0,
+    "fixture_data_mutated": false
+  },
+  "test_case": {
+    "id": "TC-WEB-004",
+    "status": "passed",
+    "product_acceptance_cases_executed": 0
+  },
+  "limitations": {
+    "real_device_screen_reader_executed": false,
+    "color_contrast_audit_executed": false,
+    "small_device_suite_executed": false,
+    "product_acceptance_cases_executed": 0
+  }
+}

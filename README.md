@@ -2,7 +2,7 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 모바일 웹/PWA를 개발한다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **S05 데이터 기반 구현 중 — W05 완료**. 실제 DB에 테이블 18개·제약·인덱스·기본 RLS와 합성 A/B/C 데이터를 준비했다. DB 51개·소스 단위 32개·빌드 검사를 통과했다. [DB 실행 방법](docs/development/database-foundation.md), [검사 증거](docs/quality/reports/physical-database-check-2026-10-08.json). 다음은 W06 업무 RPC·권한·동시성, W07 서버 API·로컬 세션이다.
+현재 단계: **S06 사용자 기능 구현 중 — W11 진행 중**. W06 DB 권한부터 W10 목표 휴지통·복구까지 구현했고, W11-A 테마 전환과 W11-B1 키보드 본문 이동·연결 조회 오류 재시도를 확인했다. 다음은 W11-B2 작은 화면·실기기 접근성과 W11-C PWA 정적 캐시다. [진행표](docs/development/backlog.md), [W11-B1 검사 증거](docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json).
 
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 

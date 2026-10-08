@@ -1534,6 +1534,27 @@
       "expected": "테마 전환은 CSS 표현과 테마 버튼 상태만 변경한다. 목표·회차·칭찬·개수·권한은 그대로 유지되고 테마를 위해 사용자 데이터·쿠키·로컬 저장소를 쓰지 않는다.",
       "status": "passed",
       "evidence": "reports/w11-a-theme-switch-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-WEB-004",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-002"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "local_ui_browser_smoke",
+      "title": "키보드 본문 이동과 읽기 화면 오류 복구",
+      "steps": [
+        "로컬 fixture 앱에서 Tab으로 건너뛰기 링크에 도달하고 Return으로 본문 영역에 초점을 이동한다",
+        "목표·연결·공유·휴지통 비동기 영역의 aria-busy source 연결과 접근성 트리의 로딩 status를 확인한다",
+        "연결 화면을 연 뒤 로컬 Supabase API 게이트웨이를 중지해 조회 오류를 발생시키고 경고·다시 불러오기 조작을 확인한다",
+        "API 게이트웨이를 다시 시작하고 다시 불러오기를 실행해 경고가 사라지고 읽기 조회가 복구되는지 확인한다"
+      ],
+      "expected": "첫 키보드 이동에서 본문 건너뛰기 링크를 사용할 수 있고, aria-busy source 연결과 로딩·오류·재시도 접근성 상태가 확인된다. 브라우저 동작은 제품 데이터를 변경하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w11-b1-accessibility-recovery-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

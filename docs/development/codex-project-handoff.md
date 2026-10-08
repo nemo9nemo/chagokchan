@@ -39,7 +39,7 @@
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
-| W11 | IN_PROGRESS | W11-A 의미 중심 테마 토큰과 정원/포도 탭 내 전환을 구현·검증했다. W11-B 오류·접근성·작은 화면, W11-C PWA 정적 캐시가 남았다. [W11-A 증거](../quality/reports/w11-a-theme-switch-check-2026-10-08.json) |
+| W11 | IN_PROGRESS | W11-A 테마 전환, W11-B1 본문 건너뛰기·목록 로딩 표식·연결 조회 오류 재시도를 구현·검증했다. W11-B2 작은 화면·실기기 읽기 도구·대비, W11-C PWA 정적 캐시가 남았다. [W11-B1 증거](../quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -178,7 +178,13 @@ W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration
 
 키보드 Space로 테마를 양방향 전환했고 `aria-pressed` 값 변경과 화면 팔레트 변화를 확인했다. 목표 제목 “오늘의 작은 수고”와 개인/공유판 0/20 개수는 동일했다. 서버 로그에 전환 이후 업무 API 쓰기는 없었고 `client-app.tsx`의 `localStorage`·`sessionStorage`·쿠키 참조는 없다. [W11-A 검사 증거](../quality/reports/w11-a-theme-switch-check-2026-10-08.json)
 
-다음은 W11-B 오류/빈/로딩 상태·키보드/읽기 도구·작은 화면 흐름이다. PWA 공개 정적 캐시와 오프라인 상태 표현은 W11-C로 이어간다.
+## W11-B1 키보드 이동·비동기 상태·조회 오류 재시도
+
+앱 첫 키보드 Tab에 “본문으로 건너뛰기” 링크를 표시하고 Enter로 목표·기록 영역에 초점을 이동한다. 목표 목록과 연결·공유·휴지통 비동기 화면의 root에 `aria-busy`를 연결하고, 로딩 문구는 status로 안내한다.
+
+로컬 fixture 브라우저에서 키보드 링크의 첫 포커스와 본문 도착 초점을 확인했다. 로컬 Supabase API 게이트웨이만 중단했을 때 연결 GET이 401/503을 반환하고, 화면 접근성 트리에 오류 문구와 “다시 불러오기” 버튼이 나타났다. 게이트웨이 복구 후 버튼을 눌러 다섯 연결 조회가 GET 200으로 복구되고 오류가 사라지는 것을 확인했다. POST/PUT/DELETE 제품 요청은 없었다. 브라우저 AX 출력이 `aria-busy` attribute 자체를 표시하지 않아 네 영역의 source attribute를 별도로 확인하고, 로딩 status는 AX tree에서 확인했다. [W11-B1 검사 증거](../quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json)
+
+W11-B2의 실기기 스크린리더·색상 대비 측정·작은 화면과 큰 글씨 조합은 아직 실행하지 않았다. PWA 공개 정적 캐시와 오프라인 상태 표현은 W11-C다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

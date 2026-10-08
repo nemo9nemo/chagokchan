@@ -51,7 +51,7 @@ function ConnectionsPanel(props: {
     void navigator.clipboard?.writeText(`${window.location.origin}${props.inviteResult.link_path}`);
   };
 
-  return <section className="content-card connection-center" aria-labelledby="connections-heading">
+  return <section className="content-card connection-center" aria-labelledby="connections-heading" aria-busy={props.loading || props.previewLoading}>
     <p className="eyebrow">PEOPLE & PERMISSIONS</p><h2 id="connections-heading">연결 관리</h2>
     <p className="section-intro">연결을 맺은 것만으로 목표가 공유되지는 않아요. 공유판마다 따로 권한을 선택해요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
@@ -117,7 +117,7 @@ function TrashPanel(props: {
   goals: TrashGoal[]; cursor: string | null; loading: boolean; error: string; restoringId: string;
   onRefresh: () => void; onMore: () => void; onRestore: (goal: TrashGoal) => void;
 }) {
-  return <section className="content-card connection-center trash-center" aria-labelledby="trash-heading">
+  return <section className="content-card connection-center trash-center" aria-labelledby="trash-heading" aria-busy={props.loading}>
     <p className="eyebrow">GOAL TRASH</p><h2 id="trash-heading">휴지통</h2>
     <p className="section-intro">삭제한 목표는 30일 동안 복구할 수 있어요. 기한이 지나면 자동 정리 대상이 됩니다. 복구해도 공유 권한은 돌아오지 않아요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
@@ -139,7 +139,7 @@ function SharedBoardsPanel(props: {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void; onRetryPraises: () => void; onMorePraises: () => void;
 }) {
   const currentBunch = props.bunches.find((item) => item.id === props.selectedBunchId) ?? props.selectedBoard?.current_bunch ?? null;
-  return <section className="shared-board-center" aria-labelledby="shared-boards-heading">
+  return <section className="shared-board-center" aria-labelledby="shared-boards-heading" aria-busy={props.loading || props.loadingPraises}>
     <p className="eyebrow">SHARED WITH ME</p><h2 id="shared-boards-heading">지인의 공유판</h2>
     <p className="section-intro">공유판에 보낸 칭찬과 회차 개수를 확인해요. 개인 목표와 개인 기록은 이 화면에 표시되지 않아요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
@@ -357,7 +357,7 @@ export default function ChagokchanApp() {
   }, []);
 
   const loadSharedBoards = useCallback(async (cursor: string | null = null, append = false) => {
-    if (!append) setSharedBoardsLoading(true);
+    setSharedBoardsLoading(true);
     setSharedBoardError("");
     try {
       const query = new URLSearchParams({ limit: "50" });
@@ -379,7 +379,7 @@ export default function ChagokchanApp() {
   }, [selectedSharedBoard]);
 
   const loadTrashGoals = useCallback(async (cursor: string | null = null, append = false) => {
-    if (!append) setTrashLoading(true);
+    setTrashLoading(true);
     setTrashError("");
     try {
       const query = new URLSearchParams({ limit: "50" });
@@ -417,8 +417,8 @@ export default function ChagokchanApp() {
   }, []);
 
   const loadGoals = useCallback(async (cursor: string | null = null, append = false) => {
-    if (append) setGoalListError("");
-    else { setLoadingGoals(true); setGoalListError(""); }
+    setLoadingGoals(true);
+    setGoalListError("");
     try {
       const query = new URLSearchParams({ limit: "20" });
       if (cursor) query.set("cursor", cursor);
@@ -969,6 +969,7 @@ export default function ChagokchanApp() {
 
   return (
     <main id="app-shell" className="app-shell">
+      <a className="skip-link" href="#workspace-content">본문으로 건너뛰기</a>
       <header className="topbar">
         <a className="brand-lockup" href="/" aria-label="차곡찬 홈">
           <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
@@ -1012,7 +1013,7 @@ export default function ChagokchanApp() {
               <button className="button button-primary button-wide" type="button" onClick={() => setShowCreate(true)}>목표 시작하기</button>
             </section>
           ) : null}
-          <nav className="goal-list" aria-label="목표 목록">
+          <nav className="goal-list" aria-label="목표 목록" aria-busy={loadingGoals}>
             {goals.map((goal) => {
               const boards = goalDetails[goal.id]?.boards ?? [];
               const personal = boards.find((board) => board.kind === "personal");
@@ -1034,7 +1035,7 @@ export default function ChagokchanApp() {
           </> : <p className="sidebar-footnote">{workspaceView === "trash" ? "복구 기한은 삭제 후 30일이에요." : "연결과 공유판 권한은 각각 따로 관리해요."}</p>}
         </aside>
 
-        <section className="main-panel" aria-label="목표와 기록">
+        <section id="workspace-content" className="main-panel" aria-label="목표와 기록" tabIndex={-1}>
           {notice && <p className="notice-banner" role="status">{notice}<button type="button" aria-label="알림 닫기" onClick={() => setNotice("")}>닫기</button></p>}
 
           {workspaceView === "connections" ? <ConnectionsPanel

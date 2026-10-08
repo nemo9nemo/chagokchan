@@ -1,7 +1,7 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S06_w11_a_theme_switch_verified_w11_b_next",
+  "current_stage": "S06_w11_b1_keyboard_skip_loading_and_connection_recovery_verified_w11_b2_next",
   "next_stage": "S07_real_auth_and_integration_verification",
   "implementation_started": true,
   "git_repository_connected": true,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_verified_w11_b_next"
+      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b1_verified_w11_b2_next"
     },
     {
       "id": "S07",
@@ -85,12 +85,12 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 70,
+    "planned_test_cases": 71,
     "application_tests_executed": 109,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
-    "local_browser_smoke_cases_executed": 4,
+    "local_browser_smoke_cases_executed": 5,
     "database_tests_executed": 257,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
@@ -116,7 +116,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 32,
+    "technical_cases_passed": 33,
     "w07_a_report": "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json",
     "w07_b_report": "docs/quality/reports/w07-b-api-security-check-2026-10-08.json",
     "w08_a_report": "docs/quality/reports/w08-a-goal-api-check-2026-10-08.json",
@@ -139,7 +139,8 @@
     "w10_a_report": "docs/quality/reports/w10-a-news-sent-api-check-2026-10-08.json",
     "local_trash_api_checks_executed": 33,
     "w10_b_report": "docs/quality/reports/w10-b-goal-trash-api-ui-check-2026-10-08.json",
-    "w11_a_report": "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json"
+    "w11_a_report": "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
+    "w11_b1_report": "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json"
   },
   "artifacts": [
     {
@@ -223,7 +224,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "ui02_ui08_basic_ui09_pending_ui10_trash_ui_w11_a_theme_switch_verified_w11_b_c_pending",
+      "status": "ui02_ui08_basic_ui09_pending_ui10_trash_ui_w11_a_theme_w11_b1_accessibility_recovery_verified_w11_b2_c_pending",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -231,7 +232,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_through_w11_a_theme_technical",
+      "status": "partially_executed_w06_through_w11_b1_accessibility_recovery_technical",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -240,7 +241,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w11_a_theme_switch",
+      "status": "documented_through_w11_b1_accessibility_recovery",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -271,7 +272,8 @@
         "docs/changes/2026-10-08-w09-c-shared-board-ui.md",
         "docs/changes/2026-10-08-w10-a-news-sent-api.md",
         "docs/changes/2026-10-08-w10-b-goal-trash-api-ui.md",
-        "docs/changes/2026-10-08-w11-a-theme-switch.md"
+        "docs/changes/2026-10-08-w11-a-theme-switch.md",
+        "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md"
       ]
     },
     {
@@ -297,7 +299,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_and_w06_w11_a_verification_passed",
+      "status": "static_and_w06_w11_b1_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -329,7 +331,8 @@
         "docs/quality/reports/w09-c-shared-board-ui-check-2026-10-08.json",
         "docs/quality/reports/w10-a-news-sent-api-check-2026-10-08.json",
         "docs/quality/reports/w10-b-goal-trash-api-ui-check-2026-10-08.json",
-        "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json"
+        "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
+        "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json"
       ]
     },
     {
@@ -354,7 +357,7 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_local_me_goal_news_trash_ui_w11_a_theme_switch_verified",
+      "status": "app_runtime_local_me_goal_news_trash_ui_w11_a_theme_w11_b1_keyboard_accessibility_verified",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
@@ -415,7 +418,8 @@
         "src/app/api/v1/goals/[goal_id]/restore/",
         "package.json",
         "scripts/project.ps1",
-        "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json"
+        "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
+        "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json"
       ]
     },
     {
