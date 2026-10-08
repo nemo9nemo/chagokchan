@@ -127,6 +127,14 @@ GET `/api/v1/goals`는 기본 20·최대 50, `active|completed|archived` 필터,
 
 `TC-API-004`는 cursor 쿼리·projection 단위 검사, RPC 권한/페이지 pgTAP, 실제 Auth session 통합과 A/B/C API 검증으로 통과 처리한다. 전체 `check`·`build:check` 최종 출력과 SHA-256 source basis는 [W08-B1 증거](reports/w08-b1-goal-list-check-2026-10-08.json)에 함께 기록한다. W08-B2 상태/설정/회차 API, W08-C 개인 칭찬 API 및 화면은 이 완료 범위에 포함하지 않는다.
 
+## W08-B2 목표 상태·판 설정·회차 목록 API 검사
+
+완료·보관·재개 POST는 `complete_goal`·`archive_goal`·`resume_goal`을, 판 설정 PATCH는 `update_board`를 호출한다. 모든 변경은 CSRF/Origin/JSON guard 뒤 revision과 고정 필드를 검사한다. 새 `list_bunches` RPC와 GET `/api/v1/boards/{board_id}/bunches`는 판 소유자 또는 현재 권한이 유효한 공유 구성원만 허용하고, cycle_no/ID 내림차순의 board-bound keyset 페이지와 회차 요약 allowlist를 반환한다. 공유판 설정은 owner만 바꿀 수 있으며 다음 회차 목표 수 변경이 이미 생성된 회차 snapshot을 소급 변경하지 않는다.
+
+새 `010_business_rpc_bunch_list.test.sql`은 SECURITY DEFINER 소유자·고정 search_path·열 권한·authenticated-only 실행 및 helper 비노출 등 9/9 통과했다. 전체 `db:test`는 231/231(물리 51·RPC 경계 21·업무 RPC 159), `db:rpc-test`는 180/180을 통과했다. 실제 Auth 발급 owner/outsider 세션 probe 6/6에서 revision 충돌, 다음 회차 target snapshot, 회차 페이지 연속성·cursor 타 판 거절·malformed/page size 거절, 완료/보관/재개 후 상태 및 회차 불변, 무관 사용자와 직접 table read 거절을 확인했다. 임시 계정과 session을 제거하고 기존 fixture 및 session count를 보존했다. 로컬 A/B/C API 경계 검사는 각 8/8로 서버 actor 고정, 각 변경 route의 CSRF 선행 차단, 잘못된 board ID/page size, 접근 불가 board의 숨김 404/no-store를 확인했으며 DB mutation은 없다.
+
+전체 `check`는 Biome·typecheck·unit 69/69·산출물 상호 참조를 통과했고 `build:check`는 신규 5개 동적 route를 컴파일했다. `TC-API-005`를 통과로 기록한다. W08-C 개인 칭찬 API, W08-D UI, 제품 수락 TC와 실제 Google/OTP 로그인은 여기 포함하지 않는다. 실행 결과와 source SHA-256은 [W08-B2 증거](reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json)에 기록한다.
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). 이 단락은 W06-A 이전 W05 부분 검사 기록이며, 이후 업무 DB/API 검증은 각 작업 단락과 진행표의 별도 증거를 따른다.

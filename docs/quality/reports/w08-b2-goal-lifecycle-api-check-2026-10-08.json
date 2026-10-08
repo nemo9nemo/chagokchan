@@ -1,0 +1,159 @@
+{
+  "verified_at": "2026-10-08T09:45:11.697Z",
+  "work_item": "W08-B2",
+  "status": "passed",
+  "scope": "goal_complete_archive_resume_board_settings_and_authorized_bunch_history_api",
+  "source_basis": {
+    "base_commit": "a51de4267ee10db85e28a9194f3910cca65a985b",
+    "format": "SHA-256 per migration, SQL test, API implementation/routes, integration runners, contract, progress, and verification source",
+    "files": [
+      {
+        "path": "supabase/migrations/20261008024500_bunch_list_rpc.sql",
+        "sha256": "917e79a69fba16f521aa887b3e486ede0c66e55b8f68a31c128c625724adeb49"
+      },
+      {
+        "path": "supabase/tests/010_business_rpc_bunch_list.test.sql",
+        "sha256": "38246527774f356e31c4b26d39d04e6fb20c5f11f212b348630d51b040ee108b"
+      },
+      {
+        "path": "src/server/goal-api.mjs",
+        "sha256": "339a9cae77047fff08e210880d186a6b6c5b1cf84088d26cd89dd12b02cdb1b7"
+      },
+      {
+        "path": "src/app/api/v1/goals/[goal_id]/complete/route.ts",
+        "sha256": "a73331b000034018e0d85f08ba0dd2fe6522178da933ad8fe39a6363ebc3bc5c"
+      },
+      {
+        "path": "src/app/api/v1/goals/[goal_id]/archive/route.ts",
+        "sha256": "3d73856207cc8fad48c798b06e9624e716a59270514a378478c22a8caf251ec8"
+      },
+      {
+        "path": "src/app/api/v1/goals/[goal_id]/resume/route.ts",
+        "sha256": "c62a1427d63674adc70b41f885dfeab2b126ad502e98f6bb97142d4949fd610c"
+      },
+      {
+        "path": "src/app/api/v1/boards/[board_id]/route.ts",
+        "sha256": "16356eb24c1f4ad2a225c47fd9d2c436f504d9cd415ebf904078c2bb6185acf2"
+      },
+      {
+        "path": "src/app/api/v1/boards/[board_id]/bunches/route.ts",
+        "sha256": "057d8806d13866d035dc59ce73903550dbef6ad534fb137d73b87ce0e21419a9"
+      },
+      {
+        "path": "scripts/goal-api.test.mjs",
+        "sha256": "096a96e0948e30b930ce58b3818e04f1a396d49e9ee6cc7928158f091b082c6a"
+      },
+      {
+        "path": "scripts/test-local-goal-lifecycle-rpc.mjs",
+        "sha256": "8b20b5978271b650950c9bce820c09affa609e8c0a36e59881b0ee99d2a6865f"
+      },
+      {
+        "path": "scripts/test-local-goal-management-api.mjs",
+        "sha256": "350b2ad41457d3b7d5c658cd7f1d371c9208bdc0d0c426f2c838c943eace4995"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "074e164ec411173ba227d26e4537fbe3d0f8900d4523ea6bc9c0386018bd6f3a"
+      },
+      {
+        "path": "package.json",
+        "sha256": "baff9ffba20f1ba3816aa869f3dfdd4d26bc7d8bc5c6db2decc4b4c129bc9583"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "6a0ed06d0a9e48df8d11c1ed6fa450fb4a46a717f6c25f5700906beee504538e"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "a3aeddfabd2837e6724d09c85992a1b6f65f2b2247b0b5d3f211bf2dfd65f69a"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "61c603cf0508952c05616e451fdbb28f020dd1ab18061fd24ecbd328ec15c794"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "4b107fcdf77d6f62968ca96677568354fe360b6c04cba2b8bc29e98491fa0d2f"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "e727a1ca96127e75ea51627a708d0c05cd36ee4132e13054740d4da4826fcb70"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w08-b2-goal-lifecycle-api.md",
+        "sha256": "4878ae56beb36c7f6775d540141a6cd75d75e7abfa4a0f841c3727463fa643e4"
+      },
+      {
+        "path": "docs/contracts/api-contract.md",
+        "sha256": "1cdfa2a5afb5d8e5fc23dbd924a2b365586fb20cb7db8c559afccd291a092d94"
+      },
+      {
+        "path": "docs/development/local-development.md",
+        "sha256": "edeb86b8d8a430b1240a7ef9d262fdcc2a867b4f11ef28b7bef4d8a49727f533"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "075417906d7a4b41b909dbfbffb98eb996e39558e91782e620d3e194623978d7"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "9d8fd73b01c719dc1a996cb952cd45bf8098b78a1186f681ac67dbcf59d76e36"
+      }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "postgresql": "17.11",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false,
+    "auth_tokens_returned": false
+  },
+  "verification": {
+    "migration_command": "scripts/project.ps1 -Task db:migrate",
+    "migration_result": "20261008024500 applied to the local database; applied SQL was not modified",
+    "database_command": "scripts/project.ps1 -Task db:test",
+    "database_result": "231/231 passed: physical 51, RPC boundary 21, business RPC 159; 010_business_rpc_bunch_list.test.sql 9/9",
+    "rpc_regression_command": "scripts/project.ps1 -Task db:rpc-test",
+    "rpc_regression_result": "180/180 passed: RPC boundary 21, business RPC 159",
+    "local_rpc_command": "scripts/project.ps1 -Task db:goal-lifecycle-test",
+    "local_rpc_result": "6/6 passed; synthetic owner/outsider accounts and sessions removed; fixture data and session count preserved",
+    "local_api_command": "scripts/project.ps1 -Task api:goal-management-test",
+    "local_api_actor_runs": [
+      {
+        "actor": "A",
+        "checks_passed": 8,
+        "status": "passed",
+        "database_mutation": false
+      },
+      {
+        "actor": "B",
+        "checks_passed": 8,
+        "status": "passed",
+        "database_mutation": false
+      },
+      {
+        "actor": "C",
+        "checks_passed": 8,
+        "status": "passed",
+        "database_mutation": false
+      }
+    ],
+    "unit_command": "scripts/project.ps1 -Task check",
+    "unit_result": "passed: Biome 47 files, typecheck, unit 69/69, and artifact consistency checks (27 JSON, 418 Markdown links, 691 OpenAPI refs, 62 test cases, 206 registered artifact paths)",
+    "build_check_command": "scripts/project.ps1 -Task build:check",
+    "build_check": "passed 2026-10-08; /api/v1/goals/{goal_id}/complete, /archive, /resume, /api/v1/boards/{board_id}, and /bunches compiled as dynamic Node.js routes",
+    "goal_lifecycle_contract": "revision-scoped goal transitions; owner-only board patch; owner/current authorized contributor bunch summaries; cycle_no/id descending board-bound keyset cursor; page limit 1..50, default 20",
+    "real_google_or_otp_login": "not_run",
+    "product_ui_and_acceptance_cases": "not_run",
+    "artifact_check": "passed: JSON 27, Markdown links 418, OpenAPI local refs 691, operations 54, test cases 62, registered paths 206"
+  },
+  "notes": [
+    "Application RPC calls in the lifecycle probe used Auth-issued owner/outsider sessions. The service role was limited to synthetic test identity setup and cleanup.",
+    "The A/B/C API boundary runner made no product database mutations; it verified server-selected actor, CSRF rejection, input bounds, and hidden 404/no-store behavior.",
+    "Direct table reads did not expose bunch rows. Goal transitions and next-target changes preserved existing bunch snapshots and revision rules."
+  ]
+}

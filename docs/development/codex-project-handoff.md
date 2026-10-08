@@ -36,7 +36,7 @@
 | W05 | DONE | 18테이블·38FK·68인덱스·RLS·합성 A/B/C. 물리 DB 51개·소스 단위 32개·빌드. [증거](../quality/reports/physical-database-check-2026-10-08.json) |
 | W06 | DONE | **W06-A~D2 완료**. 전체 DB 213/213·RPC 162/162, D1 세션 통합 4/4·D2 세션/Auth Admin 통합 6/6. 외부 원장·BFF/API·실제 로그인·제품 수락은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
-| W08 | IN_PROGRESS | W08-A 목표 생성·상세·수정과 W08-B1 목표 목록 API를 로컬 Auth 세션에 연결. W08-B2 상태/설정/회차, W08-C 칭찬 API, W08-D 기본 화면 진행 중 |
+| W08 | IN_PROGRESS | W08-A/B1/B2 목표·상태·판·회차 API 완료. W08-C 개인 칭찬 API와 W08-D 기본 화면이 남음. [W08-B2 증거](../quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json) |
 | W09~W11 | TODO | 연결·공유·소식/삭제·테마/접근성/PWA |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
@@ -86,12 +86,12 @@ Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서
 | W07-B `src/server/api-security.mjs`, `src/app/api/v1/auth/csrf/route.ts`, `scripts/api-security.test.mjs` | 구현. 로컬 전용 signed CSRF 이중 제출과 HttpOnly/SameSite 쿠키 발급, Origin·Fetch Metadata·JSON object·실제 32KB body guard를 제공한다. deployed mode는 CSRF secret 32바이트 이상을 요구하고 local manifest/key를 거절한다. 보안 unit 14/14·A/B/C CSRF API 확인 통과. 배포 session-bound flow는 W12로 유예. [증거](../quality/reports/w07-b-api-security-check-2026-10-08.json) |
 | W08-A `src/server/goal-api.mjs`, `src/app/api/v1/goals/`, `scripts/goal-api.test.mjs`, `scripts/test-local-goal-api.mjs` | 구현. create/get/update goal RPC 연결, 입력·응답 allowlist, 멱등 키·CSRF·no-store를 적용했다. 단위 8/8, 실제 A/B/C 세션으로 비소유 404·malformed ID·CSRF 거절 각 3/3. API handler의 실제 성공 DB 쓰기/수정은 미실행이며 검사 중 DB 쓰기가 없었다. [증거](../quality/reports/w08-a-goal-api-check-2026-10-08.json) |
 
-다음 작업은 진행표의 W08-B2 목표 상태·판 설정·회차 API다. 변경 route를 추가할 때 `validateMutationRequest`를 업무 검증 전에 사용한다. 배포 session-bound auth/CSRF flow는 사용자 결정에 따라 W12에서 진행한다.
+당시 인계의 다음 작업은 W08-B2였으며 현재 W08-B2는 완료됐다. 이어서 진행표의 W08-C 개인 칭찬 생성·수정·취소 및 회차 API를 구현한다. 새 변경 route는 `validateMutationRequest`를 업무 검증 전에 사용한다. 배포 session-bound auth/CSRF flow는 사용자 결정에 따라 W12에서 진행한다.
 
 Auth 관리 테이블은 RLS가 켜져 있고 앱 정책이 없다. 그 때문에 전용 reader만 `BYPASSRLS`를 가지며 조회 가능한 Auth 열을 제한했다. 이 역할은 `NOLOGIN`, 제품 테이블 권한 없음, API 역할이 assume 불가이고, 고정 `search_path`를 가진 세션 검사 함수만 소유한다. 결정 근거와 제한은 [ADR-0005](../decisions/ADR-0005-local-auth-session-reader.md)에 있다. 일반 get_me 호출은 publishable key와 실제 발급된 사용자 세션을 사용한다. 관리 API 키는 검사용 임시 계정 생성·삭제에만 쓴다.
 
 1. W06 전체 DB 213/213·RPC 162/162, W06-D1 발급 세션 통합 4/4·W06-D2 발급 세션/Auth Admin 통합 6/6을 통과했다. 기존 fixture 보존·probe 계정/세션 정리도 통과했다. 실제 Google/OTP 로그인과 BFF/API는 실행하지 않았다.
-2. W07-A/B 기반과 W08-A 목표 생성·상세·수정 API를 구현했다. 다음은 목표 목록·상태 API와 개인 칭찬·회차 API/UI이며 실제 Google/OTP 로그인을 W12/W13까지 미룬다.
+2. W07-A/B 기반과 W08-A/B1/B2 목표 생성·조회·수정·상태·판·회차 API를 구현했다. 다음은 W08-C 개인 칭찬 API와 W08-D 화면이며 실제 Google/OTP 로그인을 W12/W13까지 미룬다.
 3. `OPS-INPUT-02` 독립 삭제 원장 저장소는 미설정이다. 이를 구성하기 전 스테이징/운영 purge 및 계정 erasure worker gate는 닫아 둔다.
 
 ## 프로젝트에서 사용할 재개 메시지
@@ -102,7 +102,15 @@ Auth 관리 테이블은 RLS가 켜져 있고 앱 정책이 없다. 그 때문�
 
 `list_goals`는 실제 Auth 세션의 소유자만 볼 수 있고 삭제되지 않은 목표 요약 allowlist만 반환한다. 기본 20·최대 50개, created_at/ID 역순 keyset 페이지, status 필터에 묶인 cursor를 사용한다. GET `/api/v1/goals`와 OpenAPI·TC-API-004를 연결하고 전체 DB 222/222, RPC 경계/업무 171/171, `009_business_rpc_goal_list.test.sql` 9/9, 실제 로컬 Auth 세션 페이지/권한 통합 5/5, A/B/C API 각 3/3을 통과했다. 전체 unit/build/산출물 확인도 커밋 시점에 기록한다. 검사는 synthetic probe를 사용하고 기존 fixture 데이터는 보존했다. [W08-B1 검사 증거](../quality/reports/w08-b1-goal-list-check-2026-10-08.json)
 
-현재 진행표는 W08-A와 W08-B1 DONE이며 W08-B2(완료·보관·재개·판 설정·회차 API), W08-C(개인 칭찬/회차 쓰기 API), W08-D(화면)가 남아 있다. 실제 생성/수정 route의 성공적인 DB write는 W08-A 검사에서 fixture 보존을 위해 미실행 상태로 유지한다. 다음은 W08-B2다.
+해당 W08-B1 시점에는 W08-B2·W08-C·W08-D가 남아 있었다. 목표 상태 전이·판 설정·회차 API를 추가한 현재 결과는 아래 후속 기록을 따른다.
+
+## W08-B2 후속 완료 기록
+
+`20261008024500_bunch_list_rpc.sql`을 순서대로 로컬 DB에 적용했다. `list_bunches`는 본인 판 또는 현재 유효한 공유판 구성원에게만 판 소속 회차 요약을 반환하며, cycle_no/ID keyset cursor는 board ID에 결합된다. cursor 형식 오류·다른 판 cursor·직접 table read를 거절한다. 적용 migration은 수정하지 않는다.
+
+완료·보관·재개 POST, 판 설정 PATCH, 회차 목록 GET route를 기존 `complete_goal`/`archive_goal`/`resume_goal`/`update_board`와 새 `list_bunches` RPC에 연결했다. pgTAP 9/9·전체 DB 231/231·RPC 180/180·실제 Auth 세션 lifecycle/history 통합 6/6·A/B/C API 각 8/8·unit 69/69·build:check가 통과했다. probe 사용자/세션 정리 및 기존 fixture 데이터 보존을 확인했다. 최종 `check`와 소스 해시는 [검사 증거](../quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json)에 기록한다.
+
+현재 W08은 W08-A/B1/B2 완료, W08-C 개인 칭찬 API와 W08-D 기본 화면 대기다. W08-A의 실제 생성/수정 route→DB 성공 통합 검사, 제품 수락 TC, 실제 Google/OTP 로그인은 여전히 미실행이며 진행표에 별도 범위로 둔다. 다음 작업은 W08-C다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

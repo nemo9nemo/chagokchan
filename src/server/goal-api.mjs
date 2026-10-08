@@ -3,6 +3,7 @@ import { ApiRequestError, getCsrfSigningSecret, validateMutationRequest } from "
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const GOAL_STATUSES = new Set(["active", "completed", "archived"]);
+const GOAL_TRANSITION_RPCS = new Map([["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"]]);
 
 function exactObject(value, fields) {
   return value !== null && typeof value === "object" && !Array.isArray(value) &&
@@ -54,6 +55,23 @@ export function validateUpdateGoalInput(value) {
     p_update_title: Object.hasOwn(value, "title"),
     p_update_private_description: Object.hasOwn(value, "private_description"),
   };
+}
+
+export function validateGoalActionInput(value) {
+  if (!exactObject(value, ["expected_revision"]) || Object.keys(value).length !== 1 ||
+      !Number.isInteger(value.expected_revision) || value.expected_revision < 1) invalidInput();
+  return { p_expected_revision: value.expected_revision };
+}
+
+export function validateUpdateBoardInput(value) {
+  const fields = ["expected_revision", "next_target_count", "shared_title", "shared_description"];
+  if (!exactObject(value, fields) || !Number.isInteger(value.expected_revision) || value.expected_revision < 1 ||
+      Object.keys(value).length < 2 ||
+      (Object.hasOwn(value, "next_target_count") && (!Number.isInteger(value.next_target_count) || value.next_target_count < 1 || value.next_target_count > 100)) ||
+      (Object.hasOwn(value, "shared_title") && (typeof value.shared_title !== "string" || [...value.shared_title].length < 1 || [...value.shared_title].length > 80)) ||
+      (Object.hasOwn(value, "shared_description") && !validOptionalText(value.shared_description, 1000))) invalidInput();
+  const { expected_revision, ...patch } = value;
+  return { expected_revision, ...patch };
 }
 
 function isTimestamp(value) {
@@ -148,6 +166,18 @@ export function validateGoalsQuery(url) {
   return { p_cursor: cursor, p_limit: limit, p_status: status };
 }
 
+export function validateBunchesQuery(url) {
+  const params = url.searchParams;
+  if (["cursor", "limit"].some((key) => params.getAll(key).length > 1)) invalidInput();
+  const cursor = params.get("cursor");
+  if (cursor !== null && (cursor.length < 1 || cursor.length > 512)) invalidInput();
+  const rawLimit = params.get("limit");
+  const limit = rawLimit === null ? 20 : Number(rawLimit);
+  if (rawLimit !== null && !/^\d+$/.test(rawLimit)) invalidInput();
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 50) invalidInput();
+  return { p_cursor: cursor, p_limit: limit };
+}
+
 function projectGoalSummary(value) {
   const fields = ["id", "title", "private_description", "status", "revision", "created_at", "completed_at", "archived_at"];
   if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || !UUID.test(value.id) ||
@@ -178,6 +208,15 @@ function projectGoalsPage(value) {
   return { items: value.items.map(projectGoalSummary), next_cursor: value.next_cursor };
 }
 
+function projectBunchesPage(value) {
+  if (!exactObject(value, ["items", "next_cursor"]) || Object.keys(value).length !== 2 ||
+      !Array.isArray(value.items) || value.items.length > 50 ||
+      !(value.next_cursor === null || (typeof value.next_cursor === "string" && /^[A-Za-z0-9_-]{1,512}$/.test(value.next_cursor)))) {
+    throw new Error("Bunch list response did not match its allowlist.");
+  }
+  return { items: value.items.map(projectBunch), next_cursor: value.next_cursor };
+}
+
 function jsonResponse(body, status, requestId) {
   return Response.json(body, { status, headers: { "Cache-Control": "no-store", Pragma: "no-cache", "X-Request-ID": requestId } });
 }
@@ -192,7 +231,7 @@ function errorResponse(error, requestId) {
     const registration = databaseMessage === "signup_required";
     return jsonResponse({ error: { code: registration ? "REGISTRATION_REQUIRED" : "ACTION_FORBIDDEN", message: registration ? "계정 등록을 완료해야 합니다." : "요청을 수행할 수 없습니다.", request_id: requestId } }, 403, requestId);
   }
-  if (code === "PT404") return jsonResponse({ error: { code: "OBJECT_NOT_AVAILABLE", message: "목표를 찾을 수 없습니다.", request_id: requestId } }, 404, requestId);
+  if (code === "PT404") return jsonResponse({ error: { code: "OBJECT_NOT_AVAILABLE", message: "요청한 항목을 찾을 수 없습니다.", request_id: requestId } }, 404, requestId);
   if (code === "PT409") {
     const mapped = databaseMessage === "idempotency_conflict" ? "IDEMPOTENCY_CONFLICT" :
       databaseMessage === "revision_conflict" ? "REVISION_CONFLICT" :
@@ -244,6 +283,55 @@ export async function listGoalsResponse(url, client) {
     const { data, error } = await client.rpc("list_goals", input);
     rpcError(error);
     return jsonResponse(projectGoalsPage(data), 200, requestId);
+  } catch (error) {
+    return errorResponse(error, requestId);
+  }
+}
+
+export async function transitionGoalResponse(goalId, action, request, client, { expectedOrigin = process.env.APP_BASE_URL, secret = getCsrfSigningSecret() } = {}) {
+  const requestId = randomUUID();
+  try {
+    const body = await validateMutationRequest(request, { expectedOrigin, secret });
+    if (typeof goalId !== "string" || !UUID.test(goalId) || !GOAL_TRANSITION_RPCS.has(action)) invalidInput();
+    const input = validateGoalActionInput(body);
+    const { data, error } = await client.rpc(GOAL_TRANSITION_RPCS.get(action), { p_goal_id: goalId, ...input });
+    rpcError(error);
+    if (!exactObject(data, ["id", "replayed"]) || Object.keys(data).length !== 2 || data.id !== goalId || typeof data.replayed !== "boolean") {
+      throw new Error("Goal transition result did not match its allowlist.");
+    }
+    return jsonResponse({ id: data.id, replayed: data.replayed }, 200, requestId);
+  } catch (error) {
+    return errorResponse(error, requestId);
+  }
+}
+
+export async function updateBoardResponse(boardId, request, client, { expectedOrigin = process.env.APP_BASE_URL, secret = getCsrfSigningSecret() } = {}) {
+  const requestId = randomUUID();
+  try {
+    const body = await validateMutationRequest(request, { expectedOrigin, secret });
+    if (typeof boardId !== "string" || !UUID.test(boardId)) invalidInput();
+    const p_patch = validateUpdateBoardInput(body);
+    const { data, error } = await client.rpc("update_board", { p_board_id: boardId, p_patch });
+    rpcError(error);
+    if (!exactObject(data, ["id", "replayed"]) || Object.keys(data).length !== 2 || data.id !== boardId || typeof data.replayed !== "boolean") {
+      throw new Error("Board mutation result did not match its allowlist.");
+    }
+    return jsonResponse({ id: data.id, replayed: data.replayed }, 200, requestId);
+  } catch (error) {
+    return errorResponse(error, requestId);
+  }
+}
+
+export async function listBunchesResponse(boardId, url, client) {
+  const requestId = randomUUID();
+  if (typeof boardId !== "string" || !UUID.test(boardId)) {
+    return jsonResponse({ error: { code: "INVALID_INPUT", message: "판 ID 형식이 올바르지 않습니다.", request_id: requestId } }, 400, requestId);
+  }
+  try {
+    const input = validateBunchesQuery(url);
+    const { data, error } = await client.rpc("list_bunches", { p_board_id: boardId, ...input });
+    rpcError(error);
+    return jsonResponse(projectBunchesPage(data), 200, requestId);
   } catch (error) {
     return errorResponse(error, requestId);
   }

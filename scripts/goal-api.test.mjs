@@ -4,11 +4,17 @@ import { createCsrfToken, CSRF_COOKIE_NAME } from "../src/server/api-security.mj
 import {
   createGoalResponse,
   getGoalResponse,
+  listBunchesResponse,
   listGoalsResponse,
   projectGoalDetail,
+  transitionGoalResponse,
+  updateBoardResponse,
   updateGoalResponse,
   validateCreateGoalInput,
+  validateBunchesQuery,
+  validateGoalActionInput,
   validateGoalsQuery,
+  validateUpdateBoardInput,
   validateUpdateGoalInput,
 } from "../src/server/goal-api.mjs";
 
@@ -52,6 +58,15 @@ function mutationRequest(body, { requestIdempotencyKey = requestKey, requestOrig
       "X-CSRF-Token": csrf,
       Cookie: `${CSRF_COOKIE_NAME}=${csrf}`,
     },
+    body: JSON.stringify(body),
+  });
+}
+
+function verifiedMutationRequest(url, method, body) {
+  const csrf = createCsrfToken(secret);
+  return new Request(url, {
+    method,
+    headers: { Origin: origin, "Content-Type": "application/json", "X-CSRF-Token": csrf, Cookie: `${CSRF_COOKIE_NAME}=${csrf}` },
     body: JSON.stringify(body),
   });
 }
@@ -185,4 +200,75 @@ test("update goal handler passes the path identity and maps stale revisions", as
   assert.equal(call.args.p_update_title, true);
   assert.equal(response.status, 409);
   assert.equal((await response.json()).error.code, "REVISION_CONFLICT");
+});
+
+test("goal transition input and handlers map each fixed action to its revision RPC", async () => {
+  assert.deepEqual(validateGoalActionInput({ expected_revision: 2 }), { p_expected_revision: 2 });
+  assert.throws(() => validateGoalActionInput({ expected_revision: 1, goal_id: goalId }), { status: 400, code: "INVALID_INPUT" });
+  assert.throws(() => validateGoalActionInput({ expected_revision: 0 }), { status: 400, code: "INVALID_INPUT" });
+  for (const [action, rpcName] of [["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"]]) {
+    let call;
+    const client = { rpc: async (name, args) => { call = { name, args }; return { data: { id: goalId, replayed: true }, error: null }; } };
+    const response = await transitionGoalResponse(goalId, action, verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}/${action}`, "POST", { expected_revision: 2 }), client, { expectedOrigin: origin, secret });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    assert.deepEqual(call, { name: rpcName, args: { p_goal_id: goalId, p_expected_revision: 2 } });
+    assert.deepEqual(await response.json(), { id: goalId, replayed: true });
+  }
+});
+
+test("goal transition handler rejects missing CSRF and unexpected RPC response fields", async () => {
+  let rpcCalled = false;
+  const rejected = await transitionGoalResponse(goalId, "complete", new Request(`${origin}/api/v1/goals/${goalId}/complete`, {
+    method: "POST", headers: { Origin: origin, "Content-Type": "application/json" }, body: JSON.stringify({ expected_revision: 1 }),
+  }), { rpc: async () => { rpcCalled = true; return { data: null, error: null }; } }, { expectedOrigin: origin, secret });
+  assert.equal(rejected.status, 403);
+  assert.equal(rpcCalled, false);
+  const malformed = await transitionGoalResponse(goalId, "archive", verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}/archive`, "POST", { expected_revision: 1 }), {
+    rpc: async () => ({ data: { id: goalId, replayed: false, status: "archived" }, error: null }),
+  }, { expectedOrigin: origin, secret });
+  assert.equal(malformed.status, 503);
+});
+
+test("board settings require revision and only allow target and shared display fields", () => {
+  assert.deepEqual(validateUpdateBoardInput({ expected_revision: 2, next_target_count: 7, shared_title: "함께 걷기", shared_description: null }), {
+    expected_revision: 2, next_target_count: 7, shared_title: "함께 걷기", shared_description: null,
+  });
+  for (const patch of [
+    { expected_revision: 1 },
+    { expected_revision: 1, next_target_count: 0 },
+    { expected_revision: 1, next_target_count: 101 },
+    { expected_revision: 1, shared_title: "" },
+    { expected_revision: 1, owner_user_id: goalId },
+    { expected_revision: 1, shared_description: 4 },
+  ]) assert.throws(() => validateUpdateBoardInput(patch), { status: 400, code: "INVALID_INPUT" });
+});
+
+test("board settings handler sends a revision-scoped patch to update_board", async () => {
+  let call;
+  const client = { rpc: async (name, args) => { call = { name, args }; return { data: { id: boardId, replayed: false }, error: null }; } };
+  const response = await updateBoardResponse(boardId, verifiedMutationRequest(`${origin}/api/v1/boards/${boardId}`, "PATCH", { expected_revision: 1, next_target_count: 8 }), client, { expectedOrigin: origin, secret });
+  assert.equal(response.status, 200);
+  assert.deepEqual(call, { name: "update_board", args: { p_board_id: boardId, p_patch: { expected_revision: 1, next_target_count: 8 } } });
+  const invalidPath = await updateBoardResponse("bad-id", verifiedMutationRequest(`${origin}/api/v1/boards/bad-id`, "PATCH", { expected_revision: 1, next_target_count: 8 }), client, { expectedOrigin: origin, secret });
+  assert.equal(invalidPath.status, 400);
+});
+
+test("bunch history query and response enforce bounded page and bunch allowlists", async () => {
+  assert.deepEqual(validateBunchesQuery(new URL(`${origin}/api/v1/boards/${boardId}/bunches`)), { p_cursor: null, p_limit: 20 });
+  assert.deepEqual(validateBunchesQuery(new URL(`${origin}/api/v1/boards/${boardId}/bunches?cursor=abc&limit=50`)), { p_cursor: "abc", p_limit: 50 });
+  for (const query of ["limit=0", "limit=51", "limit=no", "cursor=a&cursor=b", "limit=10&limit=20"]) {
+    assert.throws(() => validateBunchesQuery(new URL(`${origin}/api/v1/boards/${boardId}/bunches?${query}`)), { status: 400, code: "INVALID_INPUT" });
+  }
+  let call;
+  const bunch = { id: goalId, cycle_no: 3, target_count: 5, valid_count: 2, progress_state: "incomplete", completed_at: null };
+  const client = { rpc: async (name, args) => { call = { name, args }; return { data: { items: [bunch], next_cursor: null }, error: null }; } };
+  const response = await listBunchesResponse(boardId, new URL(`${origin}/api/v1/boards/${boardId}/bunches?limit=4`), client);
+  assert.equal(response.status, 200);
+  assert.deepEqual(call, { name: "list_bunches", args: { p_board_id: boardId, p_cursor: null, p_limit: 4 } });
+  assert.deepEqual(await response.json(), { items: [bunch], next_cursor: null });
+  const badProjection = await listBunchesResponse(boardId, new URL(`${origin}/api/v1/boards/${boardId}/bunches`), {
+    rpc: async () => ({ data: { items: [{ ...bunch, owner_user_id: goalId }], next_cursor: null }, error: null }),
+  });
+  assert.equal(badProjection.status, 503);
 });

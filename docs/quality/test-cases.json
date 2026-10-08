@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_through_w08_b1",
+  "phase": "partially_executed_w06_through_w08_b2",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -1314,6 +1314,31 @@
       "expected": "목표 목록은 검증된 소유자의 삭제되지 않은 요약만 반환한다. keyset cursor는 마지막 반환 행 기준으로 이어지고 status filter와 일치하지 않으면 사용할 수 없다. A/B/C API 요청은 actor가 변경되지 않고 검사 중 제품 fixture DB 쓰기는 없다.",
       "status": "passed",
       "evidence": "reports/w08-b1-goal-list-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-005",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-012",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-GOAL-002",
+        "POL-CYCLE-001",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_local_db_and_local_api_integration",
+      "title": "목표 상태 전이·판 설정·회차 읽기 경계",
+      "steps": [
+        "완료·보관·재개 route가 CSRF를 먼저 검사하고 expected_revision만 고정 goal RPC에 전달하는지 단위 검사한다",
+        "판 설정 API가 허용된 next target/shared display patch만 update_board에 전달하고 이전 bunch snapshot은 list_bunches 결과에서 유지하는지 확인한다",
+        "회차 목록 RPC가 주인과 현재 권한 기여자만 허용하며 board-bound cursor keyset, 페이지 연속성, 직접 테이블 읽기 거절을 검사한다",
+        "A/B/C 실제 로컬 Auth API로 상태/설정 CSRF 경계, 목록 query·ID 거절 및 no-store 응답을 검사한다"
+      ],
+      "expected": "goal RPC가 상태 전이·revision·반복 요청 규칙을 유지한다. update_board는 미래 회차 설정만 변경하고 bunch 목록은 판 소속 요약만 반환한다. 목록 cursor는 보드에 바인딩되고 권한 회수/무관 사용자의 접근은 숨겨진 404다. API 경계는 owner/actor 입력을 받지 않으며 검증 중 제품 fixture 데이터가 바뀌지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

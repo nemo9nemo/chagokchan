@@ -1674,8 +1674,8 @@
         "tags": [
           "goals"
         ],
-        "description": "목표 완료",
-        "x-implementation-status": "not_implemented",
+        "description": "목표 완료. revision 검사와 멱등 반복은 complete_goal 업무 RPC에 위임한다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1686,7 +1686,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-005"
         ],
         "parameters": [
           {
@@ -1765,7 +1766,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "complete_goal(uuid,integer)"
+        ]
       }
     },
     "/goals/{goal_id}/archive": {
@@ -1775,8 +1779,8 @@
         "tags": [
           "goals"
         ],
-        "description": "목표 보관",
-        "x-implementation-status": "not_implemented",
+        "description": "목표 보관. revision 검사와 멱등 반복은 archive_goal 업무 RPC에 위임한다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1787,7 +1791,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-005"
         ],
         "parameters": [
           {
@@ -1866,7 +1871,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "archive_goal(uuid,integer)"
+        ]
       }
     },
     "/goals/{goal_id}/resume": {
@@ -1876,8 +1884,8 @@
         "tags": [
           "goals"
         ],
-        "description": "목표 재개",
-        "x-implementation-status": "not_implemented",
+        "description": "목표 재개. revision 검사와 멱등 반복은 resume_goal 업무 RPC에 위임한다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1888,7 +1896,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-005"
         ],
         "parameters": [
           {
@@ -1967,7 +1976,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "resume_goal(uuid,integer)"
+        ]
       }
     },
     "/goals/{goal_id}/restore": {
@@ -2380,8 +2392,8 @@
         "tags": [
           "boards"
         ],
-        "description": "주인만, revision 충돌 검사. personal 판에는 shared_* 입력 거절. 현재 회차 목표는 불변.",
-        "x-implementation-status": "not_implemented",
+        "description": "주인만 다음 회차 목표 수나 공유 표시를 revision과 함께 수정한다. 현재 회차 snapshot은 바꾸지 않는다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-004"
@@ -2398,7 +2410,8 @@
           "TC-CYCLE-003",
           "TC-CYCLE-004",
           "TC-ACCESS-001",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-005"
         ],
         "parameters": [
           {
@@ -2477,7 +2490,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "update_board(uuid,jsonb)"
+        ]
       }
     },
     "/boards/{board_id}/bunches": {
@@ -2487,8 +2503,8 @@
         "tags": [
           "boards"
         ],
-        "description": "허용된 판의 회차 목록",
-        "x-implementation-status": "not_implemented",
+        "description": "주인 또는 현재 권한이 유효한 기여자에게 해당 판의 회차 요약을 cycle_no/ID 역순으로 제공한다. cursor는 board ID에 묶인다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-012"
         ],
@@ -2500,7 +2516,8 @@
           "TC-GOAL-002",
           "TC-CYCLE-003",
           "TC-CYCLE-004",
-          "TC-NOTIFY-001"
+          "TC-NOTIFY-001",
+          "TC-API-005"
         ],
         "parameters": [
           {
@@ -2572,7 +2589,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "list_bunches(uuid,text,integer)"
+        ]
       }
     },
     "/boards/{board_id}/praises": {
