@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-08T13:22:34Z",
+  "checked_at": "2026-10-08T13:27:38Z",
   "work_item": "W16-C",
-  "status": "local_and_remote_ci_passed_branch_protection_pending",
-  "tested_parent_commit": "bc74c8b7ad1d778037c0785efa3b677f27a45b04",
+  "status": "ci_and_branch_protection_verified",
+  "tested_parent_commit": "40c74d00fac773498935abbfd9f401792e24bbbe",
   "tested_worktree_changes": true,
   "workflow": {
     "path": ".github/workflows/ci.yml",
@@ -67,21 +67,37 @@
     "corrected_run_id": 37783463500,
     "corrected_commit": "bc74c8b7ad1d778037c0785efa3b677f27a45b04",
     "corrected_conclusion": "success",
+    "evidence_run_id": 37783959708,
+    "evidence_commit": "40c74d00fac773498935abbfd9f401792e24bbbe",
+    "evidence_conclusion": "success",
     "check_name": "quality",
     "checks_passed": [
       "pnpm check",
       "pnpm build:check"
     ]
   },
-  "remote_branch_protection_read": "GitHub API returned 404 Branch not protected for main",
-  "branch_protection": "confirmed_not_configured",
+  "branch_protection_before": "GitHub API returned 404 Branch not protected for main",
+  "branch_protection": {
+    "branch": "main",
+    "verified_by": "GitHub REST API readback",
+    "required_pull_request": true,
+    "required_status_checks": {
+      "strict": true,
+      "contexts": [
+        "quality"
+      ]
+    },
+    "required_approving_review_count": 0,
+    "enforce_admins": true,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "restrictions": null
+  },
   "limitations": [
-    "Branch protection was confirmed unconfigured before its planned W16-C update.",
     "CI has no staging database or product credentials; this workflow covers repository checks and production-check compilation only.",
-    "GitHub API confirmed main has no protection; no branch-protection settings have been changed yet."
+    "TC-WEB-006 and TC-CACHE-001 physical-device checks remain pending under W11 and are independent of W16-C."
   ],
   "next_actions": [
-    "Configure main protection with PRs and the quality check, no admin bypass, and no force-push/deletion.",
-    "After branch protection is enabled, commit and merge the final status/evidence update through a PR."
+    "Continue the remaining project backlog, including the W11 physical-device checks; real login remains deferred to W12/W13."
   ]
 }

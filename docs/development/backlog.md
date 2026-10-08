@@ -32,7 +32,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W13 | 실제 로그인·여러 계정 권한 수락 검사 | DEFERRED | **공개 전 필수**, W09~W12 | 실제 로그인한 테스트 계정으로 연결·권한·세션 폐기·캐시·가입·삭제 검사 | 로컬 가상 계정 결과로 대체하지 않음 |
 | W14 | 운영 입력·공개 정책·스테이징 준비 | TODO | 로컬 개발과 병행 가능. 서비스 개설 전에 입력 필요 | 운영 주체·지원·도메인·예산·처리방침·약관·독립 삭제 원장·별도 환경 | 실제 서비스·결제·운영 설정 없음 |
 | W15 | 통합·보안·기기·복원·부하 검사 | TODO | W11, W13, W14 | 필수 TC 실행 증거·P0/P1 해결·복원·실측 성능·배포 차단 검사 | 소스 단위 32개·물리 DB 51개 통과. 제품 수락 TC 36개·업무 RPC·실제 로그인·통합/복원/부하 검사 미실행. [검증 계획](../quality/verification-plan.md) |
-| W16 | Git 형상관리·CI 연결 | IN_PROGRESS | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B 완료. 첫 원격 CI의 임시 checkout 경로 오류를 수정했고, 후속 GitHub Actions `quality` check와 build가 통과했다. main 브랜치 보호 설정이 남았다. [연결 증거](../quality/reports/git-remote-connection-2026-10-08.json) · [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
+| W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
 
 W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 진행한다. 이 두 입력 때문에 로컬 DB·기능 개발을 멈추지 않는다. 실제 로그인 없이 개발한다는 요구도 DB 권한·동시성 검사를 미루는 이유로 사용하지 않는다.
@@ -48,7 +48,7 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | W04-C | Docker 엔진·로컬 DB·포트 제한 | DONE | PostgreSQL 17.11·Auth/REST 200·공개 포트 127.0.0.1·포트 회귀 7개 통과 |
 | W16-A | 로컬 Git·기능 단위 커밋 | DONE | main·메시지 훅 적용. 작업·이유·검증·참조 본문 필수 |
 | W16-B | 지정 GitHub 원격 연결·이력 업로드 | DONE | 2026-10-08. 공개 origin/main·기존 세 커밋 보존·SHA/업스트림 일치. [증거](../quality/reports/git-remote-connection-2026-10-08.json) |
-| W16-C | CI·브랜치 보호 | IN_PROGRESS | GitHub Actions `quality` job에 고정 런타임·잠금 설치·`pnpm check`·`pnpm build:check`를 구성했다. 첫 실행 오류를 수정한 뒤 run `37783463500`에서 check와 build가 모두 통과했다. 현재 check 이름은 `quality`; main 보호(필수 `quality`, PR, 관리자 우회·강제 push/삭제 금지)를 적용하고 상태를 확인하면 완료한다. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) · [CI 변경 기록](../changes/2026-10-08-w16-c-ci.md) |
+| W16-C | CI·브랜치 보호 | DONE | GitHub Actions `quality` job에 Node·pnpm 잠금 설치·`pnpm check`·`pnpm build:check`를 구성했다. 첫 실행 오류를 수정한 뒤 원격 run `37783463500`와 기록 PR run `37783959708`의 `quality`·build가 통과했다. main에 PR 필수, strict `quality`, 관리자 포함, 강제 push·삭제 금지를 적용·재조회했다. 1인 개발 기준 승인 리뷰 요구는 0명이다. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) · [CI 변경 기록](../changes/2026-10-08-w16-c-ci.md) |
 
 ## W05의 완료 범위
 
