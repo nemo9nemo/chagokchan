@@ -1,8 +1,8 @@
 # API 계약과 구현 규칙
 
-버전: 0.2.0 / 상태: GET /me의 로컬 API 구현·검증, 나머지 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
+버전: 0.2.0 / 상태: GET /me·목표 생성/목록/상세/수정의 로컬 API 구현·검증, 나머지 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
 
-OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A에서 목표 생성·상세·수정 API를 로컬 fixture Auth 세션에 연결했다. 목표 API는 POST `/goals`, GET/PATCH `/goals/{goal_id}`이며 구현된 RPC만 호출한다. 배포 Auth flow/session binding은 W12, 목표 목록·상태 전이·개인 칭찬 route는 W08 후속 구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
+OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A에서 목표 생성·상세·수정, W08-B1에서 목표 목록 API를 로컬 fixture Auth 세션에 연결했다. 목표 경로는 POST/GET `/goals`, GET/PATCH `/goals/{goal_id}`이며 현재 적용된 업무 RPC만 호출한다. 목록은 `status=active|completed|archived`, 기본 20·최대 50개, 해당 status에 결합된 keyset cursor를 쓴다. 목표 상태/판 설정·회차·개인 칭찬 route는 W08 후속이고 배포 Auth flow/session binding은 W12다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
 개발 중에는 [로컬 사용자 해석기](../development/local-development.md)가 가상 Auth 세션을 서버에서 준비한다. 아래 공개 인증·쿠키 계약을 변경하거나 클라이언트 actor 입력을 추가하지 않는다. 실제 Google/OTP 인증 API와 사용자 로그인 검증은 [진행표](../development/backlog.md)의 W12/W13에서 수행한다.
 
@@ -44,7 +44,7 @@ reauth는 현재 세션·UUID·account.delete에 묶인다. 이메일은 검증�
 
 목표·판·회차·칭찬은 현재 권한을 확인한 뒤 조회한다. 회차 query는 해당 판 소속이어야 한다. include_hidden은 주인만 허용한다. 휴지통은 본인만이며 일반 조회와 별도다.
 
-목록 기본 20건·최대 50건, 안정적인 recorded/created 시각과 ID 또는 cycle_no·ID 순서를 사용한다. 각 커서는 해당 목록·필터에만 적용한다. 요청 키·정렬·cursor를 사용자가 준 SQL로 합성하지 않는다.
+목록 기본 20건·최대 50건, 안정적인 recorded/created 시각과 ID 또는 cycle_no·ID 순서를 사용한다. 목표 목록은 created_at·ID 역순 keyset cursor를 쓰고 cursor에 status 필터를 포함해 다른 필터에서 재사용할 수 없게 한다. 각 커서는 해당 목록·필터에만 적용한다. 요청 키·정렬·cursor를 사용자가 준 SQL로 합성하지 않는다.
 
 | 상태 | code 예 | 처리 |
 | --- | --- | --- |

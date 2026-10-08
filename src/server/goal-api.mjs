@@ -134,6 +134,50 @@ export function projectGoalDetail(value) {
   };
 }
 
+export function validateGoalsQuery(url) {
+  const params = url.searchParams;
+  if (["cursor", "limit", "status"].some((key) => params.getAll(key).length > 1)) invalidInput();
+  const cursor = params.get("cursor");
+  if (cursor !== null && (cursor.length < 1 || cursor.length > 512)) invalidInput();
+  const rawLimit = params.get("limit");
+  const limit = rawLimit === null ? 20 : Number(rawLimit);
+  if (rawLimit !== null && !/^\d+$/.test(rawLimit)) invalidInput();
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 50) invalidInput();
+  const status = params.get("status");
+  if (status !== null && !GOAL_STATUSES.has(status)) invalidInput();
+  return { p_cursor: cursor, p_limit: limit, p_status: status };
+}
+
+function projectGoalSummary(value) {
+  const fields = ["id", "title", "private_description", "status", "revision", "created_at", "completed_at", "archived_at"];
+  if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || !UUID.test(value.id) ||
+      typeof value.title !== "string" || [...value.title].length < 1 || [...value.title].length > 80 ||
+      !validTextOrNull(value.private_description, 1000) || !GOAL_STATUSES.has(value.status) ||
+      !Number.isInteger(value.revision) || value.revision < 1 || !isTimestamp(value.created_at) ||
+      !isTimestampOrNull(value.completed_at) || !isTimestampOrNull(value.archived_at)) {
+    throw new Error("Goal list response did not match its allowlist.");
+  }
+  return {
+    id: value.id,
+    title: value.title,
+    private_description: value.private_description,
+    status: value.status,
+    revision: value.revision,
+    created_at: value.created_at,
+    completed_at: value.completed_at,
+    archived_at: value.archived_at,
+  };
+}
+
+function projectGoalsPage(value) {
+  if (!exactObject(value, ["items", "next_cursor"]) || Object.keys(value).length !== 2 ||
+      !Array.isArray(value.items) || value.items.length > 50 ||
+      !(value.next_cursor === null || (typeof value.next_cursor === "string" && /^[A-Za-z0-9_-]{1,512}$/.test(value.next_cursor)))) {
+    throw new Error("Goal list response did not match its allowlist.");
+  }
+  return { items: value.items.map(projectGoalSummary), next_cursor: value.next_cursor };
+}
+
 function jsonResponse(body, status, requestId) {
   return Response.json(body, { status, headers: { "Cache-Control": "no-store", Pragma: "no-cache", "X-Request-ID": requestId } });
 }
@@ -188,6 +232,18 @@ export async function getGoalResponse(goalId, client) {
     const { data, error } = await client.rpc("get_goal", { p_goal_id: goalId });
     rpcError(error);
     return jsonResponse(projectGoalDetail(data), 200, requestId);
+  } catch (error) {
+    return errorResponse(error, requestId);
+  }
+}
+
+export async function listGoalsResponse(url, client) {
+  const requestId = randomUUID();
+  try {
+    const input = validateGoalsQuery(url);
+    const { data, error } = await client.rpc("list_goals", input);
+    rpcError(error);
+    return jsonResponse(projectGoalsPage(data), 200, requestId);
   } catch (error) {
     return errorResponse(error, requestId);
   }

@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 57개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개·W06-C2 기술 TC 4개·W06-D1 기술 TC 4개·W06-D2 기술 TC 2개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 61개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06 기술 TC 21개·W07 API TC 2개·W08 API TC 2개, 합계 기술 TC 25개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -115,10 +115,18 @@ OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했
 
 ## W08-A 목표 생성·상세·수정 API 경계 검사
 
-`POST /api/v1/goals`, `GET /api/v1/goals/{goal_id}`, `PATCH /api/v1/goals/{goal_id}`를 기존 `create_goal`·`get_goal`·`update_goal` 업무 RPC에 연결했다. 목표 변경 route는 `validateMutationRequest`의 Origin·Fetch Metadata·CSRF·JSON/32KB 경계를 업무 입력 검사 전에 통과해야 한다. client actor/owner/recipient 입력은 거절하고, 결과를 OpenAPI allowlist로 축소하며 모든 응답은 no-store·request ID를 반환한다. 목표 목록은 DB `listGoals` RPC가 없어서 이 작업에 포함하지 않았다.
+`POST /api/v1/goals`, `GET /api/v1/goals/{goal_id}`, `PATCH /api/v1/goals/{goal_id}`를 기존 `create_goal`·`get_goal`·`update_goal` 업무 RPC에 연결했다. 목표 변경 route는 `validateMutationRequest`의 Origin·Fetch Metadata·CSRF·JSON/32KB 경계를 업무 입력 검사 전에 통과해야 한다. client actor/owner/recipient 입력은 거절하고, 결과를 OpenAPI allowlist로 축소하며 모든 응답은 no-store·request ID를 반환한다. 당시 목표 목록은 DB `listGoals` RPC가 없어 포함하지 않았고, 다음 W08-B1에서 추가했다.
 
-새 `scripts/goal-api.test.mjs` 8/8은 기본값·공유 입력·멱등 키·알 수 없는 입력 거절·RPC 인자·CSRF 선행 검사·응답 projection·404/409 안전 변환을 확인했다. 실제 A/B/C Auth session API 검사는 각 3/3으로 임의 UUID의 비공개 404, 잘못된 경로 UUID 400, CSRF 없는 생성 거절 403을 확인했다. 해당 API integration은 DB 쓰기를 하지 않는다. `scripts/project.ps1 -Task build:check`에서 세 route가 dynamic Node.js API로 컴파일됐다. 전체 `check`는 Biome·typecheck·unit·산출물 검사를 다시 실행해 이 변경 범위의 최종 상태를 남긴다. `TC-API-003`은 이 제한된 handler/경계 범위만 통과이며 실제 생성·수정 route→DB 성공, 목표 목록·전이, 제품 화면/수락 검사는 미실행이다. [세부 증거](reports/w08-a-goal-api-check-2026-10-08.json)
+새 `scripts/goal-api.test.mjs` 8/8은 기본값·공유 입력·멱등 키·알 수 없는 입력 거절·RPC 인자·CSRF 선행 검사·응답 projection·404/409 안전 변환을 확인했다. 실제 A/B/C Auth session API 검사는 각 3/3으로 임의 UUID의 비공개 404, 잘못된 경로 UUID 400, CSRF 없는 생성 거절 403을 확인했다. 해당 API integration은 DB 쓰기를 하지 않는다. `scripts/project.ps1 -Task build:check`에서 세 route가 dynamic Node.js API로 컴파일됐다. 전체 `check`는 Biome·typecheck·unit·산출물 검사를 다시 실행해 이 변경 범위의 최종 상태를 남긴다. `TC-API-003`은 이 제한된 handler/경계 범위만 통과이며 실제 생성·수정 route→DB 성공과 제품 화면/수락 검사는 미실행이다. [세부 증거](reports/w08-a-goal-api-check-2026-10-08.json)
+
+## W08-B1 목표 목록·status-bound cursor RPC/API 검사
+
+`20261008024300_goal_list_rpc.sql`에서 owner 전용 `list_goals(text,integer,text)`와 내부 cursor helper를 추가했다. PostgreSQL `encode(...,'base64')`가 긴 값에서 줄바꿈을 생성해 API cursor 제한에 걸린 결함을 확인해, 적용 migration은 수정하지 않고 `20261008024400_goal_list_cursor_base64_wrap_fix.sql` 후속 migration에서 줄바꿈을 제거했다. 목록은 삭제되지 않은 본인 목표 요약 필드만 반환하고 created_at·ID 내림차순 keyset으로 이어 간다. cursor에는 필터 상태를 포함해 다른 status에 재사용할 수 없다.
+
+GET `/api/v1/goals`는 기본 20·최대 50, `active|completed|archived` 필터, cursor 길이/중복 query parameter 검증과 RPC 응답 allowlist를 적용한다. 신규 DB test `009_business_rpc_goal_list.test.sql` 9/9 및 전체 DB 222/222를 통과했다. 실제 로컬 Auth-issued owner probe에서 페이지 끝까지 ID 중복·누락 없음, status 필터, 다른 필터의 cursor 거절, malformed cursor/page/status 거절, 타인 빈 목록 및 직접 테이블 읽기 거절을 5/5 확인했다. probe 계정/세션은 제거했고 기존 fixture를 보존했다. A/B/C API 각 3/3은 기본 목록·허용 필터·잘못된 status/limit를 확인했으며 DB 쓰기는 없었다.
+
+`TC-API-004`는 cursor 쿼리·projection 단위 검사, RPC 권한/페이지 pgTAP, 실제 Auth session 통합과 A/B/C API 검증으로 통과 처리한다. 전체 `check`·`build:check` 최종 출력과 SHA-256 source basis는 [W08-B1 증거](reports/w08-b1-goal-list-check-2026-10-08.json)에 함께 기록한다. W08-B2 상태/설정/회차 API, W08-C 개인 칭찬 API 및 화면은 이 완료 범위에 포함하지 않는다.
 
 ## W05 물리 DB의 부분 검사
 
-2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). W06-A 검사 전 단계의 범위다. 현재 두 기술 TC만 추가로 실행했으며 제품 업무·동시성·전체 API/E2E·실제 로그인 검사는 남아 있다.
+2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). 이 단락은 W06-A 이전 W05 부분 검사 기록이며, 이후 업무 DB/API 검증은 각 작업 단락과 진행표의 별도 증거를 따른다.

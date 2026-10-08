@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_d1_w06_d2_w07_a_w07_b",
+  "phase": "partially_executed_w06_through_w08_b1",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -1292,6 +1292,28 @@
       "expected": "actor·owner UUID를 클라이언트에서 받지 않고, 목표 접근 불가 응답은 같은 404다. mutation은 동일 출처와 CSRF 검사를 통과해야 RPC를 호출한다. 검사에서 DB 쓰기는 없다.",
       "status": "passed",
       "evidence": "reports/w08-a-goal-api-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-004",
+      "requirement_ids": [
+        "REQ-002",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_local_db_and_local_api_integration",
+      "title": "내 목표 목록·상태 필터·커서 소유 경계",
+      "steps": [
+        "owner-scoped list_goals가 필요한 목표 요약 필드만 반환하고 DB 직접 읽기와 내부 cursor helper 호출을 거절하는지 검사한다",
+        "실제 로컬 Auth 세션으로 여러 페이지를 탐색해 중복·누락이 없고 status filter에 묶인 cursor가 다른 필터에서 거절되는지 확인한다",
+        "A/B/C 로컬 API에서 actor를 입력으로 바꾸지 못하고 기본 목록·유효 status·잘못된 status와 limit 경계를 확인한다"
+      ],
+      "expected": "목표 목록은 검증된 소유자의 삭제되지 않은 요약만 반환한다. keyset cursor는 마지막 반환 행 기준으로 이어지고 status filter와 일치하지 않으면 사용할 수 없다. A/B/C API 요청은 actor가 변경되지 않고 검사 중 제품 fixture DB 쓰기는 없다.",
+      "status": "passed",
+      "evidence": "reports/w08-b1-goal-list-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

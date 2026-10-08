@@ -26,6 +26,7 @@
     "db:test": "node scripts/database-task.mjs test",
     "db:rpc-test": "node scripts/database-task.mjs rpc-test",
     "db:goal-test": "node scripts/test-local-goal-rpc.mjs",
+    "db:goal-list-test": "node scripts/test-local-goal-list-rpc.mjs",
     "db:praise-test": "node scripts/test-local-personal-praise.mjs",
     "db:connection-test": "node scripts/test-local-connection-rpc.mjs",
     "db:shared-test": "node scripts/test-local-shared-board-rpc.mjs",
@@ -33,6 +34,7 @@
     "db:deletion-test": "node scripts/test-local-account-deletion.mjs",
     "api:me-test": "node scripts/test-local-me-api.mjs",
     "api:goal-test": "node scripts/test-local-goal-api.mjs",
+    "api:goal-list-test": "node scripts/test-local-goal-list-api.mjs",
     "api:security-test": "node --test scripts/api-security.test.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },

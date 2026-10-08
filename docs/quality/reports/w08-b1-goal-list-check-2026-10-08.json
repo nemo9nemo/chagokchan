@@ -1,0 +1,68 @@
+{
+  "verified_at": "2026-10-08T09:26:50Z",
+  "work_item": "W08-B1",
+  "status": "passed",
+  "scope": "owner_goal_list_projection_status_filter_bound_keyset_and_local_api_boundary",
+  "source_basis": {
+    "base_commit": "c5ce155888404194793ed473515a245d4377e4a5",
+    "format": "SHA-256 per migration, RPC test, API implementation, route, runner, contract, progress, and verification source; resulting commit identifies the reviewed snapshot",
+    "files": [
+      { "path": "supabase/migrations/20261008024300_goal_list_rpc.sql", "sha256": "859ce2c70cca861656a797c724b417f7c26660899f3bbac4f2e4f355238459d2" },
+      { "path": "supabase/migrations/20261008024400_goal_list_cursor_base64_wrap_fix.sql", "sha256": "11d50fbfe40377327614bfb8420fbe0857c6dedd2c8a598a2b3972a591e2d0fa" },
+      { "path": "supabase/tests/009_business_rpc_goal_list.test.sql", "sha256": "cd15cd4237f2c92f47ff576648074730543a0b97e92005e6360ba97a891e19de" },
+      { "path": "src/server/goal-api.mjs", "sha256": "add6418c39b850fe43e29a5ef3247f6e009db55939945d59ff5c5cf602ee32ac" },
+      { "path": "src/app/api/v1/goals/route.ts", "sha256": "891a6515ac374a472ab8ee98ef72522739be2bda3982d7120ae5db0350057802" },
+      { "path": "scripts/goal-api.test.mjs", "sha256": "5d98771129caa7b9e70b608bc59b760ff7424303dbb8195eec7182143237ca13" },
+      { "path": "scripts/test-local-goal-list-rpc.mjs", "sha256": "4bdd354035bfadaae4a835f3f36c296570a9cc257558098b5721df707c5e00b0" },
+      { "path": "scripts/test-local-goal-list-api.mjs", "sha256": "48f107d6cdd7b8bb574c444ab96debe39cba7ee4cdec372fbd9cc6eb475792c7" },
+      { "path": "package.json", "sha256": "11bc1307adde22be55f9b86e71e2b25a635b7fd25ac2fb07b94be5a61f2e514d" },
+      { "path": "scripts/project.ps1", "sha256": "010a5382ea34902eacfd9cd9e32f2f1cb0a97d07f1447ea0c251aa3b257e81c5" },
+      { "path": "contracts/openapi.json", "sha256": "071b756ce23e9898963ae68eb4260aeef7a88d82d0b51d954fac255d54f3a48e" },
+      { "path": "docs/quality/test-cases.json", "sha256": "8cc5e4f105834f85e470d6fc6c212bd3f8112c580c965c6fe79a6769824f6675" },
+      { "path": "docs/development/backlog.md", "sha256": "f3189a6d01ac70c87de7347907d48dddd96f9303994517653556732ec86bfe59" },
+      { "path": "docs/development/artifact-register.json", "sha256": "ca1add1f98ec2693cdb488eef06fe78d5ce822dbb00658668020225d36a02599" },
+      { "path": "docs/quality/verification-plan.md", "sha256": "ac86600b8fe5b83cfc8211f883239a7e633a96e0264c5018a3331b314c0ccb94" },
+      { "path": "docs/changes/2026-10-08-w08-b1-goal-list.md", "sha256": "be35745a8319ce2545d394afdea3b91616790a8bbb782724558f1edafeb6b0cd" },
+      { "path": "docs/contracts/api-contract.md", "sha256": "07a4b1b335a9225a14556231bc892b996f6ebcb30ff3c3c42fa578ac95fa20d5" },
+      { "path": "docs/development/local-development.md", "sha256": "b0db5a485beadaac87f90a8462ea3fb6a5a44be96efbdf2597da3ae8904c2b29" }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "postgresql": "17.11",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false,
+    "auth_tokens_returned": false
+  },
+  "verification": {
+    "unit_command": "scripts/project.ps1 -Task check",
+    "goal_api_unit_cases": "11/11 passed for W08-A and W08-B1 handlers/projections",
+    "full_check": "passed 2026-10-08T09:26:50Z; Biome 40 files, typecheck passed, unit 64/64, artifact checks passed (26 JSON, 412 Markdown links, 691 OpenAPI refs, 61 test cases, 199 registered artifact paths)",
+    "build_check_command": "scripts/project.ps1 -Task build:check",
+    "build_check": "passed 2026-10-08; /api/v1/goals and /api/v1/goals/{goal_id} compiled as dynamic Node.js routes",
+    "database_command": "scripts/project.ps1 -Task db:test",
+    "database_result": "222/222 passed: physical 51, RPC boundary 21, business RPC 150; 009_business_rpc_goal_list.test.sql 9/9",
+    "rpc_regression_command": "scripts/project.ps1 -Task db:rpc-test",
+    "rpc_regression_result": "171/171 passed: RPC boundary 21, business RPC 150",
+    "local_rpc_command": "scripts/project.ps1 -Task db:goal-list-test",
+    "local_rpc_result": "5/5 passed at 2026-10-08T09:23:00Z; synthetic owner/outsider probes removed; existing fixture data and session count preserved",
+    "local_api_command": "scripts/project.ps1 -Task api:goal-list-test",
+    "local_api_actor_runs": [
+      { "actor": "A", "checks_passed": 3, "status": "passed", "database_mutation": false },
+      { "actor": "B", "checks_passed": 3, "status": "passed", "database_mutation": false },
+      { "actor": "C", "checks_passed": 3, "status": "passed", "database_mutation": false }
+    ],
+    "goal_list_contract": "owner-only summary projection; created_at/id descending keyset; limit 1..50 default 20; active/completed/archived status filter bound into cursor",
+    "real_google_or_otp_login": "not_run",
+    "product_ui_and_acceptance_cases": "not_run"
+  },
+  "notes": [
+    "The first applied migration exposed PostgreSQL base64 line wrapping on long cursors. The applied migration was preserved; migration 20261008024400 fixes encoding in order.",
+    "The local RPC probe used Auth-issued sessions and the service role only for synthetic account lifecycle setup/cleanup; product RPC calls used each probe's user session.",
+    "Goal list API checks attempted client actor and Authorization inputs and confirmed the server-selected A/B/C identity remained in force."
+  ]
+}

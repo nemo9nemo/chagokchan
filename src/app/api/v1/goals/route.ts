@@ -1,6 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { createGoalResponse } from "@/server/goal-api.mjs";
+import { createGoalResponse, listGoalsResponse } from "@/server/goal-api.mjs";
 import { getLocalSessionClient } from "@/server/local-user-session.mjs";
 
 export const runtime = "nodejs";
@@ -29,4 +29,15 @@ export async function POST(request: Request) {
   }
   if (!client) return authRequired(randomUUID());
   return createGoalResponse(request, client, { expectedOrigin: new URL(process.env.APP_BASE_URL ?? "http://localhost").origin });
+}
+
+export async function GET(request: Request) {
+  let client: Awaited<ReturnType<typeof getLocalSessionClient>> = null;
+  try {
+    client = await getLocalSessionClient();
+  } catch {
+    return dependencyUnavailable(randomUUID());
+  }
+  if (!client) return authRequired(randomUUID());
+  return listGoalsResponse(new URL(request.url), client);
 }

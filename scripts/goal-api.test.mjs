@@ -4,9 +4,11 @@ import { createCsrfToken, CSRF_COOKIE_NAME } from "../src/server/api-security.mj
 import {
   createGoalResponse,
   getGoalResponse,
+  listGoalsResponse,
   projectGoalDetail,
   updateGoalResponse,
   validateCreateGoalInput,
+  validateGoalsQuery,
   validateUpdateGoalInput,
 } from "../src/server/goal-api.mjs";
 
@@ -115,6 +117,45 @@ test("goal detail handler calls get_goal and maps inaccessible goals to the shar
   const missing = await getGoalResponse(goalId, { rpc: async () => ({ data: null, error: { code: "PT404", message: "goal_not_found" } }) });
   assert.equal(missing.status, 404);
   assert.equal((await missing.json()).error.code, "OBJECT_NOT_AVAILABLE");
+});
+
+test("goal list query validates cursor, page size, and status and supplies the documented defaults", () => {
+  assert.deepEqual(validateGoalsQuery(new URL(`${origin}/api/v1/goals`)), {
+    p_cursor: null,
+    p_limit: 20,
+    p_status: null,
+  });
+  assert.deepEqual(validateGoalsQuery(new URL(`${origin}/api/v1/goals?cursor=eyJ4IjoxfQ&limit=50&status=archived`)), {
+    p_cursor: "eyJ4IjoxfQ",
+    p_limit: 50,
+    p_status: "archived",
+  });
+  for (const query of ["limit=0", "limit=51", "limit=x", "status=deleted", "status=active&status=archived", "limit=10&limit=20"]) {
+    assert.throws(() => validateGoalsQuery(new URL(`${origin}/api/v1/goals?${query}`)), { status: 400, code: "INVALID_INPUT" });
+  }
+});
+
+test("goal list handler calls the owner-only RPC and returns only page contract fields", async () => {
+  let call;
+  const page = { items: [detail().goal], next_cursor: null };
+  const client = { rpc: async (name, args) => { call = { name, args }; return { data: page, error: null }; } };
+  const response = await listGoalsResponse(new URL(`${origin}/api/v1/goals?limit=5&status=active`), client);
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("cache-control"), /no-store/i);
+  assert.equal(call.name, "list_goals");
+  assert.deepEqual(call.args, { p_cursor: null, p_limit: 5, p_status: "active" });
+  assert.deepEqual(await response.json(), page);
+});
+
+test("goal list response allowlist rejects cross-user fields and malformed cursors", async () => {
+  const extraField = await listGoalsResponse(new URL(`${origin}/api/v1/goals`), {
+    rpc: async () => ({ data: { items: [{ ...detail().goal, owner_user_id: goalId }], next_cursor: null }, error: null }),
+  });
+  assert.equal(extraField.status, 503);
+  const malformed = await listGoalsResponse(new URL(`${origin}/api/v1/goals`), {
+    rpc: async () => ({ data: { items: [], next_cursor: "not a cursor" }, error: null }),
+  });
+  assert.equal(malformed.status, 503);
 });
 
 test("update goal input preserves explicit null and requires a revision and editable field", () => {
