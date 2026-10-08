@@ -1,0 +1,110 @@
+{
+  "verified_at": "2026-10-08T12:08:55Z",
+  "work_item": "W11-A",
+  "status": "passed",
+  "scope": "theme_independent_tokens_and_tab_scoped_palette_switch",
+  "source_basis": {
+    "base_commit": "7fc8a4d8045145e505a0b20c318679b196c58b76",
+    "format": "SHA-256 per implementation, test case, design, progress, handoff and change record sources; excludes this report.",
+    "files": [
+      {
+        "path": "src/app/client-app.tsx",
+        "sha256": "00bd6143e547e54069506540f0824faf6bcf5bdca1a9458d9fc3bd1b0a5d06d2"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "dea2485813a7fc30b233b8af0ed2b4eb881aa3915d20bffe9621a68f9021fe89"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "0766715c00872f08ada092647c0f85a84cd036a358e87406e276d1301d145a62"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w11-a-theme-switch.md",
+        "sha256": "7d0da6f9b046ebe8f54c4d14e4e6d586dd1a50a4e6d93771e1fc402fdc184ca3"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "c96cd4e93eb57495f8083d85468c073a885ce492a114fd120530622afb030e2b"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "be8e4d63f833d82fc66aae90511c9125bd536c9c7c019b6cf390d2ebad7778d5"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "3326b2ec6b76d7351ba4a35e429546982e1f01591f84c7955873a0917325e3b7"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "ddcb248f3eae07586550124e08e203b0ce80e156f22d5a47ff971fbd24059005"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "16f1b167ef58a640df79d75a2e672be3de5fddbe1a48460cb32b75c4a4c8e129"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "9639be697b8c8f380904dd7c3f368fa6fddaebcd652d03dbe604c3b2830b0f3b"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "auth_mode": "local_fixture; actor A synthetic Auth-issued session",
+    "database_host_binding": "127.0.0.1"
+  },
+  "commands": {
+    "check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 90,
+      "typecheck": "passed",
+      "unit_tests": 109,
+      "unit_tests_passed": 109,
+      "artifact_check": "passed",
+      "planned_test_cases": 70,
+      "artifact_check_registered_paths": 269,
+      "local_markdown_links": 468,
+      "json_files": 35,
+      "traceability_cases": 70
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "route_entries": 36
+    },
+    "browser_theme_smoke": {
+      "status": "passed",
+      "interaction": "keyboard Space on the accessible theme toggle; garden to grape and back",
+      "aria_pressed_values_observed": [
+        0,
+        1,
+        0
+      ],
+      "selected_goal_title_before_and_after": "오늘의 작은 수고",
+      "personal_board_count_before_and_after": "0/20",
+      "shared_board_count_before_and_after": "0/20",
+      "theme_transition_business_api_writes": 0,
+      "theme_state_saved_to_storage_or_cookie": false,
+      "static_visual_check": "brand, text, border, and pale surface palette changed to the grape token set",
+      "fixture_data_mutated": false
+    }
+  },
+  "test_case": {
+    "id": "TC-WEB-003",
+    "status": "passed",
+    "product_acceptance_cases_executed": 0
+  },
+  "limitations": {
+    "screen_reader_on_real_device_executed": false,
+    "color_contrast_audit_executed": false,
+    "small_device_suite_executed": false,
+    "error_and_offline_states_completed": false,
+    "pwa_static_cache_completed": false,
+    "actual_ui_goal_mutation_e2e_cases_executed": 0
+  }
+}

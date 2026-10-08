@@ -1513,6 +1513,27 @@
       "expected": "각 사용자는 본인 삭제 목표의 제한 projection만 확인한다. 삭제는 30일 복구 기한을 한 번만 설정하고 공유판 grant를 즉시 회수한다. 복구 시 archived 상태로 돌아오며 이전 grant는 복구되지 않는다. API 검사 중 제품 fixture 쓰기는 없다.",
       "status": "passed",
       "evidence": "reports/w10-b-goal-trash-api-ui-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-WEB-003",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-002"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "local_ui_browser_smoke",
+      "title": "테마 전환은 화면 표현만 바꾼다",
+      "steps": [
+        "목표 상세에서 현재 제목과 개인/공유판별 진행 개수를 확인한다",
+        "키보드로 테마 버튼을 눌러 정원·포도 팔레트를 전환하고 접근 가능한 이름과 pressed 상태를 확인한다",
+        "선택 목표·회차·판별 진행 개수가 그대로인지, 전환 중 업무 API 쓰기나 브라우저 저장이 없는지 확인한다",
+        "원래 팔레트로 되돌려 동일한 목표·판 상태를 확인한다"
+      ],
+      "expected": "테마 전환은 CSS 표현과 테마 버튼 상태만 변경한다. 목표·회차·칭찬·개수·권한은 그대로 유지되고 테마를 위해 사용자 데이터·쿠키·로컬 저장소를 쓰지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w11-a-theme-switch-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

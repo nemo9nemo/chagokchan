@@ -38,7 +38,8 @@
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
-| W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. 다음 작업은 W11 테마·오류 UX·접근성·PWA |
+| W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
+| W11 | IN_PROGRESS | W11-A 의미 중심 테마 토큰과 정원/포도 탭 내 전환을 구현·검증했다. W11-B 오류·접근성·작은 화면, W11-C PWA 정적 캐시가 남았다. [W11-A 증거](../quality/reports/w11-a-theme-switch-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -169,7 +170,15 @@ DELETE `/api/v1/goals/{goal_id}`, POST `/api/v1/goals/{goal_id}/restore`, GET `/
 
 검사는 신규 `TC-API-011`, handler unit 포함 전체 unit 109/109, 새 pgTAP 014 5/5·전체 DB 257/257, W06-D1 실제 Auth session lifecycle 4/4, A/B/C local Auth trash API 각 11/11(제품 fixture 쓰기 0), 정적 산출물 검사, Biome, typecheck, `build:check`로 기록한다. UI 화면은 로컬 Auth에서 휴지통 navigation·빈 목록·기한 안내를 읽기 전용 smoke로 확인했다. 브라우저의 목표 삭제·복구 submit은 기존 fixture를 바꾸므로 미실행이다. 실제 Google/OTP 로그인·운영 독립 삭제 원장·백업 복원도 통과로 간주하지 않는다. [W10-B 검사 증거](../quality/reports/w10-b-goal-trash-api-ui-check-2026-10-08.json)
 
-W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration은 사용자의 actual-login schedule에 따라 W12/W13으로 유예하며, W11 테마·오류 UX·접근성·PWA를 다음 진행 단위로 둔다.
+W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration은 사용자의 actual-login schedule에 따라 W12/W13으로 유예한다.
+
+## W11-A 테마 분리 완료 기록
+
+전역 색상 토큰을 의미 중심으로 바꾸고 정원·포도 팔레트를 추가했다. 화면 테마 스위치는 현재 탭 메모리 상태와 `data-theme` 표시에만 연결한다. theme preference는 브라우저 저장소·쿠키·API에 기록하지 않으며 브랜드명·목표·개인/공유 진행 수·권한과 분리된다.
+
+키보드 Space로 테마를 양방향 전환했고 `aria-pressed` 값 변경과 화면 팔레트 변화를 확인했다. 목표 제목 “오늘의 작은 수고”와 개인/공유판 0/20 개수는 동일했다. 서버 로그에 전환 이후 업무 API 쓰기는 없었고 `client-app.tsx`의 `localStorage`·`sessionStorage`·쿠키 참조는 없다. [W11-A 검사 증거](../quality/reports/w11-a-theme-switch-check-2026-10-08.json)
+
+다음은 W11-B 오류/빈/로딩 상태·키보드/읽기 도구·작은 화면 흐름이다. PWA 공개 정적 캐시와 오프라인 상태 표현은 W11-C로 이어간다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

@@ -255,6 +255,7 @@ function boardProgress(board: Board | undefined, status: GoalStatus) {
 
 export default function ChagokchanApp() {
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("goals");
+  const [theme, setTheme] = useState<"garden" | "grape">("garden");
   const [goals, setGoals] = useState<GoalSummary[]>([]);
   const [goalDetails, setGoalDetails] = useState<Record<string, GoalDetail>>({});
   const [goalCursor, setGoalCursor] = useState<string | null>(null);
@@ -326,6 +327,12 @@ export default function ChagokchanApp() {
   const [peerAttempt, setPeerAttempt] = useState<IdempotentAttempt | null>(null);
   const [peerSending, setPeerSending] = useState(false);
   const [peerError, setPeerError] = useState("");
+
+  useEffect(() => {
+    if (theme === "grape") document.documentElement.dataset.theme = "grape";
+    else delete document.documentElement.dataset.theme;
+    return () => { delete document.documentElement.dataset.theme; };
+  }, [theme]);
 
   const refreshConnectionCenter = useCallback(async () => {
     setConnectionLoading(true);
@@ -968,6 +975,10 @@ export default function ChagokchanApp() {
           <span className="brand-name">차곡찬</span>
         </a>
         <p className="topbar-note">나를 알아보는 작은 기록</p>
+        <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === "garden" ? "grape" : "garden")}
+          aria-label="화면 색상 테마" aria-pressed={theme === "grape"}>
+          테마 · {theme === "garden" ? "정원" : "포도"}
+        </button>
         <span className="profile-chip">오늘도 나</span>
       </header>
 
