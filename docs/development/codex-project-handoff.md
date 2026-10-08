@@ -9,7 +9,7 @@
 - 로컬 기본 브랜치: `main`, 원격: `origin`, 업스트림: `origin/main`
 - 인계 작성 전 검증된 로컬·원격 HEAD: `229056f66a1534e479584b626af6e4bcff783076`
 - 원격 연결·이력 보존·업스트림·비밀 제외 검사는 [연결 증거](../quality/reports/git-remote-connection-2026-10-08.json)에 기록했다. 이 문서의 커밋도 별도로 업로드한다.
-- CI·브랜치 보호·클라우드 서비스·공개 배포는 미설정이다.
+- W16-C GitHub Actions CI 워크플로를 추가했다. 원격 실행·브랜치 보호·클라우드 서비스·공개 배포는 아직 미확인/미설정이다.
 
 2026-10-08 조회 시 이 폴더는 Codex의 저장된 프로젝트 목록에 없었다. 현재 도구에는 로컬 프로젝트 등록과 이 대화의 작업 경로 변경 기능이 없다. 앱에서 로컬 프로젝트를 추가하고 위 폴더를 기본 폴더로 지정한 뒤 프로젝트 대화에서 이어간다. 프로젝트·대화의 이동 완료로 기록하지 않는다. 폴더가 준비되어 있으므로 해당 폴더를 그대로 사용한다.
 
@@ -43,7 +43,7 @@
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
-| W16-C | TODO | CI·브랜치 보호 |
+| W16-C | IN_PROGRESS | `.github/workflows/ci.yml`에 lint/type/unit/artifact/build 검사를 구성했다. 로컬 check 115/115·artifact 491 링크 및 build:check 통과. GitHub 원격 실행·main 브랜치 보호 설정이 남았다. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | TODO | 공개 배포·관찰 |
 
 화면은 준비 화면이다. W07-A/B에서 GET /api/v1/me, 개발용 GET /api/v1/auth/csrf와 변경 요청 guard 기반을 구현했고, W08-A에서 목표 생성·상세·설명 수정 API를 연결했다. W08-A는 unit 8/8, A/B/C 비파괴 API 각 3/3, 전체 check 61/61, build:check 통과다. 실제 mutation의 route→DB 성공 통합 검사는 아직 하지 않았고 기존 DB RPC 검증은 W06 결과를 유지한다. 배포 CSRF flow/session binding 및 실제 Google/OTP 로그인은 W12/W13에서 검증한다. 36개 제품 수락 TC는 계속 미실행이다.
