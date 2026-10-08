@@ -1,0 +1,274 @@
+{
+  "verified_at": "2026-10-08T06:08:57.765Z",
+  "work_item": "W06-D2",
+  "status": "passed",
+  "scope": "session_bound_reauth_account_access_revocation_author_and_recipient_erasure_retry_and_auth_finalization",
+  "source_basis": {
+    "base_commit": "b5290ad80b64e5f7952c2a2a9de425be3e82ef3f",
+    "format": "SHA-256 per changed migration, DB suite, runner, contract and test-case path; repository history identifies the resulting commit",
+    "files": [
+      {
+        "path": "supabase/migrations/20261008023500_account_deletion_request_boundary.sql",
+        "sha256": "a29b9dbf39ca73c60b79e2eeb8b42d4b139b8d2b8b1297ddea9ee418f136bd1d"
+      },
+      {
+        "path": "supabase/migrations/20261008023600_account_deletion_erasure_worker.sql",
+        "sha256": "84240ba2a34491b19d20abbd065980cf8b92bd53298eed13d5bcbafcf9b65ad6"
+      },
+      {
+        "path": "supabase/migrations/20261008023700_account_deletion_retry_privilege_fix.sql",
+        "sha256": "08aa09c61626c842e3103d8f94166b7898d575bb87d5bacaf37195e9e63c76f5"
+      },
+      {
+        "path": "supabase/migrations/20261008023800_account_profile_erasure_privilege.sql",
+        "sha256": "3f33e129380d44e965a86da0799b28464c518ea25ee4175c0e10daac20afaa40"
+      },
+      {
+        "path": "supabase/migrations/20261008023900_account_deletion_guard_helper.sql",
+        "sha256": "8347785659f527d0ff29665430b576c4048032d9c641f7e102313fdfbed36544"
+      },
+      {
+        "path": "supabase/migrations/20261008024000_account_deletion_state_read_privilege.sql",
+        "sha256": "a5b648f1c63dedef8e82a2ba151d07c0e9330193ff936afe5f3ccc5a3f8a8b1b"
+      },
+      {
+        "path": "supabase/migrations/20261008024100_account_deletion_timezone_check_privilege.sql",
+        "sha256": "070eb86777f0b4e8a802fdc73e167c8e320fc2456dbcf3ed7b6895c5586d56e4"
+      },
+      {
+        "path": "supabase/migrations/20261008024200_account_deletion_request_timestamp_privilege.sql",
+        "sha256": "2489680dd2f6b9367d09be7ebd13fa11a9f4f3dd265fbed9c6bb303c11cbb38d"
+      },
+      {
+        "path": "supabase/tests/001_physical_integrity.test.sql",
+        "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d"
+      },
+      {
+        "path": "supabase/tests/002_rpc_boundary.test.sql",
+        "sha256": "356a1ea7a334e4bdb066e8065e7b163c8a8d74f9ac24eabc35d2520c8bdb8fb5"
+      },
+      {
+        "path": "supabase/tests/003_business_rpc.test.sql",
+        "sha256": "9a41916a9d3ad769e226c6c410d59138e0139124e942125e8bf456dfd5c62339"
+      },
+      {
+        "path": "supabase/tests/004_business_rpc_praise.test.sql",
+        "sha256": "626347b02958b34eb5f442ece8ae4d3ec5600acf9bbcefdd9307144faecf4261"
+      },
+      {
+        "path": "supabase/tests/005_business_rpc_connections.test.sql",
+        "sha256": "f3c43a491f49087f298aff44bb5dcfae934484a55f0776ea9a1a5b586beffe21"
+      },
+      {
+        "path": "supabase/tests/006_business_rpc_shared_board.test.sql",
+        "sha256": "121c22b7cb6e1d2fbc1c078433e90ee5361f82cde4123442512aa6e14cb72e11"
+      },
+      {
+        "path": "supabase/tests/007_business_rpc_lifecycle.test.sql",
+        "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f"
+      },
+      {
+        "path": "supabase/tests/008_business_rpc_account_deletion.test.sql",
+        "sha256": "73ce3a9d2e4a82366351f3409ed5528e4cbaeda3bc4482039d7de9803bb19eff"
+      },
+      {
+        "path": "scripts/test-local-account-deletion.mjs",
+        "sha256": "a9b362cdbdfa88932b11106c476ca5e00dc7d8060c08b2771a85a4fd51a264d7"
+      },
+      {
+        "path": "package.json",
+        "sha256": "879485aa0a9d784b712cb48b5b56ee1c6de64b22beb21178c934aa5df515ddc7"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "80aa7678e0c497957f5d7ef095acbc14a04c6462a6f32d6d74b264e6caeac11f"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "75462907c8a9de2200f3c24213b722e16882f7d2bb8a3c97ef5a6035d762c87c"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "8848d7dfc9d03dc3d54528ffa992b21b41c1cb27df30e9ef8ccddfa5493cd98d"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "docker_engine": "29.1.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase",
+    "local_schema_applied_through": "20261008024200"
+  },
+  "d2_migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008023500",
+      "20261008023600",
+      "20261008023700",
+      "20261008023800",
+      "20261008023900",
+      "20261008024000",
+      "20261008024100",
+      "20261008024200"
+    ],
+    "previous_applied_migrations_modified": false
+  },
+  "full_database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "verified_at": "2026-10-08T05:56:16.452Z",
+    "status": "passed",
+    "executed": 213,
+    "passed": 213,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 141
+  },
+  "rpc_only_tests": {
+    "command": "scripts/project.ps1 -Task db:rpc-test",
+    "verified_at": "2026-10-08T05:56:29.718Z",
+    "status": "passed",
+    "executed": 162,
+    "passed": 162,
+    "failed": 0
+  },
+  "d2_authorization_tests": {
+    "suite": "supabase/tests/008_business_rpc_account_deletion.test.sql",
+    "sha256": "73ce3a9d2e4a82366351f3409ed5528e4cbaeda3bc4482039d7de9803bb19eff",
+    "verified_at": "2026-10-08T05:56:16.452Z",
+    "status": "passed",
+    "executed": 32,
+    "passed": 32,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-DELETE-003",
+      "TC-DB-DELETE-004"
+    ]
+  },
+  "lifecycle_regression": {
+    "command": "scripts/project.ps1 -Task db:lifecycle-test",
+    "verified_at": "2026-10-08T05:55:56.958Z",
+    "work_item": "W06-D1",
+    "scope": "recipient_scoped_news_sent_peer_praise_goal_trash_restore_and_ledger_gated_purge",
+    "status": "passed",
+    "executed": 4,
+    "passed": 4,
+    "cases": [
+      {
+        "name": "recipient_scoped_minimal_notifications_cursor_and_read_retry",
+        "status": "passed"
+      },
+      {
+        "name": "sent_praise_cursor_survives_disconnect_and_hides_goal_state",
+        "status": "passed"
+      },
+      {
+        "name": "soft_delete_trash_restore_and_membership_revoke",
+        "status": "passed"
+      },
+      {
+        "name": "purge_requires_ledger_gate_and_cleans_fk_dependents",
+        "status": "passed"
+      }
+    ],
+    "failure_detail": null,
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_user_scoped_app_rpc": false,
+    "service_role_used_for_worker_rpc": true,
+    "external_deletion_ledger_configured": false,
+    "external_ledger_gate_simulated_in_local_database": true,
+    "google_or_otp_login_tests_executed": 0
+  },
+  "issued_session_and_auth_admin_integration": {
+    "command": "scripts/project.ps1 -Task db:deletion-test",
+    "verified_at": "2026-10-08T06:08:57.765Z",
+    "work_item": "W06-D2",
+    "scope": "session_bound_reauth_account_deletion_access_revocation_author_erasure_recipient_erasure_retry_and_auth_finalization",
+    "status": "passed",
+    "executed": 6,
+    "passed": 6,
+    "cases": [
+      {
+        "name": "foreign_expired_wrong_scope_and_wrong_session_reauth_are_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "valid_same_key_retry_consumes_grant_and_revokes_session_access",
+        "status": "passed"
+      },
+      {
+        "name": "independent_ledger_gate_and_failure_injection_roll_back_all_erasure",
+        "status": "passed"
+      },
+      {
+        "name": "author_erasure_preserves_valid_event_and_erases_actor_receipt",
+        "status": "passed"
+      },
+      {
+        "name": "author_auth_deletion_failure_checkpoint_retry_and_final_rejoin_block",
+        "status": "passed"
+      },
+      {
+        "name": "recipient_erasure_removes_owned_goal_received_rows_and_relationships",
+        "status": "passed"
+      }
+    ],
+    "failure_detail": null,
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_user_scoped_app_rpc": false,
+    "service_role_used_for_deletion_worker_rpc": true,
+    "external_deletion_ledger_configured": false,
+    "external_ledger_gate_simulated_in_local_database": true,
+    "synthetic_local_auth_admin_deletion_executed": 2,
+    "reauth_grants_seeded_for_local_policy_tests": true,
+    "google_or_otp_login_tests_executed": 0
+  },
+  "safety": {
+    "external_deletion_ledger_configured": false,
+    "external_ledger_gate_simulated_in_local_database": true,
+    "service_role_used_for_user_scoped_app_rpc": false,
+    "service_role_used_for_deletion_worker_rpc": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "synthetic_local_auth_admin_deletion_executed": 2,
+    "google_or_otp_login_tests_executed": 0,
+    "server_api_and_ui_implemented": false,
+    "product_acceptance_cases_planned": 36,
+    "product_acceptance_cases_completed": 0,
+    "technical_cases_passed": 21,
+    "backup_restore_tests_executed": 0
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T06:10:03.242Z",
+    "status": "passed",
+    "lint_files": 26,
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 57,
+      "json_documents": 22,
+      "local_markdown_links": 389,
+      "registry_paths": 174,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  }
+}

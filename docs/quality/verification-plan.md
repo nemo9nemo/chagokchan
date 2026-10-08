@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 55개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개·W06-C2 기술 TC 4개·W06-D1 기술 TC 4개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 57개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개·W06-C2 기술 TC 4개·W06-D1 기술 TC 4개·W06-D2 기술 TC 2개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -91,7 +91,15 @@ TC-DB-SHARED-001~004는 통과했다. 제품 수락 TC 36개, 실제 로그인 �
 
 W06-D1 전용 pgTAP `007_business_rpc_lifecycle.test.sql`은 20/20, 실제 Auth 발급 로컬 세션 통합 `db:lifecycle-test`는 4/4를 통과했다. 통합 검사는 최소 소식 projection·수신자/대상 권한·읽음 재시도·보낸 peer 칭찬 cursor·연결 해제 이후 접근·목표 휴지통/복구와 멤버 권한 회수·만료 후 복구 거절·원장 gate 거절·FK 의존 정리를 확인했다. 기존 fixture 보존, 합성 계정/세션 정리도 통과했다. 원장 gate를 합성으로 켠 단계는 로컬 DB의 동작 검사이고 독립 저장소 구성이나 운영 파기 완료가 아니다. [증거](reports/w06-d1-news-and-purge-check-2026-10-08.json)
 
-OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했다. `TC-DB-NEWS-001~002`와 `TC-DB-DELETE-001~002`를 통과로 기록한다. 제품 수락 36개·백업 복원·실제 Google/OTP 로그인은 미실행이다. 계정 삭제 W06-D2는 별도 기술 케이스로 검증한다.
+OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했다. `TC-DB-NEWS-001~002`와 `TC-DB-DELETE-001~002`를 통과로 기록한다. 제품 수락 36개·백업 복원·실제 Google/OTP 로그인은 미실행이다.
+
+## W06-D2 재인증·계정 파기·Auth 최종 삭제 검사
+
+`db:rpc-test`는 162/162, 전체 `db:test`는 213/213(물리 51·RPC 경계 21·업무 RPC 141)을 통과했다. D2 pgTAP `008_business_rpc_account_deletion.test.sql`은 32/32, Auth가 실제 발급한 probe 세션과 로컬 Auth Admin을 사용한 `db:deletion-test`는 6/6을 통과했다. D1 `db:lifecycle-test` 4/4도 최종 전체 스키마에서 다시 통과했다. `scripts/project.ps1 -Task check`는 lint·typecheck·단위 32/32·정적 산출물 57개 상호참조를 통과했다.
+
+통합은 외부/만료/다른 scope·session grant 거절, 같은 키 재시도·입력 충돌, 접수 즉시 접근 중단, worker 외부 원장 gate 거절, 주입 오류의 전체 rollback, 작성자 이벤트 수 보존과 개인 필드 scrub, Auth 삭제 실패 checkpoint·동일 ledger reference retry·최종 Auth 제거, UUID 재가입 차단, 수신자 소유 데이터/FK 정리를 확인했다. 임시 Auth 사용자·세션은 제거됐고 원래 fixture는 보존됐다. gate 활성화는 폐기 가능한 로컬 DB에서 합성한 동작 검사이며 실제 독립 원장은 미설정이다. [증거](reports/w06-d2-account-deletion-check-2026-10-08.json)
+
+`TC-DB-DELETE-003~004`를 통과로 기록한다. 제품 수락 TC 36개, BFF/API·UI·Google/OTP 로그인·스테이징/운영 원장·백업 복원은 미실행이거나 미설정이다. 이에 따라 W06 DB 작업만 완료했고 다음 W07 서버 API 구현과 오픈 전 W12/W13 실제 인증 검증은 별도다.
 
 ## W05 물리 DB의 부분 검사
 

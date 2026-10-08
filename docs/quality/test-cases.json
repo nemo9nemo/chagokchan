@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_d1",
+  "phase": "partially_executed_w06_d1_w06_d2",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -1181,6 +1181,53 @@
       "expected": "운영 설정 없이는 purge가 차단된다. 허용된 작업만 잠금 후 만료를 재검사하고 FK 의존을 정해진 순서로 삭제한다.",
       "status": "passed",
       "evidence": "reports/w06-d1-news-and-purge-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-DELETE-003",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-DELETE-002",
+        "POL-API-001"
+      ],
+      "level": "local_db_transaction",
+      "title": "같은 세션 재인증·멱등 탈퇴 접수·즉시 접근 중단",
+      "steps": [
+        "실제 발급 세션으로 외부·만료·다른 scope·다른 session의 재인증 grant를 접수해 모두 거절되는지 확인",
+        "정상 10분 이내 account.delete grant로 탈퇴를 접수하고 같은 키/입력 재시도를 비교",
+        "다른 키·다른 입력의 충돌을 확인하고 현재 세션의 profile/notification RPC가 차단되는지 확인",
+        "grant가 한 번 소비되고 deleting 상태·요청 checkpoint가 단일 트랜잭션으로 기록되는지 확인"
+      ],
+      "expected": "현재 Auth 사용자와 현재 세션에 묶인 유효 grant만 한 번 소비된다. 접수 커밋 직후 제품 접근이 차단되고 같은 요청 키는 같은 결과를 반환한다.",
+      "status": "passed",
+      "evidence": "reports/w06-d2-account-deletion-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-DELETE-004",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-002",
+        "POL-DELETE-003",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_transaction",
+      "title": "작성자/수신자 계정 파기·rollback·Auth 최종 삭제 재시도",
+      "steps": [
+        "원장 gate가 꺼진 worker 요청을 거절하고 failure injection으로 앱 파기 전체 rollback을 확인",
+        "작성자 탈퇴에서 다른 사람 판의 유효 peer 칭찬 개수/회차는 보존하고 본문·날짜·actor·receipt 입력을 scrub",
+        "Auth 삭제 실패 checkpoint 뒤 같은 ledger reference로 재시도하고 Auth Admin 삭제 후 완료",
+        "영구 삭제 marker의 같은 UUID 재가입 차단을 검사",
+        "수신자 탈퇴에서 소유 목표·받은 칭찬·소식·연결·프로필이 FK 순서로 삭제되는지 검사"
+      ],
+      "expected": "앱 데이터 파기는 원자적이며 실패는 checkpoint부터 재시도한다. Auth 계정은 앱 데이터 정리 뒤 마지막에 삭제되고 UUID 재가입은 영구 marker로 차단된다.",
+      "status": "passed",
+      "evidence": "reports/w06-d2-account-deletion-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

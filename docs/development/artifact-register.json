@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S05_w06_d1_news_and_purge_rpc_verified",
-  "next_stage": "S05_w06_d2_account_deletion_rpc",
+  "current_stage": "S05_w06_database_rpc_and_deletion_verified",
+  "next_stage": "S05_w07_local_user_adapter_and_server_api",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -30,7 +30,7 @@
     {
       "id": "S05",
       "name": "DB·권한·로컬 사용자",
-      "status": "in_progress_w06_a_w06_b_w06_c_w06_d1_verified_d2_pending"
+      "status": "w06_database_rpc_rls_and_deletion_verified_w07_server_api_pending"
     },
     {
       "id": "S06",
@@ -69,7 +69,7 @@
     "docker_cli": "29.1.3",
     "docker_engine": "29.1.3",
     "supabase_cli": "2.120.0",
-    "local_database": "w06_a_w06_b_w06_c_rpcs_and_w06_d1_news_goal_purge_verified_w06_d2_in_progress",
+    "local_database": "w06_a_through_w06_d2_database_rpc_and_deletion_boundaries_verified",
     "selected_node": "24.19.0",
     "next": "16.4.0",
     "react": "19.3.0",
@@ -85,18 +85,18 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 55,
+    "planned_test_cases": 57,
     "application_tests_executed": 32,
     "application_test_scope": "runtime_ports_and_fixture_manifest_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
-    "database_tests_executed": 161,
+    "database_tests_executed": 213,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
-    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c1_connection_pagination_w06_c2_shared_board_rpc_security",
-    "business_rpc_tests_executed": 89,
+    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_w06_d2_account_deletion",
+    "business_rpc_tests_executed": 141,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
@@ -110,7 +110,11 @@
     "w06_c2_report": "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
     "w06_d1_pgtap_tests_executed": 20,
     "w06_d1_local_session_tests_executed": 4,
-    "w06_d1_report": "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json"
+    "w06_d1_report": "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json",
+    "w06_d2_pgtap_tests_executed": 32,
+    "w06_d2_local_session_tests_executed": 6,
+    "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
+    "technical_cases_passed": 21
   },
   "artifacts": [
     {
@@ -202,7 +206,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_a_w06_b1_w06_b2_w06_c1_w06_c2_w06_d1",
+      "status": "partially_executed_w06_a_w06_b1_w06_b2_w06_c1_w06_c2_w06_d1_w06_d2",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -211,7 +215,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_w06_d1_news_and_goal_purge",
+      "status": "documented_through_w06_d2_account_deletion",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -228,7 +232,8 @@
         "docs/changes/2026-10-08-w06-c1-connection-rpcs.md",
         "docs/changes/2026-10-08-w06-c2-shared-board-rpcs.md",
         "docs/changes/2026-10-08-w06-c1-cursor-pagination.md",
-        "docs/changes/2026-10-08-w06-d1-news-and-purge.md"
+        "docs/changes/2026-10-08-w06-d1-news-and-purge.md",
+        "docs/changes/2026-10-08-w06-d2-account-deletion.md"
       ]
     },
     {
@@ -254,7 +259,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_and_w06_d1_database_verification_passed",
+      "status": "static_and_w06_d1_d2_database_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -272,7 +277,8 @@
         "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
         "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
         "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
-        "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json"
+        "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json",
+        "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json"
       ]
     },
     {
@@ -324,7 +330,7 @@
     {
       "id": "ART-017",
       "title": "DB·RLS·RPC·기능 검사",
-      "status": "w06_a_w06_b_w06_c_and_w06_d1_news_goal_trash_purge_verified_w06_d2_pending",
+      "status": "w06_a_through_d2_database_rpcs_and_deletion_boundaries_verified",
       "paths": [
         "scripts/database-task.mjs",
         "scripts/test-local-rpc.mjs",
@@ -384,7 +390,18 @@
         "supabase/migrations/20261008023300_worker_jwt_reader_boundary.sql",
         "supabase/migrations/20261008023400_goal_purge_lock_privileges.sql",
         "supabase/tests/007_business_rpc_lifecycle.test.sql",
-        "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json"
+        "docs/quality/reports/w06-d1-news-and-purge-check-2026-10-08.json",
+        "scripts/test-local-account-deletion.mjs",
+        "supabase/migrations/20261008023500_account_deletion_request_boundary.sql",
+        "supabase/migrations/20261008023600_account_deletion_erasure_worker.sql",
+        "supabase/migrations/20261008023700_account_deletion_retry_privilege_fix.sql",
+        "supabase/migrations/20261008023800_account_profile_erasure_privilege.sql",
+        "supabase/migrations/20261008023900_account_deletion_guard_helper.sql",
+        "supabase/migrations/20261008024000_account_deletion_state_read_privilege.sql",
+        "supabase/migrations/20261008024100_account_deletion_timezone_check_privilege.sql",
+        "supabase/migrations/20261008024200_account_deletion_request_timestamp_privilege.sql",
+        "supabase/tests/008_business_rpc_account_deletion.test.sql",
+        "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json"
       ],
       "planned_paths": [
         "tests/e2e/"

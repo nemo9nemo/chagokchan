@@ -30,6 +30,7 @@
     "db:connection-test": "node scripts/test-local-connection-rpc.mjs",
     "db:shared-test": "node scripts/test-local-shared-board-rpc.mjs",
     "db:lifecycle-test": "node scripts/test-local-lifecycle-rpc.mjs",
+    "db:deletion-test": "node scripts/test-local-account-deletion.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },
   "dependencies": {

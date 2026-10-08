@@ -1,23 +1,23 @@
 {
-  "checked_at": "2026-10-08T06:04:16.273Z",
+  "checked_at": "2026-10-08T06:10:03.242Z",
   "status": "passed",
   "runtime": "v24.19.0",
   "scope": "artifact_structural_consistency_only",
   "full_openapi_validator_executed": false,
   "mermaid_render_executed": false,
   "application_or_database_tests_executed": 0,
-  "planned_test_cases": 55,
+  "planned_test_cases": 57,
   "checks": [
     {
       "id": "json",
       "description": "JSON parse",
-      "count": 21,
+      "count": 22,
       "status": "passed"
     },
     {
       "id": "links",
       "description": "Local Markdown links",
-      "count": 381,
+      "count": 389,
       "status": "passed"
     },
     {
@@ -32,7 +32,7 @@
       "description": "REQ/NFR/POL/TC/API cross references",
       "requirements": 17,
       "policies": 20,
-      "test_cases": 55,
+      "test_cases": 57,
       "status": "passed"
     },
     {
@@ -62,7 +62,7 @@
     {
       "id": "registry",
       "description": "Existing registered artifact paths",
-      "count": 161,
+      "count": 174,
       "status": "passed"
     },
     {
@@ -104,6 +104,6 @@
       "scripts/verify-artifacts.mjs"
     ],
     "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
-    "sha256": "ac5ec95c6a53f22aae16e8ac7f0965e090c5f87f0234529d08bc22331a4a6379"
+    "sha256": "bee4326a747e1951a6436e0562c19734a2e3f944253eedc1d9a2c44b91e72e76"
   }
 }

@@ -5257,7 +5257,7 @@
           "account"
         ],
         "description": "접수 트랜잭션에서 grant 소비·deleting·작업 생성. 커밋 후 세션 폐기, 배경 작업. 응답은 삭제 완료가 아님. 이미 deleting이면 일반 제품 접근을 열지 않는다.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-010"
         ],
@@ -5272,7 +5272,9 @@
           "TC-DELETE-001",
           "TC-DELETE-002",
           "TC-DELETE-003",
-          "TC-DELETE-004"
+          "TC-DELETE-004",
+          "TC-DB-DELETE-003",
+          "TC-DB-DELETE-004"
         ],
         "parameters": [
           {
@@ -5345,7 +5347,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "request_account_deletion(uuid,uuid,boolean)"
+        ]
       }
     }
   },

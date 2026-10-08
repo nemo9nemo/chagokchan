@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. W06-A~C와 W06-D1 소식·보낸함·목표 휴지통/복구·원장 gate 파기를 완료했다. W06-D2 계정 탈퇴·파기 RPC가 다음 작업이다. D1 전용 DB 권한 검사 20/20과 실제 Auth 발급 세션 통합 4/4가 통과했다. 제품 BFF/API·UI는 W07 이후 구현 대상이며 OpenAPI는 DB RPC와 서버 API 상태를 따로 표시한다. [진행표](backlog.md), [W06-D1 검사 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json)에 결과를 기록한다. 문서 작성, DB RPC 구현, 실행 검증, 서버 API 연결, 공개 출시 상태를 각각 기록한다.
+S04 앱·실행 환경·로컬 DB 준비와 S05 W05 물리 스키마를 완료했다. W06-A~D2의 DB 업무 RPC·RLS·삭제 경계를 완료했다. 전체 DB 213/213, RPC 162/162, D1 세션 통합 4/4, D2 세션/Auth Admin 통합 6/6이 통과했다. 다음은 W07 서버 API 기반과 로컬 사용자 연결이다. 앱 BFF/API·UI는 아직 없고 OpenAPI에는 DB RPC 완료와 서버 API 미연결을 구분해 표시한다. 독립 원장은 미설정이며 파기 worker gate는 기본 차단이다. 실제 Google/OTP 로그인·제품 수락·운영 파기/복원은 후속 단계다. [진행표](backlog.md), [D1 검사 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [D2 검사 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json)에 결과를 기록한다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 

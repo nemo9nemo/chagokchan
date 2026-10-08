@@ -34,7 +34,7 @@
 | W00~W03 | DONE | 작업 공간 이전·요구·정책·논리 설계·개발 무로그인 정책 |
 | W04 | DONE | 앱 기반·로컬 DB·소스 27개·빌드·loopback HTTP. [증거](../quality/reports/foundation-check-2026-10-08.json) |
 | W05 | DONE | 18테이블·38FK·68인덱스·RLS·합성 A/B/C. 물리 DB 51개·소스 단위 32개·빌드. [증거](../quality/reports/physical-database-check-2026-10-08.json) |
-| W06 | IN_PROGRESS | **W06-A~C2·D1 완료**. D1 pgTAP 20/20·실제 Auth 발급 세션 통합 4/4. 다음은 W06-D2 계정 탈퇴·파기 RPC와 FK/재시도 검사다. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json) |
+| W06 | DONE | **W06-A~D2 완료**. 전체 DB 213/213·RPC 162/162, D1 세션 통합 4/4·D2 세션/Auth Admin 통합 6/6. 외부 원장·BFF/API·실제 로그인·제품 수락은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 | W07~W11 | TODO | 서버 API·로컬 사용자 해석·개인/공유 기능·삭제·테마/접근성/PWA |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
@@ -50,13 +50,13 @@ Node `24.19.0`, pnpm `11.19.0`, Next `16.4.0`, React `19.3.0`, TypeScript `5.9.3
 
 Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서비스 7개를 사용한다. DB 컨테이너는 `supabase_db_chagokchan`, API 게이트웨이는 `supabase_kong_chagokchan`이다. API 54321·DB 54322·Studio 54323·메일함 54324는 127.0.0.1에 바인딩한다. 프로젝트의 loopback 프록시를 포함한 `db:start` 실행 경로를 유지한다.
 
-적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`, W06-B2 `20261008021400`~`20261008021700`, W06-C1 `20261008021800`~`20261008022100`, W06-C2 `20261008022200`~`20261008022900`, C1 페이지 보완 `20261008023000`, W06-D1 `20261008023100`~`20261008023400`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
+적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`, W06-B2 `20261008021400`~`20261008021700`, W06-C1 `20261008021800`~`20261008022100`, W06-C2 `20261008022200`~`20261008022900`, C1 페이지 보완 `20261008023000`, W06-D1 `20261008023100`~`20261008023400`, W06-D2 `20261008023500`~`20261008024200`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
 
 `.env.development.local`, `private-data/local-fixtures.json`은 현재 폴더에 존재하며 Git에서 제외한다. 인증 값은 읽어 출력하거나 문서·로그에 기록하지 않는다. 로컬 fixture 파일은 현재 사용자와 SYSTEM만 접근하도록 제한했다. `db:seed`는 명시적으로 준비하며 재실행 시 기존 제품 데이터를 덮어쓰지 않는다. 서버 실행·빌드에서 자동 seed를 하지 않는다.
 
 원격 첫 업로드는 GitHub CLI의 기존 인증을 프로세스 한정 credential helper로 사용했다. 글로벌 Git 설정은 바꾸지 않았다. 후속 push가 로컬 인증 설정 때문에 실패하면 `gh auth status`로 상태를 확인하고 토큰을 출력하지 않는 GitHub CLI credential helper를 사용한다. 강제 push로 원격 이력을 덮어쓰지 않는다.
 
-## W06-A~W06-D1 완료와 다음 작업
+## W06-A~W06-D2 완료와 다음 작업
 
 `tmp/w06-draft/source/`와 `tmp/w06-draft/manifest.json`은 초안 복사 당시 상태를 보존하는 Git 제외 자료다. manifest의 `draft_unapplied_untested`는 복사 당시 사실이며 현재 적용 상태가 아니다. 기능 소스는 저장소의 정식 경로에서 후속 검토·수정했다.
 
@@ -79,12 +79,13 @@ Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서
 | `supabase/migrations/20261008022200_shared_board_access_and_peer_praise.sql`~`supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql` | 적용. owner grant/revoke·관계 세대 검증·역할별 safe projection·공유 칭찬/영수증/회차/알림·판/일일/분당 quota·50명 상한·revoke/disconnect/block 경합을 구현. cursor 인코딩 줄바꿈과 공유 목록 경계를 후속 migration으로 수정 |
 | `supabase/tests/006_business_rpc_shared_board.test.sql`·`scripts/test-local-shared-board-rpc.mjs` | 공유판 pgTAP 25/25·실제 Auth 발급 세션 통합 6/6. grant/projection·독립 집계·멱등/롤백·상한 경합·권한 회수 경합·재연결 시 재 grant 확인, 기존 fixture 보존·probe 세션/계정 정리 |
 | W06-D1 `20261008023100`~`20261008023400`, `supabase/tests/007_business_rpc_lifecycle.test.sql`, `scripts/test-local-lifecycle-rpc.mjs` | 적용. 수신자 최소 소식 목록/읽음·마지막 반환행 커서, 연결 해제 뒤 보낸 peer praise, 목표 soft-trash/복구·grant 미복원·만료 후 복구 거절, 전용 worker의 FK 순서 purge를 추가했다. DB 권한 검사 20/20·실제 발급 Auth 세션 통합 4/4, 기존 fixture 보존·probe 정리 통과. purge gate는 독립 삭제 원장이 설정될 때만 열리며 로컬 검사에서만 합성 참조를 사용했다. [증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json) |
+| W06-D2 `20261008023500`~`20261008024200`, `supabase/tests/008_business_rpc_account_deletion.test.sql`, `scripts/test-local-account-deletion.mjs` | 적용. 현재 발급 세션의 10분 reauth를 한번 소비하고 deleting/요청을 원자 처리한다. worker는 원장 reference로 재시도를 고정하며 작성자 탈퇴에서 다른 판의 유효 칭찬 이벤트를 보존하고 actor·본문·날짜·receipt 입력을 제거한다. 수신자 탈퇴는 목표/받은 칭찬/소식/연결/프로필을 정리한다. DB pgTAP 32/32·발급 Auth 세션/Auth Admin 통합 6/6, 강제 실패 전체 rollback·Auth 삭제 checkpoint 재시도·UUID 재가입 차단·기존 fixture 보존 통과. 외부 원장 미설정으로 gate는 기본 차단, 로컬에서만 합성 reference로 동작을 검증했다. [증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 
 Auth 관리 테이블은 RLS가 켜져 있고 앱 정책이 없다. 그 때문에 전용 reader만 `BYPASSRLS`를 가지며 조회 가능한 Auth 열을 제한했다. 이 역할은 `NOLOGIN`, 제품 테이블 권한 없음, API 역할이 assume 불가이고, 고정 `search_path`를 가진 세션 검사 함수만 소유한다. 결정 근거와 제한은 [ADR-0005](../decisions/ADR-0005-local-auth-session-reader.md)에 있다. 일반 get_me 호출은 publishable key와 실제 발급된 사용자 세션을 사용한다. 관리 API 키는 검사용 임시 계정 생성·삭제에만 쓴다.
 
-1. W06-D1 pgTAP 20/20·발급 세션 통합 4/4, fixture 보존과 합성 probe 정리를 확인했다. OpenAPI 서버 API, 실제 Google/OTP 로그인 및 백업 복원은 미검증이다.
-2. 다음 작업 W06-D2에서 reauth·계정 접근 중단·작성자/수신자 파기·Auth 삭제 재시도 및 FK 경계를 구현하고 검사한다. 기능 단위 커밋 뒤 W06 전체 회귀를 실행한다.
-3. W06 이후 W07에서 로컬 사용자 해석기·BFF API를 구현한다. 실제 Google/OTP 로그인은 오픈 준비 W12/W13까지 미룬다.
+1. W06 전체 DB 213/213·RPC 162/162, W06-D1 발급 세션 통합 4/4·W06-D2 발급 세션/Auth Admin 통합 6/6을 통과했다. 기존 fixture 보존·probe 계정/세션 정리도 통과했다. 실제 Google/OTP 로그인과 BFF/API는 실행하지 않았다.
+2. W07에서 로컬 사용자 해석기·BFF API를 구현한다. 실제 Google/OTP 로그인은 오픈 준비 W12/W13까지 미룬다.
+3. `OPS-INPUT-02` 독립 삭제 원장 저장소는 미설정이다. 이를 구성하기 전 스테이징/운영 purge 및 계정 erasure worker gate는 닫아 둔다.
 
 ## 프로젝트에서 사용할 재개 메시지
 
