@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 43개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 47개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -64,6 +64,14 @@ TC-DB-GOAL-001/002는 통과했지만 OpenAPI `/api/v1` 서버와 화면은 아�
 `db:test`는 116/116(물리 무결성 51, RPC 경계 21, 업무 RPC 권한/RLS 44), `db:rpc-test`는 65/65를 통과했다. Auth가 발급한 로컬 소유자·타인 세션 통합 `db:praise-test` 12/12에서 개인 칭찬 생성/재시도/입력 충돌·수정/취소·직접 테이블 거절·동시 회차 경계·과거 회차 취소·다음 회차 설정 적용·목표 완료/재개·UTC 분당 20/일 300 제한·완성 실패 시 칭찬/회차/영수증/쿼터 전체 롤백과 같은 키 재시도를 확인했다. ON CONFLICT 알림 probe, 테스트 계정/세션 정리, 기존 fixture 보존도 통과했다. 기존 W06-B1 목표 세션 회귀 12/12와 W06-A 세션 회귀 27/27을 다시 통과했다.
 
 `check`는 lint 22개, typecheck, 단위 32/32 및 43개 계획 TC의 정적 링크/참조 검사를 통과했고 offline `build:check`도 Next 16.4.0으로 통과했다. TC-DB-PRAISE-001·TC-DB-CYCLE-001·TC-DB-RATE-001을 통과로 기록한다. 업무 UI/BFF는 아직 미구현이므로 제품 수락 36개와 실제 Google/OTP 로그인은 여전히 실행 0개다. 연결/판 권한/공유 칭찬 W06-C와 소식·삭제 W06-D는 남아 있다. [세부 증거](reports/w06-b2-personal-praise-check-2026-10-08.json)
+
+## W06-C1 초대·연결 요청·관계 수명주기 검사
+
+2026-10-08 PostgreSQL 17.11 로컬 DB에 `20261008021800`~`20261008022100`을 순서대로 적용했다. 14개 SECURITY DEFINER RPC와 초대 해시/코드 정규화, 24시간 미리보기·소비, 멱등 요청, 승인/거절/취소, 연결 세대·해제·차단/해제, 관계 projection을 구현했다. DB `db:test` 135/135(물리 51, 경계 21, 업무 권한/RLS 63), RPC 전용 `db:rpc-test` 84/84, 연결 Auth 발급 세션 통합 `db:connection-test` 13/13과 신규 관계 권한 pgTAP 19/19를 통과했다. 동일 초대·역방향 요청 경합, 요청 일일/15분 제한, 연결 200개 상한의 병렬 승인, 재연결 generation 증가 및 fixture/세션 정리를 확인했다. 기존 W06-A 세션 27/27, 목표 12/12, 개인 칭찬 12/12 회귀도 통과했다.
+
+적용 뒤 결함 세 건을 후속 migration으로 고쳤다. `jsonb_object_length`가 PostgreSQL에 없어 `jsonb_object_keys`를 사용하고, 요청/수락 알림 ON CONFLICT의 제안 행 SELECT RLS를 전이 당사자로 한정했다. 수락 알림은 `notifications_typed_target`의 단일 대상 제약에 맞춰 request ID 대신 connection ID를 저장한다. W06-B2 임시 알림 probe는 PostgREST schema reload가 필요해 테스트 생성·제거 뒤 캐시 갱신을 넣었다. 적용된 파일은 수정하지 않았다. [상세 증거](reports/w06-c1-connection-rpc-check-2026-10-08.json)
+
+TC-DB-CONNECT-001~004는 통과했다. 업무 UI/BFF가 없으므로 제품 연결 흐름 TC-CONNECT-001~003은 미실행이며 완료 처리하지 않는다. W06-C2 공유판 grant/revoke·공유 칭찬/권한 회수 경합과 W06-D 소식·삭제가 남아 있다. 실제 Google/OTP 로그인도 미검증이다.
 
 ## W05 물리 DB의 부분 검사
 

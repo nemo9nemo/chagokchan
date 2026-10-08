@@ -911,6 +911,92 @@
       "expected": "제한 초과는 일부 기록 없이 거절되고, 회차 완성 트랜잭션의 실패는 칭찬·회차·영수증·속도 제한 사용량을 모두 되돌린다. 실패한 같은 요청 키는 이후 한 번 성공할 수 있다.",
       "status": "passed",
       "evidence": "reports/w06-b2-personal-praise-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-CONNECT-001",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-LIMIT-001",
+        "POL-API-001"
+      ],
+      "level": "local_db_integration",
+      "title": "일회용 초대 미리보기·소비·연결 요청",
+      "steps": [
+        "실제 발급 세션으로 24시간 링크 token과 코드 초대 생성, DB에는 SHA-256 해시만 저장되는지 확인",
+        "링크와 정규화된 코드로 최소 nickname·만료 미리보기를 반복하고 초대가 소비되지 않는지 확인",
+        "활성 초대 5개·UTC 일 발급 20개와 요청 15분/일 제한 경계에서 실패가 부분 기록을 남기지 않는지 확인",
+        "1회 초대 소비·같은 입력 멱등 재시도·다른 입력 충돌·정확한 승인자 확인"
+      ],
+      "expected": "초대 비밀은 해시만 저장되고 미리보기는 소비하지 않는다. 초대·요청 제한 초과는 receipt/초대 소비 없이 거절되며 같은 키와 입력만 동일 결과를 돌려준다.",
+      "status": "passed",
+      "evidence": "reports/w06-c1-connection-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-CONNECT-002",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-LIMIT-001",
+        "POL-API-001"
+      ],
+      "level": "local_db_concurrency",
+      "title": "초대 단일 소비·역방향 요청·연결 상한 경합",
+      "steps": [
+        "두 사용자가 한 초대의 코드·링크를 병렬 소비해 한 요청만 생성되는지 확인",
+        "한 쌍의 역방향 요청을 병렬 생성해 단일 pending만 남고 패자 초대는 미소비인지 확인",
+        "활성 연결 199개에서 서로 다른 두 승인 경합을 실행해 200개를 넘지 않는지 확인"
+      ],
+      "expected": "초대 1회 소비와 쌍별 대기 요청 1개가 advisory lock·제약과 함께 지켜지고, 상한 직전 병렬 수락은 최대 200개만 활성화한다.",
+      "status": "passed",
+      "evidence": "reports/w06-c1-connection-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-CONNECT-003",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-CONNECT-002"
+      ],
+      "level": "local_db_integration",
+      "title": "연결 승인·해제·차단과 재연결 세대",
+      "steps": [
+        "허용된 발급자만 요청을 승인하고 반복 승인이 연결 세대를 올리지 않는지 확인",
+        "해제·양방향 블록으로 현재 연결을 닫고 pending 요청을 취소하는지 확인",
+        "차단 해제 후 자동 복구가 없고 새 연결 승인에서만 generation이 증가하는지 확인"
+      ],
+      "expected": "요청 상태 전이는 한 번만 반영되며 해제·차단은 연결을 비활성화한다. 해제 후 권한과 과거 요청은 재활성화하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w06-c1-connection-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-CONNECT-004",
+      "requirement_ids": [
+        "REQ-005",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-CONNECT-002",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_security",
+      "title": "관계 RPC 권한·알림·프로필 최소 RLS",
+      "steps": [
+        "14개 관계 RPC의 고정 search_path·소유자·authenticated 실행 범위를 검사",
+        "anon/service_role 실행·직접 DML/SELECT와 내부 helper 호출이 거절되는지 검사",
+        "연결 전 미리보기·당사자 관계·전이 알림 정책과 FORCE RLS·열 권한을 검사"
+      ],
+      "expected": "업무 RPC만 비로그인·RLS 유지 역할이 수행하고 API 역할은 직접 테이블 접근을 할 수 없다. 공개 프로필과 알림은 검증된 당사자·필드로 한정된다.",
+      "status": "passed",
+      "evidence": "reports/w06-c1-connection-rpc-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

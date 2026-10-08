@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('dev', 'check', 'build:check', 'db:init', 'db:start', 'db:status', 'db:stop', 'db:migrate', 'db:seed', 'db:test', 'db:rpc-test', 'db:goal-test', 'db:praise-test', 'db:session-test')]
+    [ValidateSet('dev', 'check', 'build:check', 'db:init', 'db:start', 'db:status', 'db:stop', 'db:migrate', 'db:seed', 'db:test', 'db:rpc-test', 'db:goal-test', 'db:praise-test', 'db:connection-test', 'db:session-test')]
     [string]$Task = 'dev'
 )
 $ErrorActionPreference = 'Stop'

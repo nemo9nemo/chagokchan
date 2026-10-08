@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S05_w06_b2_personal_praise_cycle_rpc_verified",
-  "next_stage": "S05_w06_c_connection_shared_rpc",
+  "current_stage": "S05_w06_c1_connection_rpc_verified",
+  "next_stage": "S05_w06_c2_shared_board_rpc",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -30,7 +30,7 @@
     {
       "id": "S05",
       "name": "DB·권한·로컬 사용자",
-      "status": "in_progress_w06_a_and_w06_b_verified_connection_shared_and_deletion_rpc_pending"
+      "status": "in_progress_w06_a_w06_b_and_w06_c1_verified_shared_board_and_deletion_rpc_pending"
     },
     {
       "id": "S06",
@@ -85,24 +85,26 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 43,
+    "planned_test_cases": 47,
     "application_tests_executed": 32,
     "application_test_scope": "runtime_ports_and_fixture_manifest_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
-    "database_tests_executed": 116,
+    "database_tests_executed": 135,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
-    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_and_w06_b2_praise_cycle_rpc_security",
-    "business_rpc_tests_executed": 44,
+    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_and_w06_c1_connection_rpc_security",
+    "business_rpc_tests_executed": 63,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
     "w06_b1_report": "docs/quality/reports/w06-b1-goal-rpc-check-2026-10-08.json",
     "local_personal_praise_tests_executed": 12,
-    "w06_b2_report": "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json"
+    "w06_b2_report": "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
+    "local_connection_rpc_tests_executed": 13,
+    "w06_c1_report": "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json"
   },
   "artifacts": [
     {
@@ -194,7 +196,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-    "status": "partially_executed_w06_a_w06_b1_w06_b2",
+    "status": "partially_executed_w06_a_w06_b1_w06_b2_w06_c1",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -203,7 +205,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-    "status": "documented_w06_b2_personal_praise_cycle_rpc",
+    "status": "documented_w06_c1_connection_rpcs",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -216,7 +218,8 @@
         "docs/changes/2026-10-08-codex-project-handoff.md",
       "docs/changes/2026-10-08-w06-a-session-boundary.md",
       "docs/changes/2026-10-08-w06-b1-goal-rpc.md",
-      "docs/changes/2026-10-08-w06-b2-personal-praise.md"
+      "docs/changes/2026-10-08-w06-b2-personal-praise.md",
+      "docs/changes/2026-10-08-w06-c1-connection-rpcs.md"
       ]
     },
     {
@@ -242,7 +245,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-    "status": "static_and_w06_b2_local_verification_passed",
+    "status": "static_and_w06_c1_local_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -256,7 +259,8 @@
         "docs/quality/reports/project-handoff-preparation-2026-10-08.json",
       "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
       "docs/quality/reports/w06-b1-goal-rpc-check-2026-10-08.json",
-      "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json"
+      "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
+      "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json"
       ]
     },
     {
@@ -308,12 +312,13 @@
     {
       "id": "ART-017",
       "title": "DB·RLS·RPC·기능 검사",
-    "status": "w06_a_session_and_w06_b_goal_personal_praise_cycle_verified_connection_shared_and_deletion_pending",
+    "status": "w06_a_session_w06_b_goal_praise_cycle_and_w06_c1_connection_verified_shared_board_and_deletion_pending",
       "paths": [
       "scripts/database-task.mjs",
       "scripts/test-local-rpc.mjs",
       "scripts/test-local-goal-rpc.mjs",
       "scripts/test-local-personal-praise.mjs",
+      "scripts/test-local-connection-rpc.mjs",
         "scripts/local-database-tools.mjs",
         "scripts/local-fixture-manifest.mjs",
         "scripts/local-fixture-manifest.test.mjs",
@@ -332,15 +337,21 @@
       "supabase/migrations/20261008021500_qualify_praise_cycle_number.sql",
       "supabase/migrations/20261008021600_verified_actor_completion_notice.sql",
       "supabase/migrations/20261008021700_notification_conflict_select_policy.sql",
+      "supabase/migrations/20261008021800_connection_invite_request_rpcs.sql",
+      "supabase/migrations/20261008021900_connection_secret_validation_fix.sql",
+      "supabase/migrations/20261008022000_connection_notification_conflict_select.sql",
+      "supabase/migrations/20261008022100_acceptance_notification_target.sql",
         "supabase/seeds/local-fixtures.sql",
         "supabase/tests/001_physical_integrity.test.sql",
       "supabase/tests/002_rpc_boundary.test.sql",
       "supabase/tests/003_business_rpc.test.sql",
       "supabase/tests/004_business_rpc_praise.test.sql",
+      "supabase/tests/005_business_rpc_connections.test.sql",
         "docs/decisions/ADR-0005-local-auth-session-reader.md",
       "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
       "docs/quality/reports/w06-b1-goal-rpc-check-2026-10-08.json",
       "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
+      "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
         "docs/development/database-foundation.md"
       ],
       "planned_paths": [

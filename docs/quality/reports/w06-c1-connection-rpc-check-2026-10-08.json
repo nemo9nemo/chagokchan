@@ -1,0 +1,237 @@
+{
+  "verified_at": "2026-10-08T04:26:35Z",
+  "work_item": "W06-C1",
+  "status": "passed",
+  "scope": "connection_invite_request_relationship_disconnect_block_and_acceptance_capacity",
+  "source_basis": {
+    "base_commit": "f9127974fab3dc52d8c41a2058fe7247fc09e79e",
+    "format": "SHA-256 per path; current commit is identified by the repository history containing this report",
+    "files": [
+      {
+        "path": "package.json",
+        "sha256": "3dd93da5067bd61812305929293721890786b8805f1be7f6488ba1d84dc358aa"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "c8f31283595fe0e588774507d3c1194f5956f86fced036b5bb5a566ae4852539"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "2bb543b40aa746a92c1f95526d6496cbbe0fb45764231f28dc32ecdcec40b73e"
+      },
+      {
+        "path": "scripts/test-local-connection-rpc.mjs",
+        "sha256": "a1de41f32da042f624e0b911d7cbcf600d3c3672834fee71222aa202cc003776"
+      },
+      {
+        "path": "scripts/test-local-personal-praise.mjs",
+        "sha256": "5c756a9b10d707d1c1fb5447cecbd73c6f287edad9cc98111b6452b2e1aeae4f"
+      },
+      {
+        "path": "supabase/migrations/20261008021800_connection_invite_request_rpcs.sql",
+        "sha256": "24fa92f3adc0cc2e38073c2af75eca77e0089309d5c84d575a65eab4106c260a"
+      },
+      {
+        "path": "supabase/migrations/20261008021900_connection_secret_validation_fix.sql",
+        "sha256": "0eec9974229dce71b19ba8e22b2a3a14beccb6b83762f9f9aa8ac4acacbfe1f2"
+      },
+      {
+        "path": "supabase/migrations/20261008022000_connection_notification_conflict_select.sql",
+        "sha256": "a3b7fe4ec1b598103811bf8b71ed21b34ea377b2508d742b0e0b466226769d21"
+      },
+      {
+        "path": "supabase/migrations/20261008022100_acceptance_notification_target.sql",
+        "sha256": "72e2a6b90e7506c102991e1361111a06a8e35aad5f90690a34149fe4527beebe"
+      },
+      {
+        "path": "supabase/tests/005_business_rpc_connections.test.sql",
+        "sha256": "0f75973fe5c6b8fc047a9cda1ecea25a3d0e198cb1f56a6b62af3b10fddd4f86"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "7f8d2d04453a8e5b54a63a95fca4fb7e32050f88e9f6195dbc77790037e74282"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "b984d4d52d65d513b832d2124a528e9a3fdc3099940420eb42f09565317508e1"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "8c61fc17afc80b8464b80a565699aef2cf74a1b6f64d1d9202f47067c1f17f11"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "ec40e4d432b3c67191a083eff2d6154f91a263bb8ec02ef40d2b8c32ca21c643"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "09caa19aa0267eba8b06deccba195759c68d43602a2bbf5f2ea4a5b49756561d"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "0fd27deeb640b52250610509239ce8eb66f1beae99f6a9d6232d8136d1decc9c"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w06-c1-connection-rpcs.md",
+        "sha256": "be2c72be2ae6263c31eff74ef4129d93d46ace5528ad79d76da869a185e4b37d"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "docker_engine": "29.1.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008021800",
+      "20261008021900",
+      "20261008022000",
+      "20261008022100"
+    ],
+    "previous_applied_migrations_modified": false,
+    "summary": "Fourteen connection RPCs, one-time invitation hashes, relationship-scoped projections/RLS, request/accept notifications, pair and capacity locks, disconnect/block transitions, and follow-up fixes."
+  },
+  "database_tests": {
+    "command": "node scripts/database-task.mjs test",
+    "verified_at": "2026-10-08T04:19:11.255Z",
+    "status": "passed",
+    "executed": 135,
+    "passed": 135,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 63,
+    "provider_login_tests_executed": 0
+  },
+  "rpc_only_tests": {
+    "command": "node scripts/database-task.mjs rpc-test",
+    "verified_at": "2026-10-08T04:18:04.468Z",
+    "status": "passed",
+    "executed": 84,
+    "passed": 84,
+    "failed": 0
+  },
+  "issued_session_integration": {
+    "command": "node scripts/test-local-connection-rpc.mjs",
+    "verified_at": "2026-10-08T04:16:15.502Z",
+    "status": "passed",
+    "executed": 13,
+    "passed": 13,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-CONNECT-001",
+      "TC-DB-CONNECT-002",
+      "TC-DB-CONNECT-003"
+    ],
+    "cases": [
+      "invite_secret_shape_hash_ttl_preview_and_active_cap",
+      "invite_daily_quota_is_atomic_and_revocation_releases_active_slot",
+      "request_rate_limits_rollback_receipt_and_preserve_invite_for_retry",
+      "single_use_invite_request_idempotency_and_approval_boundary",
+      "accept_replay_generation_and_safe_connected_profile_projection",
+      "active_connection_rejects_new_request_without_consuming_invite",
+      "disconnect_is_idempotent_and_reconnect_increments_generation",
+      "block_closes_relation_hides_invite_and_unblock_never_restores",
+      "blocking_pending_request_cancels_it_and_unblock_does_not_reopen",
+      "reverse_direction_concurrent_requests_keep_one_pending_and_rollback_loser_invite",
+      "one_invite_competed_by_two_users_is_consumed_once",
+      "notification_and_relationship_lists_are_recipient_and_party_scoped",
+      "active_connection_ceiling_serializes_two_competing_accepts"
+    ],
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_app_rpc": false,
+    "provider_login_tests_executed": 0
+  },
+  "relationship_rpc_security": {
+    "test_case_id": "TC-DB-CONNECT-004",
+    "suite": "supabase/tests/005_business_rpc_connections.test.sql",
+    "verified_at": "2026-10-08T04:18:04.468Z",
+    "status": "passed",
+    "executed": 19,
+    "passed": 19,
+    "failed": 0
+  },
+  "regressions": {
+    "session_boundary": {
+      "command": "node scripts/test-local-rpc.mjs",
+      "verified_at": "2026-10-08T04:19:43.375Z",
+      "status": "passed",
+      "executed": 27,
+      "passed": 27,
+      "cleanup_passed": true,
+      "existing_fixture_data_preserved": true
+    },
+    "goal_rpc": {
+      "command": "node scripts/test-local-goal-rpc.mjs",
+      "verified_at": "2026-10-08T04:20:17.143Z",
+      "status": "passed",
+      "executed": 12,
+      "passed": 12,
+      "cleanup_passed": true,
+      "existing_fixture_data_preserved": true
+    },
+    "personal_praise": {
+      "command": "node scripts/test-local-personal-praise.mjs",
+      "verified_at": "2026-10-08T04:21:54.176Z",
+      "status": "passed",
+      "executed": 12,
+      "passed": 12,
+      "cleanup_passed": true,
+      "existing_fixture_data_preserved": true
+    }
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T04:25:53.193Z",
+    "status": "passed",
+    "lint_files": 23,
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 47,
+      "local_markdown_links": 370,
+      "registry_paths": 135,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "build_check": {
+    "command": "scripts/project.ps1 -Task build:check",
+    "verified_at": "2026-10-08T04:26:35Z",
+    "status": "passed",
+    "next": "16.4.0",
+    "build_mode": "offline_local"
+  },
+  "product_scope": {
+    "openapi_bff_implemented": false,
+    "product_acceptance_cases_planned": 36,
+    "product_acceptance_cases_completed": 0,
+    "technical_cases_passed": 11,
+    "shared_board_grant_and_praise_pending": true,
+    "deletion_rpc_pending": true,
+    "human_or_provider_login_tests_executed": 0
+  },
+  "findings_and_fixes": [
+    "Before applying C1, create_block SQL row variables were corrected so block state and connection state use distinct scalar identifiers.",
+    "The issued-session run found jsonb_object_length is unavailable in PostgreSQL; follow-up migration 20261008021900 uses jsonb_object_keys.",
+    "Request/accept notification ON CONFLICT checks proposed rows against SELECT RLS; migrations 20261008022000 and 20261008022100 limit that policy to the transition parties.",
+    "Accepted notification schema permits exactly one typed target; follow-up migration 20261008022100 stores connection_id only.",
+    "W06-B2 notification probe now reloads the PostgREST schema after creating and removing its temporary RPC."
+  ],
+  "next_work_item": "W06-C2"
+}
