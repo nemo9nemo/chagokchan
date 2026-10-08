@@ -135,6 +135,14 @@ GET `/api/v1/goals`는 기본 20·최대 50, `active|completed|archived` 필터,
 
 전체 `check`는 Biome·typecheck·unit 69/69·산출물 상호 참조를 통과했고 `build:check`는 신규 5개 동적 route를 컴파일했다. `TC-API-005`를 통과로 기록한다. W08-C 개인 칭찬 API, W08-D UI, 제품 수락 TC와 실제 Google/OTP 로그인은 여기 포함하지 않는다. 실행 결과와 source SHA-256은 [W08-B2 증거](reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json)에 기록한다.
 
+## W08-C 개인 칭찬 목록·생성·수정·취소 API 검사
+
+GET/POST `/api/v1/boards/{board_id}/praises`, PATCH `/api/v1/praises/{praise_id}`, POST `/api/v1/praises/{praise_id}/cancel`을 연결했다. 각 mutation은 업무 검증 전에 동일 출처·CSRF·JSON guard를 거치며 본문/날짜/Idempotency-Key/query와 response allowlist를 검사한다. 목록 응답은 owner와 contributor shape를 분리하고 contributor에게 작성자 신원·실천일·숨김/제외/author erased 필드를 주지 않는다. 공유 peer 생성과 숨김/제외는 W09 범위다.
+
+기존 `create_praise`의 원자적 transaction은 회차 ID를 반환하지 않는다. 이미 적용된 migration을 수정하지 않고 `create_personal_praise` wrapper migration `20261008024600`을 추가했다. wrapper는 기존 생성 RPC의 결과 ID로 현재 actor·board·self source 행을 찾고 그 불변 bunch ID를 응답한다. 신규 `011_business_rpc_personal_praise_result.test.sql` 6/6, 전체 `db:test` 237/237(물리 51·RPC 경계 21·업무 165), `db:rpc-test` 186/186을 통과했다.
+
+실제 Auth-issued owner probe 3/3에서 정확한 bunch 결합, 동일 키 재시도 ID·cycle 유지와 집계 중복 방지, 임의 board의 hidden 404를 확인했다. synthetic account/session을 제거하고 원래 fixture 및 session count를 보존했다. A/B/C 로컬 API 경계는 각 10/10으로 actor 고정, invalid board/query, create/edit/cancel CSRF, 유효 CSRF 뒤 없는 대상의 안전 404를 확인했다. unit 79/79, Biome·typecheck, 산출물 교차 참조, build:check가 통과했다. `TC-API-006`은 API handler·RPC result 경계의 기술 검사만 통과로 기록한다. 제품 수락 TC, W08-D UI, 실제 Google/OTP 로그인은 미실행이다. 결과와 SHA-256 source basis는 [W08-C 증거](reports/w08-c-personal-praise-api-check-2026-10-08.json)에 남긴다.
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). 이 단락은 W06-A 이전 W05 부분 검사 기록이며, 이후 업무 DB/API 검증은 각 작업 단락과 진행표의 별도 증거를 따른다.

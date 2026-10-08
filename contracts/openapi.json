@@ -2602,8 +2602,8 @@
         "tags": [
           "boards"
         ],
-        "description": "bunch_id는 해당 판에 속해야 한다. contributor는 현재 권한이 유효할 때 자기 peer 기록만 보며 숨김/제외 정보는 받지 않는다. include_hidden은 owner 전용. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "권한이 유효한 판의 역할별 칭찬 요약을 cursor로 조회한다. contributor 응답에는 작성자 신원·실천일·숨김/제외 상태를 넣지 않는다. 로컬 fixture API에서 연결했고 배포 세션은 W12 대기.",
+        "x-implementation-status": "local_fixture_role_scoped_list_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-003",
           "REQ-004",
@@ -2623,7 +2623,8 @@
           "TC-DB-SHARED-002",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
-          "TC-ACCESS-003"
+          "TC-ACCESS-003",
+          "TC-API-006"
         ],
         "parameters": [
           {
@@ -2713,7 +2714,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "list_board_praises(uuid,uuid,text,integer,boolean)"
+        ]
       },
       "post": {
         "operationId": "createPraise",
@@ -2721,11 +2725,10 @@
         "tags": [
           "boards"
         ],
-        "description": "작성자·수신자·회차는 DB 결정. owner 개인 칭찬과 유효 권한 contributor의 공유 칭찬을 각각 검증하며 집계·완성 소식·제한·중복을 트랜잭션으로 처리한다. 결과에는 최신 개수를 포함하지 않는다. DB RPC 구현, 서버 API는 W07에서 연결.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "W08-C에서는 owner 개인판의 create_praise transaction만 호출한다. 작성자·수신자·회차는 DB가 결정하고 결과는 ID·bunch ID·재시도 여부만 반환한다. 공유 peer 쓰기는 W09에 연결한다.",
+        "x-implementation-status": "local_fixture_personal_create_api_implemented_shared_write_pending",
         "x-database-rpcs": [
-          "create_praise",
-          "create_peer_praise"
+          "create_personal_praise(uuid,uuid,text,date)"
         ],
         "x-requirements": [
           "REQ-003",
@@ -2749,7 +2752,8 @@
           "TC-DB-SHARED-003",
           "TC-DB-SHARED-004",
           "TC-TIME-001",
-          "TC-ACCESS-001"
+          "TC-ACCESS-001",
+          "TC-API-006"
         ],
         "parameters": [
           {
@@ -3159,8 +3163,8 @@
         "tags": [
           "praises"
         ],
-        "description": "본인 개인 메모·실천일 수정",
-        "x-implementation-status": "not_implemented",
+        "description": "작성자 본인의 미취소 self 칭찬에 메시지·실천일 patch만 허용한다. 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_self_edit_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-007"
         ],
@@ -3172,7 +3176,8 @@
           "TC-CYCLE-002",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
-          "TC-TIME-001"
+          "TC-TIME-001",
+          "TC-API-006"
         ],
         "parameters": [
           {
@@ -3251,7 +3256,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "edit_self_praise(uuid,jsonb)"
+        ]
       }
     },
     "/praises/{praise_id}/cancel": {
@@ -3261,8 +3269,8 @@
         "tags": [
           "praises"
         ],
-        "description": "역할별 정책 검사. 반복 동작으로 집계 재반영 없음. cancel은 관계 종료 뒤도 본인 경로 허용, 응답에 상대 개수 비노출.",
-        "x-implementation-status": "not_implemented",
+        "description": "작성자의 칭찬을 취소하고 본문을 제거한다. 현재 개수나 타인의 상태는 응답하지 않는다. 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_author_cancel_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-007",
           "REQ-009"
@@ -3275,7 +3283,8 @@
           "TC-CYCLE-002",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
-          "TC-TIME-001"
+          "TC-TIME-001",
+          "TC-API-006"
         ],
         "parameters": [
           {
@@ -3354,7 +3363,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "cancel_praise(uuid)"
+        ]
       }
     },
     "/praises/{praise_id}/hide": {

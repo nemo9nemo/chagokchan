@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_through_w08_b2",
+  "phase": "partially_executed_w06_through_w08_c",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -1339,6 +1339,33 @@
       "expected": "goal RPC가 상태 전이·revision·반복 요청 규칙을 유지한다. update_board는 미래 회차 설정만 변경하고 bunch 목록은 판 소속 요약만 반환한다. 목록 cursor는 보드에 바인딩되고 권한 회수/무관 사용자의 접근은 숨겨진 404다. API 경계는 owner/actor 입력을 받지 않으며 검증 중 제품 fixture 데이터가 바뀌지 않는다.",
       "status": "passed",
       "evidence": "reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-006",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-007",
+        "REQ-012",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-PRAISE-002",
+        "POL-CYCLE-001",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_local_db_and_local_api_integration",
+      "title": "개인 칭찬 생성·수정·취소와 역할별 조회 API 경계",
+      "steps": [
+        "생성 요청이 CSRF·동일 출처·Idempotency-Key를 검사하고 personal praise RPC의 ID·정확한 bunch ID·재시도 응답만 반환하는지 확인한다",
+        "작성자 본인 edit patch와 취소는 허용하고 알 수 없는 필드·불량 날짜·빈 patch·취소 body를 거절하는지 확인한다",
+        "목록 owner/contributor projection이 각기 허용된 필드만 담고 limit·cursor·bunch·include_hidden query를 검증하는지 확인한다",
+        "실제 Auth session으로 생성 결과 bunch_id와 같은 키 재시도·집계 비중복을 검사하고 A/B/C API 요청 경계와 숨김 404/no-store를 확인한다"
+      ],
+      "expected": "개인 칭찬 변경은 기존 원자적 업무 RPC를 사용한다. 생성 결과의 bunch_id는 같은 트랜잭션에서 만들어진 칭찬 행에 결합되며 재시도는 ID와 회차를 재사용한다. 목록은 권한별 allowlist를 벗어나지 않고 최신 개수·토큰·미디어 개인정보를 반환하지 않는다. A/B/C actor는 서버 환경에서 결정된다.",
+      "status": "passed",
+      "evidence": "reports/w08-c-personal-praise-api-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

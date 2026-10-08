@@ -36,7 +36,7 @@
 | W05 | DONE | 18테이블·38FK·68인덱스·RLS·합성 A/B/C. 물리 DB 51개·소스 단위 32개·빌드. [증거](../quality/reports/physical-database-check-2026-10-08.json) |
 | W06 | DONE | **W06-A~D2 완료**. 전체 DB 213/213·RPC 162/162, D1 세션 통합 4/4·D2 세션/Auth Admin 통합 6/6. 외부 원장·BFF/API·실제 로그인·제품 수락은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
-| W08 | IN_PROGRESS | W08-A/B1/B2 목표·상태·판·회차 API 완료. W08-C 개인 칭찬 API와 W08-D 기본 화면이 남음. [W08-B2 증거](../quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json) |
+| W08 | IN_PROGRESS | W08-A/B1/B2/C 목표·상태·판·회차·개인 칭찬 API 완료. W08-D 기본 화면 대기. [W08-C 증거](../quality/reports/w08-c-personal-praise-api-check-2026-10-08.json) |
 | W09~W11 | TODO | 연결·공유·소식/삭제·테마/접근성/PWA |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
@@ -110,7 +110,15 @@ Auth 관리 테이블은 RLS가 켜져 있고 앱 정책이 없다. 그 때문�
 
 완료·보관·재개 POST, 판 설정 PATCH, 회차 목록 GET route를 기존 `complete_goal`/`archive_goal`/`resume_goal`/`update_board`와 새 `list_bunches` RPC에 연결했다. pgTAP 9/9·전체 DB 231/231·RPC 180/180·실제 Auth 세션 lifecycle/history 통합 6/6·A/B/C API 각 8/8·unit 69/69·build:check가 통과했다. probe 사용자/세션 정리 및 기존 fixture 데이터 보존을 확인했다. 최종 `check`와 소스 해시는 [검사 증거](../quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json)에 기록한다.
 
-현재 W08은 W08-A/B1/B2 완료, W08-C 개인 칭찬 API와 W08-D 기본 화면 대기다. W08-A의 실제 생성/수정 route→DB 성공 통합 검사, 제품 수락 TC, 실제 Google/OTP 로그인은 여전히 미실행이며 진행표에 별도 범위로 둔다. 다음 작업은 W08-C다.
+현재 W08-A/B1/B2/C가 완료됐고 W08-D 기본 화면이 남았다. W08-A의 실제 생성/수정 route→DB 성공 통합 검사, 제품 수락 TC, 실제 Google/OTP 로그인은 여전히 미실행이며 진행표에 별도 범위로 둔다.
+
+## W08-C 후속 완료 기록
+
+칭찬 API는 GET/POST `/api/v1/boards/{board_id}/praises`, PATCH `/api/v1/praises/{praise_id}`, POST `/api/v1/praises/{praise_id}/cancel`이다. 요청은 공통 CSRF/Origin/JSON 검사를 먼저 거치고 개인 메모·실천일 입력 및 응답 allowlist를 적용한다. 조회는 owner/contributor projection을 구분해 개인정보와 moderation state를 한정한다. 개인판 생성·수정·취소는 기존 업무 RPC를 사용하며 shared peer create·hide·unhide·exclude는 W09 범위로 둔다.
+
+기존 `create_praise`가 id/replayed만 반환해 API 계약의 bunch_id를 채우지 못하므로 기존 적용 migration을 수정하지 않고 `20261008024600_personal_praise_result_rpc.sql`에 wrapper를 추가했다. 기존 트랜잭션을 호출한 뒤 같은 인증 actor·board·self praise 행에서 정확한 bunch_id를 조회해 응답한다. 새 pgTAP 6/6·전체 DB 237/237·RPC 186/186, 실제 Auth session probe 3/3, A/B/C API 각 10/10, unit 79/79, build:check 통과. probe 계정·세션 정리와 기존 fixture 보존을 확인했다. 세부 명령·source hashes는 [W08-C 검사 증거](../quality/reports/w08-c-personal-praise-api-check-2026-10-08.json)에 있다.
+
+다음 작업은 W08-D 기본 화면이다. 공유 칭찬 생성 및 숨김/제외 UI는 W09가 연결될 때 진행한다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

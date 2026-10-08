@@ -1,0 +1,152 @@
+{
+  "verified_at": "2026-10-08T10:00:56.556Z",
+  "work_item": "W08-C",
+  "status": "passed",
+  "scope": "personal_praise_list_create_edit_cancel_and_exact_cycle_result_api",
+  "source_basis": {
+    "base_commit": "e6d3ef6d57e6edec80b3882f06334c5398c00549",
+    "format": "SHA-256 per migration, SQL test, API implementation/routes, unit and integration runners, contract, progress, and verification source",
+    "files": [
+      {
+        "path": "supabase/migrations/20261008024600_personal_praise_result_rpc.sql",
+        "sha256": "d12ce614344ab3d0336d07cdf68c31d761860580063a59c07fd03a0c9f228e50"
+      },
+      {
+        "path": "supabase/tests/011_business_rpc_personal_praise_result.test.sql",
+        "sha256": "c5831e7b243ec907084939b7cc5897d1e68c8515721a22c8a874821fcc337bbc"
+      },
+      {
+        "path": "src/server/praise-api.mjs",
+        "sha256": "d41e08fc5da97ef20bbeb390fa6f046558a20a6651615ccfbbebc83bc5c33730"
+      },
+      {
+        "path": "src/app/api/v1/boards/[board_id]/praises/route.ts",
+        "sha256": "76f83522c709e9c581b626ea9dc4094c06727d5c78428460c67dd88667aea47a"
+      },
+      {
+        "path": "src/app/api/v1/praises/[praise_id]/route.ts",
+        "sha256": "7d63b5bf37b37d22f0b59e2ba8636ae4dc68e31e0589439662fd9fc924168ad9"
+      },
+      {
+        "path": "src/app/api/v1/praises/[praise_id]/cancel/route.ts",
+        "sha256": "f02378055dec598b5ef3ddd12d99bd4f19a2d3afdca284266bc56f86b7d23d52"
+      },
+      {
+        "path": "scripts/praise-api.test.mjs",
+        "sha256": "a641c074e972252740aff8d96fb1dff26018c69cd264edf2179339b3c656ea51"
+      },
+      {
+        "path": "scripts/test-local-personal-praise-result-rpc.mjs",
+        "sha256": "4ada24f2cd178bc2e90c38ce2c93dbbf4cac394d67fa3aac7a1b6c8b574d941c"
+      },
+      {
+        "path": "scripts/test-local-personal-praise-api.mjs",
+        "sha256": "1bf2f60ebb93fd124c491a452289b6406f73ba60b308b9fcd58f5218c71726f5"
+      },
+      {
+        "path": "package.json",
+        "sha256": "6978df17bebad502c759033bdaa33c2b3e2ec2bac8dba75c12a111f140545730"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "1a751a284a2893ed78a862c8b82434c5ba0dfd27fbfb5f5b4803eb1c940cf40e"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "f7038915ffe6f7fe5e60153e39438353f8ab78fb052674198720223dd0e3a31b"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "8c1fd53ab237555ba3f9b2a4c1961bfd37d94e222b4c2d28ff95ce85fda00e33"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "9084a2701ebb21a68ec6be9f1ff4f66e267c3d002940270b1373be1d17845d55"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "1c3310f6275a0c9eca19fb0ac591c0bb9989d52e9737e2cfa8fab8919e6d74c8"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "556e33937ddba12a74c6afc955090752c754b45a4d71a4ac60572e845971c8db"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w08-c-personal-praise-api.md",
+        "sha256": "740d8a53ddc7a0e2d3fc69210e8d2f78613bbecd600ddfddedc7710359dca5f8"
+      },
+      {
+        "path": "docs/contracts/api-contract.md",
+        "sha256": "f4d3745ac7773903331ec13f38cb1cc22c2d06d1b6eda4f18747f12a6548084a"
+      },
+      {
+        "path": "docs/development/local-development.md",
+        "sha256": "82de8df58c202200886ddc190503e314ceb38a75665eb828645ef7bed8e4b442"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "df24922c8f5aad9fca1e8155c85b4b9680311923f05452ed8c6e921bd411e864"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "6225603d338937449cc7c163d1142912e0491c4f4cb8f9622824dd7c1908fbb2"
+      }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "postgresql": "17.11",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false,
+    "auth_tokens_returned": false
+  },
+  "verification": {
+    "migration_command": "scripts/project.ps1 -Task db:migrate",
+    "migration_result": "20261008024600 applied to the local database; earlier applied migrations were not modified",
+    "database_command": "scripts/project.ps1 -Task db:test",
+    "database_result": "237/237 passed: physical 51, RPC boundary 21, business RPC 165; 011_business_rpc_personal_praise_result.test.sql 6/6",
+    "rpc_regression_command": "scripts/project.ps1 -Task db:rpc-test",
+    "rpc_regression_result": "186/186 passed: RPC boundary 21, business RPC 165",
+    "local_rpc_command": "scripts/project.ps1 -Task db:praise-result-test",
+    "local_rpc_result": "3/3 passed; exact bunch ID, idempotent replay and target row scope; synthetic account/session removed; fixture data and session count preserved",
+    "local_api_command": "scripts/project.ps1 -Task api:praise-test",
+    "local_api_actor_runs": [
+      {
+        "actor": "A",
+        "checks_passed": 10,
+        "status": "passed",
+        "product_database_mutation": false
+      },
+      {
+        "actor": "B",
+        "checks_passed": 10,
+        "status": "passed",
+        "product_database_mutation": false
+      },
+      {
+        "actor": "C",
+        "checks_passed": 10,
+        "status": "passed",
+        "product_database_mutation": false
+      }
+    ],
+    "unit_command": "scripts/project.ps1 -Task check",
+    "unit_result": "passed 2026-10-08T10:00:56.556Z; Biome 54 files, typecheck passed, unit 79/79, artifact checks passed (28 JSON, 424 Markdown links, 691 OpenAPI refs, 63 test cases, 216 registered artifact paths)",
+    "build_check_command": "scripts/project.ps1 -Task build:check",
+    "build_check": "passed 2026-10-08; GET/POST board praises, PATCH praise, and POST cancel compiled as dynamic Node.js routes",
+    "praise_contract": "role-scoped praise list projection; personal create requires Idempotency-Key and returns id/bunch_id/replayed; edit and cancel return id/replayed; shared peer write/hide/exclude remain W09",
+    "real_google_or_otp_login": "not_run",
+    "product_ui_and_acceptance_cases": "not_run",
+    "full_check_command": "scripts/project.ps1 -Task check",
+    "artifact_check": "passed: JSON 28, Markdown links 424, OpenAPI local refs 691, operations 54, test cases 63, registered paths 216"
+  },
+  "notes": [
+    "Application RPC calls in the result probe used an Auth-issued user session. The service role was limited to synthetic account setup and cleanup.",
+    "The API actor checks rejected writes without CSRF and used inaccessible IDs for safe error mapping; they did not create a product praise record.",
+    "The result wrapper reads only the newly created self praise row under the same authenticated actor and requested board; it does not return the current board count."
+  ]
+}
