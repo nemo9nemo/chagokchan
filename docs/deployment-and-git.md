@@ -1,8 +1,8 @@
 # 배포, 운영 환경, Git 형상관리
 
-결정일: 2026-10-07 / 갱신일: 2026-10-08 / 상태: 로컬·원격 Git 연결 및 CI 통과, 브랜치 보호·운영 배포 미설정
+결정일: 2026-10-07 / 갱신일: 2026-10-08 / 상태: 로컬·원격 Git·CI·main 브랜치 보호 설정 완료, 운영 배포 미설정
 
-2026-10-08 사용자 요청으로 로컬 Git의 기능 단위 커밋과 공개 원격 저장소 연결·첫 업로드를 완료했다. 지정한 주소는 https://github.com/nemo9nemo/chagokchan.git 이며 origin/main을 추적한다. W16-C에서 `.github/workflows/ci.yml`에 GitHub Actions 검사 작업을 추가했다. 첫 원격 CI는 artifact 검증기의 개발 PC 경로 전제 오류로 실패했으나 수정본 원격 run `37783463500`은 check·build 모두 통과했다. 브랜치 보호·클라우드 프로젝트·유료 서비스·실제 배포는 아직 완료하지 않았다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
+2026-10-08 사용자 요청으로 로컬 Git의 기능 단위 커밋과 공개 원격 저장소 연결·첫 업로드를 완료했다. 지정한 주소는 https://github.com/nemo9nemo/chagokchan.git 이며 origin/main을 추적한다. W16-C의 GitHub Actions 검사와 main 브랜치 보호도 설정·검증했다. 원격 run `37783463500` 및 후속 `37783959708`의 quality·build가 통과했다. 클라우드 프로젝트·유료 서비스·실제 배포는 아직 미설정이다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
 
 외부 도구 사용은 허용되었다. 플러그인 설치·계정 인증·프로젝트 연결 상태와 도구별 연결 시점은 [외부 도구 연결](external-tools.md)에 기록한다. GitHub 플러그인 설치와 이 앱의 원격 저장소 연결은 구분한다.
 
@@ -88,11 +88,11 @@ Git 없이도 Vercel CLI 배포는 가능하다. 초기 배포를 할 때도 프
 5. 1인 개발에서는 PR 설명·검사 결과를 본인이 검토한다. 협업자가 생기면 최소 1명의 다른 리뷰어를 요구하고 인증·권한·배포 변경에 CODEOWNERS를 적용한다.
 6. staging·production 환경과 비밀을 분리하고 운영 배포 권한자는 최소 인원으로 지정한다.
 
-첫 연결의 1~3번을 완료했다. GitHub CLI 계정 nemo9nemo의 쓰기 권한, 빈 원격 저장소, 기존 세 커밋의 제외 경로·자격증명 패턴, origin 주소·push·업스트림·원격 SHA 일치를 확인했다. [실행 증거](quality/reports/git-remote-connection-2026-10-08.json)를 남겼다. W16-C가 CI 워크플로를 구성 중이며 4번의 브랜치 보호·필수 CI 확인과 6번의 환경별 배포 설정은 완료되지 않았다. 1인 개발이므로 별도 승인 리뷰는 요구하지 않고, PR 자체와 `quality` CI를 main 병합 조건으로 둔다. 배포 도메인은 미정이다.
+첫 연결의 1~5번을 완료했다. GitHub CLI 계정 nemo9nemo의 쓰기 권한, origin·업스트림·원격 SHA를 확인하고, main에 필수 PR·strict `quality`·관리자 적용·강제 push/삭제 금지를 설정했다. [연결 증거](quality/reports/git-remote-connection-2026-10-08.json)와 [W16-C 설정·검사 증거](quality/reports/w16-c-ci-check-2026-10-08.json)를 남겼다. 1인 개발이라 별도 승인 리뷰 수는 0명이며 협업자가 생기면 최소 1명으로 변경한다. staging·production 환경 및 비밀 설정은 아직 미완료이고 배포 도메인은 미정이다.
 
 ### W16-C GitHub Actions 품질 검사
 
-`.github/workflows/ci.yml`은 `main` 대상 PR·push와 수동 실행에서 읽기 전용 `contents` 권한으로 동작한다. Actions는 전체 커밋 SHA로 고정하고 저장소 인증정보를 checkout 이후 보존하지 않는다. `.node-version`의 Node.js 24.19.0, pnpm 11.19.0, frozen lockfile 설치를 사용한 뒤 `pnpm check`와 `pnpm build:check`를 순서대로 실행한다. `quality`는 필수 상태 검사 이름으로 사용한다. 운영 비밀·DB 자격증명은 CI에 전달하지 않는다. 첫 run `37782665722`에서 GitHub의 임시 checkout root가 개발 PC의 canonical path와 달라 artifact checker가 실패했다. checker는 GitHub Actions에서만 checkout root 일치 검사를 생략하고 transfer 기록·상태 검사는 유지한다. 수정본 run [37783463500](https://github.com/nemo9nemo/chagokchan/actions/runs/37783463500)은 `quality`·build가 통과했다. main 보호는 아직 적용하지 않았다.
+`.github/workflows/ci.yml`은 `main` 대상 PR·push와 수동 실행에서 읽기 전용 `contents` 권한으로 동작한다. Actions는 전체 커밋 SHA로 고정하고 저장소 인증정보를 checkout 이후 보존하지 않는다. `.node-version`의 Node.js 24.19.0, pnpm 11.19.0, frozen lockfile 설치를 사용한 뒤 `pnpm check`와 `pnpm build:check`를 순서대로 실행한다. 수정본 run [37783463500](https://github.com/nemo9nemo/chagokchan/actions/runs/37783463500)과 후속 [37783959708](https://github.com/nemo9nemo/chagokchan/actions/runs/37783959708)은 `quality`·build가 통과했다. GitHub API에서 main 보호를 다음과 같이 설정한 뒤 재조회했다: PR 필수, strict required status `quality`, 관리자 적용, 승인 리뷰 0명, 강제 push 금지, 삭제 금지, push 제한 목록 없음. 운영 비밀·DB 자격증명은 CI에 전달하지 않는다.
 
 ### 포함·제외 기준
 
