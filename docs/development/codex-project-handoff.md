@@ -39,7 +39,7 @@
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
-| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2 320/640px 재배치·두 테마 대비 브라우저 검사와 W11-C PWA 매니페스트·정적 캐시·오프라인 안내 검증을 마쳤다. 전체 check 115/115·artifact check·build:check 40 route entries를 통과했다. 실기기 확대·스크린리더·터치 TC-WEB-006과 A/B 계정 전환·실제 오프라인 TC-CACHE-001이 남았다. [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
+| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 검사했다. 작은 폭 넘침을 제거하고 앱 조작 영역을 45px로 보완했다. W11-C PWA 매니페스트·정적 캐시·오프라인 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006, A/B 계정 전환·실제 오프라인 TC-CACHE-001이 남았다. [모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -186,7 +186,9 @@ W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration
 
 ## W11-B2 작은 화면·대비 브라우저 검사
 
-320px·640px 뷰포트에서 목표 목록/상세·연결·받은 공유판·휴지통을 확인했다. 모바일 주요 메뉴를 2열로 바꾸고 네 항목을 모두 보이게 했으며 44px 높이를 확보했다. 초대 버튼은 좁은 화면에서 헤더 아래에 놓이도록 조정했다. 두 테마의 렌더링 글자 대비를 확인해 낮은 보조 문구 색상을 어둡게 했고, 브라우저 측정 대상에는 기준 이하 텍스트가 없었다. [검사 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json)
+320px·640px 뷰포트에서 목표 목록/상세·연결·받은 공유판·휴지통을 확인했다. 모바일 주요 메뉴를 2열로 바꾸고 네 항목을 모두 보이게 했으며 44px 높이를 확보했다. 초대 버튼은 좁은 화면에서 헤더 아래에 놓이도록 조정했다. 두 테마의 렌더링 글자 대비를 확인해 낮은 보조 문구 색상을 어둡게 했고, 브라우저 측정 대상에는 기준 이하 텍스트가 없었다. [기존 검사 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json)
+
+후속 검사에서는 합성 로컬 fixture를 사용하는 폭 320/345/360/375/412/641px에서 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 확인했다. 로컬 Supabase 49개 마이그레이션 적용과 합성 A 세션 API 15/15 통과 후, 메뉴 이동·빈 상태·가로 넘침·조작부 크기를 확인했다. [후속 검사 증거](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [변경 기록](../changes/2026-10-09-w11-b2-mobile-screen-check.md)
 
 이 로컬 브라우저로 실제 200% 확대 조작, VoiceOver/TalkBack, 기기 터치를 실행하지 않았다. 해당 검사는 `TC-WEB-006`으로 `not_run` 상태에 두고 W11-B2 기기 범위를 계속 추적한다.
 

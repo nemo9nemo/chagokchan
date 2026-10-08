@@ -1,0 +1,173 @@
+{
+  "verified_at": "2026-10-08T15:21:34Z",
+  "work_item": "W11-B2",
+  "status": "browser_viewport_emulation_passed_fixture_backed_success_path_physical_device_acceptance_pending",
+  "scope": "responsive_layout_and_mobile_touch_target_emulation",
+  "source_basis": {
+    "format": "SHA-256 per source file; excludes this report.",
+    "files": [
+      {
+        "path": "src/app/globals.css",
+        "sha256": "f4737d16023362bd816f10eb3d0e8b6ed9f2d28c464fa371e41936d53d9a1139"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "89e9fc2110a833ce9b8bc0f47f32d6888d71c87e75cfaddf77fa1fcdfc9910da"
+      },
+      {
+        "path": "scripts/test-local-me-api.mjs",
+        "sha256": "4afc2cbc384f0829bc6a9caa25c63612aed846d7b515d2ea207cf58ab5082b1d"
+      },
+      {
+        "path": "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md",
+        "sha256": "32eecb7753632db7e742efb088a06b9adda9a782594a9372eed8a1d23e0b3f94"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "08063bebb06603e96e101bbe4292a52e6f75d1e71d376dfff55ba395b1dd4d95"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "9c8bd1517db1e446dfb58f879e887705a9b8812d33c0fcd0949a91f9749c4813"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "0280fb422735cc340e777fd03adf97749cb5aa3286b21a11182128d441615948"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "d112bffd56e4c8a4fb80c1317e040cd61c3c81b90a63c344d16551fd93395aae"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "d3a4ed48b638caa5ae79fb663984696bf16cec36bed02ae6a85c6f0694196630"
+      },
+      {
+        "path": "docs/development/local-development.md",
+        "sha256": "2ae5a9c5b73a79fd4d58013be57e8899450a8f38d5b0f8e31ea64d47a4372ae3"
+      },
+      {
+        "path": "docs/development/database-foundation.md",
+        "sha256": "2d12f9b75006671b20b592703c4f94a2449ca71ec9af37dd961c9895ebd063e5"
+      },
+      {
+        "path": "package.json",
+        "sha256": "8c9e37e43c98cd9e752f8384b73ec086451de52497a686f9a3d25199ad08551f"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "runtime_versions": {
+      "project_script_node": "24.19.0",
+      "pnpm": "11.19.0",
+      "next": "16.4.0",
+      "supabase_cli": "2.120.0",
+      "postgresql": "17.11"
+    },
+    "browser": "Codex In-app Browser",
+    "browser_mode": "desktop browser viewport override; iOS/Android user agent, touch hardware, and platform screen reader are not emulated",
+    "local_app": "http://127.0.0.1:3000",
+    "database": "local Supabase loopback; 49 ordered migrations applied; documented synthetic A/B/C fixtures prepared"
+  },
+  "local_database_checks": {
+    "migration_status": "passed",
+    "migrations_applied": 49,
+    "first_migration": "20261008013000",
+    "last_migration": "20261008024900",
+    "fixture_seed": "prepared_synthetic_A_B_C; credentials excluded",
+    "local_me_api": "passed; actor A; 15/15 checks; tokens not returned",
+    "browser_api_reads": "fixture-backed application GET screens loaded successfully; no product UI write requests"
+  },
+  "browser_viewport_matrix": {
+    "observed_content_widths_css_px": [
+      320,
+      345,
+      360,
+      375,
+      412,
+      641
+    ],
+    "requested_override_widths_css_px": [
+      335,
+      360,
+      375,
+      390,
+      427,
+      655
+    ],
+    "width_mapping": "335→320, 360→345, 375→360, 390→375, 427→412, 655→641; desktop browser scrollbar accounts for the difference",
+    "screens_per_width": 5,
+    "screen_views_total": 30,
+    "screens_checked": [
+      "goal_list",
+      "goal_detail",
+      "connections",
+      "received_shared_boards",
+      "trash"
+    ],
+    "checks": {
+      "screen_heading_rendered": true,
+      "four_primary_navigation_items_visible_on_list_screens": true,
+      "goal_detail_back_control_visible": true,
+      "primary_navigation_minimum_measured_height_px": 44.98,
+      "visible_app_controls_minimum_css_height_px": 45,
+      "visible_app_controls_below_44px": 0,
+      "document_scroll_width_exceeded_available_client_width": false,
+      "app_controls_extended_past_right_edge": false,
+      "application_error_state_visible": false,
+      "accessible_tree_exposed_skip_link_headings_and_navigation": true,
+      "trash_empty_state_heading_rendered": true,
+      "received_shared_boards_empty_state_rendered": true,
+      "goal_form_opened_without_submission": true
+    },
+    "exact_320_content_width": {
+      "requested_override_width_px": 335,
+      "observed_client_width_px": 320
+    }
+  },
+  "product_data": {
+    "synthetic_fixture_seed_prepared": true,
+    "mutation_controls_submitted": false,
+    "product_write_requests_sent": 0,
+    "fixture_data_mutated_by_screen_flows": false
+  },
+  "test_cases": {
+    "TC-WEB-005": "previously_passed; existing contrast report remains the evidence for theme contrast",
+    "TC-WEB-006": "not_run overall; responsive viewport subset passed, but actual browser zoom, iOS/Android touch, VoiceOver/TalkBack acceptance not run",
+    "TC-CACHE-001": "not_run; account switch and real-device offline path not run",
+    "TC-CACHE-002": "previously_passed; W11-C unit report remains the evidence"
+  },
+  "commands": {
+    "project_check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 96,
+      "typecheck": "passed",
+      "unit_tests": 115,
+      "unit_tests_passed": 115,
+      "artifact_check": {
+        "status": "passed",
+        "json_files": 40,
+        "markdown_links": 502,
+        "openapi_paths": 55,
+        "openapi_references": 700,
+        "registered_paths": 290,
+        "traceability_cases": 74
+      }
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "next": "16.4.0",
+      "route_entries": 40
+    }
+  },
+  "limitations": {
+    "actual_browser_zoom_200_percent": "not_run; in-app browser shortcut produced no observable zoom change",
+    "physical_ios_android_device": "not_available",
+    "actual_touchscreen": "not_available",
+    "voiceover_talkback": "not_available",
+    "pwa_install_account_switch_offline": "not_run"
+  }
+}

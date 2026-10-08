@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-08",
-  "current_stage": "S06_w11_b2_browser_reflow_and_contrast_verified_device_accessibility_pending",
-  "next_stage": "S06_w11_c_pwa_static_cache_and_offline_boundary",
+  "updated_on": "2026-10-09",
+  "current_stage": "S06_w11_mobile_viewport_and_touch_target_emulation_verified_physical_device_acceptance_pending",
+  "next_stage": "S06_w11_device_accessibility_and_pwa_account_switch_offline_acceptance",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b1_verified_w11_b2_browser_verified_device_accessibility_pending_w11_c_next"
+      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b1_w11_b2_mobile_emulation_verified_physical_device_accessibility_pending_w11_c_cache_unit_verified_device_acceptance_pending"
     },
     {
       "id": "S07",
@@ -118,6 +118,11 @@
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
     "technical_cases_passed": 35,
     "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
+    "w11_b2_mobile_report": "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
+    "w11_b2_viewport_screen_views_verified": 30,
+    "w11_b2_observed_content_widths": 6,
+    "w11_b2_fixture_api_me_checks": 15,
+    "w11_b2_ordered_migrations_applied": 49,
     "w07_a_report": "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json",
     "w07_b_report": "docs/quality/reports/w07-b-api-security-check-2026-10-08.json",
     "w08_a_report": "docs/quality/reports/w08-a-goal-api-check-2026-10-08.json",
@@ -246,7 +251,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w11_c_pwa_cache_unit_device_check_pending",
+      "status": "documented_through_w11_c_cache_unit_and_w11_mobile_emulation_device_checks_pending",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -280,6 +285,7 @@
         "docs/changes/2026-10-08-w11-a-theme-switch.md",
         "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md",
         "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md",
+        "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md",
         "docs/changes/2026-10-08-w11-c-pwa-cache.md"
       ]
     },
@@ -306,7 +312,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_w06_w11_c_pwa_and_w16_c_ci_main_protection_verified_w11_device_check_pending",
+      "status": "static_w06_w11_c_pwa_w16_c_ci_and_w11_mobile_emulation_verified_physical_device_acceptance_pending",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -341,6 +347,7 @@
         "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
         "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
         "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
+        "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
         "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
         "docs/quality/reports/w16-c-ci-check-2026-10-08.json"
       ]
@@ -367,7 +374,7 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_local_me_goal_news_trash_ui_w11_a_theme_w11_b2_mobile_reflow_contrast_browser_and_w11_c_pwa_static_cache_unit_verified_device_check_pending",
+      "status": "app_runtime_local_me_goal_news_trash_ui_w11_b2_mobile_reflow_contrast_and_touch_target_emulation_verified_w11_c_pwa_cache_unit_verified_physical_device_checks_pending",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
@@ -436,7 +443,9 @@
         "scripts/project.ps1",
         "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
         "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
-        "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json"
+        "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
+        "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
+        "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md"
       ]
     },
     {
