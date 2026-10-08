@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { cancelPraiseResponse, createPraiseResponse, editSelfPraiseResponse, listBoardPraisesResponse, validateBoardPraisesQuery, validateCancelPraiseInput, validateCreatePraiseInput, validateEditSelfPraiseInput } from "../src/server/praise-api.mjs";
+import { cancelPraiseResponse, createPraiseResponse, editSelfPraiseResponse, listBoardPraisesResponse, peerPraiseStateResponse, validateBoardPraisesQuery, validateCancelPraiseInput, validateCreatePraiseInput, validateEditSelfPraiseInput, validatePeerPraiseStateInput } from "../src/server/praise-api.mjs";
 import { createCsrfToken } from "../src/server/api-security.mjs";
 
 const boardId = "11111111-1111-4111-8111-111111111111";
@@ -46,6 +46,11 @@ test("create praise checks CSRF before invoking the full result RPC and returns 
   let called = false;
   const client = { rpc: async (name, input) => {
     called = true;
+    if (name === "get_board") {
+      assert.deepEqual(input, { p_board_id: boardId });
+      return { data: { viewer_role: "owner", id: boardId, goal_id: actorId, kind: "personal", revision: 1, next_target_count: 20,
+        shared_title: null, shared_description: null, current_bunch: null }, error: null };
+    }
     assert.equal(name, "create_personal_praise");
     assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null });
     return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
@@ -58,6 +63,45 @@ test("create praise checks CSRF before invoking the full result RPC and returns 
   assert.equal(response.status, 201);
   assert.deepEqual(await response.json(), { id: praiseId, bunch_id: bunchId, replayed: false });
   assert.match(response.headers.get("cache-control") ?? "", /no-store/i);
+});
+
+test("shared praise create checks the current contributor role and sends only peer input", async () => {
+  const calls = [];
+  const client = { rpc: async (name, input) => {
+    calls.push([name, input]);
+    if (name === "get_board") return { data: {
+      viewer_role: "contributor", id: boardId, kind: "shared", shared_title: "응원판", shared_description: null,
+      owner: { user_id: actorId, nickname: "주인", avatar_key: "grape" }, goal_state: "active", current_bunch: null, can_praise: true,
+    }, error: null };
+    assert.equal(name, "create_peer_praise");
+    return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
+  } };
+  const response = await createPraiseResponse(boardId, mutationRequest("/boards/" + boardId + "/praises", { message: "응원" }, { "Idempotency-Key": praiseId }), client, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(response.status, 201);
+  assert.deepEqual(calls, [
+    ["get_board", { p_board_id: boardId }],
+    ["create_peer_praise", { p_request_key: praiseId, p_board_id: boardId, p_message: "응원" }],
+  ]);
+  assert.deepEqual(await response.json(), { id: praiseId, bunch_id: bunchId, replayed: false });
+});
+
+test("shared praise rejects occurred_on and owners cannot write to their shared board", async () => {
+  let writes = 0;
+  const contributor = { rpc: async (name) => {
+    if (name === "get_board") return { data: { viewer_role: "contributor", id: boardId, kind: "shared", shared_title: "응원판", shared_description: null,
+      owner: { user_id: actorId, nickname: "주인", avatar_key: "grape" }, goal_state: "active", current_bunch: null, can_praise: true }, error: null };
+    writes++;
+    return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
+  } };
+  const invalid = await createPraiseResponse(boardId, mutationRequest("/praises", { occurred_on: "2026-10-08" }, { "Idempotency-Key": praiseId }), contributor, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(invalid.status, 400);
+  assert.equal(writes, 0);
+  const owner = { rpc: async () => ({ data: {
+    viewer_role: "owner", id: boardId, goal_id: actorId, kind: "shared", revision: 1, next_target_count: 20,
+    shared_title: "응원판", shared_description: null, current_bunch: null,
+  }, error: null }) };
+  const denied = await createPraiseResponse(boardId, mutationRequest("/praises", {}, { "Idempotency-Key": praiseId }), owner, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(denied.status, 403);
 });
 
 test("self praise edit requires a nonempty allowlisted patch and preserves explicit null", () => {
@@ -100,6 +144,26 @@ test("cancel praise checks CSRF first and returns no current count", async () =>
   const response = await cancelPraiseResponse(praiseId, mutationRequest("/praises/" + praiseId + "/cancel", {}), client, { expectedOrigin: "https://chagokchan.test", secret });
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { id: praiseId, replayed: false });
+});
+
+test("peer praise state validates an empty body, checks CSRF, and calls only the selected RPC", async () => {
+  assert.deepEqual(validatePeerPraiseStateInput({}, praiseId, "hide"), { p_praise_id: praiseId });
+  assert.throws(() => validatePeerPraiseStateInput({ actor_user_id: actorId }, praiseId, "hide"), { status: 400 });
+  assert.throws(() => validatePeerPraiseStateInput({}, "bad", "hide"), { status: 400 });
+  assert.throws(() => validatePeerPraiseStateInput({}, praiseId, "cancel"), { status: 400 });
+  let called = false;
+  const client = { rpc: async (name, input) => {
+    called = true;
+    assert.equal(name, "exclude_peer_praise");
+    assert.deepEqual(input, { p_praise_id: praiseId });
+    return { data: { id: praiseId, replayed: true }, error: null };
+  } };
+  const blocked = await peerPraiseStateResponse(praiseId, "exclude", new Request("https://chagokchan.test", { method: "POST" }), client, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(blocked.status, 403);
+  assert.equal(called, false);
+  const response = await peerPraiseStateResponse(praiseId, "exclude", mutationRequest("/praises/" + praiseId + "/exclude", {}), client, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { id: praiseId, replayed: true });
 });
 
 test("board praise query validates page size, cursor, bunch ID, and hidden-owner flag", () => {

@@ -1,8 +1,8 @@
 # API 계약과 구현 규칙
 
-버전: 0.2.0 / 상태: GET /me·목표·개인 칭찬 목록/생성/수정/취소·상태 전이·판 설정·회차 목록의 로컬 API 구현·검증, 공유 peer 쓰기와 W08-D 이후 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
+버전: 0.2.0 / 상태: 목표·판·관계·개인/공유 칭찬 API의 로컬 fixture 세션 구현·검증, 연결/공유 UI와 배포 세션 adapter는 후속 / 기준: [OpenAPI](../../contracts/openapi.json)
 
-OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A/B1/B2에서 목표·판 API, W08-C에서 칭찬 목록·개인판 생성·수정·취소 API를 로컬 fixture Auth 세션에 연결했다. 칭찬 route는 GET/POST `/boards/{board_id}/praises`, PATCH `/praises/{praise_id}`, POST `/praises/{praise_id}/cancel`이다. 개인 생성은 멱등 키를 요구하며 회차 ID를 결과에 반환한다. 공유 peer 쓰기·숨김·제외는 W09에 연결한다. 목표·회차·칭찬 목록은 기본 20·최대 50개이며 cursor는 해당 목표 필터 또는 판에 적용한다. 배포 Auth flow/session binding은 W12다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
+OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A/B1/B2에서 목표·판 API, W08-C에서 개인 칭찬 API를 연결했다. W09-A는 연결 수명주기 API를, W09-B는 역할별 판 상세·멤버 목록, owner grant/revoke, contributor 공유 peer 생성과 recipient hide/unhide/exclude API를 기존 RPC에 연결했다. 각 mutation은 Origin·CSRF·JSON guard와 응답 allowlist를 적용한다. 개인과 공유 생성은 멱등 키를 요구하며 회차 ID를 결과에 반환한다. 공유 peer 생성은 실천일 입력을 받지 않는다. 숨김은 수량을 바꾸지 않고 제외는 회차 집계를 원자적으로 다시 계산한다. 목표·회차·칭찬·멤버 목록은 기본 20·최대 50개이며 cursor는 해당 목표·판에 적용한다. 배포 Auth flow/session binding은 W12다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
 개발 중에는 [로컬 사용자 해석기](../development/local-development.md)가 가상 Auth 세션을 서버에서 준비한다. 아래 공개 인증·쿠키 계약을 변경하거나 클라이언트 actor 입력을 추가하지 않는다. 실제 Google/OTP 인증 API와 사용자 로그인 검증은 [진행표](../development/backlog.md)의 W12/W13에서 수행한다.
 

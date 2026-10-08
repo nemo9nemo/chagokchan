@@ -82,7 +82,7 @@ function isTimestampOrNull(value) {
   return value === null || isTimestamp(value);
 }
 
-function projectBunch(value) {
+export function projectBunch(value) {
   if (value === null) return null;
   if (!exactObject(value, ["id", "cycle_no", "target_count", "valid_count", "progress_state", "completed_at"]) ||
       Object.keys(value).length !== 6 || !UUID.test(value.id) || !Number.isInteger(value.cycle_no) || value.cycle_no < 1 ||

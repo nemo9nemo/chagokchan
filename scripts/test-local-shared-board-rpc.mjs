@@ -269,6 +269,26 @@ try {
     assert.notEqual(nextPage.items[0].id, firstPage.items[0].id);
   });
 
+  await record("peer_praise_owner_moderation_is_idempotent_and_recounts_atomically", async () => {
+    const hidden = ok(await owner.client.rpc("hide_peer_praise", { p_praise_id: firstPraise.id }));
+    assert.equal(hidden.id, firstPraise.id);
+    assert.equal(hidden.replayed, false);
+    assert.equal(ok(await owner.client.rpc("hide_peer_praise", { p_praise_id: firstPraise.id })).replayed, true);
+    denied(await contributor.client.rpc("hide_peer_praise", { p_praise_id: firstPraise.id }), "PT404", "praise_not_found");
+    const withoutHidden = ok(await owner.client.rpc("list_board_praises", { p_board_id: shared.boardId, p_limit: 10 }));
+    assert.ok(!withoutHidden.items.some((item) => item.id === firstPraise.id));
+    const withHidden = ok(await owner.client.rpc("list_board_praises", { p_board_id: shared.boardId, p_limit: 10, p_include_hidden: true }));
+    assert.ok(withHidden.items.find((item) => item.id === firstPraise.id).hidden_at);
+    assert.equal(ok(await owner.client.rpc("unhide_peer_praise", { p_praise_id: firstPraise.id })).replayed, false);
+    assert.equal(ok(await owner.client.rpc("unhide_peer_praise", { p_praise_id: firstPraise.id })).replayed, true);
+    assert.ok(ok(await owner.client.rpc("list_board_praises", { p_board_id: shared.boardId, p_limit: 10 })).items.some((item) => item.id === firstPraise.id));
+    assert.equal(ok(await owner.client.rpc("exclude_peer_praise", { p_praise_id: firstPraise.id })).replayed, false);
+    assert.equal(ok(await owner.client.rpc("exclude_peer_praise", { p_praise_id: firstPraise.id })).replayed, true);
+    assert.equal(countFor("select count(*) from public.bunches where id=:'bunch'::uuid and valid_count=1 and progress_state='incomplete' and completed_at is null;\n", { bunch: firstPraise.bunch_id }), "1");
+    assert.equal(countFor("select count(*) from public.praises where id=:'praise'::uuid and excluded_at is not null and message=E'첫 칭찬\\n메모';\n", { praise: firstPraise.id }), "1");
+    denied(await outsider.client.rpc("exclude_peer_praise", { p_praise_id: firstPraise.id }), "PT404", "praise_not_found");
+  });
+
   await record("peer_rate_limits_and_completion_failure_roll_back_every_write", async () => {
     const peerScope = "peer_praise_board_day:" + shared.boardId;
     seedRate(contributor.id, peerScope, 29, "day");
@@ -404,10 +424,10 @@ try {
   }
 }
 
-const passed = !failed && !cleanupFailed && cases.length === 6;
+const passed = !failed && !cleanupFailed && cases.length === 7;
 const report = {
-  verified_at: new Date().toISOString(), work_item: "W06-C2",
-  scope: "shared_board_grant_projections_peer_praise_and_revoke_disconnect_block_concurrency_with_issued_auth_sessions",
+  verified_at: new Date().toISOString(), work_item: "W09-B",
+  scope: "shared_board_access_peer_praise_moderation_and_relationship_concurrency_with_issued_auth_sessions",
   status: passed ? "passed" : "failed", executed: cases.length,
   passed: cases.filter((entry) => entry.status === "passed").length, cases,
   failure_detail: failureDetail, cleanup_passed: !cleanupFailed, existing_fixture_data_preserved: fixturePreserved,

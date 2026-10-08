@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { ApiRequestError, getCsrfSigningSecret, validateMutationRequest } from "./api-security.mjs";
+import { projectBoardView } from "./board-api.mjs";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -157,12 +158,56 @@ export async function createPraiseResponse(boardId, request, client, { expectedO
   const requestId = randomUUID();
   try {
     const body = await validateMutationRequest(request, { expectedOrigin, secret });
-    const input = validateCreatePraiseInput(body, request.headers.get("idempotency-key"), boardId);
-    const { data, error } = await client.rpc("create_personal_praise", input);
+    if (typeof boardId !== "string" || !UUID.test(boardId)) invalidInput();
+    const requestKey = request.headers.get("idempotency-key");
+    if (typeof requestKey !== "string" || !UUID.test(requestKey)) invalidInput();
+    const { data: rawBoard, error: boardError } = await client.rpc("get_board", { p_board_id: boardId });
+    rpcError(boardError);
+    const board = projectBoardView(rawBoard);
+    let rpc;
+    let input;
+    if (board.viewer_role === "owner" && board.kind === "personal") {
+      rpc = "create_personal_praise";
+      input = validateCreatePraiseInput(body, requestKey, boardId);
+    } else if (board.viewer_role === "contributor" && board.kind === "shared") {
+      if (!exactObject(body, ["message"]) ||
+          (Object.hasOwn(body, "message") && body.message !== null &&
+            (typeof body.message !== "string" || [...body.message].length > 1000))) invalidInput();
+      rpc = "create_peer_praise";
+      input = { p_request_key: requestKey, p_board_id: boardId, p_message: body.message ?? null };
+    } else {
+      throw new ApiRequestError(403, "ACTION_FORBIDDEN", "요청을 수행할 수 없습니다.");
+    }
+    const { data, error } = await client.rpc(rpc, input);
     rpcError(error);
     if (!exactObject(data, ["id", "bunch_id", "replayed"]) || Object.keys(data).length !== 3 ||
         !UUID.test(data.id) || !UUID.test(data.bunch_id) || typeof data.replayed !== "boolean") throw new Error("Praise result did not match its allowlist.");
     return jsonResponse(data, 201, requestId);
+  } catch (error) { return errorResponse(error, requestId); }
+}
+
+const PEER_PRAISE_STATE_RPCS = new Map([
+  ["hide", "hide_peer_praise"],
+  ["unhide", "unhide_peer_praise"],
+  ["exclude", "exclude_peer_praise"],
+]);
+
+export function validatePeerPraiseStateInput(value, praiseId, action) {
+  if (!PEER_PRAISE_STATE_RPCS.has(action) || typeof praiseId !== "string" || !UUID.test(praiseId) ||
+      !exactObject(value, []) || Object.keys(value).length !== 0) invalidInput();
+  return { p_praise_id: praiseId };
+}
+
+export async function peerPraiseStateResponse(praiseId, action, request, client, { expectedOrigin = process.env.APP_BASE_URL, secret = getCsrfSigningSecret() } = {}) {
+  const requestId = randomUUID();
+  try {
+    const body = await validateMutationRequest(request, { expectedOrigin, secret });
+    const input = validatePeerPraiseStateInput(body, praiseId, action);
+    const { data, error } = await client.rpc(PEER_PRAISE_STATE_RPCS.get(action), input);
+    rpcError(error);
+    if (!exactObject(data, ["id", "replayed"]) || Object.keys(data).length !== 2 ||
+        data.id !== praiseId || typeof data.replayed !== "boolean") throw new Error("Praise state result did not match its allowlist.");
+    return jsonResponse(data, 200, requestId);
   } catch (error) { return errorResponse(error, requestId); }
 }
 

@@ -2297,8 +2297,11 @@
         "tags": [
           "boards"
         ],
-        "description": "owner는 판 설정을, 현재 연결 세대와 명시 권한이 유효한 contributor는 공유 정보·최소 주인 프로필·공유 회차만 조회한다. contributor에게 개인 goal ID·개수·설명·다른 멤버를 반환하지 않는다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "owner는 판 설정을, 현재 연결 세대와 명시 권한이 유효한 contributor는 공유 정보·최소 주인 프로필·공유 회차만 조회한다. contributor에게 개인 goal ID·개수·설명·다른 멤버를 반환하지 않는다. 로컬 fixture Auth API에서 역할별 응답 projection을 적용했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_role_scoped_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "get_board(uuid)"
+        ],
         "x-requirements": [
           "REQ-003",
           "REQ-004",
@@ -2725,10 +2728,11 @@
         "tags": [
           "boards"
         ],
-        "description": "W08-C에서는 owner 개인판의 create_praise transaction만 호출한다. 작성자·수신자·회차는 DB가 결정하고 결과는 ID·bunch ID·재시도 여부만 반환한다. 공유 peer 쓰기는 W09에 연결한다.",
-        "x-implementation-status": "local_fixture_personal_create_api_implemented_shared_write_pending",
+        "description": "owner 개인판은 개인 칭찬 RPC를, 현재 grant·연결 세대가 유효한 contributor의 공유판은 peer 칭찬 RPC를 호출한다. 작성자·수신자·회차는 DB가 결정하고 결과는 ID·bunch ID·재시도 여부만 반환한다. contributor 공유 작성에는 occurred_on을 받지 않는다. 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_role_scoped_create_api_implemented_deployed_session_pending",
         "x-database-rpcs": [
-          "create_personal_praise(uuid,uuid,text,date)"
+          "create_personal_praise(uuid,uuid,text,date)",
+          "create_peer_praise(uuid,uuid,text)"
         ],
         "x-requirements": [
           "REQ-003",
@@ -2845,8 +2849,11 @@
         "tags": [
           "boards"
         ],
-        "description": "공유판 주인만 최소 프로필·contributor 상태·연결 세대를 페이지 조회한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "공유판 주인만 최소 프로필·contributor 상태·연결 세대를 페이지 조회한다. 로컬 fixture Auth API에서 역할 권한과 응답 allowlist를 적용했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_owner_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "list_board_members(uuid,text,integer)"
+        ],
         "x-requirements": [
           "REQ-006"
         ],
@@ -2859,7 +2866,8 @@
           "TC-DB-SHARED-001",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
-          "TC-ACCESS-003"
+          "TC-ACCESS-003",
+          "TC-API-008"
         ],
         "parameters": [
           {
@@ -2941,8 +2949,11 @@
         "tags": [
           "boards"
         ],
-        "description": "공유판 주인만 현재 활성·차단되지 않은 연결 사용자에게 권한을 부여한다. connection_id/generation을 고정하며 contributor 상한과 재부여를 직렬화한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "공유판 주인만 현재 활성·차단되지 않은 연결 사용자에게 권한을 부여한다. connection_id/generation을 고정하며 contributor 상한과 재부여를 직렬화한다. 로컬 fixture Auth API에서 기존 업무 RPC에 연결했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_owner_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "grant_board_member(uuid,uuid)"
+        ],
         "x-requirements": [
           "REQ-006"
         ],
@@ -2956,7 +2967,8 @@
           "TC-DB-SHARED-004",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
-          "TC-ACCESS-003"
+          "TC-ACCESS-003",
+          "TC-API-008"
         ],
         "parameters": [
           {
@@ -3052,8 +3064,11 @@
         "tags": [
           "boards"
         ],
-        "description": "공유판 주인이 contributor 권한을 해제한다. 연결 해제·차단·공유 칭찬과 같은 잠금 경계로 권한 회수 뒤 시작한 쓰기를 거절한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "공유판 주인이 contributor 권한을 해제한다. 연결 해제·차단·공유 칭찬과 같은 잠금 경계로 권한 회수 뒤 시작한 쓰기를 거절한다. 로컬 fixture Auth API에서 기존 업무 RPC에 연결했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_owner_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "revoke_board_member(uuid,uuid)"
+        ],
         "x-requirements": [
           "REQ-006"
         ],
@@ -3065,7 +3080,8 @@
           "TC-DB-SHARED-004",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
-          "TC-ACCESS-003"
+          "TC-ACCESS-003",
+          "TC-API-008"
         ],
         "parameters": [
           {
@@ -3376,8 +3392,11 @@
         "tags": [
           "praises"
         ],
-        "description": "역할별 정책 검사. 반복 동작으로 집계 재반영 없음. cancel은 관계 종료 뒤도 본인 경로 허용, 응답에 상대 개수 비노출.",
-        "x-implementation-status": "not_implemented",
+        "description": "수신자만 peer 칭찬을 숨긴다. 반복 요청은 멱등하고 집계에는 반영하지 않는다. 로컬 fixture Auth API에서 기존 RPC에 연결했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_recipient_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "hide_peer_praise(uuid)"
+        ],
         "x-requirements": [
           "REQ-007"
         ],
@@ -3389,7 +3408,8 @@
           "TC-CYCLE-002",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
-          "TC-TIME-001"
+          "TC-TIME-001",
+          "TC-API-008"
         ],
         "parameters": [
           {
@@ -3478,8 +3498,11 @@
         "tags": [
           "praises"
         ],
-        "description": "역할별 정책 검사. 반복 동작으로 집계 재반영 없음. cancel은 관계 종료 뒤도 본인 경로 허용, 응답에 상대 개수 비노출.",
-        "x-implementation-status": "not_implemented",
+        "description": "수신자만 peer 칭찬 숨김을 해제한다. 반복 요청은 멱등하고 집계에는 반영하지 않는다. 로컬 fixture Auth API에서 기존 RPC에 연결했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_recipient_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "unhide_peer_praise(uuid)"
+        ],
         "x-requirements": [
           "REQ-007"
         ],
@@ -3491,7 +3514,8 @@
           "TC-CYCLE-002",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
-          "TC-TIME-001"
+          "TC-TIME-001",
+          "TC-API-008"
         ],
         "parameters": [
           {
@@ -3580,8 +3604,11 @@
         "tags": [
           "praises"
         ],
-        "description": "역할별 정책 검사. 반복 동작으로 집계 재반영 없음. cancel은 관계 종료 뒤도 본인 경로 허용, 응답에 상대 개수 비노출.",
-        "x-implementation-status": "not_implemented",
+        "description": "수신자는 peer 칭찬을 다음 집계에서 제외할 수 있다. 개수·완료 시각은 한 트랜잭션에서 다시 계산하고 반복 요청은 멱등한다. 로컬 fixture Auth API에서 기존 RPC에 연결했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_recipient_api_implemented_deployed_session_pending",
+        "x-database-rpcs": [
+          "exclude_peer_praise(uuid)"
+        ],
         "x-requirements": [
           "REQ-007"
         ],
@@ -3593,7 +3620,8 @@
           "TC-CYCLE-002",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
-          "TC-TIME-001"
+          "TC-TIME-001",
+          "TC-API-008"
         ],
         "parameters": [
           {

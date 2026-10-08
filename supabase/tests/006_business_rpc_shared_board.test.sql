@@ -39,9 +39,11 @@ select ok(has_column_privilege('chagokchan_rpc','public.board_members','connecti
 select ok(has_column_privilege('chagokchan_rpc','public.praises','hidden_at','SELECT') and
   has_column_privilege('chagokchan_rpc','public.praises','actor_user_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.praises','recipient_user_id','INSERT') and
-  not has_column_privilege('chagokchan_rpc','public.praises','hidden_at','UPDATE') and
+  has_column_privilege('chagokchan_rpc','public.praises','hidden_at','UPDATE') and
+  has_column_privilege('chagokchan_rpc','public.praises','excluded_at','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.praises','actor_user_id','UPDATE') and
   not has_table_privilege('chagokchan_rpc','public.praises','DELETE'),
-  'owner projection reads hidden state while the peer RPC cannot change praise identity or delete rows');
+  'moderation RPC has state columns while praise identity and deletion remain protected');
 select ok(has_column_privilege('chagokchan_rpc','public.notifications','praise_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.notifications','bunch_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.notifications','praise_id','SELECT') and

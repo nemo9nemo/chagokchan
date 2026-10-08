@@ -157,7 +157,13 @@ UI02~UI05 기본 화면을 server API에 연결했다. 목록은 소유 목표 �
 
 `scripts/connection-api.test.mjs` 8/8은 초대 secret 정규화, 응답 allowlist, query 경계, CSRF 선행 검사, request key, block 입력, 안전 오류 변환을 확인했다. `scripts/project.ps1 -Task api:connection-test`는 실제 local Auth 세션 A/B/C 각각 12/12를 통과했다. 각 actor에서 연결·초대·요청·차단 GET, 잘못된 페이지/actor query, CSRF 없는 발급 차단, malformed preview/request/block, 임의 연결 404/no-store를 확인했고 기존 fixture 쓰기는 0건이었다. 관계 업무 RPC의 실제 Auth 세션 13/13과 초대 소비·권한·재연결 경합 근거는 [W06-C1 증거](reports/w06-c1-cursor-pagination-check-2026-10-08.json)를 따른다.
 
-새 `TC-API-007`은 handler 단위 및 A/B/C 로컬 API 경계 범위만 통과한다. 유효 초대 발급/소비·실제 요청 생성의 route→DB 성공은 제품 fixture 보호를 위해 여기서 실행하지 않았고, 공유판 grant/peer praise API와 화면은 W09-B/C 작업으로 남는다. 최종 check·build·source hash는 [W09-A 검사 증거](reports/w09-a-connection-api-check-2026-10-08.json)에 기록한다.
+새 `TC-API-007`은 handler 단위 및 A/B/C 로컬 API 경계 범위만 통과한다. 유효 초대 발급/소비·실제 요청 생성의 route→DB 성공은 제품 fixture 보호를 위해 여기서 실행하지 않았다. 공유판 grant/peer praise API는 W09-B에서 완료했고 UI는 W09-C에 남는다. check·build·source hash는 [W09-A 검사 증거](reports/w09-a-connection-api-check-2026-10-08.json)에 기록한다.
+
+## W09-B 공유판 권한·peer 칭찬 API
+
+W09-B는 `GET /boards/{board_id}`, `GET /members`, `PUT/DELETE /members/{user_id}`, 역할별 공유 칭찬 `POST /praises`, peer praise 숨김·해제·제외 route를 구현했다. endpoint는 로컬 Auth 세션과 기존 grant·revoke·get_board·member list·peer create/moderation 업무 RPC를 사용한다. owner/contributor 응답은 별도 allowlist를 적용하고 contributor에게 goal ID와 비공개 목표 필드를 노출하지 않는다. 모든 mutation은 Origin·CSRF·JSON body guard와 고정 인자 mapping을 거친다.
+
+새 pgTAP `012_business_rpc_peer_praise_moderation.test.sql` 10/10과 전체 `db:test` 247/247을 통과했다. 실제 Auth 발급 합성 owner/contributor/outsider 세션 기반 `db:shared-test` 7/7은 명시적 grant/revoke, peer 작성 멱등성, hide/unhide 반복, exclude 반복·회차 개수 및 완료 상태 조정, 관계 회수/차단 경합을 확인했다. 계정·세션을 제거하고 기존 fixture snapshot을 보존했다. `api:board-test`는 local A/B/C 각각 12/12에서 owner/contributor projection 및 읽기 경계, C 거절, mutation CSRF 선행 차단을 확인했고 제품 fixture 쓰기 0건이다. API unit 99/99·Biome·typecheck·정적 검사·`build:check` 통과. 실제 API route mutation을 합성 세션으로 호출해 DB에 쓰는 통합과 제품 UI E2E·실제 로그인은 미실행이다. 상세 명령·소스 hash는 [W09-B 검사 증거](reports/w09-b-shared-board-praise-api-check-2026-10-08.json)를 따른다.
 
 ## W05 물리 DB의 부분 검사
 

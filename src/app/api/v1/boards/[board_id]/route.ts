@@ -1,5 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
+import { getBoardResponse } from "@/server/board-api.mjs";
 import { updateBoardResponse } from "@/server/goal-api.mjs";
 import { getLocalSessionClient } from "@/server/local-user-session.mjs";
 
@@ -28,4 +29,12 @@ export async function PATCH(request: Request, { params }: Context) {
   if (!client) return authRequired(randomUUID());
   const { board_id } = await params;
   return updateBoardResponse(board_id, request, client, { expectedOrigin: new URL(process.env.APP_BASE_URL ?? "http://localhost").origin });
+}
+
+export async function GET(_request: Request, { params }: Context) {
+  let client: Awaited<ReturnType<typeof getLocalSessionClient>> = null;
+  try { client = await getLocalSessionClient(); } catch { return dependencyUnavailable(randomUUID()); }
+  if (!client) return authRequired(randomUUID());
+  const { board_id } = await params;
+  return getBoardResponse(board_id, client);
 }

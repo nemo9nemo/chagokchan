@@ -96,5 +96,5 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | ID | 기능 단위 | 상태 | 결과·다음 행동 |
 | --- | --- | --- | --- |
 | W09-A | 연결 초대·요청·차단 API | DONE | 연결·초대·요청·차단 목록/수명주기 route 14개를 기존 Auth-scoped RPC에 연결했다. unit 8/8, A/B/C 각각 12/12 경계 API 검사, 기존 W06-C 관계 RPC 실제 세션 13/13 근거를 함께 확인했다. 기존 fixture 쓰기 0건. [검사](../quality/reports/w09-a-connection-api-check-2026-10-08.json) |
-| W09-B | 공유판 권한·peer 칭찬 API | TODO | owner grant/revoke·역할별 보드 projection·공유 칭찬 생성/숨김/제외 route를 추가하고 연결만 된 B·무관한 C 접근 거절을 검증한다. |
+| W09-B | 공유판 권한·peer 칭찬 API | DONE | 2026-10-08. 판 상세/멤버 목록 역할 projection, owner grant/revoke, contributor 공유 칭찬 생성, recipient hide/unhide/exclude API를 기존 업무 RPC에 연결했다. pgTAP 10/10, 전체 DB 247/247, 합성 Auth 세션 7/7, A/B/C route 경계 각 12/12, unit 99/99, build:check 통과. 기존 fixture DB 보존. 실제 route mutation→DB 성공은 fixture 쓰기 없이 미실행이며 실제 로그인은 W12/W13. [검사](../quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json) |
 | W09-C | 연결·공유판 화면 | TODO | 초대 발급/미리보기/요청 수락·거절·철회·차단, 목표별 권한, 지인 공유판과 공유 칭찬 흐름을 UI06~UI08에 연결한다. |
