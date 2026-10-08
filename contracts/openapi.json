@@ -2262,8 +2262,8 @@
         "tags": [
           "boards"
         ],
-        "description": "owner/contributor별 별도 projection. contributor에게 개인 goal ID·개수·설명·다른 멤버를 반환하지 않는다.",
-        "x-implementation-status": "not_implemented",
+        "description": "owner는 판 설정을, 현재 연결 세대와 명시 권한이 유효한 contributor는 공유 정보·최소 주인 프로필·공유 회차만 조회한다. contributor에게 개인 goal ID·개수·설명·다른 멤버를 반환하지 않는다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-003",
           "REQ-004",
@@ -2279,6 +2279,8 @@
           "TC-CYCLE-003",
           "TC-TIME-001",
           "TC-CONNECT-003",
+          "TC-DB-SHARED-001",
+          "TC-DB-SHARED-004",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003"
@@ -2557,8 +2559,8 @@
         "tags": [
           "boards"
         ],
-        "description": "bunch_id는 해당 판에 속해야 한다. contributor는 자기 기록만, 숨김/제외 정보 비노출. include_hidden은 owner 전용.",
-        "x-implementation-status": "not_implemented",
+        "description": "bunch_id는 해당 판에 속해야 한다. contributor는 현재 권한이 유효할 때 자기 peer 기록만 보며 숨김/제외 정보는 받지 않는다. include_hidden은 owner 전용. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-003",
           "REQ-004",
@@ -2574,6 +2576,8 @@
           "TC-CYCLE-003",
           "TC-TIME-001",
           "TC-CONNECT-003",
+          "TC-DB-SHARED-001",
+          "TC-DB-SHARED-002",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003"
@@ -2674,8 +2678,12 @@
         "tags": [
           "boards"
         ],
-        "description": "작성자·수신자·회차는 DB 결정. 개인/공유·권한·상태·제한·중복 검사. 결과에는 최신 개수를 포함하지 않는다.",
-        "x-implementation-status": "not_implemented",
+        "description": "작성자·수신자·회차는 DB 결정. owner 개인 칭찬과 유효 권한 contributor의 공유 칭찬을 각각 검증하며 집계·완성 소식·제한·중복을 트랜잭션으로 처리한다. 결과에는 최신 개수를 포함하지 않는다. DB RPC 구현, 서버 API는 W07에서 연결.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "x-database-rpcs": [
+          "create_praise",
+          "create_peer_praise"
+        ],
         "x-requirements": [
           "REQ-003",
           "REQ-004",
@@ -2694,6 +2702,9 @@
           "TC-CYCLE-003",
           "TC-PRAISE-001",
           "TC-PRAISE-002",
+          "TC-DB-SHARED-002",
+          "TC-DB-SHARED-003",
+          "TC-DB-SHARED-004",
           "TC-TIME-001",
           "TC-ACCESS-001"
         ],
@@ -2787,8 +2798,8 @@
         "tags": [
           "boards"
         ],
-        "description": "주인의 판 권한 관리 목록",
-        "x-implementation-status": "not_implemented",
+        "description": "공유판 주인만 최소 프로필·contributor 상태·연결 세대를 페이지 조회한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-006"
         ],
@@ -2798,6 +2809,7 @@
         ],
         "x-test-cases": [
           "TC-CONNECT-003",
+          "TC-DB-SHARED-001",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003"
@@ -2882,8 +2894,8 @@
         "tags": [
           "boards"
         ],
-        "description": "명시적 contributor 권한 부여",
-        "x-implementation-status": "not_implemented",
+        "description": "공유판 주인만 현재 활성·차단되지 않은 연결 사용자에게 권한을 부여한다. connection_id/generation을 고정하며 contributor 상한과 재부여를 직렬화한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-006"
         ],
@@ -2893,6 +2905,8 @@
         ],
         "x-test-cases": [
           "TC-CONNECT-003",
+          "TC-DB-SHARED-001",
+          "TC-DB-SHARED-004",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003"
@@ -2991,8 +3005,8 @@
         "tags": [
           "boards"
         ],
-        "description": "판 권한 해제",
-        "x-implementation-status": "not_implemented",
+        "description": "공유판 주인이 contributor 권한을 해제한다. 연결 해제·차단·공유 칭찬과 같은 잠금 경계로 권한 회수 뒤 시작한 쓰기를 거절한다. DB RPC는 구현했고 서버 API는 W07에서 연결한다.",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-006"
         ],
@@ -3001,6 +3015,7 @@
         ],
         "x-test-cases": [
           "TC-CONNECT-003",
+          "TC-DB-SHARED-004",
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003"

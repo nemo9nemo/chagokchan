@@ -1,0 +1,145 @@
+{
+  "verified_at": "2026-10-08T05:09:08.770Z",
+  "work_item": "W06-C2",
+  "status": "passed",
+  "scope": "shared_board_grants_safe_projections_peer_praise_and_permission_revocation_races",
+  "source_basis": {
+    "base_commit": "c2097c26226704bf7204fca4a9a5848d3336b038",
+    "format": "SHA-256 per path; the resulting commit is identified by repository history containing this report",
+    "files": [
+      { "path": "supabase/migrations/20261008022200_shared_board_access_and_peer_praise.sql", "sha256": "216e0b81aed41c7012972cc21ae6c0948b4af4d3ac0c53caf1ce5ca3c722b029" },
+      { "path": "supabase/migrations/20261008022300_shared_board_rpc_row_lock_rls.sql", "sha256": "c2645da8c4af6200aa0d9bb45b3d7e41636f32587664009a62a2e7f8078820d3" },
+      { "path": "supabase/migrations/20261008022400_shared_praise_write_policies.sql", "sha256": "dd0ba7257587bcef9c12dabd01f02f619dcb435eaef5290eef3eb7719697131b" },
+      { "path": "supabase/migrations/20261008022500_shared_praise_cycle_column_fix.sql", "sha256": "ca40c4b1243073665a8ea984f90fda67dc886a8c1a3750f0a27752310d56b819" },
+      { "path": "supabase/migrations/20261008022600_peer_praise_receipt_shape.sql", "sha256": "1b1861f76c7760b6130de7e438bc9aefada46f248508d0f935d6db9e7b925415" },
+      { "path": "supabase/migrations/20261008022700_shared_praise_owner_state_projection.sql", "sha256": "350ac80586f57856cb1b4d456eaf62af5a6b540b9ec6a1c62e6136c55e077e28" },
+      { "path": "supabase/migrations/20261008022800_relationship_cursor_line_wrap_fix.sql", "sha256": "7cd4301758905da6df2b4a2622f4042374386d9d6668070ff259347e2c5f864c" },
+      { "path": "supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql", "sha256": "0092a9c9b5b34f93796b5d5de091832c0203fed503104669b923b35720079264" },
+      { "path": "supabase/tests/006_business_rpc_shared_board.test.sql", "sha256": "5212dd5557bb92a3f98cfbb49edd7c993d5d53a568c18bc8bada97f651e9be71" },
+      { "path": "scripts/test-local-shared-board-rpc.mjs", "sha256": "d66485a46dbe77da97c904becef3d8f93300292658adfa1f7f4603eee2cd0e15" },
+      { "path": "contracts/openapi.json", "sha256": "01442f02daade277276316a3b747358686b5da69259daf36d005f7a7f082074c" },
+      { "path": "docs/quality/test-cases.json", "sha256": "3e5de8d5612b56b310dd676bc8b12728b7d637a0891eb223f5a080cafd6d783e" },
+      { "path": "package.json", "sha256": "5a8db3da84ea301e1f1791c3bbe54fb85ca1cc70a732ffeae31b9c6e18cd5ff7" },
+      { "path": "scripts/project.ps1", "sha256": "9c74aab8fa88e00f484f154bcceecc403dbb7617764855a527e24a63a3f6b84e" }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "docker_engine": "29.1.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008022200",
+      "20261008022300",
+      "20261008022400",
+      "20261008022500",
+      "20261008022600",
+      "20261008022700",
+      "20261008022800",
+      "20261008022900"
+    ],
+    "previous_applied_migrations_modified": false,
+    "summary": "Owner-controlled board grants/revokes, connection-generation snapshots, role-limited board and praise projections, atomic peer praise/cycle/quota/notice writes, and serialization against grant/revoke, disconnect, block, and capacity races. Follow-up migrations address the tested RLS row-lock path and PostgreSQL function/receipt/projection/cursor issues."
+  },
+  "database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "verified_at": "2026-10-08T05:09:08.770Z",
+    "status": "passed",
+    "executed": 160,
+    "passed": 160,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 88,
+    "provider_login_tests_executed": 0
+  },
+  "rpc_only_tests": {
+    "command": "scripts/project.ps1 -Task db:rpc-test",
+    "verified_at": "2026-10-08T05:08:54.773Z",
+    "status": "passed",
+    "executed": 109,
+    "passed": 109,
+    "failed": 0
+  },
+  "shared_board_pgtap": {
+    "suite": "supabase/tests/006_business_rpc_shared_board.test.sql",
+    "verified_at": "2026-10-08T05:08:54.773Z",
+    "status": "passed",
+    "executed": 25,
+    "passed": 25,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-SHARED-001",
+      "TC-DB-SHARED-002",
+      "TC-DB-SHARED-003",
+      "TC-DB-SHARED-004"
+    ]
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:shared-test",
+    "status": "passed",
+    "verified_at": "2026-10-08T04:57:05.104Z",
+    "executed": 6,
+    "passed": 6,
+    "cases": [
+      "owner_and_ungranted_views_have_separate_safe_projection",
+      "explicit_grant_revoke_and_minimal_owner_member_list",
+      "peer_praise_is_atomic_idempotent_and_role_scoped",
+      "peer_rate_limits_and_completion_failure_roll_back_every_write",
+      "concurrent_member_grants_never_exceed_fifty",
+      "revoke_disconnect_block_races_and_reconnect_requires_new_grant"
+    ],
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_app_rpc": false,
+    "provider_login_tests_executed": 0
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T05:08:34.800Z",
+    "status": "passed",
+    "lint_files": 24,
+    "typecheck": "passed",
+    "unit_tests": { "executed": 32, "passed": 32, "failed": 0 },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 51,
+      "local_markdown_links": 373,
+      "registry_paths": 148,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "build_check": {
+    "command": "scripts/project.ps1 -Task build:check",
+    "verified_at": "2026-10-08T05:06:45Z",
+    "status": "passed",
+    "next": "16.4.0",
+    "build_mode": "offline_local"
+  },
+  "findings_and_fixes": [
+    "FOR UPDATE requires an UPDATE RLS policy path for the RPC owner; the added policy remains scoped to the current owner/member relationship.",
+    "RPC insert/update operations require narrowly scoped RLS and column grants for bunch, praise, receipt, and notice rows while authenticated callers retain no direct product DML.",
+    "The praise receipt trigger now accepts both personal-praise and peer-praise RPC receipt shapes without exposing either receipt table to API roles.",
+    "The owner board projection grants only the hidden-state column used by the RPC and does not expose it to authenticated users.",
+    "Base64 cursor output is made single-line, and board member/praise pages resume after the last returned item rather than the lookahead item."
+  ],
+  "product_scope": {
+    "openapi_bff_implemented": false,
+    "product_acceptance_cases_planned": 36,
+    "product_acceptance_cases_completed": 0,
+    "technical_cases_passed": 15,
+    "real_or_provider_login_tests_executed": 0,
+    "deletion_rpc_pending": true
+  },
+  "next_work_item": "W06-D"
+}

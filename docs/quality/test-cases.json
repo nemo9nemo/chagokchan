@@ -997,6 +997,100 @@
       "expected": "업무 RPC만 비로그인·RLS 유지 역할이 수행하고 API 역할은 직접 테이블 접근을 할 수 없다. 공개 프로필과 알림은 검증된 당사자·필드로 한정된다.",
       "status": "passed",
       "evidence": "reports/w06-c1-connection-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-SHARED-001",
+      "requirement_ids": [
+        "REQ-006"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001",
+        "POL-CONNECT-002",
+        "POL-LIMIT-001"
+      ],
+      "level": "local_db_integration",
+      "title": "공유판 명시 grant와 역할별 안전 projection",
+      "steps": [
+        "실제 발급 owner·연결 사용자·무관 사용자 세션으로 grant 전후 board projection을 조회",
+        "주인만 최소 프로필·권한 상태·연결 세대를 페이지 조회하고 contributor/무관 사용자의 목록 접근 거절 확인",
+        "grant/revoke 재시도와 직접 board_members SELECT 거절을 확인"
+      ],
+      "expected": "연결만으로 공유판 접근이 열리지 않는다. contributor 응답에는 개인 goal ID·개인 설명·다음 목표 수·멤버 목록이 없고 최소 프로필·공유 상태만 포함한다. 권한 변경은 소유자만 수행한다.",
+      "status": "passed",
+      "evidence": "reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-SHARED-002",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-004",
+        "REQ-006",
+        "REQ-007",
+        "REQ-008"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-CYCLE-001",
+        "POL-LIMIT-001",
+        "POL-ACCESS-001",
+        "POL-API-001"
+      ],
+      "level": "local_db_transaction",
+      "title": "공유 칭찬·역할별 목록·독립 회차와 원자성",
+      "steps": [
+        "멱등 재시도·입력 충돌·문구 줄바꿈 정규화와 actor/recipient/server cycle을 확인",
+        "owner 수신 목록과 contributor 자기 기록 목록, 숨김·제외 필드 비노출 및 cursor 페이지를 비교",
+        "개인 칭찬 개수와 공유 칭찬 개수를 분리하고 회차 완성·수신/완성 알림 한 건씩 확인",
+        "분당/일일/판별 제한과 회차 완성 실패 주입에서 기록·회차·소식·영수증·쿼터 rollback 확인"
+      ],
+      "expected": "공유 칭찬은 공유판 한 알로만 계산된다. 권한 있는 contributor만 기록하며 중복·초과·강제 실패는 부분 변경이나 정보 노출을 남기지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-SHARED-003",
+      "requirement_ids": [
+        "REQ-006"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-002",
+        "POL-LIMIT-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_concurrency",
+      "title": "공유판 50명 grant 상한 경합",
+      "steps": [
+        "유효 연결 contributor 49명을 test fixture로 준비",
+        "두 owner grant RPC를 병렬 실행해 같은 공유판의 50번째/51번째가 경합하는지 확인",
+        "권한 행 수와 사용자 projection을 확인하고 임시 계정·fixture를 정리"
+      ],
+      "expected": "판 행 잠금과 현재 연결 검사로 활성 contributor는 최대 50명이다. 경합 패자 요청은 새 멤버 기록 없이 안정적으로 거절된다.",
+      "status": "passed",
+      "evidence": "reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-SHARED-004",
+      "requirement_ids": [
+        "REQ-005",
+        "REQ-006",
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-002",
+        "POL-PRAISE-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_concurrency",
+      "title": "권한 회수·해제·차단·재연결 공유 칭찬 경합",
+      "steps": [
+        "owner revoke와 peer praise를 병렬 실행해 선행 성공 또는 권한 후 거절만 가능한지 확인",
+        "disconnect·block과 peer praise를 병렬 실행하고 커밋 이후 접근 차단 확인",
+        "재연결에서 generation이 증가해도 기존 grant가 복원되지 않고 owner 재 grant 후에만 조회 가능한지 확인",
+        "차단 해제만으로 연결·grant를 복구하지 않는지 검사"
+      ],
+      "expected": "현재 connection_id·generation·active·양방향 block을 같은 직렬화 경계에서 다시 검사한다. 권한 종료 후 새 쓰기는 거절되고 완료된 쓰기는 한 번만 남는다.",
+      "status": "passed",
+      "evidence": "reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

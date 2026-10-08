@@ -44,8 +44,11 @@ select ok(has_column_privilege('chagokchan_rpc','public.request_receipts','input
   not has_column_privilege('chagokchan_rpc','public.request_receipts','input_hash','UPDATE') and
   not has_table_privilege('chagokchan_rpc','public.request_receipts','DELETE'),
   'retry locking is actor-scoped and only the immutable result key has UPDATE privilege');
-select ok((select count(*) = 3 from pg_policies where schemaname='public' and tablename='goals' and roles @> array['chagokchan_rpc'::name]),
-  'goal owner reads, creates and updates are RLS-scoped to the verified actor');
+select ok((select count(*) = 3 from pg_policies where schemaname='public' and tablename='goals' and roles @> array['chagokchan_rpc'::name]
+    and policyname like 'rpc_owner_goals_%') and
+  (select count(*) = 2 from pg_policies where schemaname='public' and tablename='goals' and roles @> array['chagokchan_rpc'::name]
+    and policyname in ('rpc_current_contributor_goals_select','rpc_current_contributor_goals_lock')),
+  'goal owner writes and current shared-member reads/locks are RLS-scoped separately');
 select ok(exists(select 1 from pg_policies where schemaname='public' and tablename='boards' and policyname='rpc_owner_boards_select') and
   exists(select 1 from pg_policies where schemaname='public' and tablename='boards' and policyname='rpc_owner_boards_insert'),
   'board access is restricted to owner rows while required creation is allowed');

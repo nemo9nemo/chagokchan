@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 47개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 51개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며, W06-A 기술 TC 2개·W06-B1 기술 TC 2개·W06-B2 기술 TC 3개·W06-C1 기술 TC 4개·W06-C2 기술 TC 4개가 통과했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -72,6 +72,14 @@ TC-DB-GOAL-001/002는 통과했지만 OpenAPI `/api/v1` 서버와 화면은 아�
 적용 뒤 결함 세 건을 후속 migration으로 고쳤다. `jsonb_object_length`가 PostgreSQL에 없어 `jsonb_object_keys`를 사용하고, 요청/수락 알림 ON CONFLICT의 제안 행 SELECT RLS를 전이 당사자로 한정했다. 수락 알림은 `notifications_typed_target`의 단일 대상 제약에 맞춰 request ID 대신 connection ID를 저장한다. W06-B2 임시 알림 probe는 PostgREST schema reload가 필요해 테스트 생성·제거 뒤 캐시 갱신을 넣었다. 적용된 파일은 수정하지 않았다. [상세 증거](reports/w06-c1-connection-rpc-check-2026-10-08.json)
 
 TC-DB-CONNECT-001~004는 통과했다. 업무 UI/BFF가 없으므로 제품 연결 흐름 TC-CONNECT-001~003은 미실행이며 완료 처리하지 않는다. W06-C2 공유판 grant/revoke·공유 칭찬/권한 회수 경합과 W06-D 소식·삭제가 남아 있다. 실제 Google/OTP 로그인도 미검증이다.
+
+## W06-C2 공유판 권한·공유 칭찬 원자성 검사
+
+2026-10-08 PostgreSQL 17.11 로컬 Supabase에 `20261008022200`~`20261008022900`을 순서대로 적용했다. 오너 전용 grant/revoke, 연결 세대 스냅샷과 공유 상태의 안전 projection, 오너/기여자 역할별 목록, 공유 칭찬 기록·영수증·회차·집계·알림을 트랜잭션 RPC로 구현했다. 개인 목표/개인 칭찬 집계는 공유판과 분리한다. 적용된 마이그레이션은 수정하지 않았다.
+
+`db:test`는 160/160(물리 51, RPC 경계 21, 업무 권한/RLS 88), `db:rpc-test`는 109/109, 공유판 전용 pgTAP은 25/25를 통과했다. Auth가 실제 발급한 로컬 오너·기여자·무관 사용자 세션 통합 `db:shared-test` 6/6에서 안전 projection, 권한 부여/회수, 역할별 목록, 멱등 공유 칭찬, 회차 완성/알림, 개인판과 독립된 개수, 판별/분당/일일 제한, 실패 전체 롤백, 50명 상한 경합, revoke/disconnect/block 대 praise 경합 및 재연결 재부여를 확인했다. probe 세션/계정 제거와 기존 fixture 보존이 통과했다. 실제 Google/OTP 로그인을 실행하지 않았다. [세부 증거](reports/w06-c2-shared-board-rpc-check-2026-10-08.json)
+
+TC-DB-SHARED-001~004는 통과했다. 제품 수락 TC 36개, 실제 로그인 및 BFF/API 실행은 계속 미실행이다. W06-C1 관계 목록의 페이지 경계 결함을 별도로 발견해 후속 커서 수정·재검사를 진행했고, 소식·요청 결과·삭제/파기 RPC는 W06-D에 남아 있다.
 
 ## W05 물리 DB의 부분 검사
 
