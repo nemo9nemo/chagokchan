@@ -158,7 +158,7 @@
     "production_build": {
       "command": "scripts/project.ps1 -Task build:check",
       "status": "passed",
-      "route_entries": 30
+      "route_entries": 31
     }
   },
   "test_case": {
