@@ -48,7 +48,7 @@ S03의 ERD 완료는 실제 DB 생성 완료가 아니다. S04에서 도구·로
 | pnpm | 11.19.0 고정. 설치·잠금 파일·실행 확인 |
 | Docker | CLI·엔진 29.1.3·WSL 3.0.1/WSL 2 확인. 임시 소켓 복구 후 정상 기동 |
 | Supabase CLI·로컬 DB | CLI 2.120.0, PostgreSQL 17.11. 서비스 7개·Auth/REST·공개 포트 127.0.0.1 확인 |
-| Git | 로컬 main 저장소·기능 단위 커밋·메시지 훅 적용. 원격·CI는 미연결 |
+| Git | 로컬 main·메시지 훅·공개 origin/main 연결·첫 업로드 검증. CI·브랜치 보호 미설정. [증거](../quality/reports/git-remote-connection-2026-10-08.json) |
 
 앱 설치·린트·타입·환경/포트 검사·빌드·HTTP·DB 연결 증거는 [앱 기반 검사](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. W05 제품 SQL·마이그레이션·가상 데이터와 물리 제약/기본 접근 검사는 [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json)에 기록했다. 업무 권한·RPC·전체 수락 TC·실제 로그인 검사는 후속 단계에서 수행한다.
 

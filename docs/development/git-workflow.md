@@ -30,6 +30,8 @@ type은 feat·fix·chore·docs·test·refactor, scope는 기능이나 개발 영
 
 ## 저장소 범위
 
-이번 요청으로 로컬 Git 초기화·커밋은 진행한다. 기존 요구·정책·설계를 초기 커밋으로 보존한 뒤 코드 작업을 단위별로 기록한다. 원격 저장소·push·GitHub Actions는 후속 연결 시점에 진행한다. 로컬 커밋이 있다는 이유로 원격 백업·CI 설정 완료로 표시하지 않는다.
+2026-10-08 사용자 지정 [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan)을 origin으로 연결했다. 저장소는 공개(public), 기본 브랜치는 main, 업스트림은 origin/main이다. 기존 세 커밋의 이력을 유지해 첫 업로드를 완료했다. [연결 증거](../quality/reports/git-remote-connection-2026-10-08.json)와 [변경 기록](../changes/2026-10-08-git-connection.md)에 확인 결과를 남겼다.
+
+기능 단위의 검증·커밋 후 원격 상태를 확인하고 일반 push로 올린다. 업로드 뒤 로컬 HEAD와 원격 main의 SHA·업스트림·작업 공간 상태를 확인한다. 원격에 다른 변경이 있으면 fetch 후 내용을 확인하며 강제 push로 덮어쓰지 않는다. CI·브랜치 보호·클라우드 배포는 별도 완료 기준으로 관리한다. 실제 .env·Auth 자격증명·로컬 개인 데이터·로그는 커밋하지 않는다.
 
 진행 기준은 [진행표](backlog.md), 전체 운영 절차는 [배포·Git](../deployment-and-git.md)이다.

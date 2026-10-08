@@ -68,8 +68,8 @@
 
 ## 현재 완료 상태와 다음 작업
 
-W04 앱·로컬 DB 준비에 이어 W05 물리 스키마·기본 RLS·합성 A/B/C 초기 데이터를 완료했다. DB 51개·소스 단위 32개·빌드 검사를 통과했다. [DB 실행 방법](development/database-foundation.md)과 [증거](quality/reports/physical-database-check-2026-10-08.json)를 남겼다. 업무 RPC·현재 세션·API·동시성·실제 로그인·클라우드·원격 저장소는 후속 작업이다. 물리 제약·기본 접근 검사를 전체 제품 보안 검증 완료로 기록하지 않는다.
+W04 앱·로컬 DB 준비에 이어 W05 물리 스키마·기본 RLS·합성 A/B/C 초기 데이터를 완료했다. DB 51개·소스 단위 32개·빌드 검사를 통과했다. [DB 실행 방법](development/database-foundation.md)과 [증거](quality/reports/physical-database-check-2026-10-08.json)를 남겼다. 업무 RPC·현재 세션·API·동시성·실제 로그인·클라우드·CI는 후속 작업이다. 공개 GitHub 원격 저장소와 origin/main 업로드는 [연결 증거](quality/reports/git-remote-connection-2026-10-08.json)에 기록했다. 물리 제약·기본 접근 검사를 전체 제품 보안 검증 완료로 기록하지 않는다.
 
-외부 도구 사용은 허용되었고 Miro 설치를 제안했다. GitHub 플러그인은 설치된 상태지만 이 앱의 저장소는 추후 연결한다. 도구별 상태와 실행 순서는 [외부 도구 연결 문서](external-tools.md)에 기록한다.
+외부 도구 사용은 허용되었고 Miro 설치를 제안했다. GitHub 플러그인·CLI 인증과 이 앱의 공개 원격 저장소 연결을 확인했다. 도구별 상태와 실행 순서는 [외부 도구 연결 문서](external-tools.md)에 기록한다.
 
 I01~I09는 개발 정책과 ERD v0.3·계약·TC로 구체화했다. 고정 Node·pnpm·Docker·Supabase CLI의 기반과 물리 DB를 준비했다. 다음은 업무 권한·RPC·로컬 세션·API 구현이다. 실제 로그인 제공자는 오픈 준비 때 연결한다. 성인 개인 범위는 확정했고 가입 기준·확인 기록을 정책·설계에 반영했다. Git 연결 시 문서·정책·계약·소스·잠금 파일·마이그레이션을 함께 관리한다.

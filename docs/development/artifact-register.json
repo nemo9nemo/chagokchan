@@ -202,7 +202,8 @@
         "docs/changes/2026-10-07-adult-audience.md",
         "docs/decisions/ADR-0003-release-name.md",
         "docs/changes/2026-10-08-app-foundation.md",
-        "docs/changes/2026-10-08-database-foundation.md"
+        "docs/changes/2026-10-08-database-foundation.md",
+        "docs/changes/2026-10-08-git-connection.md"
       ]
     },
     {
@@ -237,7 +238,8 @@
         "docs/quality/reports/artifacts-check-2026-10-08-workspace.json",
         "docs/quality/reports/artifacts-check-2026-10-08-development.json",
         "docs/quality/reports/foundation-check-2026-10-08.json",
-        "docs/quality/reports/physical-database-check-2026-10-08.json"
+        "docs/quality/reports/physical-database-check-2026-10-08.json",
+        "docs/quality/reports/git-remote-connection-2026-10-08.json"
       ]
     },
     {
@@ -376,6 +378,15 @@
       "confirmed_on": "2026-10-08",
       "user_decision": "지정 작업 공간 사용, 개발 중 로그인 없이 사용, 실제 로그인은 오픈 준비 때 테스트·실사용",
       "decision_record": "docs/decisions/ADR-0004-local-development-auth.md"
+    },
+    {
+      "id": "GIT-REMOTE-001",
+      "subject": "GitHub 원격 저장소 연결",
+      "status": "confirmed_and_connected",
+      "confirmed_on": "2026-10-08",
+      "user_decision": "https://github.com/nemo9nemo/chagokchan.git",
+      "actual_visibility": "public",
+      "decision_record": "docs/changes/2026-10-08-git-connection.md"
     }
   ],
   "branding": {
@@ -419,14 +430,21 @@
       "W13"
     ]
   },
-  "remote_repository_connected": false,
+  "remote_repository_connected": true,
   "version_control": {
     "local_repository": "initialized",
     "default_branch": "main",
-    "remote": "not_connected",
+    "remote": "connected_verified",
     "ci": "not_configured",
     "functional_commits_required": true,
     "commit_policy": "docs/development/git-workflow.md",
-    "hook": ".githooks/commit-msg"
+    "hook": ".githooks/commit-msg",
+    "remote_name": "origin",
+    "remote_url": "https://github.com/nemo9nemo/chagokchan.git",
+    "visibility": "public",
+    "upstream": "origin/main",
+    "initial_uploaded_head": "3569842caf4803696b3103d38d9469c4e1126d73",
+    "remote_connection_report": "docs/quality/reports/git-remote-connection-2026-10-08.json",
+    "branch_protection": "not_configured"
   }
 }

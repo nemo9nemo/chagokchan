@@ -1,0 +1,32 @@
+{
+  "scope": "first_remote_upload_and_configuration_only",
+  "connected_at": "2026-10-08T02:16:15.787Z",
+  "remote_url": "https://github.com/nemo9nemo/chagokchan.git",
+  "repository": "nemo9nemo/chagokchan",
+  "visibility": "public",
+  "branch": "main",
+  "upstream": "origin/main",
+  "pushed_head": "3569842caf4803696b3103d38d9469c4e1126d73",
+  "remote_head": "3569842caf4803696b3103d38d9469c4e1126d73",
+  "fast_forward_only": true,
+  "force_push_used": false,
+  "history_check": {
+    "commits_scanned": 3,
+    "historical_paths_scanned": 94,
+    "objects_scanned": 161,
+    "credential_patterns_found": 0,
+    "excluded_paths_verified": [
+      ".env.development.local",
+      "private-data/local-fixtures.json",
+      "node_modules/",
+      ".next/",
+      "tmp/"
+    ]
+  },
+  "ci": "not_configured",
+  "deployment": "not_performed",
+  "verified_source_commit": "3569842caf4803696b3103d38d9469c4e1126d73",
+  "global_git_configuration_changed": false,
+  "credential_values_printed": false,
+  "note": "기존 세 커밋의 첫 업로드 증거다. 이 연결 문서는 별도 기능 단위 커밋으로 기록하고 업로드 후 다시 SHA를 확인한다. 패턴 검사는 전체 보안 수락 검사를 대신하지 않는다."
+}

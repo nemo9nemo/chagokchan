@@ -1,8 +1,8 @@
-# 배포, 운영 환경, 향후 Git 형상관리
+# 배포, 운영 환경, Git 형상관리
 
-결정일: 2026-10-07 / 상태: 운영 기준 결정, 실제 연결·배포 전
+결정일: 2026-10-07 / 갱신일: 2026-10-08 / 상태: 로컬·원격 Git 연결 완료, CI·운영 배포 준비 전
 
-2026-10-08 사용자 요청으로 로컬 Git 저장소와 기능 단위 커밋을 시작한다. 원격 연결·클라우드 프로젝트 생성·유료 서비스 가입·실제 배포는 아직 수행하지 않았다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
+2026-10-08 사용자 요청으로 로컬 Git의 기능 단위 커밋과 공개 원격 저장소 연결·첫 업로드를 완료했다. 지정한 주소는 https://github.com/nemo9nemo/chagokchan.git 이며 origin/main을 추적한다. CI·브랜치 보호·클라우드 프로젝트·유료 서비스·실제 배포는 미설정이다. 커밋 기준은 [기능 단위 커밋](development/git-workflow.md)을 따른다.
 
 외부 도구 사용은 허용되었다. 플러그인 설치·계정 인증·프로젝트 연결 상태와 도구별 연결 시점은 [외부 도구 연결](external-tools.md)에 기록한다. GitHub 플러그인 설치와 이 앱의 원격 저장소 연결은 구분한다.
 
@@ -18,7 +18,7 @@
 | 인증 메일·봇 방어 | 환경별 Resend 발신 설정, Turnstile 키 |
 | 요청 제한 | 환경별 Upstash Redis 또는 엄격히 분리된 키 공간 |
 | Git 연결 전 | 로컬 검증 후 CLI로 스테이징, 검증된 버전만 수동 운영 배포 |
-| Git 연결 후 | GitHub 비공개 저장소 + Actions + Vercel CLI |
+| Git 연결 후 | 사용자 지정 공개 GitHub 저장소 연결 완료. Actions + Vercel CLI는 후속 설정 |
 | 운영 공개 | DB 마이그레이션 → 운영 빌드·검증 → 도메인 연결 |
 
 서울은 DB와 서버 함수의 배치 기준이다. CDN·Google 로그인·인증 메일·로그 등 모든 처리 위치가 국내로 제한된다는 뜻은 아니다. 서비스 개설 시 각 서비스의 실제 처리·보관 설정을 운영 기록에 남긴다. [Vercel 리전](https://vercel.com/docs/regions), [Supabase 리전](https://supabase.com/docs/guides/platform/regions)
@@ -73,22 +73,22 @@ Vercel의 프로젝트·환경별 설정을 구분하고 빌드 시작 전에 AP
 
 Git 없이도 Vercel CLI 배포는 가능하다. 초기 배포를 할 때도 프로젝트와 환경을 명시하고 기본 자동 선택에 맡기지 않는다. [Vercel 배포](https://vercel.com/docs/deployments/overview)
 
-## 향후 Git 연결 결정
+## Git 연결 결과와 후속 결정
 
-GitHub **비공개 저장소**, 기본 브랜치 **main**, 작업 브랜치 **feat/*·fix/*·docs/**를 사용한다. 변경은 PR로 정리하고 검증이 끝난 상태만 main에 병합한다.
+초기 설계는 비공개 저장소를 권장했으나 사용자가 지정한 실제 저장소는 **공개(public) nemo9nemo/chagokchan**이다. 2026-10-08 조회한 공개 범위를 유지해 연결했다. 기본 브랜치는 **main**, 업스트림은 **origin/main**이다. 이후 협업·CI 검토 흐름에는 **feat/*·fix/*·docs/**와 PR을 사용하고 검증된 변경을 main에 반영한다.
 
-비공개 저장소의 보호 브랜치·환경별 비밀을 사용하므로 개인 소유 저장소는 GitHub Pro, 조직 저장소는 Team을 운영 기준으로 선택한다. 실제 가입·저장소 소유자는 연결 시 확인한다. 무료 비공개 저장소에서도 모든 보호 기능이 제공된다고 가정하지 않는다. [보호 브랜치](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+저장소 소유자는 nemo9nemo로 확인했다. 실제 GitHub 가입 플랜·보호 규칙·환경별 배포 비밀은 미확인·미설정이다. 비공개 저장소로 변경할 경우 보호 기능과 필요한 플랜을 다시 확인한다. [보호 브랜치](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
 
 ### 첫 연결 때 할 일
 
 1. 포함할 파일과 비밀 제외 목록을 확인하고 기존 문서를 첫 커밋에 포함한다.
-2. 로컬 저장소를 초기화하고 main을 만든 뒤, 비공개 원격 저장소를 연결한다.
+2. 로컬 main을 준비하고 사용자가 지정한 원격 저장소를 연결한다.
 3. 원격 공개 범위와 업로드 파일을 확인한 다음 첫 push를 한다.
 4. main의 직접 push·강제 push·삭제를 제한하고 필수 CI 결과를 지정한다. 관리자 우회도 기본 허용하지 않는다.
 5. 1인 개발에서는 PR 설명·검사 결과를 본인이 검토한다. 협업자가 생기면 최소 1명의 다른 리뷰어를 요구하고 인증·권한·배포 변경에 CODEOWNERS를 적용한다.
 6. staging·production 환경과 비밀을 분리하고 운영 배포 권한자는 최소 인원으로 지정한다.
 
-저장소 주소·소유자·배포 도메인은 아직 생성하지 않는다. 위 절차를 실제 수행한 뒤 설정 결과를 이 문서에 기록한다.
+첫 연결의 1~3번을 완료했다. GitHub CLI 계정 nemo9nemo의 쓰기 권한, 빈 원격 저장소, 기존 세 커밋의 제외 경로·자격증명 패턴, origin 주소·push·업스트림·원격 SHA 일치를 확인했다. [실행 증거](quality/reports/git-remote-connection-2026-10-08.json)를 남겼다. 4~6번의 브랜치 보호·필수 CI·환경별 배포 설정은 후속 작업이며 배포 도메인은 미정이다.
 
 ### 포함·제외 기준
 
@@ -172,4 +172,4 @@ RPO·RTO는 운영 목표이며 보장된 서비스 수준이 아니다. 일일 
 - Git 연결 시 문서·소스·잠금 파일·마이그레이션·검사가 같은 커밋으로 관리된다.
 - 서비스 소유자, 실제 도메인, 프로젝트 식별자, 적용 플랜과 월 예산을 비밀 없이 기록한다.
 
-현재 단계에서는 이 기준을 문서로 정했으며, 앱·운영 환경을 구축하거나 위 검증을 실행한 상태는 아니다.
+로컬 앱 기반·DB 물리 스키마·초기 데이터·로컬 및 원격 Git은 구축·검증했다. 운영 환경·실제 로그인·통합 수락 검사·배포·복원은 위 기준에 따라 후속 단계에서 수행한다.

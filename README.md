@@ -21,4 +21,4 @@
 - [개발 작업 목록](docs/development/backlog.md)
 - [검증 계획](docs/quality/verification-plan.md)
 
-개발자는 요구사항 → 정책 → ERD·화면·API 계약 → 검증 시나리오 → 구현 → 검증 → 릴리스 순서로 진행한다. 작업 규칙은 [AGENTS.md](AGENTS.md)를 따른다. 2026-10-08 사용자 요청으로 로컬 Git을 초기화하고 기능 단위로 커밋한다. 메시지에 작업·이유·검증·참조를 포함하며 [커밋 기준](docs/development/git-workflow.md)을 따른다. 원격 연결·CI는 후속 단계다.
+개발자는 요구사항 → 정책 → ERD·화면·API 계약 → 검증 시나리오 → 구현 → 검증 → 릴리스 순서로 진행한다. 작업 규칙은 [AGENTS.md](AGENTS.md)를 따른다. 2026-10-08 사용자 요청으로 로컬 Git을 초기화하고 기능 단위로 커밋한다. 메시지에 작업·이유·검증·참조를 포함하며 [커밋 기준](docs/development/git-workflow.md)을 따른다. [GitHub 저장소](https://github.com/nemo9nemo/chagokchan)는 origin/main으로 연결했다. CI 설정은 후속 단계다. [연결 증거](docs/quality/reports/git-remote-connection-2026-10-08.json)를 남겼다.
