@@ -58,7 +58,7 @@ function ConnectionsPanel(props: {
     {props.previewError && <p className="form-error" role="alert">{props.previewError}</p>}
 
     <section className="connection-section" aria-labelledby="invite-heading">
-      <div className="settings-title"><div><p className="eyebrow">ONE-TIME INVITE</p><h3 id="invite-heading">초대 링크 만들기</h3></div><button className="button button-primary" type="button" onClick={props.onCreateInvite}>초대 만들기</button></div>
+      <div className="settings-title invite-heading-row"><div><p className="eyebrow">ONE-TIME INVITE</p><h3 id="invite-heading">초대 링크 만들기</h3></div><button className="button button-primary" type="button" onClick={props.onCreateInvite}>초대 만들기</button></div>
       <p className="field-hint">링크나 코드로 요청을 보낼 수 있어요. 사용 기한은 초대 응답에 표시돼요.</p>
       {props.inviteResult && <div className="invite-secret" role="status">
         <b>이번 탭에서만 확인할 수 있는 초대예요</b>

@@ -39,7 +39,7 @@
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
-| W11 | IN_PROGRESS | W11-A 테마 전환, W11-B1 본문 건너뛰기·목록 로딩 표식·연결 조회 오류 재시도를 구현·검증했다. W11-B2 작은 화면·실기기 읽기 도구·대비, W11-C PWA 정적 캐시가 남았다. [W11-B1 증거](../quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json) |
+| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2의 320/640px 재배치·두 테마 대비를 브라우저에서 수정·검증했다. 실기기 확대·스크린리더·터치 TC-WEB-006과 W11-C PWA 정적 캐시가 남았다. [W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -184,7 +184,11 @@ W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration
 
 로컬 fixture 브라우저에서 키보드 링크의 첫 포커스와 본문 도착 초점을 확인했다. 로컬 Supabase API 게이트웨이만 중단했을 때 연결 GET이 401/503을 반환하고, 화면 접근성 트리에 오류 문구와 “다시 불러오기” 버튼이 나타났다. 게이트웨이 복구 후 버튼을 눌러 다섯 연결 조회가 GET 200으로 복구되고 오류가 사라지는 것을 확인했다. POST/PUT/DELETE 제품 요청은 없었다. 브라우저 AX 출력이 `aria-busy` attribute 자체를 표시하지 않아 네 영역의 source attribute를 별도로 확인하고, 로딩 status는 AX tree에서 확인했다. [W11-B1 검사 증거](../quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json)
 
-W11-B2의 실기기 스크린리더·색상 대비 측정·작은 화면과 큰 글씨 조합은 아직 실행하지 않았다. PWA 공개 정적 캐시와 오프라인 상태 표현은 W11-C다.
+## W11-B2 작은 화면·대비 브라우저 검사
+
+320px·640px 뷰포트에서 목표 목록/상세·연결·받은 공유판·휴지통을 확인했다. 모바일 주요 메뉴를 2열로 바꾸고 네 항목을 모두 보이게 했으며 44px 높이를 확보했다. 초대 버튼은 좁은 화면에서 헤더 아래에 놓이도록 조정했다. 두 테마의 렌더링 글자 대비를 확인해 낮은 보조 문구 색상을 어둡게 했고, 브라우저 측정 대상에는 기준 이하 텍스트가 없었다. [검사 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json)
+
+이 로컬 브라우저로 실제 200% 확대 조작, VoiceOver/TalkBack, 기기 터치를 실행하지 않았다. 해당 검사는 `TC-WEB-006`으로 `not_run` 상태에 두고 W11-B2를 진행 중으로 유지한다. 다음은 W11-C 공개 정적 파일 캐시·오프라인 경계다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

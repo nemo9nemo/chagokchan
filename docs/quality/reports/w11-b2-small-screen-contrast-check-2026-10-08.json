@@ -1,0 +1,105 @@
+{
+  "verified_at": "2026-10-08T12:39:45Z",
+  "work_item": "W11-B2",
+  "status": "browser_scope_passed_device_scope_pending",
+  "scope": "responsive_reflow_and_rendered_text_contrast",
+  "source_basis": {
+    "base_commit": "f9c52c09f202350271542dbf3c47bd6a97f1d8b1",
+    "format": "SHA-256 per implementation, test case, design, progress, handoff, verification plan, README and change record sources; excludes this report.",
+    "files": [
+      { "path": "src/app/client-app.tsx", "sha256": "bb72cebe7e06dc6b3887c3a8bf9cb0d800ec05e9dc107fef486f1d11d838de27" },
+      { "path": "src/app/globals.css", "sha256": "f88089e5f7fa7eb50c138dc6570ab6f58f78a1a9b3901bbec5a9b87fad9f8ddf" },
+      { "path": "docs/quality/test-cases.json", "sha256": "813a1f4b94e82b9f81a6a7c36a738fe044e4cbbb50face45992952988667267a" },
+      { "path": "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md", "sha256": "aae4c5027a1f2bbd19bc2caeeb4c308b7942709819ca5f617a62198eb2266511" },
+      { "path": "docs/development/backlog.md", "sha256": "009770f8bda482e7d87e5a38bedb095dbcb144b5e31e3026d26f430bd53a2071" },
+      { "path": "docs/development/artifact-register.json", "sha256": "4bc1c95f47a51ae77efa297ffc2d7a6a8fa89442ea999c1009dc3b60763f79a9" },
+      { "path": "docs/development/codex-project-handoff.md", "sha256": "ac26e1190e45c7b1f0fbd700881ddbd7673a394d053514014e950437b044ae49" },
+      { "path": "docs/development/README.md", "sha256": "fd1bcb160ef1476fb2fb7dddf4bcf1bd0af294078a34bba84df5a96ba0ca0ad1" },
+      { "path": "docs/design/user-flows.md", "sha256": "f4f484ea9e4606f817c56c0d8a871ea1743ff686c0778e52ea04e4f3446465ac" },
+      { "path": "docs/quality/verification-plan.md", "sha256": "40f3addec8fe2b858d972f08bf1e08fa9acfce91ee46b5b098128bb7a833a067" },
+      { "path": "README.md", "sha256": "27ef9c7ed850450b9ff531a9aef61a036dc18ec7a073eae5d15851ced7dbd287" }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "runtime_versions": {
+      "project_script_node": "24.19.0",
+      "default_shell_node": "22.14.0",
+      "pnpm": "11.19.0",
+      "next": "16.4.0"
+    },
+    "auth_mode": "local_fixture; actor A synthetic Auth-issued session",
+    "browser": "Codex In-app Browser",
+    "database_host_binding": "127.0.0.1",
+    "api_gateway": "supabase_kong_chagokchan"
+  },
+  "commands": {
+    "check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 90,
+      "typecheck": "passed",
+      "unit_tests": 109,
+      "unit_tests_passed": 109,
+      "artifact_check": "passed",
+      "planned_test_cases": 73,
+      "artifact_check_registered_paths": 275,
+      "local_markdown_links": 479,
+      "json_files": 37,
+      "openapi_paths": 55,
+      "openapi_local_references": 700,
+      "traceability_cases": 73
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "next": "16.4.0",
+      "route_entries": 36
+    }
+  },
+  "browser_smoke": {
+    "status": "passed",
+    "viewport_overrides_css_px": [320, 640],
+    "screens": [
+      "goal_list",
+      "goal_detail",
+      "connections",
+      "received_shared_boards",
+      "trash"
+    ],
+    "layout": {
+      "horizontal_overflow": false,
+      "all_four_primary_navigation_buttons_visible": true,
+      "primary_navigation_button_minimum_height_px": 44,
+      "invite_create_button_wrapped_or_clipped": false,
+      "browser_widths_checked": [320, 640]
+    },
+    "theme_contrast": {
+      "themes_checked": ["garden", "grape"],
+      "screen_theme_coverage": {
+        "both_themes": ["goal_detail", "connections", "received_shared_boards", "trash"],
+        "garden_only": ["goal_list"],
+        "garden_all_screens_at_640px": true
+      },
+      "measurement": "Rendered text foreground and effective computed solid ancestor backgrounds; 4.5:1 for normal text and 3:1 for large text; aria-hidden decorative marks excluded.",
+      "observed_failures_after_fix": 0,
+      "invite_code_placeholder_garden_ratio": 6.21,
+      "text_muted_garden": "#54645b",
+      "text_muted_grape": "#65596c"
+    },
+    "product_mutation_controls_activated": false,
+    "fixture_data_mutated": false
+  },
+  "test_cases": {
+    "TC-WEB-005": "passed",
+    "TC-WEB-006": "not_run",
+    "product_acceptance_cases_executed": 0
+  },
+  "limitations": {
+    "actual_browser_zoom_control_executed": false,
+    "real_device_screen_reader_executed": false,
+    "real_device_touch_flow_executed": false,
+    "physical_device_suite_complete": false,
+    "reason": "This local browser session does not provide iOS/Android devices or VoiceOver/TalkBack. The 640px viewport checks layout at the corresponding narrow CSS width but is not an actual browser zoom test."
+  }
+}
