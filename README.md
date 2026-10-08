@@ -7,6 +7,7 @@
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 
 - [개발 순서·현재 진행표](docs/development/backlog.md) — 작업 완료마다 상태와 검사 근거를 갱신한다.
+- [Codex 프로젝트 개발 인계](docs/development/codex-project-handoff.md) — W06 재개 순서와 미검증 초안 위치.
 - [로그인 없이 사용하는 로컬 개발](docs/development/local-development.md)
 - [개발 환경 정책](policies/development-policy.json)
 

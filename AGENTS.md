@@ -4,7 +4,7 @@
 
 한국어로 소통한다. 첫 출시는 성인 개인 사용자 중심이며 한국 가입 기준은 만 19세 이상 자기 확인이다. 목표 주인은 한 사람이며 목표별 개인판·선택 공유판의 칭찬 개수는 독립적이다. 지인 연결과 목표별 판 권한은 별개다.
 
-현재 단계와 다음 작업은 docs/development/artifact-register.json, docs/development/backlog.md에서 확인한다. 요구사항·정책·설계 파일 생성과 기능 구현·검증 완료를 구분한다. 구현되지 않은 기능과 실행하지 않은 검사를 완료로 표시하지 않는다.
+현재 단계와 다음 작업은 docs/development/artifact-register.json, docs/development/backlog.md에서 확인한다. 프로젝트에서 이어서 개발할 때 docs/development/codex-project-handoff.md도 읽고 W06 미적용 초안과 실제 완료 범위를 구분한다. 요구사항·정책·설계 파일 생성과 기능 구현·검증 완료를 구분한다. 구현되지 않은 기능과 실행하지 않은 검사를 완료로 표시하지 않는다.
 
 개발의 기준 경로는 C:\Users\love0\nemo9Dev\chagokchan이다. 이전 경로는 참고 사본이며 복사 검증 후 새 경로에서만 개발 산출물과 상태를 갱신한다. 작업별 상태는 docs/development/backlog.md가 기준이다. 각 작업 완료 시 상태·완료 범위·검사 근거를 갱신하고 사용자에게 갱신한 진행표를 보여준다. 상위 단계는 등록부에 일치시킨다.
 

@@ -30,7 +30,7 @@
     {
       "id": "S05",
       "name": "DB·권한·로컬 사용자",
-      "status": "in_progress_physical_schema_fixtures_verified"
+      "status": "in_progress_physical_verified_rpc_drafts_unapplied"
     },
     {
       "id": "S06",
@@ -109,7 +109,8 @@
         "docs/development/backlog.md",
         "docs/development/git-workflow.md",
         ".githooks/commit-msg",
-        "scripts/check-commit-message.mjs"
+        "scripts/check-commit-message.mjs",
+        "docs/development/codex-project-handoff.md"
       ]
     },
     {
@@ -203,7 +204,8 @@
         "docs/decisions/ADR-0003-release-name.md",
         "docs/changes/2026-10-08-app-foundation.md",
         "docs/changes/2026-10-08-database-foundation.md",
-        "docs/changes/2026-10-08-git-connection.md"
+        "docs/changes/2026-10-08-git-connection.md",
+        "docs/changes/2026-10-08-codex-project-handoff.md"
       ]
     },
     {
@@ -239,7 +241,8 @@
         "docs/quality/reports/artifacts-check-2026-10-08-development.json",
         "docs/quality/reports/foundation-check-2026-10-08.json",
         "docs/quality/reports/physical-database-check-2026-10-08.json",
-        "docs/quality/reports/git-remote-connection-2026-10-08.json"
+        "docs/quality/reports/git-remote-connection-2026-10-08.json",
+        "docs/quality/reports/project-handoff-preparation-2026-10-08.json"
       ]
     },
     {
@@ -416,7 +419,15 @@
     "transfer_status": "verified",
     "transfer_record": "docs/quality/reports/workspace-transfer-2026-10-08.json",
     "progress_source": "docs/development/backlog.md",
-    "verified_at": "2026-10-07T22:52:36.1488226Z"
+    "verified_at": "2026-10-07T22:52:36.1488226Z",
+    "project_handoff": {
+      "status": "prepared_user_app_registration_pending",
+      "document": "docs/development/codex-project-handoff.md",
+      "preparation_report": "docs/quality/reports/project-handoff-preparation-2026-10-08.json",
+      "draft_directory": "tmp/w06-draft",
+      "draft_state": "unapplied_untested_git_ignored",
+      "continuation_work_item": "W06"
+    }
   },
   "development_auth": {
     "policy": "policies/development-policy.json",

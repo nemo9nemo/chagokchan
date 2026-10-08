@@ -1,0 +1,54 @@
+{
+  "prepared_at": "2026-10-08T02:30:10.028Z",
+  "scope": "project_handoff_documents_and_unapplied_draft_transfer_only",
+  "source_basis_commit": "229056f66a1534e479584b626af6e4bcff783076",
+  "canonical_workspace": "C:\\Users\\love0\\nemo9Dev\\chagokchan",
+  "github_repository": "https://github.com/nemo9nemo/chagokchan",
+  "remote_head_matched_before_handoff": true,
+  "codex_project_registered_by_tool": false,
+  "codex_project_registration_status": "user_app_action_needed",
+  "current_chat_cwd": "C:\\Users\\love0\\Documents\\Codex\\2026-10-07\\new-chat",
+  "draft_copy_hashes_verified": true,
+  "files": [
+    {
+      "file": "scripts/test-local-rpc.mjs",
+      "sha256": "b837366aae2ec44fdd9321a6d01d1a4a6cd80e490241de7c752aa8c14e791bf9",
+      "copied_hash_matched": true,
+      "applied": false,
+      "tests_executed": false
+    },
+    {
+      "file": "supabase/migrations/20261008020500_session_rpc_boundary.sql",
+      "sha256": "dd770d1b489a4fbf547ff53ed72482167ca0859267bb715fa0ed3c75d5ff13d1",
+      "copied_hash_matched": true,
+      "applied": false,
+      "tests_executed": false
+    },
+    {
+      "file": "supabase/tests/001_physical_integrity.test.sql",
+      "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d",
+      "copied_hash_matched": true,
+      "applied": false,
+      "tests_executed": false
+    },
+    {
+      "file": "supabase/tests/002_rpc_boundary.test.sql",
+      "sha256": "8ba82dcb508f85c39658167242ecb145fbcb040e987bbe02a8c7ca11d321f95b",
+      "copied_hash_matched": true,
+      "applied": false,
+      "tests_executed": false
+    }
+  ],
+  "verified_database_state": {
+    "migration_versions": [
+      "20261008013000"
+    ],
+    "boundary_owner_roles": 0,
+    "get_me_exists": false,
+    "app_tables": 18,
+    "local_fixture_sessions": 0
+  },
+  "database_changes_performed": false,
+  "new_runtime_or_business_tests_executed": 0,
+  "real_login_tests_executed": 0
+}

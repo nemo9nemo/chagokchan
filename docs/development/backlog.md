@@ -22,7 +22,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W03 | 개발 중 무로그인 사용 정책 | DONE | 사용자 결정·W01 | 로컬 가상 사용자·배포 분리·실제 로그인 적용 시점 | **설계 완료**. [개발 정책](../../policies/development-policy.json)·[로컬 개발](local-development.md)·[ADR-0004](../decisions/ADR-0004-local-development-auth.md). 실행 코드는 W07 |
 | W04 | 개발 환경·앱 기반·로컬 DB 준비 | DONE | W02, W03. 다음 작업 | 고정 Node/pnpm·package/lock·타입/린트·Supabase 설정. 앱 빌드·DB 기동 재현 | **완료 2026-10-08**. 설치·린트·타입·환경/포트 27/27·빌드·HTTP·PostgreSQL 17.11·Auth/REST·포트 127.0.0.1 확인. [검사 증거](../quality/reports/foundation-check-2026-10-08.json) |
 | W05 | DB 물리 설계·마이그레이션·가상 데이터 | DONE | W04 | ERD를 SQL·제약·인덱스로 구현. 빈 로컬 DB 적용·A/B/C 초기 데이터 재현 | **완료 2026-10-08**. 빈 DB 적용·18테이블/ERD 컬럼·A/B/C·DB 51/51·준비 재실행 보존/환경 차단·소스 32/32·빌드. [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json) |
-| W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | TODO | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | 기본 RLS·직접 권한 거절 적용. 업무 RPC·현재 세션·관계 권한·집계/동시성 검사 미구현 |
+| W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | IN_PROGRESS | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | 세션/get_me·참조/불변 조건 초안 작성. DB 미적용·W06 검사 미실행. [프로젝트 인계](codex-project-handoff.md)에서 재개 |
 | W07 | 서버 API 기반·로컬 사용자 연결 | TODO | W03, W06 | 로그인 화면 없이 A 사용, B/C로 같은 RPC/RLS 검사. 입력·CSRF·응답 제한·배포 차단 검증 | 로컬 사용자 해석기·API 미구현 |
 | W08 | 개인 목표·셀프 칭찬·회차·정리 | TODO | W07 | 목표→개인 칭찬→완성→지난 회차·취소. REQ-002/003/007/012 검증 | 화면·API 미구현 |
 | W09 | 사람 연결·판 권한·공유 칭찬 | TODO | W07, W08 | 초대→요청→수락→판 grant→칭찬. 연결만 된 B·무관한 C 거절 | REQ-004/005/006 미구현 |
