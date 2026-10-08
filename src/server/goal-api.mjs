@@ -3,7 +3,7 @@ import { ApiRequestError, getCsrfSigningSecret, validateMutationRequest } from "
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const GOAL_STATUSES = new Set(["active", "completed", "archived"]);
-const GOAL_TRANSITION_RPCS = new Map([["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"]]);
+const GOAL_TRANSITION_RPCS = new Map([["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"], ["delete", "delete_goal"], ["restore", "restore_goal"]]);
 
 function exactObject(value, fields) {
   return value !== null && typeof value === "object" && !Array.isArray(value) &&
@@ -178,6 +178,19 @@ export function validateBunchesQuery(url) {
   return { p_cursor: cursor, p_limit: limit };
 }
 
+export function validateTrashGoalsQuery(url) {
+  const params = url.searchParams;
+  if ([...params.keys()].some((key) => !["cursor", "limit"].includes(key)) ||
+      ["cursor", "limit"].some((key) => params.getAll(key).length > 1)) invalidInput();
+  const cursor = params.get("cursor");
+  if (cursor !== null && (cursor.length < 1 || cursor.length > 512 || !/^[A-Za-z0-9_-]+$/.test(cursor))) invalidInput();
+  const rawLimit = params.get("limit");
+  const limit = rawLimit === null ? 20 : Number(rawLimit);
+  if (rawLimit !== null && !/^\d+$/.test(rawLimit)) invalidInput();
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 50) invalidInput();
+  return { p_cursor: cursor, p_limit: limit };
+}
+
 function projectGoalSummary(value) {
   const fields = ["id", "title", "private_description", "status", "revision", "created_at", "completed_at", "archived_at"];
   if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || !UUID.test(value.id) ||
@@ -206,6 +219,26 @@ function projectGoalsPage(value) {
     throw new Error("Goal list response did not match its allowlist.");
   }
   return { items: value.items.map(projectGoalSummary), next_cursor: value.next_cursor };
+}
+
+function projectTrashGoal(value) {
+  const fields = ["id", "title", "deleted_at", "purge_after", "revision"];
+  if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || !UUID.test(value.id) ||
+      typeof value.title !== "string" || [...value.title].length < 1 || [...value.title].length > 80 ||
+      !isTimestamp(value.deleted_at) || !isTimestamp(value.purge_after) ||
+      Date.parse(value.purge_after) <= Date.parse(value.deleted_at) || !Number.isInteger(value.revision) || value.revision < 2) {
+    throw new Error("Trash goal response did not match its allowlist.");
+  }
+  return { id: value.id, title: value.title, deleted_at: value.deleted_at, purge_after: value.purge_after, revision: value.revision };
+}
+
+function projectTrashGoalsPage(value) {
+  if (!exactObject(value, ["items", "next_cursor"]) || Object.keys(value).length !== 2 ||
+      !Array.isArray(value.items) || value.items.length > 50 ||
+      !(value.next_cursor === null || (typeof value.next_cursor === "string" && /^[A-Za-z0-9_-]{1,512}$/.test(value.next_cursor)))) {
+    throw new Error("Trash goal list response did not match its allowlist.");
+  }
+  return { items: value.items.map(projectTrashGoal), next_cursor: value.next_cursor };
 }
 
 function projectBunchesPage(value) {
@@ -283,6 +316,18 @@ export async function listGoalsResponse(url, client) {
     const { data, error } = await client.rpc("list_goals", input);
     rpcError(error);
     return jsonResponse(projectGoalsPage(data), 200, requestId);
+  } catch (error) {
+    return errorResponse(error, requestId);
+  }
+}
+
+export async function listTrashGoalsResponse(url, client) {
+  const requestId = randomUUID();
+  try {
+    const input = validateTrashGoalsQuery(url);
+    const { data, error } = await client.rpc("list_trash_goals", input);
+    rpcError(error);
+    return jsonResponse(projectTrashGoalsPage(data), 200, requestId);
   } catch (error) {
     return errorResponse(error, requestId);
   }

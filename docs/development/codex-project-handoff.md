@@ -38,7 +38,7 @@
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
-| W10 | IN_PROGRESS | W10-A 소식·보낸함 읽기 API 완료: unit 107/107·A/B/C API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 252/252. 다음 W10-B 목표 휴지통 API/UI. 계정 재인증은 W12/W13 |
+| W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. 다음 작업은 W11 테마·오류 UX·접근성·PWA |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -160,6 +160,16 @@ W09-C 완료 당시 다음 단계였던 W10에 착수해 W10-A를 완료했다. 
 신규 `TC-API-010` handler unit 7/7, A/B/C 실제 local Auth API 각 11/11, W06-D1 실제 Auth session RPC 회귀 4/4, 전체 DB 252/252를 확인했다. 로컬 API 검사는 제품 fixture를 쓰지 않았고, lifecycle probe cleanup·fixture snapshot 보존을 확인했다. check/build 및 SHA-256은 [W10-A 검사 증거](../quality/reports/w10-a-news-sent-api-check-2026-10-08.json)에 기록한다. 실제 route mutation의 성공 쓰기·UI09 제품 E2E는 미실행이다.
 
 다음은 W10-B 본인 목표 휴지통·복구 API/UI다. 계정 탈퇴 API의 실제 재인증·세션 폐기는 W12/W13에 구현한다.
+
+## W10-B 목표 휴지통·복구 API/UI 완료 기록
+
+기존 적용 migration을 수정하지 않고 `20261008024900_goal_delete_retry_is_idempotent.sql`을 추가했다. 목표가 이미 삭제된 경우 revision 비교보다 먼저 소유자·삭제 상태를 확인해 같은 원래 revision의 재요청을 replay한다. 삭제 시각·30일 purge 기한·revision은 그대로 유지하고, 최초 삭제 때 회수한 공유판 권한은 복구하지 않는다.
+
+DELETE `/api/v1/goals/{goal_id}`, POST `/api/v1/goals/{goal_id}/restore`, GET `/api/v1/trash/goals`를 기존 Auth-scoped 업무 RPC에 연결했다. 목록은 제목·삭제 시각·파기 예정 시각·revision만 cursor로 반환한다. UI10에서 목표 휴지통 이동·목록·복구, 30일 정책과 권한 미복구 안내, 삭제 응답 불확실 시 같은 revision 재시도, 복구 응답 불확실 시 목록 재조회와 revision 갱신을 제공한다.
+
+검사는 신규 `TC-API-011`, handler unit 포함 전체 unit 109/109, 새 pgTAP 014 5/5·전체 DB 257/257, W06-D1 실제 Auth session lifecycle 4/4, A/B/C local Auth trash API 각 11/11(제품 fixture 쓰기 0), 정적 산출물 검사, Biome, typecheck, `build:check`로 기록한다. UI 화면은 로컬 Auth에서 휴지통 navigation·빈 목록·기한 안내를 읽기 전용 smoke로 확인했다. 브라우저의 목표 삭제·복구 submit은 기존 fixture를 바꾸므로 미실행이다. 실제 Google/OTP 로그인·운영 독립 삭제 원장·백업 복원도 통과로 간주하지 않는다. [W10-B 검사 증거](../quality/reports/w10-b-goal-trash-api-ui-check-2026-10-08.json)
+
+W10-A/B 기능은 완료했다. W10-C 계정 탈퇴 HTTP 재인증 orchestration은 사용자의 actual-login schedule에 따라 W12/W13으로 유예하며, W11 테마·오류 UX·접근성·PWA를 다음 진행 단위로 둔다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

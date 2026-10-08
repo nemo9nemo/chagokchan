@@ -6,6 +6,7 @@ import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idemp
 type GoalStatus = "active" | "completed" | "archived";
 type Bunch = { id: string; cycle_no: number; target_count: number; valid_count: number; progress_state: "incomplete" | "complete"; completed_at: string | null };
 type GoalSummary = { id: string; title: string; private_description: string | null; status: GoalStatus; revision: number; created_at: string; completed_at: string | null; archived_at: string | null };
+type TrashGoal = { id: string; title: string; deleted_at: string; purge_after: string; revision: number };
 type Board = { viewer_role: "owner"; id: string; goal_id: string; kind: "personal" | "shared"; revision: number; next_target_count: number; shared_title: string | null; shared_description: string | null; current_bunch: Bunch | null };
 type ContributorBoard = { viewer_role: "contributor"; id: string; kind: "shared"; shared_title: string; shared_description: string | null; owner: { user_id: string; nickname: string | null; avatar_key: string | null }; goal_state: GoalStatus; current_bunch: Bunch | null; can_praise: boolean };
 type GoalDetail = { goal: GoalSummary; boards: Board[] };
@@ -19,7 +20,7 @@ type ConnectionRequest = { id: string; direction: "incoming" | "outgoing"; other
 type Block = { id: string; blocked_user: Profile; created_at: string };
 type BoardMember = { user: Profile; role: "contributor"; status: "active" | "revoked"; connection_generation: number };
 type ConnectionInvite = { id: string; link_path: string; code: string; expires_at: string };
-type WorkspaceView = "goals" | "connections" | "shared";
+type WorkspaceView = "goals" | "connections" | "shared" | "trash";
 
 class ApiFailure extends Error {
   status: number;
@@ -109,6 +110,24 @@ function ConnectionsPanel(props: {
         {props.blocks.map((item) => <li key={item.id}><div><b>{displayName(item.blocked_user)}</b><span>차단 중</span></div><button className="text-button" type="button" onClick={() => props.onRevokeBlock(item)}>차단 해제</button></li>)}
       </ul>}
     </section>
+  </section>;
+}
+
+function TrashPanel(props: {
+  goals: TrashGoal[]; cursor: string | null; loading: boolean; error: string; restoringId: string;
+  onRefresh: () => void; onMore: () => void; onRestore: (goal: TrashGoal) => void;
+}) {
+  return <section className="content-card connection-center trash-center" aria-labelledby="trash-heading">
+    <p className="eyebrow">GOAL TRASH</p><h2 id="trash-heading">휴지통</h2>
+    <p className="section-intro">삭제한 목표는 30일 동안 복구할 수 있어요. 기한이 지나면 자동 정리 대상이 됩니다. 복구해도 공유 권한은 돌아오지 않아요.</p>
+    {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
+    {props.loading && props.goals.length === 0 ? <p className="loading-inline" role="status">휴지통을 불러오고 있어요.</p> : null}
+    {!props.loading && props.goals.length === 0 && !props.error ? <div className="empty-records"><b aria-hidden="true">⌑</b><h3>휴지통이 비어 있어요</h3><p>삭제한 목표가 여기에 표시됩니다.</p></div> : null}
+    {props.goals.length > 0 && <ul className="trash-list">{props.goals.map((goal) => <li key={goal.id}>
+      <div className="trash-goal-copy"><b>{goal.title}</b><span>삭제 {shortDate(goal.deleted_at)} · {shortDate(goal.purge_after)}까지 복구 가능</span></div>
+      <button className="button button-secondary" type="button" disabled={props.restoringId === goal.id} onClick={() => props.onRestore(goal)}>{props.restoringId === goal.id ? "복구 중…" : "목표 복구"}</button>
+    </li>)}</ul>}
+    {props.cursor && <button className="button button-secondary button-wide" type="button" onClick={props.onMore}>휴지통 더 보기</button>}
   </section>;
 }
 
@@ -241,6 +260,11 @@ export default function ChagokchanApp() {
   const [goalCursor, setGoalCursor] = useState<string | null>(null);
   const [loadingGoals, setLoadingGoals] = useState(true);
   const [goalListError, setGoalListError] = useState("");
+  const [trashGoals, setTrashGoals] = useState<TrashGoal[]>([]);
+  const [trashCursor, setTrashCursor] = useState<string | null>(null);
+  const [trashLoading, setTrashLoading] = useState(false);
+  const [trashError, setTrashError] = useState("");
+  const [restoringGoalId, setRestoringGoalId] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
   const selectedGoalIdRef = useRef<string | null>(null);
   const [detail, setDetail] = useState<GoalDetail | null>(null);
@@ -258,6 +282,8 @@ export default function ChagokchanApp() {
   const goalRequestSeq = useRef(0);
   const [showCreate, setShowCreate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [deleteAttempt, setDeleteAttempt] = useState<{ goalId: string; expected_revision: number } | null>(null);
+  const [deletingGoal, setDeletingGoal] = useState(false);
   const [goalDraft, setGoalDraft] = useState({ title: "", description: "", personalTarget: 20, sharedEnabled: false, sharedTitle: "", sharedDescription: "", sharedTarget: 10 });
   const [goalAttempt, setGoalAttempt] = useState<IdempotentAttempt | null>(null);
   const [goalSending, setGoalSending] = useState(false);
@@ -345,10 +371,29 @@ export default function ChagokchanApp() {
     }
   }, [selectedSharedBoard]);
 
+  const loadTrashGoals = useCallback(async (cursor: string | null = null, append = false) => {
+    if (!append) setTrashLoading(true);
+    setTrashError("");
+    try {
+      const query = new URLSearchParams({ limit: "50" });
+      if (cursor) query.set("cursor", cursor);
+      const page = await apiJson<Page<TrashGoal>>(`/api/v1/trash/goals?${query.toString()}`);
+      setTrashGoals((previous) => append ? [...previous, ...page.items] : page.items);
+      setTrashCursor(page.next_cursor);
+      return page;
+    } catch (error) {
+      setTrashError(errorMessage(error));
+      return null;
+    } finally {
+      setTrashLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (workspaceView === "connections") void refreshConnectionCenter();
     if (workspaceView === "shared") void loadSharedBoards();
-  }, [workspaceView, refreshConnectionCenter, loadSharedBoards]);
+    if (workspaceView === "trash") void loadTrashGoals();
+  }, [workspaceView, refreshConnectionCenter, loadSharedBoards, loadTrashGoals]);
 
   useEffect(() => {
     const inviteHash = new URLSearchParams(window.location.hash.slice(1));
@@ -824,6 +869,51 @@ export default function ChagokchanApp() {
     }
   }
 
+  async function deleteGoal(retry = false) {
+    if (!detail || deletingGoal) return;
+    const attempt = deleteAttempt?.goalId === detail.goal.id ? deleteAttempt : { goalId: detail.goal.id, expected_revision: detail.goal.revision };
+    if (!retry && !window.confirm("이 목표를 휴지통으로 옮길까요? 30일 안에 복구할 수 있어요. 공유판 권한은 즉시 회수되며 복구해도 돌아오지 않습니다.")) return;
+    setDeletingGoal(true);
+    setDetailError("");
+    try {
+      await mutate(`/api/v1/goals/${attempt.goalId}`, "DELETE", { expected_revision: attempt.expected_revision });
+      setDeleteAttempt(null);
+      selectedGoalIdRef.current = null;
+      setSelectedGoalId(null);
+      setDetail(null);
+      setShowSettings(false);
+      setWorkspaceView("trash");
+      setNotice("목표를 휴지통으로 옮겼어요. 공유판 권한은 회수되어 복구되지 않습니다.");
+      await Promise.all([loadGoals(), loadTrashGoals()]);
+    } catch (error) {
+      setDeleteAttempt(error instanceof ApiFailure && error.status < 500 ? null : attempt);
+      setDetailError(errorMessage(error));
+    } finally {
+      setDeletingGoal(false);
+    }
+  }
+
+  async function restoreGoal(goal: TrashGoal) {
+    if (restoringGoalId) return;
+    setRestoringGoalId(goal.id);
+    setTrashError("");
+    try {
+      await mutate(`/api/v1/goals/${goal.id}/restore`, "POST", { expected_revision: goal.revision });
+      setNotice("목표를 보관함으로 복구했어요. 공유 권한은 새로 선택해야 합니다.");
+      await Promise.all([loadTrashGoals(), loadGoals()]);
+    } catch (error) {
+      const latest = await loadTrashGoals();
+      if (latest?.items.some((item) => item.id === goal.id)) {
+        setTrashError(`${errorMessage(error)} 휴지통 목록을 새로 확인했어요. 변경된 revision으로 다시 시도할 수 있습니다.`);
+      } else if (latest) {
+        setTrashError("목표가 휴지통에서 사라졌어요. 목표 목록을 새로고침해 상태를 확인해 주세요.");
+        await loadGoals();
+      }
+    } finally {
+      setRestoringGoalId("");
+    }
+  }
+
   async function savePraiseEdit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!editingPraise) return;
@@ -886,7 +976,7 @@ export default function ChagokchanApp() {
           <div className="sidebar-heading">
             <div>
               <p className="eyebrow">CHAGOKCHAN</p>
-              <h1>{workspaceView === "goals" ? "내 목표" : workspaceView === "connections" ? "연결" : "받은 공유판"}</h1>
+              <h1>{workspaceView === "goals" ? "내 목표" : workspaceView === "connections" ? "연결" : workspaceView === "shared" ? "받은 공유판" : "휴지통"}</h1>
             </div>
             {workspaceView === "goals" && <button className="icon-button add-button" type="button" aria-label="새 목표 만들기" onClick={() => { setShowCreate(true); setGoalFormError(""); setGoalAttempt(null); }}>
               <span aria-hidden="true">＋</span>
@@ -897,6 +987,7 @@ export default function ChagokchanApp() {
             <button type="button" aria-current={workspaceView === "goals" ? "page" : undefined} className={workspaceView === "goals" ? "active" : ""} onClick={() => setWorkspaceView("goals")}>내 목표</button>
             <button type="button" aria-current={workspaceView === "connections" ? "page" : undefined} className={workspaceView === "connections" ? "active" : ""} onClick={() => setWorkspaceView("connections")}>연결 관리</button>
             <button type="button" aria-current={workspaceView === "shared" ? "page" : undefined} className={workspaceView === "shared" ? "active" : ""} onClick={() => { setWorkspaceView("shared"); setSelectedSharedBoard(null); }}>받은 공유판</button>
+            <button type="button" aria-current={workspaceView === "trash" ? "page" : undefined} className={workspaceView === "trash" ? "active" : ""} onClick={() => setWorkspaceView("trash")}>휴지통</button>
           </nav>
 
           {workspaceView === "goals" ? <>
@@ -929,7 +1020,7 @@ export default function ChagokchanApp() {
           </nav>
           {goalCursor && <button className="text-button load-more" type="button" onClick={() => void loadMoreGoals()}>목표 더 보기</button>}
           <p className="sidebar-footnote">개인판과 공유판은 각각 따로 쌓여요.</p>
-          </> : <p className="sidebar-footnote">연결과 공유판 권한은 각각 따로 관리해요.</p>}
+          </> : <p className="sidebar-footnote">{workspaceView === "trash" ? "복구 기한은 삭제 후 30일이에요." : "연결과 공유판 권한은 각각 따로 관리해요."}</p>}
         </aside>
 
         <section className="main-panel" aria-label="목표와 기록">
@@ -956,6 +1047,9 @@ export default function ChagokchanApp() {
             onMoreBunches={() => void loadMoreSharedBunches()} onMessage={setPeerMessage} onSubmit={submitPeerPraise}
             onRetryPraises={() => void loadPraises(selectedSharedBoard?.id ?? "", selectedSharedBunchId)}
             onMorePraises={() => void loadPraises(selectedSharedBoard?.id ?? "", selectedSharedBunchId, praiseCursor, true)}
+          /> : workspaceView === "trash" ? <TrashPanel
+            goals={trashGoals} cursor={trashCursor} loading={trashLoading} error={trashError} restoringId={restoringGoalId}
+            onRefresh={() => void loadTrashGoals()} onMore={() => trashCursor && void loadTrashGoals(trashCursor, true)} onRestore={(goal) => void restoreGoal(goal)}
           /> : showCreate ? (
             <section className="content-card create-card" aria-labelledby="create-heading">
               <button className="back-link mobile-only" type="button" onClick={() => setShowCreate(false)}>← 목표 목록</button>
@@ -1005,6 +1099,7 @@ export default function ChagokchanApp() {
                   {detail.goal.status === "active" && <button className="button button-quiet" type="button" onClick={() => void transitionGoal("complete")}>완료</button>}
                   {detail.goal.status !== "archived" && <button className="button button-quiet" type="button" onClick={() => void transitionGoal("archive")}>보관</button>}
                   {detail.goal.status !== "active" && <button className="button button-primary" type="button" onClick={() => void transitionGoal("resume")}>다시 시작</button>}
+                  {deleteAttempt?.goalId === detail.goal.id ? <button className="button button-danger" type="button" disabled={deletingGoal} onClick={() => void deleteGoal(true)}>{deletingGoal ? "확인 중…" : "같은 삭제 다시 확인"}</button> : <button className="button button-quiet danger-link" type="button" disabled={deletingGoal} onClick={() => void deleteGoal()}>{deletingGoal ? "삭제 중…" : "휴지통으로"}</button>}
                 </div>
               </div>
 

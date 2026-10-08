@@ -1,0 +1,218 @@
+{
+  "verified_at": "2026-10-08T11:57:30Z",
+  "work_item": "W10-B",
+  "status": "passed",
+  "scope": "goal_trash_restore_api_ui_and_idempotent_delete_retry",
+  "source_basis": {
+    "base_commit": "f21a4dc0849ad9342ab4ea5b32552f0a32b695bc",
+    "format": "SHA-256 per implementation, migration, unit/local integration checks, API contract, progress, handoff and change record; excludes this report.",
+    "files": [
+      {
+        "path": "src/server/goal-api.mjs",
+        "sha256": "1f2bc29e085282eeeae0fca2cb8a81f7f021cdd37afc26f2233219c7342aac24"
+      },
+      {
+        "path": "src/app/api/v1/goals/[goal_id]/route.ts",
+        "sha256": "bdf3687a86502d9471a849578282cc432988f48e4f794184f02d72ba74435d63"
+      },
+      {
+        "path": "src/app/api/v1/goals/[goal_id]/restore/route.ts",
+        "sha256": "02e7def43b619570e2051b9a7072e0f68adf946f9800a4dcbb5971c94d3049f3"
+      },
+      {
+        "path": "src/app/api/v1/trash/goals/route.ts",
+        "sha256": "9ec1b700c85ba8b155ec3d93921f0d79c1b7dc172b688aeb6bc1d73ef1a156cb"
+      },
+      {
+        "path": "src/app/client-app.tsx",
+        "sha256": "107c2a625b9205dd8cd53483b17b137370fcee13206e355c8bd72a43ecf2f159"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "c3e28a6d0894ce94a23b91482e379b4bb2024d934bb19866abc54dbcd471b0c9"
+      },
+      {
+        "path": "scripts/goal-api.test.mjs",
+        "sha256": "5a9791bc6025381c26c6b2e79d89a5f4f7cee9a203add6694e71b78be6a8729a"
+      },
+      {
+        "path": "scripts/test-local-trash-api.mjs",
+        "sha256": "ee807d2705805dd4f6fc48d72684e05d18fba0d16a4cb29969fb6c0d9fa58505"
+      },
+      {
+        "path": "scripts/test-local-lifecycle-rpc.mjs",
+        "sha256": "470ce4d93884ac1e6cd0191d0744691b67ee2a0dfab684729806fd7ab599232c"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "89e9fc2110a833ce9b8bc0f47f32d6888d71c87e75cfaddf77fa1fcdfc9910da"
+      },
+      {
+        "path": "package.json",
+        "sha256": "41e066a814b8a15a00881824bd9b3fcde26820da8cd697ae74899744e1d4e329"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "e942dd1ca611e0c6bbc8cd6fe818ce552ed848e47ce8272e7417f7b133cb8610"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "381f8077fb81685c3818d8c06f3ff82d8b965837c123b06c10ea7abed506baf6"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w10-b-goal-trash-api-ui.md",
+        "sha256": "5f1eb055143c2942e4034c88c253d45c41fe947214ad5eb7e799e134c1e1322a"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "2b3d92f3175ea323972b326cba328bb791459853ba2d2bfc0012474c4ab412c1"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "ca090c1d3abb67178feab48bb8170b24f0ec79591b502c1a8ba468933d1711e3"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "f5958b1944fe4990287ab12ba83644f208cb83783e516873c6e49c927663e408"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "dd4b9b3f1c3d7a1b35e94f7acb6c992055dd2d8aa8553fa19e6abd806fa3fa63"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "ebde9d792f1e6d702f7ede5b37e1cc45a68a4913b558c47e2d1624942977c491"
+      },
+      {
+        "path": "docs/policies/data-lifecycle.md",
+        "sha256": "ecfd66bf2b3b0466c3b1e452026e2fd69d9d00d1df01774d1b83287c16c50b87"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "5eae70fcb4c342269d2bd4be621786d8a8aa8ebabf0c48aefbd1d863eaf12bf0"
+      },
+      {
+        "path": "supabase/migrations/20261008024900_goal_delete_retry_is_idempotent.sql",
+        "sha256": "3510fef354b9e0dba3931a3fe76040e42cfd6aeccc74a1742d80b948eaa2cca2"
+      },
+      {
+        "path": "supabase/tests/014_business_rpc_goal_delete_retry.test.sql",
+        "sha256": "2a2530cdb10c1db756e97e2ce5c619db67400e50280297e222ce0e3ae03c171c"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "supabase_cli": "2.120.0",
+    "postgresql": "17.11 local disposable Supabase database",
+    "auth_mode": "local_fixture; synthetic Auth-issued sessions",
+    "database_host_binding": "127.0.0.1"
+  },
+  "database_schema": {
+    "new_migration_applied": true,
+    "latest_applied_version": "20261008024900",
+    "regression_suite": "scripts/project.ps1 -Task db:test",
+    "regression_executed": 257,
+    "regression_passed": 257
+  },
+  "commands": {
+    "focused_unit": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 90,
+      "typecheck": "passed",
+      "unit_tests": 109,
+      "unit_tests_passed": 109,
+      "artifact_check": "passed",
+      "artifact_check_registered_paths": 266,
+      "local_markdown_links": 462,
+      "planned_test_cases": 69,
+      "openapi_local_references": 700,
+      "traceability_cases": 69
+    },
+    "api_actor_smoke": {
+      "command": "scripts/project.ps1 -Task api:trash-test",
+      "status": "passed",
+      "actors": {
+        "A": {
+          "executed": 11,
+          "passed": 11
+        },
+        "B": {
+          "executed": 11,
+          "passed": 11
+        },
+        "C": {
+          "executed": 11,
+          "passed": 11
+        }
+      },
+      "total_executed": 33,
+      "product_fixture_writes": 0
+    },
+    "lifecycle_rpc": {
+      "command": "scripts/project.ps1 -Task db:lifecycle-test",
+      "status": "passed",
+      "executed": 4,
+      "passed": 4,
+      "probe_sessions_removed": true,
+      "fixture_data_preserved": true,
+      "service_role_used_for_user_scoped_app_rpc": false,
+      "same_revision_delete_retry_preserved_original_trash_deadline": true
+    },
+    "database": {
+      "command": "scripts/project.ps1 -Task db:test",
+      "status": "passed",
+      "executed": 257,
+      "passed": 257,
+      "physical_integrity": 51,
+      "rpc_boundary": 21,
+      "business_rpc": 185,
+      "new_pgtap_assertions": 5
+    },
+    "local_auth_api": {
+      "command": "scripts/project.ps1 -Task api:me-test",
+      "status": "passed",
+      "actor": "A",
+      "checks": 15,
+      "fixture_credentials_printed": false,
+      "auth_tokens_returned": false
+    },
+    "ui10_browser_read_only_smoke": {
+      "status": "passed",
+      "server": "scripts/project.ps1 -Task dev; local_fixture Auth",
+      "initial_goal_list_http_status": 200,
+      "trash_list_http_status": 200,
+      "observed": [
+        "내 목표에서 휴지통으로 이동",
+        "삭제 후 30일 복구 안내",
+        "복구 시 공유 권한 미복원 안내",
+        "빈 휴지통 상태"
+      ],
+      "ui_delete_or_restore_mutation_submitted": false
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "route_entries": 36,
+      "trash_delete_restore_routes_included": true
+    }
+  },
+  "test_case": {
+    "id": "TC-API-011",
+    "status": "passed",
+    "product_acceptance_cases_executed": 0
+  },
+  "limitations": {
+    "browser_delete_or_restore_to_database_mutation_e2e_cases_executed": 0,
+    "actual_account_deletion_reauth_http_orchestration_verified": false,
+    "independent_deletion_ledger_configured": false,
+    "backup_restore_tested": false,
+    "real_provider_login_tests_executed": 0,
+    "deployed_session_adapter_verified": false,
+    "ci_or_deployment_verified": false
+  }
+}

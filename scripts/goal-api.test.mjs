@@ -6,6 +6,7 @@ import {
   getGoalResponse,
   listBunchesResponse,
   listGoalsResponse,
+  listTrashGoalsResponse,
   projectGoalDetail,
   transitionGoalResponse,
   updateBoardResponse,
@@ -14,6 +15,7 @@ import {
   validateBunchesQuery,
   validateGoalActionInput,
   validateGoalsQuery,
+  validateTrashGoalsQuery,
   validateUpdateBoardInput,
   validateUpdateGoalInput,
 } from "../src/server/goal-api.mjs";
@@ -206,7 +208,7 @@ test("goal transition input and handlers map each fixed action to its revision R
   assert.deepEqual(validateGoalActionInput({ expected_revision: 2 }), { p_expected_revision: 2 });
   assert.throws(() => validateGoalActionInput({ expected_revision: 1, goal_id: goalId }), { status: 400, code: "INVALID_INPUT" });
   assert.throws(() => validateGoalActionInput({ expected_revision: 0 }), { status: 400, code: "INVALID_INPUT" });
-  for (const [action, rpcName] of [["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"]]) {
+  for (const [action, rpcName] of [["complete", "complete_goal"], ["archive", "archive_goal"], ["resume", "resume_goal"], ["delete", "delete_goal"], ["restore", "restore_goal"]]) {
     let call;
     const client = { rpc: async (name, args) => { call = { name, args }; return { data: { id: goalId, replayed: true }, error: null }; } };
     const response = await transitionGoalResponse(goalId, action, verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}/${action}`, "POST", { expected_revision: 2 }), client, { expectedOrigin: origin, secret });
@@ -215,6 +217,45 @@ test("goal transition input and handlers map each fixed action to its revision R
     assert.deepEqual(call, { name: rpcName, args: { p_goal_id: goalId, p_expected_revision: 2 } });
     assert.deepEqual(await response.json(), { id: goalId, replayed: true });
   }
+});
+
+test("trash goals query and response use a bounded minimal owner projection", async () => {
+  assert.deepEqual(validateTrashGoalsQuery(new URL(`${origin}/api/v1/trash/goals`)), { p_cursor: null, p_limit: 20 });
+  assert.deepEqual(validateTrashGoalsQuery(new URL(`${origin}/api/v1/trash/goals?cursor=abc_DEF-12&limit=50`)), { p_cursor: "abc_DEF-12", p_limit: 50 });
+  for (const query of ["limit=0", "limit=51", "limit=no", "cursor=a&cursor=b", "limit=10&limit=20", "status=deleted", "cursor=bad%2Fcursor"]) {
+    assert.throws(() => validateTrashGoalsQuery(new URL(`${origin}/api/v1/trash/goals?${query}`)), { status: 400, code: "INVALID_INPUT" });
+  }
+  let call;
+  const trashGoal = { id: goalId, title: "걷기", deleted_at: "2026-10-08T00:00:00Z", purge_after: "2026-11-07T00:00:00Z", revision: 2 };
+  const client = { rpc: async (name, args) => { call = { name, args }; return { data: { items: [trashGoal], next_cursor: null }, error: null }; } };
+  const response = await listTrashGoalsResponse(new URL(`${origin}/api/v1/trash/goals?limit=4`), client);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.deepEqual(call, { name: "list_trash_goals", args: { p_cursor: null, p_limit: 4 } });
+  assert.deepEqual(await response.json(), { items: [trashGoal], next_cursor: null });
+  const badProjection = await listTrashGoalsResponse(new URL(`${origin}/api/v1/trash/goals`), {
+    rpc: async () => ({ data: { items: [{ ...trashGoal, private_description: "leak" }], next_cursor: null }, error: null }),
+  });
+  assert.equal(badProjection.status, 503);
+});
+
+test("delete and restore handlers require CSRF and allow only the fixed revision body", async () => {
+  let rpcCalled = false;
+  const client = { rpc: async (name, _args) => { rpcCalled = true; return { data: { id: goalId, replayed: name === "delete_goal" }, error: null }; } };
+  const noCsrf = await transitionGoalResponse(goalId, "delete", new Request(`${origin}/api/v1/goals/${goalId}`, {
+    method: "DELETE", headers: { Origin: origin, "Content-Type": "application/json" }, body: JSON.stringify({ expected_revision: 1 }),
+  }), client, { expectedOrigin: origin, secret });
+  assert.equal(noCsrf.status, 403);
+  assert.equal(rpcCalled, false);
+  for (const [action, method, route] of [["delete", "DELETE", ""], ["restore", "POST", "/restore"]]) {
+    const response = await transitionGoalResponse(goalId, action, verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}${route}`, method, { expected_revision: 2 }), client, { expectedOrigin: origin, secret });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+  }
+  const malformed = await transitionGoalResponse(goalId, "delete", verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}`, "DELETE", { expected_revision: 1, force: true }), client, { expectedOrigin: origin, secret });
+  assert.equal(malformed.status, 400);
+  const unsupported = await transitionGoalResponse(goalId, "purge", verifiedMutationRequest(`${origin}/api/v1/goals/${goalId}`, "DELETE", { expected_revision: 1 }), client, { expectedOrigin: origin, secret });
+  assert.equal(unsupported.status, 400);
 });
 
 test("goal transition handler rejects missing CSRF and unexpected RPC response fields", async () => {

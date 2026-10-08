@@ -1562,8 +1562,8 @@
         "tags": [
           "goals"
         ],
-        "description": "목표를 30일 휴지통으로 이동",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "목표를 30일 휴지통으로 이동. 삭제가 반영됐지만 응답을 잃은 경우 같은 revision 재시도는 원래 삭제 결과만 반환하고 삭제 기한을 연장하지 않는다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-010"
@@ -1582,7 +1582,8 @@
           "TC-DELETE-003",
           "TC-DELETE-004",
           "TC-DB-DELETE-001",
-          "TC-DB-DELETE-002"
+          "TC-DB-DELETE-002",
+          "TC-API-011"
         ],
         "parameters": [
           {
@@ -1989,8 +1990,8 @@
         "tags": [
           "goals"
         ],
-        "description": "휴지통 목표 archived 복구",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "기한 안에 휴지통 목표를 archived 상태로 복구한다. 공유판 권한은 복구하지 않는다. 복구 API 연결 후 목록을 재조회한다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -2003,7 +2004,8 @@
           "TC-GOAL-002",
           "TC-CYCLE-004",
           "TC-DELETE-001",
-          "TC-DB-DELETE-001"
+          "TC-DB-DELETE-001",
+          "TC-API-011"
         ],
         "parameters": [
           {
@@ -2095,8 +2097,8 @@
         "tags": [
           "trash"
         ],
-        "description": "본인 휴지통 최소 목록",
-        "x-implementation-status": "database_rpc_implemented_server_api_pending",
+        "description": "본인 휴지통의 제목·삭제 시각·파기 예정 시각·revision만 cursor page로 반환한다. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-010"
@@ -2115,7 +2117,8 @@
           "TC-DELETE-003",
           "TC-DELETE-004",
           "TC-DB-DELETE-001",
-          "TC-DB-DELETE-002"
+          "TC-DB-DELETE-002",
+          "TC-API-011"
         ],
         "parameters": [
           {

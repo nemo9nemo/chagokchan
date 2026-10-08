@@ -218,6 +218,10 @@ try {
     assert.deepEqual(Object.keys(row).sort(), ["deleted_at", "id", "purge_after", "revision", "title"]);
     assert.equal(row.revision, 2);
     assert.ok(new Date(row.purge_after).getTime() > Date.now() + 29 * 86400000);
+    const deletionRetry = ok(await owner.client.rpc("delete_goal", { p_goal_id: goal.id, p_expected_revision: 1 }));
+    assert.deepEqual(deletionRetry, { id: goal.id, replayed: true }, "retry with the original revision returns the committed delete result");
+    const retryTrash = ok(await owner.client.rpc("list_trash_goals", { p_limit: 1 }));
+    assert.deepEqual(retryTrash.items.find((item) => item.id === goal.id), row, "retry does not extend the original 30-day window");
     assert.equal(countFor("select count(*) from public.board_members where board_id=:'board'::uuid and user_id=:'peer'::uuid and status='revoked';\n", { board: goal.boardId, peer: peer.id }), "1");
     const hiddenSent = ok(await peer.client.rpc("list_sent_praises", { p_limit: 50 }));
     assert.equal(hiddenSent.items.length, 0, "deleted goal should hide its sent entries");

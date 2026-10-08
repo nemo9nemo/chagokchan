@@ -1,6 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { getGoalResponse, updateGoalResponse } from "@/server/goal-api.mjs";
+import { getGoalResponse, transitionGoalResponse, updateGoalResponse } from "@/server/goal-api.mjs";
 import { getLocalSessionClient } from "@/server/local-user-session.mjs";
 
 export const runtime = "nodejs";
@@ -36,4 +36,12 @@ export async function PATCH(request: Request, { params }: Context) {
   if (!client) return authRequired(randomUUID());
   const { goal_id } = await params;
   return updateGoalResponse(goal_id, request, client, { expectedOrigin: new URL(process.env.APP_BASE_URL ?? "http://localhost").origin });
+}
+
+export async function DELETE(request: Request, { params }: Context) {
+  let client: Awaited<ReturnType<typeof getLocalSessionClient>> = null;
+  try { client = await getLocalSessionClient(); } catch { return dependencyUnavailable(randomUUID()); }
+  if (!client) return authRequired(randomUUID());
+  const { goal_id } = await params;
+  return transitionGoalResponse(goal_id, "delete", request, client, { expectedOrigin: new URL(process.env.APP_BASE_URL ?? "http://localhost").origin });
 }

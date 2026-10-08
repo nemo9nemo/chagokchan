@@ -42,6 +42,7 @@
     "api:board-test": "node scripts/test-local-board-api.mjs",
     "api:connection-test": "node scripts/test-local-connection-api.mjs",
     "api:news-test": "node scripts/test-local-news-api.mjs",
+    "api:trash-test": "node scripts/test-local-trash-api.mjs",
     "api:security-test": "node --test scripts/api-security.test.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },
