@@ -1,7 +1,7 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S06_w09_connection_and_share_next",
+  "current_stage": "S06_w09_connection_share_completed_w10_next",
   "next_stage": "S07_real_auth_and_integration_verification",
   "implementation_started": true,
   "git_repository_connected": true,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_d_verified_w09_a_relationship_api_verified_w09_b_c_next"
+      "status": "in_progress_w08_a_b1_b2_c_d_and_w09_a_b_c_verified_w10_next"
     },
     {
       "id": "S07",
@@ -69,7 +69,7 @@
     "docker_cli": "29.1.3",
     "docker_engine": "29.1.3",
     "supabase_cli": "2.120.0",
-    "local_database": "w08_c_personal_praise_and_bunch_result_verified",
+    "local_database": "w09_c_shared_board_directory_verified",
     "selected_node": "24.19.0",
     "next": "16.4.0",
     "react": "19.3.0",
@@ -85,20 +85,20 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 66,
-    "application_tests_executed": 99,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_idempotent_retry_units",
+    "planned_test_cases": 67,
+    "application_tests_executed": 100,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_idempotent_retry_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
-    "local_browser_smoke_cases_executed": 1,
-    "database_tests_executed": 247,
+    "local_browser_smoke_cases_executed": 2,
+    "database_tests_executed": 252,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
-    "local_api_tests_executed": 144,
+    "local_api_tests_executed": 150,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
-    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_w06_d2_account_deletion_w08_b1_goal_list_w08_b2_goal_lifecycle_bunch_history_w08_c_personal_praise_result_w09_b_peer_praise_moderation",
-    "business_rpc_tests_executed": 175,
+    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_w06_d2_account_deletion_w08_b1_goal_list_w08_b2_goal_lifecycle_bunch_history_w08_c_personal_praise_result_w09_b_peer_praise_moderation_w09_c_shared_board_directory",
+    "business_rpc_tests_executed": 180,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
@@ -108,7 +108,7 @@
     "local_connection_rpc_tests_executed": 13,
     "w06_c1_report": "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
     "w06_c1_cursor_fix_report": "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
-    "local_shared_board_rpc_tests_executed": 7,
+    "local_shared_board_rpc_tests_executed": 8,
     "w06_c2_report": "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
     "w06_d1_pgtap_tests_executed": 20,
     "w06_d1_local_session_tests_executed": 4,
@@ -116,7 +116,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 28,
+    "technical_cases_passed": 29,
     "w07_a_report": "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json",
     "w07_b_report": "docs/quality/reports/w07-b-api-security-check-2026-10-08.json",
     "w08_a_report": "docs/quality/reports/w08-a-goal-api-check-2026-10-08.json",
@@ -132,8 +132,9 @@
     "local_personal_praise_api_checks_executed": 30,
     "w09_a_report": "docs/quality/reports/w09-a-connection-api-check-2026-10-08.json",
     "local_connection_api_checks_executed": 36,
-    "local_board_api_checks_executed": 36,
-    "w09_b_report": "docs/quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json"
+    "local_board_api_checks_executed": 42,
+    "w09_b_report": "docs/quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json",
+    "w09_c_report": "docs/quality/reports/w09-c-shared-board-ui-check-2026-10-08.json"
   },
   "artifacts": [
     {
@@ -208,7 +209,7 @@
     {
       "id": "ART-008",
       "title": "API 계약",
-      "status": "partially_implemented_through_w09_b_shared_board_and_peer_praise_api",
+      "status": "partially_implemented_through_w09_c_shared_board_ui_and_directory_api",
       "paths": [
         "contracts/openapi.json",
         "docs/contracts/api-contract.md"
@@ -217,7 +218,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "ui02_ui05_basic_implemented_read_only_browser_smoke_passed_other_screens_design_only",
+      "status": "ui02_ui08_basic_implemented_read_only_browser_smoke_passed_remaining_acceptance_pending",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -225,7 +226,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_through_w09_b_api_verification",
+      "status": "partially_executed_w06_through_w09_c_api_and_ui_smoke_verification",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -234,7 +235,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w09_b_shared_board_praise_api",
+      "status": "documented_through_w09_c_shared_board_ui",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -261,7 +262,8 @@
         "docs/changes/2026-10-08-w08-c-personal-praise-api.md",
         "docs/changes/2026-10-08-w08-d-goal-record-ui.md",
         "docs/changes/2026-10-08-w09-a-connection-api.md",
-        "docs/changes/2026-10-08-w09-b-shared-board-praise-api.md"
+        "docs/changes/2026-10-08-w09-b-shared-board-praise-api.md",
+        "docs/changes/2026-10-08-w09-c-shared-board-ui.md"
       ]
     },
     {
@@ -287,7 +289,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_and_w06_w09_b_verification_passed",
+      "status": "static_and_w06_w09_c_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -315,7 +317,8 @@
         "docs/quality/reports/w08-c-personal-praise-api-check-2026-10-08.json",
         "docs/quality/reports/w08-d-goal-record-ui-check-2026-10-08.json",
         "docs/quality/reports/w09-a-connection-api-check-2026-10-08.json",
-        "docs/quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json"
+        "docs/quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json",
+        "docs/quality/reports/w09-c-shared-board-ui-check-2026-10-08.json"
       ]
     },
     {
@@ -340,7 +343,7 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_local_me_goal_praise_connection_apis_and_goal_record_ui_verified",
+      "status": "app_runtime_local_me_goal_praise_connection_shared_board_apis_and_ui_verified",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
@@ -380,19 +383,23 @@
         "src/client/idempotent-request.mjs",
         "scripts/idempotent-request.test.mjs",
         "src/server/connection-api.mjs",
+        "src/server/board-api.mjs",
         "src/server/local-api-route.ts",
         "src/app/api/v1/connections/",
         "src/app/api/v1/connection-invites/",
         "src/app/api/v1/connection-requests/",
         "src/app/api/v1/blocks/",
+        "src/app/api/v1/shared-boards/",
         "scripts/connection-api.test.mjs",
-        "scripts/test-local-connection-api.mjs"
+        "scripts/test-local-connection-api.mjs",
+        "scripts/board-api.test.mjs",
+        "scripts/test-local-board-api.mjs"
       ]
     },
     {
       "id": "ART-017",
       "title": "DB·RLS·RPC·기능 검사",
-      "status": "w06_w09_b_database_rpcs_and_w07_w09_b_local_api_security_verified",
+      "status": "w06_w09_c_database_rpcs_and_w07_w09_c_local_api_security_verified",
       "paths": [
         "scripts/database-task.mjs",
         "scripts/test-local-rpc.mjs",
@@ -431,6 +438,7 @@
         "supabase/migrations/20261008022800_relationship_cursor_line_wrap_fix.sql",
         "supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql",
         "supabase/migrations/20261008023000_connection_list_cursor_boundary_fix.sql",
+        "supabase/migrations/20261008024800_list_my_shared_boards_rpc.sql",
         "supabase/seeds/local-fixtures.sql",
         "supabase/tests/001_physical_integrity.test.sql",
         "supabase/tests/002_rpc_boundary.test.sql",
@@ -438,12 +446,15 @@
         "supabase/tests/004_business_rpc_praise.test.sql",
         "supabase/tests/005_business_rpc_connections.test.sql",
         "supabase/tests/006_business_rpc_shared_board.test.sql",
+        "scripts/test-local-shared-board-rpc.mjs",
+        "supabase/tests/013_business_rpc_shared_board_directory.test.sql",
         "docs/decisions/ADR-0005-local-auth-session-reader.md",
         "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
         "docs/quality/reports/w06-b1-goal-rpc-check-2026-10-08.json",
         "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
         "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
         "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
+        "docs/quality/reports/w09-c-shared-board-ui-check-2026-10-08.json",
         "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
         "docs/development/database-foundation.md",
         "scripts/test-local-lifecycle-rpc.mjs",

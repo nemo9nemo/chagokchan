@@ -134,6 +134,20 @@ export async function listBoardMembersResponse(boardId, url, client) {
   } catch (error) { return errorResponse(error, requestId); }
 }
 
+export async function listMySharedBoardsResponse(url, client) {
+  const requestId = randomUUID();
+  try {
+    const input = validateBoardMembersQuery(url);
+    const { data, error } = await client.rpc("list_my_shared_boards", input);
+    rpcError(error);
+    if (!exactObject(data, ["items", "next_cursor"]) || Object.keys(data).length !== 2 || !Array.isArray(data.items) || data.items.length > 50 ||
+        !(data.next_cursor === null || (typeof data.next_cursor === "string" && /^[A-Za-z0-9_-]{1,512}$/.test(data.next_cursor)))) {
+      throw new Error("Shared board list response did not match its allowlist.");
+    }
+    return jsonResponse({ items: data.items.map(projectBoardView), next_cursor: data.next_cursor }, 200, requestId);
+  } catch (error) { return errorResponse(error, requestId); }
+}
+
 function validateGrantInput(value, boardId, userId) {
   if (typeof boardId !== "string" || !UUID.test(boardId) || typeof userId !== "string" || !UUID.test(userId) ||
       !exactObject(value, ["role"]) || (Object.hasOwn(value, "role") && value.role !== "contributor")) invalidInput();

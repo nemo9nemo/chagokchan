@@ -1,0 +1,184 @@
+{
+  "verified_at": "2026-10-08T11:24:42Z",
+  "work_item": "W09-C",
+  "status": "passed",
+  "scope": "shared_board_directory_and_ui06_ui08",
+  "source_basis": {
+    "base_commit": "3da5e916526e5cff607e66831df14629a0c31424",
+    "format": "SHA-256 per implementation, migration, DB/API tests, contract, progress, handoff and verification source; excludes this report.",
+    "files": [
+      {
+        "path": "supabase/migrations/20261008024800_list_my_shared_boards_rpc.sql",
+        "sha256": "295e672efd2ab2b7e4d5f412a86224cf2879b185178a3e65b3edeb2bfa59216b"
+      },
+      {
+        "path": "supabase/tests/013_business_rpc_shared_board_directory.test.sql",
+        "sha256": "85343d4e3b6bfb29711e2bb9b0f06c4a0589e66307c9738276e5e05ef6e9596f"
+      },
+      {
+        "path": "src/server/board-api.mjs",
+        "sha256": "583311b603bef11a202ee6b946a3c1b4d7df62638a519dd2bc7ab3bff95fb35d"
+      },
+      {
+        "path": "src/app/api/v1/shared-boards/route.ts",
+        "sha256": "9acafa79587b79ac469c3280a9ec25042b1c10ab43360b375ad78681e04da072"
+      },
+      {
+        "path": "scripts/board-api.test.mjs",
+        "sha256": "5f0b266a3cb8d7edcb9a8b5efc294bdbf9232d2014cfcc71312b02b862ebc44c"
+      },
+      {
+        "path": "scripts/test-local-board-api.mjs",
+        "sha256": "ad489c0b6b3d2667a18687db3d8dc5128046bfc56049b3c49d7613f4487f0fbb"
+      },
+      {
+        "path": "scripts/test-local-shared-board-rpc.mjs",
+        "sha256": "895cfc1fbcc59be1abf615102d48f8c57fbf32e3178550d3668b394ece20c34b"
+      },
+      {
+        "path": "src/app/client-app.tsx",
+        "sha256": "901219e4dba2eea56f08cb816bf6de4afbb49386fdc7e5516d7a73330d954db3"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "7336306df9cc41a31433d27b49afe162d9332c6563fb6a1fdf564f262f13bf28"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "254a02898b8fb225a8a33d7b0e362314c1c9cc7cc40cdbb446b94820569737bb"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "d8af7f4db2d3dd517a868174488e22429bab5e72a7950812c25a2a267fdf6926"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w09-c-shared-board-ui.md",
+        "sha256": "ef693712091c03ef3e76d03344d5fcf4240437d134bb970c1010a33766454a25"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "c4d425b998f80b97664ba6789a1c9cc1ef4a093e76d853e6e343995b33eaea65"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "d4d1418faae709e59eb452145fd2651321e7bc74de85f15d859f170ced5dd8c8"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "5ab5f9db9a430f6a00d9f356f82f01cd147dfd7acead53f0828e391b83298f02"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "99e1a1382de92e781d4d2dbaf068e1364f4ebdf36f8f667bf7158c6c1cb5c804"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "82d53f26fe09e0d9434c3c3c2624ad542a2702e40bd4060cf634088bcfce11ad"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "0ec0e535cdbf3a71646e055af061790df109e323ac118a50593f2425bdf8f5c7"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "8d254c927f001498f06f1da5d41771aacd4adbf41b108e12bd89161f1ede2197"
+      },
+      {
+        "path": "package.json",
+        "sha256": "0ca83cc3b50d886a024ef7320a6140f2ae1c5eef1e107a2585c898ce273ef0b2"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "supabase_cli": "2.120.0",
+    "postgresql": "17.11 local disposable Supabase database",
+    "auth_mode": "local_fixture; synthetic Auth-issued sessions",
+    "database_host_binding": "127.0.0.1"
+  },
+  "commands": {
+    "migration": {
+      "command": "scripts/project.ps1 -Task db:migrate",
+      "status": "passed",
+      "applied_version": "20261008024800"
+    },
+    "unit_and_static": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 81,
+      "typecheck": "passed",
+      "unit_tests": 100,
+      "unit_tests_passed": 100,
+      "artifact_check": "passed",
+      "planned_test_cases": 67
+    },
+    "database": {
+      "command": "scripts/project.ps1 -Task db:test",
+      "status": "passed",
+      "executed": 252,
+      "passed": 252,
+      "physical_integrity": 51,
+      "rpc_boundary": 21,
+      "business_rpc": 180,
+      "directory_suite": "013_business_rpc_shared_board_directory.test.sql",
+      "directory_cases": 5
+    },
+    "shared_auth_sessions": {
+      "command": "scripts/project.ps1 -Task db:shared-test",
+      "status": "passed",
+      "executed": 8,
+      "passed": 8,
+      "directory_case": "shared_board_directory_lists_only_current_grants",
+      "probe_sessions_removed": true,
+      "fixture_data_preserved": true,
+      "service_role_used_for_app_rpc": false
+    },
+    "api_actor_smoke": {
+      "command": "scripts/project.ps1 -Task api:board-test",
+      "status": "passed",
+      "actors": {
+        "A": {
+          "executed": 14,
+          "passed": 14
+        },
+        "B": {
+          "executed": 14,
+          "passed": 14
+        },
+        "C": {
+          "executed": 14,
+          "passed": 14
+        }
+      },
+      "product_fixture_writes": 0
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "route_entries": 30
+    }
+  },
+  "test_case": {
+    "id": "TC-API-009",
+    "status": "passed",
+    "level": "unit_database_and_local_api_integration",
+    "product_acceptance_cases_executed": 0
+  },
+  "browser_smoke": {
+    "screen": "UI06 connection center invite entry",
+    "status": "passed_read_only_render",
+    "synthetic_input": "invalid token; removed from browser URL after parsing",
+    "product_mutations_submitted": 0
+  },
+  "limitations": {
+    "api_route_mutation_to_database_success_cases_executed": 0,
+    "ui_mutation_e2e_cases_executed": 0,
+    "device_or_screen_reader_cases_executed": 0,
+    "real_provider_login_tests_executed": 0,
+    "deployed_session_adapter_verified": false,
+    "ci_or_deployment_verified": false
+  }
+}

@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-08
 
-[테스트 케이스](test-cases.json)에 65개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W09의 기술 TC 27개는 각 범위별 근거에 따라 통과 처리했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 67개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W09-C의 기술 TC 29개는 각 범위별 근거에 따라 통과 처리했다. 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -164,6 +164,14 @@ UI02~UI05 기본 화면을 server API에 연결했다. 목록은 소유 목표 �
 W09-B는 `GET /boards/{board_id}`, `GET /members`, `PUT/DELETE /members/{user_id}`, 역할별 공유 칭찬 `POST /praises`, peer praise 숨김·해제·제외 route를 구현했다. endpoint는 로컬 Auth 세션과 기존 grant·revoke·get_board·member list·peer create/moderation 업무 RPC를 사용한다. owner/contributor 응답은 별도 allowlist를 적용하고 contributor에게 goal ID와 비공개 목표 필드를 노출하지 않는다. 모든 mutation은 Origin·CSRF·JSON body guard와 고정 인자 mapping을 거친다.
 
 새 pgTAP `012_business_rpc_peer_praise_moderation.test.sql` 10/10과 전체 `db:test` 247/247을 통과했다. 실제 Auth 발급 합성 owner/contributor/outsider 세션 기반 `db:shared-test` 7/7은 명시적 grant/revoke, peer 작성 멱등성, hide/unhide 반복, exclude 반복·회차 개수 및 완료 상태 조정, 관계 회수/차단 경합을 확인했다. 계정·세션을 제거하고 기존 fixture snapshot을 보존했다. `api:board-test`는 local A/B/C 각각 12/12에서 owner/contributor projection 및 읽기 경계, C 거절, mutation CSRF 선행 차단을 확인했고 제품 fixture 쓰기 0건이다. API unit 99/99·Biome·typecheck·정적 검사·`build:check` 통과. 실제 API route mutation을 합성 세션으로 호출해 DB에 쓰는 통합과 제품 UI E2E·실제 로그인은 미실행이다. 상세 명령·소스 hash는 [W09-B 검사 증거](reports/w09-b-shared-board-praise-api-check-2026-10-08.json)를 따른다.
+
+## W09-C 연결·공유 화면과 현재 grant 디렉터리
+
+UI06 연결 센터에서 일회 초대 발급/미리보기, 요청 수락·거절·철회, 연결 해제, 차단/해제를 연결했다. 초대 fragment secret은 브라우저 주소에서 바로 제거하고 요청 성공·취소 뒤 탭 상태에서도 지운다. UI07은 목표 설정별 contributor grant/revoke를 활성 연결 사용자에게만 제공한다. UI08은 본인의 현재 유효 grant 공유판을 표시하고 해당 판에서만 peer 칭찬을 읽고 작성한다.
+
+화면의 공유판 목록을 위해 `20261008024800_list_my_shared_boards_rpc.sql`과 GET `/api/v1/shared-boards`를 추가했다. DB는 호출자의 현재 연결 generation, 양방향 차단, 명시적 grant, 삭제 목표 상태를 매번 확인한다. 최대 50개 순서형 페이지와 contributor 최소 projection을 반환한다. UI 디렉터리도 이어보기 cursor를 사용한다.
+
+신규 `TC-API-009`는 pgTAP 013 5/5, 전체 DB 252/252, 실제 Auth-issued 공유 RPC 통합 8/8, A/B/C board API 경계 각 14/14, unit 100/100으로 통과 처리한다. A/B/C API 검사는 기존 제품 fixture 쓰기 없이 종료했고 합성 probe 계정/세션 정리와 fixture snapshot 보존을 확인했다. Biome·typecheck·artifact check·`build:check`는 W09-C 완료 시 다시 실행해 보고서에 결과를 기록한다. UI 검사는 invalid synthetic invite token을 이용한 읽기 전용 UI06 렌더 smoke 한 건이며, 실제 초대·관계·grant·칭찬 mutation submit, 제품 수락, 스크린리더·기기 E2E, 실제 Google/OTP 로그인은 포함하지 않는다. [W09-C 검사 증거](reports/w09-c-shared-board-ui-check-2026-10-08.json)
 
 ## W05 물리 DB의 부분 검사
 

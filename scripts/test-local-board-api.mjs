@@ -63,6 +63,15 @@ async function runActor(actor) {
     }
     checks++;
 
+    const sharedBoards = await fetchApi("/api/v1/shared-boards?limit=50");
+    assert.equal(sharedBoards.status, 200);
+    const directory = await sharedBoards.json();
+    assert.equal(Array.isArray(directory.items), true);
+    assert.equal(directory.next_cursor, null);
+    if (actor === "B") assert.equal(directory.items.some((board) => board.id === sharedBoard && board.viewer_role === "contributor"), true);
+    else assert.equal(directory.items.some((board) => board.id === sharedBoard), false);
+    checks++;
+
     const members = await fetchApi(`/api/v1/boards/${sharedBoard}/members`);
     assert.equal(members.status, actor === "A" ? 200 : 404);
     if (actor === "A") assert.equal(Array.isArray((await members.json()).items), true);
@@ -78,6 +87,10 @@ async function runActor(actor) {
 
     const invalidMemberQuery = await fetchApi(`/api/v1/boards/${sharedBoard}/members?actor_id=${actor}`);
     assert.equal(invalidMemberQuery.status, 400);
+    checks++;
+
+    const invalidDirectoryQuery = await fetchApi("/api/v1/shared-boards?actor_id=" + actor);
+    assert.equal(invalidDirectoryQuery.status, 400);
     checks++;
 
     const praiseId = crypto.randomUUID();
@@ -102,5 +115,5 @@ async function runActor(actor) {
 
 for (const actor of ["A", "B", "C"]) {
   const result = await runActor(actor);
-  process.stdout.write(`${result.actor}: ${result.checks}/${result.checks} board/praise role and mutation-boundary checks passed; product fixture writes 0\n`);
+  process.stdout.write(`${result.actor}: ${result.checks}/${result.checks} board/praise/directory role and mutation-boundary checks passed; product fixture writes 0\n`);
 }

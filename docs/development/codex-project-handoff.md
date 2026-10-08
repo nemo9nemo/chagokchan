@@ -37,7 +37,7 @@
 | W06 | DONE | **W06-A~D2 완료**. 전체 DB 213/213·RPC 162/162, D1 세션 통합 4/4·D2 세션/Auth Admin 통합 6/6. 외부 원장·BFF/API·실제 로그인·제품 수락은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
-| W09 | IN_PROGRESS | W09-A 연결 API와 W09-B 공유 권한/칭찬 API를 완료했다. 연결·공유 UI06~UI08은 W09-C에 남았다. 다음 W10 소식/삭제, W11 테마/접근성/PWA |
+| W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -52,7 +52,7 @@ Node `24.19.0`, pnpm `11.19.0`, Next `16.4.0`, React `19.3.0`, TypeScript `5.9.3
 
 Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서비스 7개를 사용한다. DB 컨테이너는 `supabase_db_chagokchan`, API 게이트웨이는 `supabase_kong_chagokchan`이다. API 54321·DB 54322·Studio 54323·메일함 54324는 127.0.0.1에 바인딩한다. 프로젝트의 loopback 프록시를 포함한 `db:start` 실행 경로를 유지한다.
 
-적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`, W06-B2 `20261008021400`~`20261008021700`, W06-C1 `20261008021800`~`20261008022100`, W06-C2 `20261008022200`~`20261008022900`, C1 페이지 보완 `20261008023000`, W06-D1 `20261008023100`~`20261008023400`, W06-D2 `20261008023500`~`20261008024200`, W08 API 보완 `20261008024300`~`20261008024600`, W09-B peer moderation `20261008024700`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
+적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`, W06-B2 `20261008021400`~`20261008021700`, W06-C1 `20261008021800`~`20261008022100`, W06-C2 `20261008022200`~`20261008022900`, C1 페이지 보완 `20261008023000`, W06-D1 `20261008023100`~`20261008023400`, W06-D2 `20261008023500`~`20261008024200`, W08 API 보완 `20261008024300`~`20261008024600`, W09-B peer moderation `20261008024700`, W09-C shared-board directory `20261008024800`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
 
 `.env.development.local`, `private-data/local-fixtures.json`은 현재 폴더에 존재하며 Git에서 제외한다. 인증 값은 읽어 출력하거나 문서·로그에 기록하지 않는다. 로컬 fixture 파일은 현재 사용자와 SYSTEM만 접근하도록 제한했다. `db:seed`는 명시적으로 준비하며 재실행 시 기존 제품 데이터를 덮어쓰지 않는다. 서버 실행·빌드에서 자동 seed를 하지 않는다.
 
@@ -136,15 +136,21 @@ UI02~UI05 기본 화면을 `src/app/client-app.tsx`에 구현했다. 목표 목�
 
 `scripts/connection-api.test.mjs` unit 8/8과 `scripts/project.ps1 -Task api:connection-test` A/B/C 각각 12/12가 통과했다. API smoke는 목록 읽기, cursor/query 검증, no-CSRF 차단, malformed 초대/요청/차단 입력, 임의 연결 404/no-store를 확인했으며 제품 fixture 쓰기 0건이다. 관계 RPC의 실제 Auth session 13/13 근거는 W06-C1 보고서를 따른다. 유효 초대 발급·소비/수락을 통한 route→DB 성공 검증은 제품 fixture를 보존하기 위해 실행하지 않았다. 전체 check/build와 SHA-256 source 근거는 [W09-A 검사 증거](../quality/reports/w09-a-connection-api-check-2026-10-08.json)에서 추적한다.
 
-W09-C 연결·공유 UI06~UI08은 남아 있다. API mutation route→DB 성공은 unit과 실제 Auth RPC 계층에서 각각 검증했으나 A/B/C route smoke에서는 기존 fixture를 쓰지 않았고, 제품 수락 TC와 기기/접근성 검사도 미실행이다.
-
 ## W09-B 공유 권한·peer 칭찬 API 완료 기록
 
 `GET /api/v1/boards/{board_id}`와 `/members`, `PUT/DELETE /members/{user_id}`를 기존 역할별 보드·멤버 RPC에 연결했다. 판 응답은 owner와 contributor의 필드 allowlist를 분리해 contributor에게 goal ID·비공개 설명·owner 목표 설정을 반환하지 않는다. 공유판 칭찬 생성은 현재 유효한 contributor만 `create_peer_praise`로 연결하고 실천일 입력을 받지 않는다. peer 수신자의 숨김·해제·제외 route는 `hide_peer_praise`, `unhide_peer_praise`, `exclude_peer_praise`로 연결했다. 숨김은 목록 표시만 바꾸고 제외는 같은 트랜잭션에서 회차 유효 개수·완료 상태를 다시 계산한다. 마이그레이션 `20261008024700`은 적용된 SQL의 후속 마이그레이션이며 RLS recipient/peer 조건과 제한된 업데이트 필드를 둔다.
 
 pgTAP W09-B 10/10, 전체 DB 247/247을 통과했다. 실제 Auth 발급 owner/contributor/outsider 세션 기반 공유판 검사는 7/7이며 숨김·해제·제외 재시도, 집계 감소, 부정 역할, grant 상한/연결 회수 경합을 확인했다. 합성 계정·세션 제거 후 제품 fixture와 기존 세션 수를 보존했다. 전체 unit 99/99·A/B/C route 경계 각 12/12·`build:check`도 통과했다. 로컬 API 검사와 경로→RPC unit은 제품 fixture를 변경하지 않는다. 실제 route mutation→DB 성공, 제품 수락 E2E, 실제 Google/OTP 로그인, 기기·접근성은 범위에서 제외했다. [W09-B 검사 증거](../quality/reports/w09-b-shared-board-praise-api-check-2026-10-08.json)
 
-다음 작업은 W09-C UI06~UI08이다. W10 소식/삭제와 W11 테마/접근성/PWA는 W09-C 뒤 진행한다.
+## W09-C 연결·공유 UI06~UI08 완료 기록
+
+UI06 연결 센터에서 초대 발급(비밀은 1회 응답으로 탭 상태에만 보관)·코드/링크 미리보기·요청 수락/거절/철회·연결 해제·차단/해제를 제공한다. fragment 초대 token은 읽은 뒤 주소에서 제거하고, 요청 생성 성공 또는 취소 시 클라이언트 상태를 비운다. UI07은 목표 설정의 공유판별 관리에서 활성 연결만 contributor로 부여/회수하며 연결만으로는 공유되지 않는다는 점과 재연결 뒤 예전 grant가 돌아오지 않는 점을 안내한다. UI08은 현재 grant가 유효한 공유판 목록, 안전한 제목/owner/current bunch projection, 내 peer 칭찬 목록·작성 폼을 제공한다. 개인 기록·상대의 다른 칭찬은 기여자 화면에 추가하지 않는다.
+
+목록 검색 경로 부재를 해소하기 위해 후속 마이그레이션 `20261008024800_list_my_shared_boards_rpc.sql`과 GET `/api/v1/shared-boards`를 추가했다. 현재 Auth actor의 연결 generation·양방향 차단·현재 grant·삭제 goal 상태를 DB에서 재검사하며 50개 cursor page와 contributor allowlist만 반환한다.
+
+검사는 `scripts/project.ps1 -Task db:migrate` 적용 성공, pgTAP 013 5/5·전체 `db:test` 252/252, 발급 Auth 세션 `db:shared-test` 8/8(기존 fixture snapshot·Auth session 수 보존), A/B/C `api:board-test` 각각 14/14(제품 fixture 쓰기 0), 전체 unit 100/100, Biome·typecheck·artifact check·`build:check`로 기록한다. 로컬 UI06 초대 진입은 불량 synthetic token을 사용한 읽기 전용 화면 smoke로 확인했다. 실제 초대 발급·연결 변경·grant/revoke·칭찬 작성을 브라우저로 전송하지 않았다. 제품 수락 E2E, UI mutation 성공/불확실 재시도 E2E, 기기/스크린리더·실제 로그인은 W13/W15에 남긴다. [W09-C 검사 증거](../quality/reports/w09-c-shared-board-ui-check-2026-10-08.json)
+
+다음 개발 작업은 W10 소식·보낸함·삭제·정리 API/UI 연결이다. W11 테마/접근성/PWA, 오픈 준비의 W12 실제 로그인, 공개 전 W13 실제 로그인 검증, W14 운영 입력, W15 제품 수락/기기/복원/부하 검사도 남아 있다.
 
 ## 프로젝트에서 사용할 재개 메시지
 

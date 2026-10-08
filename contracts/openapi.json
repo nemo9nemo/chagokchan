@@ -3789,6 +3789,72 @@
         }
       }
     },
+    "/shared-boards": {
+      "get": {
+        "operationId": "listMySharedBoards",
+        "summary": "현재 권한으로 참여 중인 공유판",
+        "tags": [
+          "boards"
+        ],
+        "description": "현재 연결·generation·차단 상태에서 유효한 contributor 권한의 공유판만 조회한다.",
+        "x-implementation-status": "implemented",
+        "x-requirements": [
+          "REQ-004",
+          "REQ-006"
+        ],
+        "x-policy-ids": [
+          "POL-ACCESS-001",
+          "POL-SEC-001"
+        ],
+        "x-test-cases": [
+          "TC-API-009"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공: 현재 grant에 연결된 제한 projection 페이지",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "no-store"
+                },
+                "description": "사용자별 공유 관계 데이터 캐시 금지"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributorBoardsPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        }
+      }
+    },
     "/connections/{connection_id}": {
       "delete": {
         "operationId": "disconnect",
@@ -7427,6 +7493,34 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Connection"
+            },
+            "maxItems": 50
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ]
+      },
+      "ContributorBoardsPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContributorBoard"
             },
             "maxItems": 50
           },

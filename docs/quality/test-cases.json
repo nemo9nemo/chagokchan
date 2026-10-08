@@ -1443,6 +1443,29 @@
       "expected": "board owner가 grant/revoke와 수신자 moderation을 수행하고 현재 grant가 유효한 contributor만 공유 칭찬을 작성한다. contributor 응답에서 개인 goal/owner의 비공개 필드가 제외된다. hide는 수량을 바꾸지 않고 exclude는 bunch 집계를 한 번만 반영한다. 검증 중 제품 fixture 변경은 없다.",
       "status": "passed",
       "evidence": "reports/w09-b-shared-board-praise-api-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-009",
+      "requirement_ids": [
+        "REQ-004",
+        "REQ-006",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-002",
+        "POL-ACCESS-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_database_and_local_api_integration",
+      "title": "현재 권한 공유판 목록과 최소 contributor projection",
+      "steps": [
+        "list_my_shared_boards가 현재 Auth actor의 연결 generation·grant·차단 상태를 재검사하고 삭제 목표를 제외하는지 검사한다",
+        "실제 Auth session으로 grant된 공유판만 조회되고 revoke 뒤 목록에서 사라지며 owner·무관 actor에는 contributor grant가 노출되지 않는지 확인한다",
+        "GET /shared-boards의 커서·limit 입력, contributor 응답 allowlist, no-store와 UI08 목록 연결을 검사한다"
+      ],
+      "expected": "현재 유효한 공유판만 50개 이하의 시간/ID 커서로 이어서 제공한다. 개인 목표·회차 revision·본인 private 내용은 응답하지 않고 권한이 회수되면 다음 조회에서 바로 제외한다.",
+      "status": "passed",
+      "evidence": "reports/w09-c-shared-board-ui-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

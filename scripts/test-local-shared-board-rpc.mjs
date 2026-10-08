@@ -217,6 +217,21 @@ try {
     denied(await contributor.client.rpc("grant_board_member", { p_board_id: shared.boardId, p_user_id: secondContributor.id }), "PT404", "board_not_found");
   });
 
+  await record("shared_board_directory_lists_only_current_grants", async () => {
+    ok(await owner.client.rpc("grant_board_member", { p_board_id: shared.boardId, p_user_id: contributor.id }));
+    const visible = ok(await contributor.client.rpc("list_my_shared_boards", { p_limit: 1 }));
+    assert.equal(visible.items.length, 1);
+    assert.equal(visible.items[0].id, shared.boardId);
+    assert.equal(visible.items[0].viewer_role, "contributor");
+    assert.equal(visible.items[0].shared_title, "권한 분리 공유판");
+    assert.ok(!("goal_id" in visible.items[0]));
+    assert.ok(!("revision" in visible.items[0]));
+    assert.deepEqual(Object.keys(ok(await owner.client.rpc("list_my_shared_boards"))), ["items", "next_cursor"]);
+    assert.deepEqual(ok(await outsider.client.rpc("list_my_shared_boards")), { items: [], next_cursor: null });
+    ok(await owner.client.rpc("revoke_board_member", { p_board_id: shared.boardId, p_user_id: contributor.id }));
+    assert.deepEqual(ok(await contributor.client.rpc("list_my_shared_boards")), { items: [], next_cursor: null });
+  });
+
   await record("peer_praise_is_atomic_idempotent_and_role_scoped", async () => {
     ok(await owner.client.rpc("grant_board_member", { p_board_id: shared.boardId, p_user_id: contributor.id }));
     const input = { p_request_key: crypto.randomUUID(), p_board_id: shared.boardId, p_message: "첫 칭찬\r\n메모" };
@@ -424,10 +439,10 @@ try {
   }
 }
 
-const passed = !failed && !cleanupFailed && cases.length === 7;
+const passed = !failed && !cleanupFailed && cases.length === 8;
 const report = {
-  verified_at: new Date().toISOString(), work_item: "W09-B",
-  scope: "shared_board_access_peer_praise_moderation_and_relationship_concurrency_with_issued_auth_sessions",
+  verified_at: new Date().toISOString(), work_item: "W09-C",
+  scope: "shared_board_directory_and_w09_b_access_regression_with_issued_auth_sessions",
   status: passed ? "passed" : "failed", executed: cases.length,
   passed: cases.filter((entry) => entry.status === "passed").length, cases,
   failure_detail: failureDetail, cleanup_passed: !cleanupFailed, existing_fixture_data_preserved: fixturePreserved,

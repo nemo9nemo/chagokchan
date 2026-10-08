@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getBoardResponse, grantBoardMemberResponse, listBoardMembersResponse, projectBoardView, revokeBoardMemberResponse, validateBoardMembersQuery } from "../src/server/board-api.mjs";
+import { getBoardResponse, grantBoardMemberResponse, listBoardMembersResponse, listMySharedBoardsResponse, projectBoardView, revokeBoardMemberResponse, validateBoardMembersQuery } from "../src/server/board-api.mjs";
 import { createCsrfToken } from "../src/server/api-security.mjs";
 
 const boardId = "11111111-1111-4111-8111-111111111111";
@@ -66,6 +66,25 @@ test("member listing projects minimal profiles and safely rejects excess fields"
   assert.deepEqual((await response.json()).items, [member]);
   const leaked = await listBoardMembersResponse(boardId, new URL("https://chagokchan.test/api"), {
     rpc: async () => ({ data: { items: [{ ...member, email: "private" }], next_cursor: null }, error: null }),
+  });
+  assert.equal(leaked.status, 503);
+});
+
+test("my shared board listing uses the live-grant RPC and contributor allowlist", async () => {
+  const board = {
+    viewer_role: "contributor", id: boardId, kind: "shared", shared_title: "함께 나눔", shared_description: null,
+    owner: { user_id: userId, nickname: "주인", avatar_key: "grape" }, goal_state: "active", current_bunch: null, can_praise: true,
+  };
+  const client = { rpc: async (name, input) => {
+    assert.equal(name, "list_my_shared_boards");
+    assert.deepEqual(input, { p_cursor: null, p_limit: 20 });
+    return { data: { items: [board], next_cursor: null }, error: null };
+  } };
+  const response = await listMySharedBoardsResponse(new URL("https://chagokchan.test/api"), client);
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { items: [board], next_cursor: null });
+  const leaked = await listMySharedBoardsResponse(new URL("https://chagokchan.test/api"), {
+    rpc: async () => ({ data: { items: [{ ...board, goal_id: goalId }], next_cursor: null }, error: null }),
   });
   assert.equal(leaked.status, 503);
 });
