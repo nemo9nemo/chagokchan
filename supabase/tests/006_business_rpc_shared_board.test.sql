@@ -45,9 +45,10 @@ select ok(has_column_privilege('chagokchan_rpc','public.praises','hidden_at','SE
 select ok(has_column_privilege('chagokchan_rpc','public.notifications','praise_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.notifications','bunch_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.notifications','praise_id','SELECT') and
-  not has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+  has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.notifications','type','UPDATE') and
   not has_table_privilege('chagokchan_rpc','public.notifications','DELETE'),
-  'peer receipt and cycle notices are append-only with typed targets');
+  'peer receipt and cycle notices remain append-only apart from W06-D recipient read state');
 select ok((select bool_and(relrowsecurity and relforcerowsecurity) from pg_class where oid in (
   'public.boards'::regclass,'public.goals'::regclass,'public.shared_board_profiles'::regclass,
   'public.board_members'::regclass,'public.bunches'::regclass,'public.praises'::regclass,'public.notifications'::regclass

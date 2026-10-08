@@ -28,9 +28,11 @@ select ok(has_column_privilege('chagokchan_rpc','public.goals','title','INSERT')
   has_column_privilege('chagokchan_rpc','public.goals','status','UPDATE') and
   not has_column_privilege('chagokchan_rpc','public.goals','owner_user_id','UPDATE'),
   'goal RPC owner receives only the columns needed for creation and lifecycle');
-select ok(not has_column_privilege('chagokchan_rpc','public.goals','deleted_at','UPDATE') and
-  not has_column_privilege('chagokchan_rpc','public.goals','purge_after','UPDATE'),
-  'W06-B goal RPC cannot modify fields reserved for W06-D deletion');
+select ok(has_column_privilege('chagokchan_rpc','public.goals','deleted_at','UPDATE') and
+  has_column_privilege('chagokchan_rpc','public.goals','purge_after','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.goals','owner_user_id','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.goals','created_at','UPDATE'),
+  'W06-D adds only the soft-delete fields needed by owner RPCs and preserves goal identity');
 select ok(has_column_privilege('chagokchan_rpc','public.boards','kind','INSERT') and
   not has_table_privilege('chagokchan_rpc','public.boards','DELETE'),
   'goal RPC can create owner boards but cannot delete or rewrite them');

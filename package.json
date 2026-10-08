@@ -29,6 +29,7 @@
     "db:praise-test": "node scripts/test-local-personal-praise.mjs",
     "db:connection-test": "node scripts/test-local-connection-rpc.mjs",
     "db:shared-test": "node scripts/test-local-shared-board-rpc.mjs",
+    "db:lifecycle-test": "node scripts/test-local-lifecycle-rpc.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },
   "dependencies": {

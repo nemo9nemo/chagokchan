@@ -1,0 +1,179 @@
+{
+  "verified_at": "2026-10-08T06:03:33.339Z",
+  "work_item": "W06-D1",
+  "status": "passed",
+  "scope": "recipient_scoped_notifications_sent_praises_goal_trash_restore_and_ledger_gated_purge",
+  "source_basis": {
+    "base_commit": "730b96745ee916b991f116e145f077d6140a9e32",
+    "format": "SHA-256 per changed code/contract/test path; repository history identifies the resulting commit",
+    "files": [
+      {
+        "path": "supabase/migrations/20261008023100_news_goal_trash_and_purge_rpcs.sql",
+        "sha256": "2f568d621cf0c311ffe6b30ecd192297537e57acaca7975b0abeb123dbd49633"
+      },
+      {
+        "path": "supabase/migrations/20261008023200_sent_praise_read_after_disconnect.sql",
+        "sha256": "8785b5e9be2278fece1df4531a37047a602f0ea65659e44c186df9f6d03dc5b9"
+      },
+      {
+        "path": "supabase/migrations/20261008023300_worker_jwt_reader_boundary.sql",
+        "sha256": "367117556bba930e6bc386d9d55ae428ecb7a05077007d295b112653d7dbb1a7"
+      },
+      {
+        "path": "supabase/migrations/20261008023400_goal_purge_lock_privileges.sql",
+        "sha256": "757214e1e57df64577257f9b06bb6bafcefb55468c2a4222f4ce2a2e61be8770"
+      },
+      {
+        "path": "supabase/tests/002_rpc_boundary.test.sql",
+        "sha256": "356a1ea7a334e4bdb066e8065e7b163c8a8d74f9ac24eabc35d2520c8bdb8fb5"
+      },
+      {
+        "path": "supabase/tests/003_business_rpc.test.sql",
+        "sha256": "9a41916a9d3ad769e226c6c410d59138e0139124e942125e8bf456dfd5c62339"
+      },
+      {
+        "path": "supabase/tests/004_business_rpc_praise.test.sql",
+        "sha256": "626347b02958b34eb5f442ece8ae4d3ec5600acf9bbcefdd9307144faecf4261"
+      },
+      {
+        "path": "supabase/tests/005_business_rpc_connections.test.sql",
+        "sha256": "f3c43a491f49087f298aff44bb5dcfae934484a55f0776ea9a1a5b586beffe21"
+      },
+      {
+        "path": "supabase/tests/006_business_rpc_shared_board.test.sql",
+        "sha256": "121c22b7cb6e1d2fbc1c078433e90ee5361f82cde4123442512aa6e14cb72e11"
+      },
+      {
+        "path": "supabase/tests/007_business_rpc_lifecycle.test.sql",
+        "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f"
+      },
+      {
+        "path": "scripts/test-local-lifecycle-rpc.mjs",
+        "sha256": "26049da32c255d9553091210727bfedfb52a602fd7e25d0605501a8d8bb6b6e2"
+      },
+      {
+        "path": "package.json",
+        "sha256": "871d2c248c2e67564487140f298fbf31a5c92f0c1c3bc67b9698ab8c6342cd7c"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "909966637d96880b15c7d707b5fdd6e671f0dc5c69f92df58d168fd561c8db48"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "3fe44e3bb56013486866fd3c2322779d9b3d55c634dbba17339b4fa98483bcc6"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "8400b42e9128c47d7186758b81d003b09eb641830f916688323c048306d0da87"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "docker_engine": "29.1.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase",
+    "local_schema_applied_through": "20261008024200"
+  },
+  "d1_migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008023100",
+      "20261008023200",
+      "20261008023300",
+      "20261008023400"
+    ],
+    "previous_applied_migrations_modified": false
+  },
+  "database_authorization_tests": {
+    "suite": "007_business_rpc_lifecycle.test.sql",
+    "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f",
+    "verified_at": "2026-10-08T05:56:16.452Z",
+    "status": "passed",
+    "executed": 20,
+    "passed": 20,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-NEWS-001",
+      "TC-DB-NEWS-002",
+      "TC-DB-DELETE-001",
+      "TC-DB-DELETE-002"
+    ]
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:lifecycle-test",
+    "verified_at": "2026-10-08T05:55:56.958Z",
+    "work_item": "W06-D1",
+    "scope": "recipient_scoped_news_sent_peer_praise_goal_trash_restore_and_ledger_gated_purge",
+    "status": "passed",
+    "executed": 4,
+    "passed": 4,
+    "cases": [
+      {
+        "name": "recipient_scoped_minimal_notifications_cursor_and_read_retry",
+        "status": "passed"
+      },
+      {
+        "name": "sent_praise_cursor_survives_disconnect_and_hides_goal_state",
+        "status": "passed"
+      },
+      {
+        "name": "soft_delete_trash_restore_and_membership_revoke",
+        "status": "passed"
+      },
+      {
+        "name": "purge_requires_ledger_gate_and_cleans_fk_dependents",
+        "status": "passed"
+      }
+    ],
+    "failure_detail": null,
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_user_scoped_app_rpc": false,
+    "service_role_used_for_worker_rpc": true,
+    "external_deletion_ledger_configured": false,
+    "external_ledger_gate_simulated_in_local_database": true,
+    "google_or_otp_login_tests_executed": 0
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T06:03:33.339Z",
+    "status": "passed",
+    "lint_files": 26,
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 55,
+      "json_documents": 21,
+      "local_markdown_links": 381,
+      "registry_paths": 161,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "safety": {
+    "external_deletion_ledger_configured": false,
+    "external_ledger_gate_simulated_in_local_database": true,
+    "service_role_used_for_user_scoped_app_rpc": false,
+    "service_role_used_for_worker_rpc": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "google_or_otp_login_tests_executed": 0,
+    "server_api_and_ui_implemented": false,
+    "product_acceptance_cases_completed": 0
+  },
+  "next_work_item": "W06-D2"
+}

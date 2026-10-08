@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. W06-A 세션 경계, W06-B 목표·개인 칭찬·회차 RPC, W06-C1 초대·연결 요청·승인·해제·차단 RPC까지 로컬 DB와 실제 발급 세션으로 검증했다. 현재 W06-C2 공유판 grant/revoke·공유 칭찬, W06-D 소식·삭제 RPC가 남아 있다. [진행표](backlog.md), [W06-A 검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json), [W06-B1 검사 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json), [W06-B2 검사 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json), [W06-C1 검사 증거](../quality/reports/w06-c1-connection-rpc-check-2026-10-08.json)에 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
+S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. W06-A~C와 W06-D1 소식·보낸함·목표 휴지통/복구·원장 gate 파기를 완료했다. W06-D2 계정 탈퇴·파기 RPC가 다음 작업이다. D1 전용 DB 권한 검사 20/20과 실제 Auth 발급 세션 통합 4/4가 통과했다. 제품 BFF/API·UI는 W07 이후 구현 대상이며 OpenAPI는 DB RPC와 서버 API 상태를 따로 표시한다. [진행표](backlog.md), [W06-D1 검사 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json)에 결과를 기록한다. 문서 작성, DB RPC 구현, 실행 검증, 서버 API 연결, 공개 출시 상태를 각각 기록한다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 

@@ -96,9 +96,10 @@ select ok((select p.provolatile='v' and r.rolname='chagokchan_rpc' from pg_proc 
   'request creation remains a volatile owner-scoped transaction');
 select ok(has_column_privilege('chagokchan_rpc','public.notifications','connection_request_id','INSERT') and
   has_column_privilege('chagokchan_rpc','public.notifications','connection_id','INSERT') and
-  not has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+  has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.notifications','type','UPDATE') and
   not has_table_privilege('chagokchan_rpc','public.notifications','DELETE'),
-  'connection notices are append-only with typed targets and immutable read state');
+  'connection notices stay append-only while W06-D can update only the recipient read state');
 select ok((select count(*)=4 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
   where n.nspname='public' and p.proname in ('list_connections','list_connection_invites','list_connection_requests','list_blocks')
     and pg_get_functiondef(p.oid) like '%last_at%' and pg_get_functiondef(p.oid) like '%last_id%'

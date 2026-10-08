@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed",
+  "phase": "partially_executed_w06_d1",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -1094,6 +1094,93 @@
       "expected": "현재 connection_id·generation·active·양방향 block을 같은 직렬화 경계에서 다시 검사한다. 권한 종료 후 새 쓰기는 거절되고 완료된 쓰기는 한 번만 남는다.",
       "status": "passed",
       "evidence": "reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-NEWS-001",
+      "requirement_ids": [
+        "REQ-008"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001",
+        "POL-API-001"
+      ],
+      "level": "local_db_integration",
+      "title": "수신자 최소 소식 목록·대상 권한·읽음 재시도",
+      "steps": [
+        "실제 발급 A/B/C 세션으로 알림 수신자 격리를 확인",
+        "다음 cursor로 모든 알림 ID가 중복·누락 없이 이어지는지 확인",
+        "동일 알림 읽음 표시를 반복하고 타인 알림을 읽거나 변경할 수 없는지 확인",
+        "목표 삭제·권한 종료 뒤 대상 상세 접근이 차단되는지 확인"
+      ],
+      "expected": "응답은 허용된 최소 필드만 담고 현재 수신자·대상 권한을 매번 확인한다. 읽음 표시는 멱등이다.",
+      "status": "passed",
+      "evidence": "reports/w06-d1-news-and-purge-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-NEWS-002",
+      "requirement_ids": [
+        "REQ-007",
+        "REQ-009"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-002",
+        "POL-ACCESS-001"
+      ],
+      "level": "local_db_integration",
+      "title": "관계 해제 뒤 보낸 peer 칭찬 최소 목록",
+      "steps": [
+        "실제 발급 작성자·수신자 세션으로 peer praise를 만든다",
+        "관계를 해제하고 작성자의 보낸함을 읽는다",
+        "목표가 삭제된 경우 해당 항목을 숨기고 페이지 cursor를 검증한다"
+      ],
+      "expected": "관계 종료 후에도 본인이 보낸 유효 peer 이벤트의 최소 이력은 보이며 현재 권한 없는 목표 내용은 노출하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w06-d1-news-and-purge-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-DELETE-001",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-010"
+      ],
+      "policy_ids": [
+        "POL-DELETE-001",
+        "POL-ACCESS-001"
+      ],
+      "level": "local_db_transaction",
+      "title": "목표 휴지통·복구·공유 권한 회수",
+      "steps": [
+        "owner가 revision을 지정해 목표 삭제를 수행한다",
+        "공유 contributor 세션과 일반 목표 목록에서 접근 차단을 확인한다",
+        "휴지통에서 복구하고 archived 상태와 권한 미복원을 확인한다",
+        "만료 시각이 지난 삭제 목표 복구를 거절한다"
+      ],
+      "expected": "삭제는 30일 휴지통이며 활성 membership을 회수한다. 복구는 archived로 돌아가지만 이전 grant를 자동 복구하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w06-d1-news-and-purge-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-DELETE-002",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-001",
+        "POL-DELETE-003",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_integration",
+      "title": "독립 원장 gate와 목표 FK 순서 purge",
+      "steps": [
+        "원장 gate가 꺼진 상태에서 purge를 실행해 거절되고 데이터가 남는지 확인한다",
+        "폐기 가능한 로컬 DB에서 gate를 합성으로 열고 원장 참조 UUID를 전달한다",
+        "만료 목표를 purge하고 모든 FK 의존·현재 회차 순환 참조가 정리되는지 확인",
+        "기존 fixture 및 Auth 세션이 보존되는지 확인"
+      ],
+      "expected": "운영 설정 없이는 purge가 차단된다. 허용된 작업만 잠금 후 만료를 재검사하고 FK 의존을 정해진 순서로 삭제한다.",
+      "status": "passed",
+      "evidence": "reports/w06-d1-news-and-purge-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

@@ -1554,7 +1554,7 @@
           "goals"
         ],
         "description": "목표를 30일 휴지통으로 이동",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-010"
@@ -1571,7 +1571,9 @@
           "TC-DELETE-001",
           "TC-DELETE-002",
           "TC-DELETE-003",
-          "TC-DELETE-004"
+          "TC-DELETE-004",
+          "TC-DB-DELETE-001",
+          "TC-DB-DELETE-002"
         ],
         "parameters": [
           {
@@ -1650,7 +1652,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "delete_goal(uuid,integer)"
+        ]
       }
     },
     "/goals/{goal_id}/complete": {
@@ -1964,7 +1969,7 @@
           "goals"
         ],
         "description": "휴지통 목표 archived 복구",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1976,7 +1981,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-DB-DELETE-001"
         ],
         "parameters": [
           {
@@ -2055,7 +2061,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "restore_goal(uuid,integer)"
+        ]
       }
     },
     "/trash/goals": {
@@ -2066,7 +2075,7 @@
           "trash"
         ],
         "description": "본인 휴지통 최소 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-010"
@@ -2083,7 +2092,9 @@
           "TC-DELETE-001",
           "TC-DELETE-002",
           "TC-DELETE-003",
-          "TC-DELETE-004"
+          "TC-DELETE-004",
+          "TC-DB-DELETE-001",
+          "TC-DB-DELETE-002"
         ],
         "parameters": [
           {
@@ -2146,7 +2157,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "list_trash_goals(text,integer)"
+        ]
       }
     },
     "/goals/{goal_id}/shared-board": {
@@ -4968,7 +4982,7 @@
           "notifications"
         ],
         "description": "내 소식 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-008"
         ],
@@ -4976,7 +4990,8 @@
           "POL-ACCESS-001"
         ],
         "x-test-cases": [
-          "TC-NOTIFY-001"
+          "TC-NOTIFY-001",
+          "TC-DB-NEWS-001"
         ],
         "parameters": [
           {
@@ -5039,7 +5054,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "list_notifications(text,integer)"
+        ]
       }
     },
     "/notifications/{notification_id}": {
@@ -5050,7 +5068,7 @@
           "notifications"
         ],
         "description": "내 소식 읽음 표시",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-008"
         ],
@@ -5058,7 +5076,8 @@
           "POL-ACCESS-001"
         ],
         "x-test-cases": [
-          "TC-NOTIFY-001"
+          "TC-NOTIFY-001",
+          "TC-DB-NEWS-001"
         ],
         "parameters": [
           {
@@ -5137,7 +5156,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "mark_notification_read(uuid)"
+        ]
       }
     },
     "/sent-praises": {
@@ -5148,7 +5170,7 @@
           "sent-praises"
         ],
         "description": "내가 보낸 peer 칭찬 최소 목록",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_server_api_pending",
         "x-requirements": [
           "REQ-009"
         ],
@@ -5157,7 +5179,8 @@
           "POL-PRAISE-002"
         ],
         "x-test-cases": [
-          "TC-PRAISE-002"
+          "TC-PRAISE-002",
+          "TC-DB-NEWS-002"
         ],
         "parameters": [
           {
@@ -5220,7 +5243,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "list_sent_praises(text,integer)"
+        ]
       }
     },
     "/account/deletion-requests": {

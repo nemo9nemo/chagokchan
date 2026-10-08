@@ -94,10 +94,11 @@ select ok(has_function_privilege('authenticated','public.cancel_praise(uuid)','E
 select ok((select p.provolatile='v' and r.rolname='chagokchan_rpc' from pg_proc p join pg_roles r on r.oid=p.proowner
   join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='create_praise'),
   'write RPCs are volatile functions and cannot be planned as stable reads');
-select ok(not has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+select ok(has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
+  not has_column_privilege('chagokchan_rpc','public.notifications','type','UPDATE') and
   not has_column_privilege('chagokchan_rpc','public.boards','kind','UPDATE') and
   not has_column_privilege('chagokchan_rpc','public.bunches','cycle_no','UPDATE'),
-  'owner RPC cannot rewrite notification read state, board kind or cycle identity');
+  'W06-D permits only notification read state while board and cycle identity remain protected');
 
 select * from finish();
 rollback;
