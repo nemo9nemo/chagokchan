@@ -581,6 +581,33 @@
       "evidence": null
     },
     {
+      "id": "TC-UI-003",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-003",
+        "REQ-007",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-CYCLE-001",
+        "POL-PRAISE-002",
+        "POL-API-001"
+      ],
+      "level": "local_browser_smoke",
+      "title": "목표·개인 기록 기본 화면 조회 흐름",
+      "steps": [
+        "로컬 fixture 세션으로 목표 목록·상세·판·회차·칭찬 목록을 조회",
+        "개인 기록과 받은 칭찬을 전환해 빈 상태·판별 개수 분리를 확인",
+        "목표 생성 폼에서 선택 공유판 필드를 확인하고 제출하지 않은 채 닫기",
+        "회차가 아직 없는 active 개인판에서 첫 칭찬 입력 폼을 확인",
+        "목표 설정에서 목표·개인판·공유판의 수정 필드를 확인"
+      ],
+      "expected": "로그인 화면 없이 기존 목표를 열고 개인·공유판 수와 기록을 따로 본다. 빈 회차에도 첫 칭찬 입력을 시작할 수 있으며, 결과 성공 전 개수를 확정하지 않는다. 이 smoke는 조회·폼 표시만 하며 제품 데이터를 쓰지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w08-d-goal-record-ui-check-2026-10-08.json"
+    },
+    {
       "id": "TC-UX-001",
       "requirement_ids": [
         "REQ-011",

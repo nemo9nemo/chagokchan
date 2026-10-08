@@ -143,6 +143,14 @@ GET/POST `/api/v1/boards/{board_id}/praises`, PATCH `/api/v1/praises/{praise_id}
 
 실제 Auth-issued owner probe 3/3에서 정확한 bunch 결합, 동일 키 재시도 ID·cycle 유지와 집계 중복 방지, 임의 board의 hidden 404를 확인했다. synthetic account/session을 제거하고 원래 fixture 및 session count를 보존했다. A/B/C 로컬 API 경계는 각 10/10으로 actor 고정, invalid board/query, create/edit/cancel CSRF, 유효 CSRF 뒤 없는 대상의 안전 404를 확인했다. unit 79/79, Biome·typecheck, 산출물 교차 참조, build:check가 통과했다. `TC-API-006`은 API handler·RPC result 경계의 기술 검사만 통과로 기록한다. 제품 수락 TC, W08-D UI, 실제 Google/OTP 로그인은 미실행이다. 결과와 SHA-256 source basis는 [W08-C 증거](reports/w08-c-personal-praise-api-check-2026-10-08.json)에 남긴다.
 
+## W08-D 목표·개인 기록 기본 UI 검사
+
+UI02~UI05 기본 화면을 server API에 연결했다. 목록은 소유 목표 상태와 개인/공유판 개수를 각각 표시한다. 상세는 개인 기록과 받은 칭찬을 판별로 나누며 지난 회차를 읽기 전용으로 선택한다. 목표 생성·목표 정보 수정·판별 다음 목표 설정·완료/보관/재개, 개인 칭찬 생성·수정·취소 폼을 제공한다. 첫 칭찬 전 `current_bunch`가 없어도 개인 입력 폼을 표시하도록 확인했다.
+
+로컬 Auth A 세션을 사용한 브라우저 조회 smoke에서 목표 목록·상세, 회차/칭찬 읽기, 개인/공유 전환, empty state, 선택 공유판 입력 필드, 목표·판 설정 필드를 확인했다. smoke는 GET과 폼 열기만 수행했고 기존 fixture의 제품 데이터를 쓰지 않았다. `TC-UI-003`은 이 범위로 통과 처리한다. 전체 `check`의 Biome·typecheck·unit 82/82·산출물 구조 검사와 `build:check`가 통과했다. Idempotency-Key와 요청 본문 재사용은 별도 unit 3개에서 확인한다.
+
+실제 UI 폼 submit 후 성공 화면/상태 반영, 전송 중 네트워크 단절 및 같은 키의 재시도는 브라우저 E2E로 실행하지 않았다. 제품 fixture 쓰기를 보존하기 위한 제한이다. 실제 성공 경로의 낮은 계층 근거는 W08-C Auth/RPC 3/3, 재시도 상태 helper는 W08-D unit 3/3이다. TC-UX-001/002, 실제 기기·스크린리더·PWA/캐시, 실제 Google/OTP 로그인 및 전체 제품 수락 검사는 계속 미실행이다. [W08-D 검사 증거](reports/w08-d-goal-record-ui-check-2026-10-08.json)
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). 이 단락은 W06-A 이전 W05 부분 검사 기록이며, 이후 업무 DB/API 검증은 각 작업 단락과 진행표의 별도 증거를 따른다.

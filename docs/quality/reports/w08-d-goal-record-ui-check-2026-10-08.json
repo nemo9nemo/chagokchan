@@ -1,0 +1,113 @@
+{
+  "verified_at": "2026-10-08T10:25:14.133Z",
+  "work_item": "W08-D",
+  "status": "passed",
+  "scope": "goal_and_personal_record_basic_ui_with_read_only_local_browser_smoke",
+  "source_basis": {
+    "base_commit": "4a2f426f78ec591fc295b6a0c0835bfd2e88549e",
+    "format": "SHA-256 per UI source, helper unit tests, contract/design, progress and verification documents",
+    "files": [
+      {
+        "path": "docs/changes/2026-10-08-w08-d-goal-record-ui.md",
+        "sha256": "d08f004b81aad0aaa101547d4f1c536a1e3b193b7dac6add88b2e8241d2fe285"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "c1f1c56e6582abb6746d7d43e948176ba2ea9d438acaa21596abcd5cf2af6900"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "23335ee6aeea9adf3c1690e9160e1c14c0f185734e146a60d56d492bdf0c7e7e"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "205f27684ba57d64cca13df587cbe33b4db010453454d5b07b1a3017d3ef45d0"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "9b325785cac7a69e7f587cb27389ed0888cd695ac2d49ed1170095c9042f91e4"
+      },
+      {
+        "path": "docs/development/local-development.md",
+        "sha256": "ee16bddb3a80c3c6d323be22538fbb93a8314035cc55a4e45cba730eddcac3f1"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "d17e0826cd1c02576423554e5c53d563fac6410d4b0bac99451a9900bafa0355"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "2d1c6e789a5b74586fdaf53eaf523882eb53ef3147af02f14910f155a78aca61"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "2b0b5ad2b485732d9ee5d8faec3476d9469ec9da4b1fe3a676f9f030294770f7"
+      },
+      {
+        "path": "docs/requirements/mvp-requirements.md",
+        "sha256": "e465368f4cad94d051cf12358e4cbd58bf56fc8b3ab1bf7e90bc8dd81f87fd63"
+      },
+      {
+        "path": "package.json",
+        "sha256": "de5c4c4302744e26f20d336bb20df15ceede1bdcc172e01e2d10cd51d346eb1e"
+      },
+      {
+        "path": "scripts/idempotent-request.test.mjs",
+        "sha256": "95f481a370f9860bb9fb8c70dd794c28cb4d3ed2304aecd9eb8cf538c5146e8e"
+      },
+      {
+        "path": "src/app/client-app.tsx",
+        "sha256": "2b1765ab58c5f8f37607fb967fb3ebd773629f9ee9c23d50eeb90a258557e183"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "7a8a41653edf5055fd24c3504a6485f064fb46c6367b346021b9e094ab36991b"
+      },
+      {
+        "path": "src/app/page.tsx",
+        "sha256": "4026dece54e1f8c7fc6e97072de11d5df4688533487394fc138edb446efc3dae"
+      },
+      {
+        "path": "src/client/idempotent-request.mjs",
+        "sha256": "3a12224a2cbb80bb489a0254a57992ea3bd7fedd0ea884f5544076d3913b5e15"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "application_check",
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint": "passed",
+      "typecheck": "passed",
+      "unit_tests": "82/82",
+      "artifact_structure": "passed"
+    },
+    {
+      "id": "production_build_check",
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "routes_compiled": 14
+    },
+    {
+      "id": "local_browser_smoke",
+      "url": "http://127.0.0.1:3000/",
+      "actor": "local fixture A",
+      "status": "passed",
+      "api_reads": "goals, goal detail, boards/bunches, personal/shared praise list",
+      "verified": [
+        "goal list and status",
+        "separate personal/shared progress and views",
+        "empty current-cycle first-praise form",
+        "optional shared-board creation fields",
+        "goal and board settings fields"
+      ],
+      "product_database_mutations": 0
+    }
+  ],
+  "limitations": [
+    "Browser UI mutation submit, response rendering and network-uncertain retry E2E were not run to preserve the existing local fixture.",
+    "The UI retry key/body snapshot helper has three passing unit tests; W08-C actual Auth/RPC result probe passed 3/3 in its separate report.",
+    "Device, screen-reader, reduced-motion, PWA/cache and full product acceptance checks remain unrun."
+  ]
+}

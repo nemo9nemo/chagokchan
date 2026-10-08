@@ -1,7 +1,7 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S06_w08_d_goal_and_record_ui_next",
+  "current_stage": "S06_w09_connection_and_share_next",
   "next_stage": "S07_real_auth_and_integration_verification",
   "implementation_started": true,
   "git_repository_connected": true,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_verified_w08_d_pending"
+      "status": "in_progress_w08_a_b1_b2_c_d_api_and_basic_ui_verified_w09_next"
     },
     {
       "id": "S07",
@@ -85,11 +85,12 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 63,
-    "application_tests_executed": 79,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_and_personal_praise_units",
+    "planned_test_cases": 64,
+    "application_tests_executed": 82,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_idempotent_retry_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
+    "local_browser_smoke_cases_executed": 1,
     "database_tests_executed": 237,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
@@ -126,6 +127,7 @@
     "local_goal_management_api_checks_executed": 24,
     "w08_b2_report": "docs/quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json",
     "w08_c_report": "docs/quality/reports/w08-c-personal-praise-api-check-2026-10-08.json",
+    "w08_d_report": "docs/quality/reports/w08-d-goal-record-ui-check-2026-10-08.json",
     "local_praise_result_rpc_tests_executed": 3,
     "local_personal_praise_api_checks_executed": 30
   },
@@ -211,7 +213,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "design_only",
+      "status": "ui02_ui05_basic_implemented_read_only_browser_smoke_passed_other_screens_design_only",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -219,7 +221,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_a_through_w06_d2_and_w07_w08_c_api_checks_verified",
+      "status": "partially_executed_w06_a_through_d2_w07_w08_c_api_and_w08_d_ui_smoke_verified",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -228,7 +230,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w08_c_personal_praise_api",
+      "status": "documented_through_w08_d_goal_record_ui",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -252,7 +254,8 @@
         "docs/changes/2026-10-08-w08-a-goal-api.md",
         "docs/changes/2026-10-08-w08-b1-goal-list.md",
         "docs/changes/2026-10-08-w08-b2-goal-lifecycle-api.md",
-        "docs/changes/2026-10-08-w08-c-personal-praise-api.md"
+        "docs/changes/2026-10-08-w08-c-personal-praise-api.md",
+        "docs/changes/2026-10-08-w08-d-goal-record-ui.md"
       ]
     },
     {
@@ -278,7 +281,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_and_w06_w07_w08_c_verification_passed",
+      "status": "static_and_w06_w07_w08_c_d_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -303,7 +306,8 @@
         "docs/quality/reports/w08-a-goal-api-check-2026-10-08.json",
         "docs/quality/reports/w08-b1-goal-list-check-2026-10-08.json",
         "docs/quality/reports/w08-b2-goal-lifecycle-api-check-2026-10-08.json",
-        "docs/quality/reports/w08-c-personal-praise-api-check-2026-10-08.json"
+        "docs/quality/reports/w08-c-personal-praise-api-check-2026-10-08.json",
+        "docs/quality/reports/w08-d-goal-record-ui-check-2026-10-08.json"
       ]
     },
     {
@@ -328,7 +332,7 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_local_me_csrf_goal_board_and_personal_praise_apis_build_verified",
+      "status": "app_runtime_local_me_csrf_goal_board_personal_praise_apis_and_goal_record_ui_build_verified",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
@@ -363,7 +367,10 @@
         "docs/development/runtime-setup.md",
         "src/server/praise-api.mjs",
         "scripts/praise-api.test.mjs",
-        "scripts/test-local-personal-praise-api.mjs"
+        "scripts/test-local-personal-praise-api.mjs",
+        "src/app/client-app.tsx",
+        "src/client/idempotent-request.mjs",
+        "scripts/idempotent-request.test.mjs"
       ]
     },
     {
