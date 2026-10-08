@@ -179,7 +179,10 @@ async function apiJson<T>(path: string, init: RequestInit = {}): Promise<T> {
   try {
     response = await fetch(path, { ...init, cache: "no-store", credentials: "same-origin" });
   } catch {
-    throw new Error("서버 응답을 받지 못했습니다. 연결을 확인해 주세요.");
+    const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+    throw new Error(offline
+      ? "오프라인이에요. 다시 연결한 뒤 상태를 확인해 주세요. 기록은 성공으로 확인되지 않았어요."
+      : "서버 응답을 받지 못했습니다. 연결을 확인해 주세요.");
   }
   const payload = await response.json().catch(() => null) as { error?: { code?: string; message?: string } } | T | null;
   if (!response.ok) {
@@ -256,6 +259,7 @@ function boardProgress(board: Board | undefined, status: GoalStatus) {
 export default function ChagokchanApp() {
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("goals");
   const [theme, setTheme] = useState<"garden" | "grape">("garden");
+  const [isOnline, setIsOnline] = useState<boolean | null>(null);
   const [goals, setGoals] = useState<GoalSummary[]>([]);
   const [goalDetails, setGoalDetails] = useState<Record<string, GoalDetail>>({});
   const [goalCursor, setGoalCursor] = useState<string | null>(null);
@@ -333,6 +337,20 @@ export default function ChagokchanApp() {
     else delete document.documentElement.dataset.theme;
     return () => { delete document.documentElement.dataset.theme; };
   }, [theme]);
+
+  useEffect(() => {
+    const updateOnlineStatus = () => setIsOnline(navigator.onLine);
+    updateOnlineStatus();
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
+    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+      void navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => undefined);
+    }
+    return () => {
+      window.removeEventListener("online", updateOnlineStatus);
+      window.removeEventListener("offline", updateOnlineStatus);
+    };
+  }, []);
 
   const refreshConnectionCenter = useCallback(async () => {
     setConnectionLoading(true);
@@ -982,6 +1000,10 @@ export default function ChagokchanApp() {
         </button>
         <span className="profile-chip">오늘도 나</span>
       </header>
+
+      {isOnline === false && <div className="offline-banner" role="status" aria-live="polite">
+        <span>오프라인이에요. 다시 연결한 뒤 기록을 확인해 주세요. 오프라인 전송은 저장되거나 성공 처리되지 않아요.</span>
+      </div>}
 
       <div className="workspace">
         <aside className={`goal-sidebar ${workspaceView === "goals" && selectedGoalId ? "has-selection" : ""}`} aria-label="차곡찬 메뉴">

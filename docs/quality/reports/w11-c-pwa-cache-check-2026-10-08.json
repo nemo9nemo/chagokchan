@@ -1,0 +1,248 @@
+{
+  "verified_at": "2026-10-08T12:59:35.587Z",
+  "work_item": "W11-C",
+  "status": "implementation_unit_and_build_passed_device_scope_pending",
+  "scope": "pwa_install_manifest_static_only_cache_offline_guidance",
+  "source_basis": {
+    "base_commit": "f753155230b5833158862afbaa03aa7b96a119aa",
+    "format": "SHA-256 per implementation, unit test, test case, design, progress, handoff, verification plan, README and change record sources; excludes this report.",
+    "files": [
+      {
+        "path": "src/app/client-app.tsx",
+        "sha256": "3f59cb1f65f54a2d07127c7e4251bdc565a2f459adf5dfcfd759815d55225871"
+      },
+      {
+        "path": "src/app/globals.css",
+        "sha256": "bcbc94065d1b9f1a147bc786ef0e31bd0ba948afbb479133939de8394932210a"
+      },
+      {
+        "path": "src/app/layout.tsx",
+        "sha256": "b58d4e6ff0d39d9cc981fd948a78d42f201799dceec755a749b955fc70366be8"
+      },
+      {
+        "path": "src/app/page.tsx",
+        "sha256": "9b5fecadea1f2683c5ddce29222abc8a27ef600e595d7f69be95c50c2e5ce8f0"
+      },
+      {
+        "path": "src/app/manifest.ts",
+        "sha256": "8410166ccbb0e0fbe086867384b5a48459f49df62dca1b8d8128da80a0ce77a7"
+      },
+      {
+        "path": "src/app/pwa-icons/render-icon.tsx",
+        "sha256": "ec58db1af686c2fe3447e9ec9782a71c99cc3f13fc6f187cfe27f368e5d55a31"
+      },
+      {
+        "path": "src/app/pwa-icons/180/route.tsx",
+        "sha256": "af21f4cb31a0ceca0b407c5033a8e7886ec50301e2c4408ac880ee814917f192"
+      },
+      {
+        "path": "src/app/pwa-icons/192/route.tsx",
+        "sha256": "7893cd4ad904f54a89e916d525307c9fbdf69fc5464062b2598d8a92698e2c1b"
+      },
+      {
+        "path": "src/app/pwa-icons/512/route.tsx",
+        "sha256": "6bc69efa0c1f33a79addf7b86169b956c118f9e501763e9da8386d88e7427975"
+      },
+      {
+        "path": "public/sw.js",
+        "sha256": "6cfc471f983125a327c48ebbfb915f6904da1099924cb77b5806d0af623b017d"
+      },
+      {
+        "path": "public/offline.html",
+        "sha256": "01fc4feefe1fcf09221dc32f5596cbaa9936fdf3c8ebd18a4305f345b8176298"
+      },
+      {
+        "path": "next.config.mjs",
+        "sha256": "6db810f1e43431e9e33591fdb3ae9121bf21097dbb3836a5ad4df3a9760fcf63"
+      },
+      {
+        "path": "package.json",
+        "sha256": "8c9e37e43c98cd9e752f8384b73ec086451de52497a686f9a3d25199ad08551f"
+      },
+      {
+        "path": "scripts/service-worker.test.mjs",
+        "sha256": "b580d7a70044906c8e6a00a6bea6d1d3c6823d1d00de9ee867bc6dcdebbabb99"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "04aa2efd8c7881f4801fcf5bd41632c121f8c592f6fd975314c5b2a124fcd9b0"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "ca28153cf8a4c1300ec07008def4748eefc2b979b789b88ab89e1f872be4f478"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "a84c0d84177feaf6e1a3f4280db0e7f6fa16bd64ac721a9326ecdbfffe0038d2"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "aed594fae7fe08323889417d6dcc5b3a75ae79b11fad49d3afd123bc070793fd"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "d8924d5e5a6e6dee42341b9a050e5cf15869f1fdc968f4e5e1891e5281c6d7dc"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "22baa631cca91b2772f8a73ca46b91627896a51639c27b8eca97109aa5bcc74d"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "e7ae5b4e0e0c043189e0adc90e7b6952331854ac83b7e047904a4d0854a52567"
+      },
+      {
+        "path": "README.md",
+        "sha256": "82c4ee6e1f2e201c2a4bdd3b4902e357e68029077c11f3c4b6121d26fd1f86d4"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w11-c-pwa-cache.md",
+        "sha256": "ebc2b7528545560a33ed9738883ac5908868d3d1901edb1a01b6e83e2308f40e"
+      }
+    ]
+  },
+  "environment": {
+    "operating_system": "Windows local workspace",
+    "project_runtime_versions": {
+      "node": "24.19.0",
+      "pnpm": "11.19.0",
+      "next": "16.4.0"
+    },
+    "targeted_test_shell_node": "22.14.0",
+    "auth_mode": "local fixture for loopback HTTP app; build-check used synthetic preview environment values",
+    "database_host_binding": "127.0.0.1"
+  },
+  "commands": {
+    "targeted_service_worker_test": {
+      "command": "node --test scripts/service-worker.test.mjs",
+      "status": "passed",
+      "tests": 6,
+      "passed": 6
+    },
+    "check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 96,
+      "typecheck": "passed",
+      "unit_tests": 115,
+      "unit_tests_passed": 115,
+      "artifact_check": "passed",
+      "planned_test_cases": 74,
+      "technical_cases_passed": 35,
+      "artifact_counts": {
+        "registered_paths": 283,
+        "local_markdown_links": 488,
+        "json_files": 38,
+        "openapi_paths": 55,
+        "openapi_local_references": 700,
+        "traceability_cases": 74
+      }
+    },
+    "production_build": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "next": "16.4.0",
+      "route_entries": 40,
+      "route_scope": [
+        "/",
+        "/manifest.webmanifest",
+        "/pwa-icons/180",
+        "/pwa-icons/192",
+        "/pwa-icons/512"
+      ]
+    }
+  },
+  "loopback_http_smoke": {
+    "status": "passed_for_static_pwa_responses",
+    "host": "127.0.0.1:3000",
+    "root": {
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    "manifest": {
+      "status": 200,
+      "name": "차곡찬 · Chagokchan",
+      "display": "standalone",
+      "icons": [
+        "192x192 image/png",
+        "512x512 image/png"
+      ]
+    },
+    "service_worker": {
+      "status": 200,
+      "content_type": "application/javascript; charset=UTF-8",
+      "cache_control": "no-store, must-revalidate, no-cache"
+    },
+    "offline_document": {
+      "status": 200,
+      "cache_control": "public, max-age=31536000, immutable",
+      "personal_data": false
+    },
+    "icons": [
+      {
+        "path": "/pwa-icons/180",
+        "status": 200,
+        "content_type": "image/png",
+        "png_signature": true,
+        "dimensions": [
+          180,
+          180
+        ]
+      },
+      {
+        "path": "/pwa-icons/192",
+        "status": 200,
+        "content_type": "image/png",
+        "png_signature": true,
+        "dimensions": [
+          192,
+          192
+        ]
+      },
+      {
+        "path": "/pwa-icons/512",
+        "status": 200,
+        "content_type": "image/png",
+        "png_signature": true,
+        "dimensions": [
+          512,
+          512
+        ]
+      }
+    ],
+    "api_me": {
+      "status": 503,
+      "cache_control": "no-store",
+      "interpretation": "API availability was not established by this static PWA smoke.",
+      "body_inspected": false
+    },
+    "product_mutation_requests": 0
+  },
+  "test_cases": {
+    "TC-CACHE-002": "passed",
+    "TC-CACHE-001": "not_run",
+    "TC-WEB-006": "not_run",
+    "product_acceptance_cases_executed": 0
+  },
+  "service_worker_harness": {
+    "status": "passed",
+    "tests": 6,
+    "assertions_scope": [
+      "install cache contains the explicit offline document and public app icons",
+      "only immutable versioned Next assets and explicit PNG icons are runtime cache candidates",
+      "HTML response, root document, RSC query, API, invite paths/secrets, query values and POST requests do not enter CacheStorage",
+      "offline root navigation returns the generic static page without personal data",
+      "activation removes old Chagokchan-prefixed caches and leaves other app caches intact"
+    ],
+    "fixture_data_mutated": false,
+    "api_mutations_sent": 0
+  },
+  "limitations": {
+    "browser_service_worker_installation_executed": false,
+    "offline_mode_in_real_browser_executed": false,
+    "real_account_a_b_switch_executed": false,
+    "physical_device_home_screen_install_executed": false,
+    "actual_device_acceptance_complete": false,
+    "reason": "The VM harness and loopback HTTP checks verify cache boundaries and static PWA responses. They do not replace installation, account-switch/back-navigation, or offline mutation checks on supported physical devices."
+  }
+}

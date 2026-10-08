@@ -85,9 +85,9 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 73,
-    "application_tests_executed": 109,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_units",
+    "planned_test_cases": 74,
+    "application_tests_executed": 115,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
@@ -116,7 +116,8 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 34,
+    "technical_cases_passed": 35,
+    "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
     "w07_a_report": "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json",
     "w07_b_report": "docs/quality/reports/w07-b-api-security-check-2026-10-08.json",
     "w08_a_report": "docs/quality/reports/w08-a-goal-api-check-2026-10-08.json",
@@ -225,7 +226,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "ui02_ui08_basic_ui09_pending_ui10_trash_ui_w11_a_theme_w11_b1_accessibility_recovery_w11_b2_browser_reflow_contrast_verified_device_check_pending_w11_c_pending",
+      "status": "ui02_ui08_basic_ui09_pending_ui10_trash_ui_w11_a_theme_w11_b1_accessibility_recovery_w11_b2_browser_reflow_contrast_verified_w11_c_pwa_static_cache_unit_verified_device_check_pending",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -233,7 +234,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_through_w11_b2_browser_reflow_contrast_technical_device_check_pending",
+      "status": "partially_executed_w06_through_w11_c_pwa_cache_unit_device_acceptance_check_pending",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -242,7 +243,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w11_b2_browser_reflow_contrast_device_check_pending",
+      "status": "documented_through_w11_c_pwa_cache_unit_device_check_pending",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -275,7 +276,8 @@
         "docs/changes/2026-10-08-w10-b-goal-trash-api-ui.md",
         "docs/changes/2026-10-08-w11-a-theme-switch.md",
         "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md",
-        "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md"
+        "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md",
+        "docs/changes/2026-10-08-w11-c-pwa-cache.md"
       ]
     },
     {
@@ -301,7 +303,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_and_w06_w11_b2_browser_verification_passed_device_check_pending",
+      "status": "static_w06_w11_b2_browser_and_w11_c_pwa_cache_unit_verification_passed_device_check_pending",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -335,7 +337,8 @@
         "docs/quality/reports/w10-b-goal-trash-api-ui-check-2026-10-08.json",
         "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
         "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
-        "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json"
+        "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
+        "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json"
       ]
     },
     {
@@ -360,7 +363,7 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_local_me_goal_news_trash_ui_w11_a_theme_w11_b2_mobile_reflow_and_contrast_browser_verified_device_check_pending",
+      "status": "app_runtime_local_me_goal_news_trash_ui_w11_a_theme_w11_b2_mobile_reflow_contrast_browser_and_w11_c_pwa_static_cache_unit_verified_device_check_pending",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
@@ -397,6 +400,12 @@
         "scripts/praise-api.test.mjs",
         "scripts/test-local-personal-praise-api.mjs",
         "src/app/client-app.tsx",
+        "src/app/manifest.ts",
+        "src/app/pwa-icons/",
+        "public/sw.js",
+        "public/offline.html",
+        "scripts/service-worker.test.mjs",
+        "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
         "src/client/idempotent-request.mjs",
         "scripts/idempotent-request.test.mjs",
         "src/server/connection-api.mjs",

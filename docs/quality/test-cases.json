@@ -581,6 +581,27 @@
       "evidence": null
     },
     {
+      "id": "TC-CACHE-002",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "unit_service_worker_cache_boundary",
+      "title": "PWA 공개 정적 캐시 허용 목록·오프라인 안내",
+      "steps": [
+        "설치 캐시에 오프라인 안내와 앱 아이콘만 포함되고 서비스 워커가 구버전 차곡찬 정적 캐시만 정리하는지 확인한다",
+        "immutable Next 정적 자산만 응답을 검사해 캐시하고 HTML 응답·RSC·API·초대·query secret·변경 요청은 서비스 워커가 가로채지 않는지 검사한다",
+        "네트워크가 끊긴 홈 화면 이동이 개인 데이터 없는 정적 오프라인 안내로 대체되고 오프라인 전송은 성공으로 표시되지 않는지 확인한다",
+        "앱 매니페스트 이름·standalone 표시·192/512 PNG 아이콘 경로와 홈 문서 private,no-store 설정을 확인한다"
+      ],
+      "expected": "공개 immutable 정적 파일과 고정 오프라인 안내만 캐시에 존재한다. 사용자 HTML/RSC/API/초대/기록과 변경 요청은 캐시에 저장되지 않고 오프라인 요청을 성공으로 확정하지 않는다. 매니페스트와 문서 응답 범위가 설치·개인정보 정책에 맞는다.",
+      "status": "passed",
+      "evidence": "reports/w11-c-pwa-cache-check-2026-10-08.json"
+    },
+    {
       "id": "TC-UI-003",
       "requirement_ids": [
         "REQ-002",
