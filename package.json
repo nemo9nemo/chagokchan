@@ -26,6 +26,7 @@
     "db:test": "node scripts/database-task.mjs test",
     "db:rpc-test": "node scripts/database-task.mjs rpc-test",
     "db:goal-test": "node scripts/test-local-goal-rpc.mjs",
+    "db:praise-test": "node scripts/test-local-personal-praise.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },
   "dependencies": {

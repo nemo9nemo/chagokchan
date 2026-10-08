@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. W06-A의 Auth 세션 경계와 W06-B1의 목표 생성·소유 조회·revision 상태 RPC도 완료했다. 다음은 W06-B2 개인 칭찬·회차의 원자적 집계이며 연결·공유·삭제 업무 RPC도 W06에 남아 있다. [진행표](backlog.md), [W06-A 검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json), [W06-B1 검사 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json)에 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
+S04 앱·실행 환경·로컬 DB 준비와 S05의 W05 물리 스키마·합성 초기 데이터를 완료했다. W06-A 세션 경계와 W06-B 목표·개인 칭찬·회차 업무 RPC도 구현·검증했다. 다음은 W06-C 연결·초대·판 권한·공유 칭찬이며 소식·삭제 RPC는 W06-D에 남아 있다. [진행표](backlog.md), [W06-A 검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json), [W06-B1 검사 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json), [W06-B2 검사 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json)에 결과를 기록한다. 문서 작성, 구현, 실행 검증, 공개 출시 상태를 각각 기록한다. 파일이 존재하는 것만으로 기능이 완료되었다고 판단하지 않는다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 

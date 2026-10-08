@@ -1,0 +1,252 @@
+{
+  "verified_at": "2026-10-08T03:55:25.616Z",
+  "work_item": "W06-B2",
+  "status": "passed",
+  "scope": "personal_praise_cycle_atomic_aggregation_retry_rate_and_completion_notification_rls",
+  "source_basis": {
+    "base_commit": "ec709aecc04a4892ecef17e271af1a3a57539367",
+    "format": "SHA-256 per path; current commit is identified by the repository history containing this report",
+    "files": [
+      {
+        "path": "package.json",
+        "sha256": "79a5ce2227c82be24d1ab81e48a1ec1ee91790697b2b00133b3e072f17f9abcc"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "c8f31283595fe0e588774507d3c1194f5956f86fced036b5bb5a566ae4852539"
+      },
+      {
+        "path": "policies/app-policy.json",
+        "sha256": "433f0fa3b876d47fb61fede39d03d7e9c52e6b2e2b31523c9ad8dc58cf82f77a"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "9db1928415e63ecb39d7bcfabd2eea9ed3d3f9573a03b1497acc3f024e11c6b0"
+      },
+      {
+        "path": "scripts/test-local-personal-praise.mjs",
+        "sha256": "9d6e1a4a56cb12c2af07a5eeb0ee4b5ef22394aef4d443815ea16a47ba173d1e"
+      },
+      {
+        "path": "supabase/migrations/20261008021400_personal_praise_cycle_rpcs.sql",
+        "sha256": "6099beeaddde493015c07e2541200eea4bc8ca895745455317a071e08e84ddec"
+      },
+      {
+        "path": "supabase/migrations/20261008021500_qualify_praise_cycle_number.sql",
+        "sha256": "a39a91fe116c473c1d3a6c8bc061211059f03698dd62674effc322b4b5fc8d18"
+      },
+      {
+        "path": "supabase/migrations/20261008021600_verified_actor_completion_notice.sql",
+        "sha256": "b6df3bbe52ed792808c61e6824c10465811069890e0e551b9d30a1e72104311c"
+      },
+      {
+        "path": "supabase/migrations/20261008021700_notification_conflict_select_policy.sql",
+        "sha256": "20b71bdad99138fc633a24fd61f473717df06747866f3559717d0ac9cddd1486"
+      },
+      {
+        "path": "supabase/tests/004_business_rpc_praise.test.sql",
+        "sha256": "e16418a5c725164de743d4dd31a5cde3f4381ecabd0da151869ea920daacbb9f"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "9d76e9d8f358d670649d556262128ea7da0432a450004082f00b200a496e603f"
+      },
+      {
+        "path": "docs/quality/verification-plan.md",
+        "sha256": "5dce6dfd7579bf193c3291337c117c410257c778a6502a87e351ed73b0daa143"
+      },
+      {
+        "path": "docs/development/README.md",
+        "sha256": "ac8676905bdcd61b472e66a13db3e4805c1b8e906199754d0d35760bb6c5e5db"
+      },
+      {
+        "path": "docs/development/backlog.md",
+        "sha256": "6d5a11a339a2de4e7ddfef967afdb3c134c9d6536c64bc27fd96706e731199cb"
+      },
+      {
+        "path": "docs/development/artifact-register.json",
+        "sha256": "20d148ef95fd33967c57e79977b16fa58bce5f2e002048d3ec6b6d7a8f3ebd4d"
+      },
+      {
+        "path": "docs/development/codex-project-handoff.md",
+        "sha256": "4751d62b719b1de7b6aee6c4c5d64d0046b7849e28bad0a33ec907878c617394"
+      },
+      {
+        "path": "docs/changes/2026-10-08-w06-b2-personal-praise.md",
+        "sha256": "c571529a1b8578c5cb1dd9f2c137eb7c24e52987cf760a2755847166804d6542"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008021400",
+      "20261008021500",
+      "20261008021600",
+      "20261008021700"
+    ],
+    "previous_applied_migrations_modified": false,
+    "security": "Fixed-search-path SECURITY DEFINER RPCs use the non-login, non-BYPASSRLS business owner, current-session actor checks, owner-scoped RLS and column grants. The notification SELECT policy is available only to that RPC owner and only for the current recipient; API roles have no direct notification or praise DML/SELECT access."
+  },
+  "database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "verified_at": "2026-10-08T03:44:09.261Z",
+    "status": "passed",
+    "executed": 116,
+    "passed": 116,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 44,
+    "real_login": 0,
+    "rpc_only_command": {
+      "command": "scripts/project.ps1 -Task db:rpc-test",
+      "verified_at": "2026-10-08T03:46:09.962Z",
+      "status": "passed",
+      "executed": 65,
+      "passed": 65,
+      "failed": 0
+    }
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:praise-test",
+    "verified_at": "2026-10-08T03:45:52.654Z",
+    "status": "passed",
+    "executed": 12,
+    "passed": 12,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-PRAISE-001",
+      "TC-DB-CYCLE-001",
+      "TC-DB-RATE-001"
+    ],
+    "cases": [
+      {
+        "name": "personal_praise_creates_first_bunch_atomically",
+        "status": "passed"
+      },
+      {
+        "name": "completion_notification_rls_matches_completion_insert_and_rolls_back",
+        "status": "passed"
+      },
+      {
+        "name": "praise_idempotency_replay_and_input_conflict",
+        "status": "passed"
+      },
+      {
+        "name": "self_message_date_edit_keeps_aggregate_and_enforces_date_range",
+        "status": "passed"
+      },
+      {
+        "name": "author_cancel_erases_body_and_decrements_once",
+        "status": "passed"
+      },
+      {
+        "name": "authenticated_direct_praise_read_remains_denied",
+        "status": "passed"
+      },
+      {
+        "name": "two_distinct_praises_at_last_unit_serialize_cycle_boundary",
+        "status": "passed"
+      },
+      {
+        "name": "historical_cancel_does_not_move_current_pointer",
+        "status": "passed"
+      },
+      {
+        "name": "next_target_configuration_applies_to_new_bunch_only",
+        "status": "passed"
+      },
+      {
+        "name": "completed_goal_rejects_new_praise_until_resume",
+        "status": "passed"
+      },
+      {
+        "name": "minute_and_utc_day_quotas_deny_without_partial_result",
+        "status": "passed"
+      },
+      {
+        "name": "completion_failure_rolls_back_praise_cycle_receipt_and_quota",
+        "status": "passed"
+      }
+    ],
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_app_rpc": false,
+    "provider_login_tests_executed": 0
+  },
+  "regressions": {
+    "goal_rpc": {
+      "command": "scripts/project.ps1 -Task db:goal-test",
+      "verified_at": "2026-10-08T03:47:13.077Z",
+      "status": "passed",
+      "executed": 12,
+      "passed": 12,
+      "cleanup_passed": true,
+      "app_fixture_data_preserved": true,
+      "provider_login_tests_executed": 0
+    },
+    "session_boundary": {
+      "command": "scripts/project.ps1 -Task db:session-test",
+      "verified_at": "2026-10-08T03:46:39.102Z",
+      "status": "passed",
+      "executed": 27,
+      "passed": 27,
+      "cleanup_passed": true,
+      "app_fixture_data_preserved": true,
+      "provider_login_tests_executed": 0
+    }
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T03:55:25.111Z",
+    "status": "passed",
+    "lint_files": 22,
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 43,
+      "local_markdown_links": 366,
+      "registry_paths": 126,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "build_check": {
+    "command": "scripts/project.ps1 -Task build:check",
+    "status": "passed",
+    "next": "16.4.0",
+    "build_mode": "offline_local"
+  },
+  "product_scope": {
+    "openapi_bff_implemented": false,
+    "product_acceptance_cases_planned": 36,
+    "product_acceptance_cases_completed": 0,
+    "technical_cases_passed": 7,
+    "human_or_provider_login_tests_executed": 0,
+    "shared_board_praise_and_notification_reading_pending": true,
+    "connection_permissions_and_deletion_rpc_pending": true
+  },
+  "findings_and_fixes": [
+    "The first issued-session run exposed an ambiguous cycle_no column/PLpgSQL variable reference; follow-up migration 20261008021500 qualifies the local cycle counter as v_cycle_no.",
+    "The exact completion-notification INSERT with an ON CONFLICT arbiter exposed the need for a SELECT RLS policy on proposed rows. Migration 20261008021700 scopes SELECT to the verified recipient for the non-login RPC owner only.",
+    "The rate-limit rollback test resets its own synthetic actor buckets before injecting a cycle-completion failure, so its result is independent of earlier test cases."
+  ],
+  "next_work_item": "W06-C"
+}

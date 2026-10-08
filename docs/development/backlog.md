@@ -22,7 +22,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W03 | 개발 중 무로그인 사용 정책 | DONE | 사용자 결정·W01 | 로컬 가상 사용자·배포 분리·실제 로그인 적용 시점 | **설계 완료**. [개발 정책](../../policies/development-policy.json)·[로컬 개발](local-development.md)·[ADR-0004](../decisions/ADR-0004-local-development-auth.md). 실행 코드는 W07 |
 | W04 | 개발 환경·앱 기반·로컬 DB 준비 | DONE | W02, W03. 다음 작업 | 고정 Node/pnpm·package/lock·타입/린트·Supabase 설정. 앱 빌드·DB 기동 재현 | **완료 2026-10-08**. 설치·린트·타입·환경/포트 27/27·빌드·HTTP·PostgreSQL 17.11·Auth/REST·포트 127.0.0.1 확인. [검사 증거](../quality/reports/foundation-check-2026-10-08.json) |
 | W05 | DB 물리 설계·마이그레이션·가상 데이터 | DONE | W04 | ERD를 SQL·제약·인덱스로 구현. 빈 로컬 DB 적용·A/B/C 초기 데이터 재현 | **완료 2026-10-08**. 빈 DB 적용·18테이블/ERD 컬럼·A/B/C·DB 51/51·준비 재실행 보존/환경 차단·소스 32/32·빌드. [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json) |
-| W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | IN_PROGRESS | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | **W06-A·W06-B1 완료 2026-10-08**: 실제 발급 세션 경계와 목표 생성·조회·revision 상태 RPC. DB 90/90·목표 통합 12/12. 개인 칭찬/회차·연결/공유·삭제 RPC와 경합은 남음. [W06-A 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json)·[W06-B1 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json) |
+| W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | IN_PROGRESS | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | **W06-A·W06-B 완료 2026-10-08**: 세션 경계·목표·개인 칭찬/회차·원자 집계. DB 116/116·개인 칭찬 12/12. 연결/공유·삭제 업무 RPC와 경합은 W06-C/D에 남음. [W06-B1 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json)·[W06-B2 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json) |
 | W07 | 서버 API 기반·로컬 사용자 연결 | TODO | W03, W06 | 로그인 화면 없이 A 사용, B/C로 같은 RPC/RLS 검사. 입력·CSRF·응답 제한·배포 차단 검증 | 로컬 사용자 해석기·API 미구현 |
 | W08 | 개인 목표·셀프 칭찬·회차·정리 | TODO | W07 | 목표→개인 칭찬→완성→지난 회차·취소. REQ-002/003/007/012 검증 | 화면·API 미구현 |
 | W09 | 사람 연결·판 권한·공유 칭찬 | TODO | W07, W08 | 초대→요청→수락→판 grant→칭찬. 연결만 된 B·무관한 C 거절 | REQ-004/005/006 미구현 |
@@ -64,6 +64,7 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | --- | --- | --- | --- |
 | W06-A | 현재 Auth 세션·계정 경계·get_me·참조/정체성 트리거 | DONE | 2026-10-08. PostgreSQL 17.11에서 전체 DB 72/72, Auth 발급 A/B/C 세션 통합 27/27, 앱 데이터 보존·임시 계정/세션 정리 통과. [검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json) |
 | W06-B1 | 목표 생성·소유 조회·내용 수정·상태 전이 RPC | DONE | 2026-10-08. migration 4개·RLS/열 권한 18/18·전체 DB 90/90·발급 세션 통합 12/12·W06-A 세션 회귀 27/27·lint/type/build 통과. 같은 키 재시도·상한 경합·데이터/세션 보존 확인. [검사 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json) |
-| W06-B | 개인 칭찬·회차 업무 RPC와 원자적 집계·취소·재시도 | IN_PROGRESS | 목표 생성·상태는 W06-B1 완료. 셀프 칭찬·회차·완성/소식·개인 메모·취소, 동시성·롤백 검사 남음 |
+| W06-B | 목표·개인 칭찬·회차 업무 RPC와 원자적 집계·취소·재시도 | DONE | W06-B1 목표 생성·소유 조회·revision 상태와 W06-B2 개인 칭찬·회차. DB 116/116·RPC 경계/업무 권한 65/65·발급 세션 목표 12/12·개인 칭찬 12/12·W06-A 세션 회귀 27/27·lint/type/unit/build 통과. 개인/회차 기술 TC 3개 통과. [W06-B2 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json) |
+| W06-B2 | 개인 칭찬·회차·완성 소식·제한·롤백 | DONE | 2026-10-08. 적용 마이그레이션 20261008021400~20261008021700. 실제 발급 세션 12/12: 편집·취소·중복, 마지막 단위 동시 부여·회차 이동·수신자 RLS·목표 snapshot·20/분·300/일·강제 실패 전체 롤백. 기존 적용 SQL은 수정하지 않음. [검사 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json) |
 | W06-C | 연결·초대·요청·판 grant·공유 칭찬 RPC와 권한 회수 경합 | TODO | 현재 연결·차단·grant 세대 검사, 중복·동시 요청 및 트랜잭션 검사 |
 | W06-D | 소식·요청 결과·삭제/파기 RPC와 FK 정리 경계 | TODO | idempotency·계정 접근 중단·작성자/수신자 삭제·재시도 검사 |

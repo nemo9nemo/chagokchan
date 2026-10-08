@@ -34,7 +34,7 @@
 | W00~W03 | DONE | 작업 공간 이전·요구·정책·논리 설계·개발 무로그인 정책 |
 | W04 | DONE | 앱 기반·로컬 DB·소스 27개·빌드·loopback HTTP. [증거](../quality/reports/foundation-check-2026-10-08.json) |
 | W05 | DONE | 18테이블·38FK·68인덱스·RLS·합성 A/B/C. 물리 DB 51개·소스 단위 32개·빌드. [증거](../quality/reports/physical-database-check-2026-10-08.json) |
-| W06 | IN_PROGRESS | **W06-A·W06-B1 완료**: Auth 세션 경계와 목표 생성·소유 조회·revision 상태 RPC. DB 90/90·목표 통합 12/12. 개인 칭찬/회차·연결/공유·삭제 RPC와 경합은 미구현. [W06-A 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json)·[W06-B1 증거](../quality/reports/w06-b1-goal-rpc-check-2026-10-08.json) |
+| W06 | IN_PROGRESS | **W06-A·W06-B 완료**: Auth 세션 경계·목표·개인 칭찬/회차 RPC. DB 116/116·개인 칭찬 통합 12/12·목표 통합 12/12. 다음 W06-C 연결/공유 권한, W06-D 소식/삭제 RPC. [W06-B2 증거](../quality/reports/w06-b2-personal-praise-check-2026-10-08.json) |
 | W07~W11 | TODO | 서버 API·로컬 사용자 해석·개인/공유 기능·삭제·테마/접근성/PWA |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
@@ -42,7 +42,7 @@
 | W16-C | TODO | CI·브랜치 보호 |
 | W17 | TODO | 공개 배포·관찰 |
 
-앱에는 준비 화면만 있다. 업무 UI·BFF API는 미구현이다. 제품 수락 TC 36개는 실행 완료 0개다. W06-A 기술 TC 2개와 W06-B1 목표 기술 TC 2개가 통과했다. 전체 DB 검사 90/90은 물리 51, 세션·참조 경계 21, 목표 RPC 권한/RLS 18개다. 발급 로컬 세션 목표 검사 12/12와 기존 A/B/C 세션 회귀 27/27도 통과했다.
+앱에는 준비 화면만 있다. 업무 UI·BFF API는 미구현이다. 제품 수락 TC 36개는 실행 완료 0개다. W06-A 기술 TC 2개, W06-B1 목표 기술 TC 2개, W06-B2 개인 칭찬/회차 기술 TC 3개가 통과했다. 전체 DB 검사 116/116은 물리 51, 세션·참조 경계 21, 업무 RPC 권한/RLS 44개다. RPC 회귀 65/65, 발급 로컬 세션 목표 검사 12/12, 개인 칭찬 검사 12/12, A/B/C 세션 회귀 27/27도 통과했다. 실제 Google/OTP 로그인은 검증하지 않았다.
 
 ## 현재 런타임과 DB
 
@@ -50,13 +50,13 @@ Node `24.19.0`, pnpm `11.19.0`, Next `16.4.0`, React `19.3.0`, TypeScript `5.9.3
 
 Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서비스 7개를 사용한다. DB 컨테이너는 `supabase_db_chagokchan`, API 게이트웨이는 `supabase_kong_chagokchan`이다. API 54321·DB 54322·Studio 54323·메일함 54324는 127.0.0.1에 바인딩한다. 프로젝트의 loopback 프록시를 포함한 `db:start` 실행 경로를 유지한다.
 
-적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
+적용 완료 SQL은 `20261008013000_product_schema.sql`, W06-A `20261008020500`~`20261008020900`, W06-B1 `20261008021000`~`20261008021300`, W06-B2 `20261008021400`~`20261008021700`이다. **적용한 SQL은 수정하지 않는다.** Auth 테이블은 Supabase 관리 영역이고 스키마 변경은 하지 않는다. 기존 합성 계정·앱 데이터를 자동으로 초기화하거나 삭제 작업 중인 계정을 재활성화하지 않는다.
 
 `.env.development.local`, `private-data/local-fixtures.json`은 현재 폴더에 존재하며 Git에서 제외한다. 인증 값은 읽어 출력하거나 문서·로그에 기록하지 않는다. 로컬 fixture 파일은 현재 사용자와 SYSTEM만 접근하도록 제한했다. `db:seed`는 명시적으로 준비하며 재실행 시 기존 제품 데이터를 덮어쓰지 않는다. 서버 실행·빌드에서 자동 seed를 하지 않는다.
 
 원격 첫 업로드는 GitHub CLI의 기존 인증을 프로세스 한정 credential helper로 사용했다. 글로벌 Git 설정은 바꾸지 않았다. 후속 push가 로컬 인증 설정 때문에 실패하면 `gh auth status`로 상태를 확인하고 토큰을 출력하지 않는 GitHub CLI credential helper를 사용한다. 강제 push로 원격 이력을 덮어쓰지 않는다.
 
-## W06-A·W06-B1 완료와 다음 작업
+## W06-A·W06-B 완료와 다음 작업
 
 `tmp/w06-draft/source/`와 `tmp/w06-draft/manifest.json`은 초안 복사 당시 상태를 보존하는 Git 제외 자료다. manifest의 `draft_unapplied_untested`는 복사 당시 사실이며 현재 적용 상태가 아니다. 기능 소스는 저장소의 정식 경로에서 후속 검토·수정했다.
 
@@ -71,13 +71,15 @@ Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서
 | `scripts/test-local-rpc.mjs` | Auth가 발급한 A/B/C 세션, 최소 본인 응답, 직접 접근/세션 폐기/계정 상태, 관리 스키마 비노출과 정리 27/27 통과 |
 | `supabase/migrations/20261008021000_goal_rpc.sql`~`20261008021300_receipt_retry_lock_privilege.sql` | 적용. 목표·개인판·명시 공유 프로필 원자 생성, 상세 조회, revision 수정·완료/보관/재개, 중복 영수증·사용자별 상한 경합 |
 | `supabase/tests/003_business_rpc.test.sql`·`scripts/test-local-goal-rpc.mjs` | 권한/RLS 18/18·실제 발급 소유자/타인 세션 목표 통합·10개 중복 병렬·20개 상한 경합 12/12. 앱 fixture 보존·probe 계정/세션 정리 |
+| `supabase/migrations/20261008021400_personal_praise_cycle_rpcs.sql`~`20261008021700_notification_conflict_select_policy.sql` | 적용. 개인 칭찬·메모 수정/취소·회차 snapshot·집계·완성 알림·쿼터와 ON CONFLICT 충돌 키에 필요한 수신자 한정 SELECT RLS. 앞서 적용된 migration은 수정하지 않음 |
+| `supabase/tests/004_business_rpc_praise.test.sql`·`scripts/test-local-personal-praise.mjs` | 업무 RPC 권한/RLS 26/26·실제 Auth 발급 소유자/타인 세션 통합 12/12. 회차 경계 병렬 부여·20/분·300/일·실패 롤백·fixture 보존·계정/세션 정리 |
 
 Auth 관리 테이블은 RLS가 켜져 있고 앱 정책이 없다. 그 때문에 전용 reader만 `BYPASSRLS`를 가지며 조회 가능한 Auth 열을 제한했다. 이 역할은 `NOLOGIN`, 제품 테이블 권한 없음, API 역할이 assume 불가이고, 고정 `search_path`를 가진 세션 검사 함수만 소유한다. 결정 근거와 제한은 [ADR-0005](../decisions/ADR-0005-local-auth-session-reader.md)에 있다. 일반 get_me 호출은 publishable key와 실제 발급된 사용자 세션을 사용한다. 관리 API 키는 검사용 임시 계정 생성·삭제에만 쓴다.
 
-1. W06-A와 W06-B1은 완료됐다. 목표 RPC 검증 명령은 `scripts/project.ps1 -Task db:test`, `db:rpc-test`, `db:goal-test`이며 W06-A 세션 명령은 `db:session-test`다. 모두 고정 Node·loopback 로컬 DB 가드를 사용한다.
-2. 다음 단위 W06-B2에서 개인 칭찬·회차의 업무 RPC, 원자적 집계·완성·소식·취소·재시도부터 구현한다. 기존 제품 정책·ERD·계약·TC를 기준으로 하고 적용한 마이그레이션은 수정하지 않는다.
-3. 이어 W06-C 연결·초대·판 권한·공유 칭찬과 연결 해제/차단/권한 회수 경합, W06-D 소식·삭제 작업을 트랜잭션과 실제 로컬 세션으로 검증한다.
-4. 하위 단위마다 관련 문서·검사 증거·진행표·등록부를 갱신해 커밋하고 원격 상태를 확인한다. W06 전체 업무 RPC가 완료되기 전에는 W06 상태를 IN_PROGRESS로 유지한다.
+1. W06-A와 W06-B1/B2는 완료됐다. 목표 검증은 `db:test`, `db:rpc-test`, `db:goal-test`, 개인 칭찬은 `db:praise-test`, 세션 회귀는 `db:session-test`다. 모두 고정 Node·loopback 로컬 DB 가드를 사용한다.
+2. 다음 단위 W06-C에서 연결·초대·요청·판 grant·공유 칭찬과 연결 해제/차단/권한 회수 경합을 구현하고 실제 발급 로컬 세션으로 검증한다. 로컬 `tmp/w06-draft`의 미적용·미검증 산출물을 완료 근거로 사용하지 않는다.
+3. 이어 W06-D에서 소식·요청 결과·삭제/파기 RPC와 FK 정리 경계를 검증한다. 적용한 마이그레이션은 수정하지 않는다.
+4. 하위 단위마다 관련 문서·검사 증거·진행표·등록부를 갱신해 기능별 커밋하고 원격 상태를 확인한다. W06-C/D가 완료되기 전에는 W06 상태를 IN_PROGRESS로 유지한다.
 5. W06 이후 W07의 서버 사용자 해석기·BFF API를 구현한다. 실제 Google/OTP 로그인은 오픈 준비 W12/W13까지 미룬다.
 
 ## 프로젝트에서 사용할 재개 메시지
