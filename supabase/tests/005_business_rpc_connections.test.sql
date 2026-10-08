@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions, pg_catalog;
-select plan(19);
+select plan(20);
 
 select ok((select count(*) = 14 and bool_and(p.prosecdef and 'search_path=pg_catalog' = any(p.proconfig) and r.rolname = 'chagokchan_rpc')
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace join pg_roles r on r.oid = p.proowner
@@ -99,6 +99,11 @@ select ok(has_column_privilege('chagokchan_rpc','public.notifications','connecti
   not has_column_privilege('chagokchan_rpc','public.notifications','read_at','UPDATE') and
   not has_table_privilege('chagokchan_rpc','public.notifications','DELETE'),
   'connection notices are append-only with typed targets and immutable read state');
+select ok((select count(*)=4 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+  where n.nspname='public' and p.proname in ('list_connections','list_connection_invites','list_connection_requests','list_blocks')
+    and pg_get_functiondef(p.oid) like '%last_at%' and pg_get_functiondef(p.oid) like '%last_id%'
+    and pg_get_functiondef(p.oid) like '%encode_relationship_cursor(last_at,last_id)%'),
+  'relationship list cursors resume after the last returned item');
 
 select * from finish();
 rollback;

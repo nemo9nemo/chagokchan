@@ -187,9 +187,16 @@ try {
     assert.equal(countFor("select count(*) from public.connection_invites where id=:'invite'::uuid and redeemed_at is null;\n", { invite: ownerInvites[0].id }), "1");
     denied(await owner.client.rpc("preview_connection_invite", { p_secret: { code: ownerInvites[0].code } }), "PT404", "invite_unavailable");
     denied(await requester.client.rpc("preview_connection_invite", { p_secret: { code: "INVALID-CODE" } }), "PT400", "invalid_invite_secret");
-    const listed = ok(await owner.client.rpc("list_connection_invites", { p_limit: 50 }));
-    assert.equal(listed.items.length, 5);
-    for (const item of listed.items) for (const key of ["link_hash", "code_hash", "token", "code"]) assert.ok(!(key in item));
+    const listedItems = [];
+    let cursor = null;
+    do {
+      const listed = ok(await owner.client.rpc("list_connection_invites", { p_cursor: cursor, p_limit: 1 }));
+      listedItems.push(...listed.items);
+      cursor = listed.next_cursor;
+      assert.ok(listedItems.length <= 5, "invite pagination must not repeat or exceed the fixture set");
+    } while (cursor);
+    assert.deepEqual(listedItems.map((item) => item.id).sort(), ownerInvites.map((item) => item.id).sort());
+    for (const item of listedItems) for (const key of ["link_hash", "code_hash", "token", "code"]) assert.ok(!(key in item));
   });
 
   await record("invite_daily_quota_is_atomic_and_revocation_releases_active_slot", async () => {
@@ -358,6 +365,17 @@ try {
     assert.equal(ownNotifications.error?.code, "42501");
     const outsiderConnections = ok(await left.client.rpc("list_connections", { p_limit: 50 }));
     assert.equal(outsiderConnections.items.some((item) => item.id === acceptedConnectionId), false);
+    const expectedRequestIds = countFor("select id from public.connection_requests where :'owner'::uuid in (requester_user_id,approver_user_id) order by created_at desc,id desc;\n", { owner: owner.id }).trim().split("\n").filter(Boolean);
+    assert.ok(expectedRequestIds.length >= 3, "request fixture set must cross a multi-page boundary");
+    const requestIds = [];
+    let requestCursor = null;
+    do {
+      const page = ok(await owner.client.rpc("list_connection_requests", { p_direction: "both", p_cursor: requestCursor, p_limit: 1 }));
+      requestIds.push(...page.items.map((item) => item.id));
+      requestCursor = page.next_cursor;
+      assert.ok(requestIds.length <= expectedRequestIds.length, "request pagination must not repeat rows");
+    } while (requestCursor);
+    assert.deepEqual(requestIds.sort(), expectedRequestIds.sort());
     denied(await left.client.rpc("disconnect", { p_connection_id: acceptedConnectionId }), "PT404", "connection_not_found");
     denied(await left.client.rpc("revoke_connection_invite", { p_invite_id: ownerInvites[1].id }), "PT404", "invite_not_found");
   });
@@ -392,11 +410,34 @@ try {
     assert.equal(rejected.error.code, "PT409");
     assert.equal(rejected.error.message, "active_connection_limit");
     assert.equal(countFor("select count(*) from public.connections where status='active' and :'owner'::uuid in (user_low_id,user_high_id);\n", { owner: owner.id }), "200");
+    const expectedConnectionIds = countFor("select id from public.connections where :'owner'::uuid in (user_low_id,user_high_id) order by created_at desc,id desc;\n", { owner: owner.id }).trim().split("\n").filter(Boolean);
+    assert.ok(expectedConnectionIds.length >= 200);
+    const connectionIds = [];
+    let connectionCursor = null;
+    do {
+      const page = ok(await owner.client.rpc("list_connections", { p_cursor: connectionCursor, p_limit: 50 }));
+      connectionIds.push(...page.items.map((item) => item.id));
+      connectionCursor = page.next_cursor;
+      assert.ok(connectionIds.length <= expectedConnectionIds.length, "connection pagination must not repeat rows");
+    } while (connectionCursor);
+    assert.deepEqual(connectionIds.sort(), expectedConnectionIds.sort());
     const rejectedId = rejected === accepts[0] ? firstRequest.id : secondRequest.id;
     assert.equal(requestRow(rejectedId).status, "pending");
     const successfulId = rejected === accepts[0] ? secondRequest.id : firstRequest.id;
     assert.equal(ok(await owner.client.rpc("reject_connection_request", { p_request_id: rejectedId })).replayed, false);
     assert.equal(requestRow(successfulId).status, "accepted");
+    for (const userId of auxiliary.slice(0, 5)) ok(await owner.client.rpc("create_block", { p_user_id: userId }));
+    const expectedBlockIds = countFor("select id from public.blocks where blocker_user_id=:'owner'::uuid and revoked_at is null order by created_at desc,id desc;\n", { owner: owner.id }).trim().split("\n").filter(Boolean);
+    assert.equal(expectedBlockIds.length, 5);
+    const listedBlockIds = [];
+    let blockCursor = null;
+    do {
+      const page = ok(await owner.client.rpc("list_blocks", { p_cursor: blockCursor, p_limit: 1 }));
+      listedBlockIds.push(...page.items.map((item) => item.id));
+      blockCursor = page.next_cursor;
+      assert.ok(listedBlockIds.length <= expectedBlockIds.length, "block pagination must not repeat rows");
+    } while (blockCursor);
+    assert.deepEqual(listedBlockIds.sort(), expectedBlockIds.sort());
   });
 } catch (error) {
   failed = true;

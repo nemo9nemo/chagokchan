@@ -90,13 +90,13 @@
     "application_test_scope": "runtime_ports_and_fixture_manifest_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
-    "database_tests_executed": 160,
+    "database_tests_executed": 161,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
-    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c1_connection_and_w06_c2_shared_board_rpc_security",
-    "business_rpc_tests_executed": 88,
+    "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c1_connection_pagination_w06_c2_shared_board_rpc_security",
+    "business_rpc_tests_executed": 89,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
@@ -105,6 +105,7 @@
     "w06_b2_report": "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
     "local_connection_rpc_tests_executed": 13,
     "w06_c1_report": "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
+    "w06_c1_cursor_fix_report": "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
     "local_shared_board_rpc_tests_executed": 6,
     "w06_c2_report": "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
   },
@@ -207,7 +208,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-    "status": "documented_w06_c2_shared_board_rpcs",
+    "status": "documented_w06_c2_shared_board_and_c1_cursor_fix",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -222,7 +223,8 @@
       "docs/changes/2026-10-08-w06-b1-goal-rpc.md",
       "docs/changes/2026-10-08-w06-b2-personal-praise.md",
       "docs/changes/2026-10-08-w06-c1-connection-rpcs.md",
-      "docs/changes/2026-10-08-w06-c2-shared-board-rpcs.md"
+      "docs/changes/2026-10-08-w06-c2-shared-board-rpcs.md",
+      "docs/changes/2026-10-08-w06-c1-cursor-pagination.md"
       ]
     },
     {
@@ -248,7 +250,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-    "status": "static_and_w06_c2_local_verification_passed",
+    "status": "static_w06_c2_and_w06_c1_cursor_verification_passed",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -264,7 +266,8 @@
       "docs/quality/reports/w06-b1-goal-rpc-check-2026-10-08.json",
       "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
       "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
-      "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json"
+      "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
+      "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json"
       ]
     },
     {
@@ -316,7 +319,7 @@
     {
       "id": "ART-017",
       "title": "DB·RLS·RPC·기능 검사",
-    "status": "w06_a_session_w06_b_goal_praise_cycle_w06_c1_connection_and_w06_c2_shared_board_verified_w06_d_deletion_pending",
+    "status": "w06_a_session_w06_b_goal_praise_cycle_w06_c1_connection_and_pagination_w06_c2_shared_board_verified_w06_d_deletion_pending",
       "paths": [
       "scripts/database-task.mjs",
       "scripts/test-local-rpc.mjs",
@@ -354,6 +357,7 @@
       "supabase/migrations/20261008022700_shared_praise_owner_state_projection.sql",
       "supabase/migrations/20261008022800_relationship_cursor_line_wrap_fix.sql",
       "supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql",
+      "supabase/migrations/20261008023000_connection_list_cursor_boundary_fix.sql",
         "supabase/seeds/local-fixtures.sql",
         "supabase/tests/001_physical_integrity.test.sql",
       "supabase/tests/002_rpc_boundary.test.sql",
@@ -367,6 +371,7 @@
       "docs/quality/reports/w06-b2-personal-praise-check-2026-10-08.json",
       "docs/quality/reports/w06-c1-connection-rpc-check-2026-10-08.json",
       "docs/quality/reports/w06-c2-shared-board-rpc-check-2026-10-08.json",
+      "docs/quality/reports/w06-c1-cursor-pagination-check-2026-10-08.json",
         "docs/development/database-foundation.md"
       ],
       "planned_paths": [

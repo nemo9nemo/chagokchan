@@ -1,0 +1,110 @@
+{
+  "verified_at": "2026-10-08T05:15:47.968Z",
+  "work_item": "W06-C1-FOLLOWUP",
+  "status": "passed",
+  "scope": "relationship_list_cursor_boundary_and_multi_page_no_skip_no_duplicate",
+  "source_basis": {
+    "base_commit": "61e910fb6eeeab4fea167918dfd3431517a83688",
+    "format": "SHA-256 per changed path; the resulting commit is identified by repository history containing this report",
+    "files": [
+      { "path": "supabase/migrations/20261008023000_connection_list_cursor_boundary_fix.sql", "sha256": "260206c94ce7eec5e69dbb33959e8b52d1c884a76133cf66905b71e3937048df" },
+      { "path": "supabase/tests/005_business_rpc_connections.test.sql", "sha256": "75c5ca917d77982e106c88b9dc2a09406b5ad62ea39ff835045f4565360dfc04" },
+      { "path": "scripts/test-local-connection-rpc.mjs", "sha256": "491bd8caf90b55ecd96bce4084482f5a8dceaf3c22d03ad95200756d7eb2e571" },
+      { "path": "docs/quality/test-cases.json", "sha256": "2b5235e834e81d7035e2ab9d4edbfa83df73e66bb7024cd1e3ff3647da3222c4" }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "docker_engine": "29.1.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migration": {
+    "status": "applied",
+    "version": "20261008023000",
+    "previous_applied_migrations_modified": false,
+    "functions": [
+      "list_connections",
+      "list_connection_invites",
+      "list_connection_requests",
+      "list_blocks"
+    ],
+    "cursor_boundary": "last item actually returned, ordered by created_at DESC and id DESC"
+  },
+  "relationship_cursor_pgtap": {
+    "command": "scripts/project.ps1 -Task db:rpc-test",
+    "suite": "supabase/tests/005_business_rpc_connections.test.sql",
+    "verified_at": "2026-10-08T05:01:04.835Z",
+    "status": "passed",
+    "executed": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "verified_at": "2026-10-08T05:01:24.256Z",
+    "status": "passed",
+    "executed": 161,
+    "passed": 161,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 89,
+    "provider_login_tests_executed": 0
+  },
+  "rpc_only_tests": {
+    "command": "scripts/project.ps1 -Task db:rpc-test",
+    "verified_at": "2026-10-08T05:01:04.835Z",
+    "status": "passed",
+    "executed": 110,
+    "passed": 110,
+    "failed": 0
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:connection-test",
+    "verified_at": "2026-10-08T05:15:47.968Z",
+    "status": "passed",
+    "executed": 13,
+    "passed": 13,
+    "pagination_assertions": {
+      "list_connection_invites": { "page_size": 1, "expected_items": 5, "actual_ids_match": true, "duplicates_or_skips": false },
+      "list_connection_requests": { "page_size": 1, "minimum_expected_items": 3, "fixture_crossed_page_boundary": true, "actual_ids_match": true, "duplicates_or_skips": false },
+      "list_connections": { "page_size": 50, "minimum_expected_items": 200, "fixture_crossed_multiple_pages": true, "actual_ids_match": true, "duplicates_or_skips": false },
+      "list_blocks": { "page_size": 1, "expected_items": 5, "actual_ids_match": true, "duplicates_or_skips": false }
+    },
+    "cleanup_passed": true,
+    "existing_fixture_data_preserved": true,
+    "synthetic_probe_accounts_and_sessions_removed": true,
+    "sessions_fabricated": false,
+    "service_role_used_for_app_rpc": false,
+    "provider_login_tests_executed": 0
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T05:16:32.585Z",
+    "status": "passed",
+    "lint_files": 24,
+    "typecheck": "passed",
+    "unit_tests": { "executed": 32, "passed": 32, "failed": 0 },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 51,
+      "json_documents": 20,
+      "local_markdown_links": 381,
+      "registry_paths": 152,
+      "openapi_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "finding_and_resolution": "The previous list cursor encoded the lookahead row that was not returned on the current page, so the next page could skip it. The four list functions now save and encode the last returned created_at/id. The shared cursor encoder's base64 line-wrap issue is addressed by W06-C2 migration 20261008022800.",
+  "product_scope": {
+    "openapi_bff_implemented": false,
+    "product_acceptance_cases_planned": 36,
+    "product_acceptance_cases_completed": 0,
+    "real_or_provider_login_tests_executed": 0
+  }
+}

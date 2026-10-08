@@ -71,7 +71,13 @@ TC-DB-GOAL-001/002는 통과했지만 OpenAPI `/api/v1` 서버와 화면은 아�
 
 적용 뒤 결함 세 건을 후속 migration으로 고쳤다. `jsonb_object_length`가 PostgreSQL에 없어 `jsonb_object_keys`를 사용하고, 요청/수락 알림 ON CONFLICT의 제안 행 SELECT RLS를 전이 당사자로 한정했다. 수락 알림은 `notifications_typed_target`의 단일 대상 제약에 맞춰 request ID 대신 connection ID를 저장한다. W06-B2 임시 알림 probe는 PostgREST schema reload가 필요해 테스트 생성·제거 뒤 캐시 갱신을 넣었다. 적용된 파일은 수정하지 않았다. [상세 증거](reports/w06-c1-connection-rpc-check-2026-10-08.json)
 
-TC-DB-CONNECT-001~004는 통과했다. 업무 UI/BFF가 없으므로 제품 연결 흐름 TC-CONNECT-001~003은 미실행이며 완료 처리하지 않는다. W06-C2 공유판 grant/revoke·공유 칭찬/권한 회수 경합과 W06-D 소식·삭제가 남아 있다. 실제 Google/OTP 로그인도 미검증이다.
+TC-DB-CONNECT-001~004는 통과했다. 업무 UI/BFF가 없으므로 제품 연결 흐름 TC-CONNECT-001~003은 미실행이며 완료 처리하지 않는다. W06-C2 공유판 권한/칭찬은 완료했고 W06-D 소식·삭제가 남아 있다. 실제 Google/OTP 로그인도 미검증이다.
+
+### W06-C1 관계 목록 cursor 경계 보완
+
+W06-C2 목록 검증 중 C1의 연결·초대·요청·차단 목록이 `limit+1` lookahead 행을 다음 페이지 cursor로 사용해 페이지 사이 첫 항목을 건너뛸 수 있음을 확인했다. C2의 공통 cursor 인코더 줄바꿈 수정과 별도로 `20261008023000_connection_list_cursor_boundary_fix.sql`에서 네 RPC 모두 마지막 반환 행의 `(created_at,id)`를 사용하게 했다. 기존 적용 마이그레이션은 바꾸지 않았다.
+
+`db:connection-test` 13/13에서 실제 발급 사용자 세션으로 초대 5개·요청 목록 3개 이상·연결 200개 이상·차단 5개를 각각 끝까지 페이지 탐색해 기대 ID 집합과 일치하고 중복/누락이 없음을 확인했다. `db:rpc-test` 110/110, `db:test` 161/161, 관계 cursor pgTAP 20/20도 통과했다. fixture 보존 및 합성 계정/세션 정리 통과, 실제 provider 로그인 0회다. [세부 증거](reports/w06-c1-cursor-pagination-check-2026-10-08.json)
 
 ## W06-C2 공유판 권한·공유 칭찬 원자성 검사
 
@@ -79,7 +85,7 @@ TC-DB-CONNECT-001~004는 통과했다. 업무 UI/BFF가 없으므로 제품 연�
 
 `db:test`는 160/160(물리 51, RPC 경계 21, 업무 권한/RLS 88), `db:rpc-test`는 109/109, 공유판 전용 pgTAP은 25/25를 통과했다. Auth가 실제 발급한 로컬 오너·기여자·무관 사용자 세션 통합 `db:shared-test` 6/6에서 안전 projection, 권한 부여/회수, 역할별 목록, 멱등 공유 칭찬, 회차 완성/알림, 개인판과 독립된 개수, 판별/분당/일일 제한, 실패 전체 롤백, 50명 상한 경합, revoke/disconnect/block 대 praise 경합 및 재연결 재부여를 확인했다. probe 세션/계정 제거와 기존 fixture 보존이 통과했다. 실제 Google/OTP 로그인을 실행하지 않았다. [세부 증거](reports/w06-c2-shared-board-rpc-check-2026-10-08.json)
 
-TC-DB-SHARED-001~004는 통과했다. 제품 수락 TC 36개, 실제 로그인 및 BFF/API 실행은 계속 미실행이다. W06-C1 관계 목록의 페이지 경계 결함을 별도로 발견해 후속 커서 수정·재검사를 진행했고, 소식·요청 결과·삭제/파기 RPC는 W06-D에 남아 있다.
+TC-DB-SHARED-001~004는 통과했다. 제품 수락 TC 36개, 실제 로그인 및 BFF/API 실행은 계속 미실행이다. C1 관계 목록도 후속 커서 마이그레이션과 실제 다중 페이지 검사로 보완했다. 소식·요청 결과·삭제/파기 RPC는 W06-D에 남아 있다.
 
 ## W05 물리 DB의 부분 검사
 
