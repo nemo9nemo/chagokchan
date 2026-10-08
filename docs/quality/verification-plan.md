@@ -113,6 +113,12 @@ OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했
 
 `scripts/project.ps1 -Task api:security-test`는 HMAC 변조·만료·다른 key·cross-site/Origin·CSRF 불일치·비JSON·잘못된 JSON·실제/선언 본문 크기 경계를 14/14 통과했다. `api:me-test` A/B/C 각각 15/15에서 /me와 CSRF 응답의 쿠키·헤더를 확인했다. `check` unit 53/53과 build:check를 통과했다. TC-API-002는 통과로 기록한다. mutation 업무 route는 아직 없으며 구현 시 이 guard를 첫 경계로 붙인다. 배포 session-bound CSRF는 W12이고 제품 업무 API는 W08~W10이다. [세부 증거](reports/w07-b-api-security-check-2026-10-08.json)
 
+## W08-A 목표 생성·상세·수정 API 경계 검사
+
+`POST /api/v1/goals`, `GET /api/v1/goals/{goal_id}`, `PATCH /api/v1/goals/{goal_id}`를 기존 `create_goal`·`get_goal`·`update_goal` 업무 RPC에 연결했다. 목표 변경 route는 `validateMutationRequest`의 Origin·Fetch Metadata·CSRF·JSON/32KB 경계를 업무 입력 검사 전에 통과해야 한다. client actor/owner/recipient 입력은 거절하고, 결과를 OpenAPI allowlist로 축소하며 모든 응답은 no-store·request ID를 반환한다. 목표 목록은 DB `listGoals` RPC가 없어서 이 작업에 포함하지 않았다.
+
+새 `scripts/goal-api.test.mjs` 8/8은 기본값·공유 입력·멱등 키·알 수 없는 입력 거절·RPC 인자·CSRF 선행 검사·응답 projection·404/409 안전 변환을 확인했다. 실제 A/B/C Auth session API 검사는 각 3/3으로 임의 UUID의 비공개 404, 잘못된 경로 UUID 400, CSRF 없는 생성 거절 403을 확인했다. 해당 API integration은 DB 쓰기를 하지 않는다. `scripts/project.ps1 -Task build:check`에서 세 route가 dynamic Node.js API로 컴파일됐다. 전체 `check`는 Biome·typecheck·unit·산출물 검사를 다시 실행해 이 변경 범위의 최종 상태를 남긴다. `TC-API-003`은 이 제한된 handler/경계 범위만 통과이며 실제 생성·수정 route→DB 성공, 목표 목록·전이, 제품 화면/수락 검사는 미실행이다. [세부 증거](reports/w08-a-goal-api-check-2026-10-08.json)
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). W06-A 검사 전 단계의 범위다. 현재 두 기술 TC만 추가로 실행했으며 제품 업무·동시성·전체 API/E2E·실제 로그인 검사는 남아 있다.

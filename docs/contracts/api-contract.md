@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: GET /me의 로컬 API 구현·검증, 나머지 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
 
-OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me를, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반을 구현했다. 배포 Auth flow/session binding, 제품 변경 route와 나머지 operation은 후속 구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
+OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A에서 목표 생성·상세·수정 API를 로컬 fixture Auth 세션에 연결했다. 목표 API는 POST `/goals`, GET/PATCH `/goals/{goal_id}`이며 구현된 RPC만 호출한다. 배포 Auth flow/session binding은 W12, 목표 목록·상태 전이·개인 칭찬 route는 W08 후속 구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
 개발 중에는 [로컬 사용자 해석기](../development/local-development.md)가 가상 Auth 세션을 서버에서 준비한다. 아래 공개 인증·쿠키 계약을 변경하거나 클라이언트 actor 입력을 추가하지 않는다. 실제 Google/OTP 인증 API와 사용자 로그인 검증은 [진행표](../development/backlog.md)의 W12/W13에서 수행한다.
 

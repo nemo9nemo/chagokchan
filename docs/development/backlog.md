@@ -24,7 +24,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W05 | DB 물리 설계·마이그레이션·가상 데이터 | DONE | W04 | ERD를 SQL·제약·인덱스로 구현. 빈 로컬 DB 적용·A/B/C 초기 데이터 재현 | **완료 2026-10-08**. 빈 DB 적용·18테이블/ERD 컬럼·A/B/C·DB 51/51·준비 재실행 보존/환경 차단·소스 32/32·빌드. [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json) |
 | W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | DONE | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | **완료 2026-10-08.** W06-A~D2의 DB RPC·RLS와 삭제 경계를 검증했다. 전체 DB 213/213(물리 51·RPC 경계 21·업무 RPC 141), RPC 전용 162/162, D1 실제 세션 통합 4/4, D2 실제 세션/Auth Admin 통합 6/6. BFF/UI·제품 수락·실제 Google/OTP 로그인·운영 원장은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json)·[D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
 | W07 | 서버 API 기반·로컬 사용자 연결 | DONE | W03, W06 | 로그인 화면 없이 A 사용, B/C로 같은 RPC/RLS 검사. 입력·CSRF·응답 제한·배포 차단 검증 | **완료 2026-10-08.** W07-A/B에서 local Auth session·`/me`·CSRF/Origin/JSON/32KB guard 기반을 구현하고 A/B/C API·unit·배포 build 차단을 검증했다. 제품 route는 W08부터 붙인다. 배포 session-bound login은 W12로 유예. [W07-B 검사](../quality/reports/w07-b-api-security-check-2026-10-08.json) |
-| W08 | 개인 목표·셀프 칭찬·회차·정리 | TODO | W07 | 목표→개인 칭찬→완성→지난 회차·취소. REQ-002/003/007/012 검증 | 화면·API 미구현 |
+| W08 | 개인 목표·셀프 칭찬·회차·정리 | IN_PROGRESS | W07 | 목표→개인 칭찬→완성→지난 회차·취소. REQ-002/003/007/012 검증 | W08-A 목표 생성·상세·수정 API 구현. A/B/C 비파괴 경계 검사와 RPC 매핑 단위 검사 통과. 목표 목록·상태 전이·칭찬·회차 API와 화면은 미완료. [검사](../quality/reports/w08-a-goal-api-check-2026-10-08.json) |
 | W09 | 사람 연결·판 권한·공유 칭찬 | TODO | W07, W08 | 초대→요청→수락→판 grant→칭찬. 연결만 된 B·무관한 C 거절 | REQ-004/005/006 미구현 |
 | W10 | 소식·보낸함·삭제·정리 작업 | TODO | W08, W09 | 최소 응답·재시도·파기·FK·접근 중단 검사. 실제 재인증 수락은 W12/W13 | REQ-008/009/010 미구현 |
 | W11 | 테마 분리·오류 UX·접근성·PWA | TODO | W08~W10 | 테마 교체 시 기록 불변, 목록 대안·작은 화면·정적 캐시·개인정보 no-store 검사 | REQ-011·NFR-002 미구현 |
@@ -80,3 +80,12 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | W07-A | 서버 전용 local fixture 세션과 GET /me | DONE | 개발 환경의 허용된 A/B/C만 서버에서 선택하고 Auth-issued local session으로 `get_me` RPC/RLS 호출. 응답을 OpenAPI Me allowlist로 제한·no-store. 현재 선택 actor에 대해 API 통합 검사 통과. [검사](../quality/reports/w07-a-local-me-api-check-2026-10-08.json) |
 | W07-B | API 공통 요청 경계·CSRF·입력·오류 처리 | DONE | Origin/Fetch Metadata·signed double-submit·JSON·실제 32KB 상한·no-store 오류 응답 기반. unit 14/14·A/B/C CSRF API integration 확인. [검사](../quality/reports/w07-b-api-security-check-2026-10-08.json) |
 | W07-C | 배포 Auth 세션 해석기와 일반 API client | DEFERRED | Google/OTP와 실사용 로그인을 미루는 사용자 결정에 따라 W12에서 구현. 배포 `/me`는 현재 세션 모드 미지원 시 401 |
+
+## W08 개인 목표·셀프 칭찬·회차·정리
+
+| ID | 기능 단위 | 상태 | 결과·다음 행동 |
+| --- | --- | --- | --- |
+| W08-A | 목표 생성·상세·설명 수정 API | DONE | 로컬 fixture Auth 세션을 사용해 POST `/api/v1/goals`, GET/PATCH `/api/v1/goals/{goal_id}`를 기존 create/get/update RPC에 연결했다. body·멱등 키·응답 allowlist·no-store·CSRF·비소유자 비공개 404를 검사했다. 단위 8/8, A/B/C 각각 비파괴 API 3/3, build:check 통과. 실제 생성/수정의 route→DB 통합 검사는 fixture DB를 변경하지 않도록 미실행이며 별도 기록한다. [검사](../quality/reports/w08-a-goal-api-check-2026-10-08.json) |
+| W08-B | 목표 목록·상태 전이·목표 설정 변경 및 회차 읽기 API | TODO | `listGoals` RPC가 DB에 없어 먼저 제한 projection·cursor 경계를 추가한다. 완료·보관·재개·다음 회차 설정과 API 통합 검사를 붙인다. |
+| W08-C | 개인 칭찬 생성·수정·취소·회차 API | TODO | existing praise/cycle RPC를 CSRF·멱등·최소 응답 API에 연결하고 작성·수정·취소·동시 회차 TC를 실제 local session으로 실행한다. |
+| W08-D | 목표·개인 기록 기본 화면 | TODO | 화면 설계 UI02~UI05를 구현하고 성공 전 전송 상태·동일 키 재시도·빈/오류 상태를 검증한다. 접근성·PWA 세부 검사는 W11에 포함한다. |

@@ -1267,8 +1267,8 @@
         "tags": [
           "goals"
         ],
-        "description": "개인판 필수, 선택 shared_board는 별도 제목 입력. 요청 결과까지 원자적 생성.",
-        "x-implementation-status": "not_implemented",
+        "description": "개인판 필수, 선택 shared_board는 별도 제목 입력. 요청 결과까지 원자적 생성. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002",
           "REQ-004"
@@ -1286,7 +1286,8 @@
           "TC-CYCLE-003",
           "TC-CYCLE-004",
           "TC-ACCESS-001",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-003"
         ],
         "parameters": [
           {
@@ -1369,8 +1370,8 @@
         "tags": [
           "goals"
         ],
-        "description": "본인 목표 상세",
-        "x-implementation-status": "not_implemented",
+        "description": "본인 목표 상세. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1381,7 +1382,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-003"
         ],
         "parameters": [
           {
@@ -1455,8 +1457,8 @@
         "tags": [
           "goals"
         ],
-        "description": "목표 제목·개인 설명 수정",
-        "x-implementation-status": "not_implemented",
+        "description": "목표 제목·개인 설명 수정. 로컬 fixture 세션 API에서 구현했고 배포 세션 adapter는 W12 대기.",
+        "x-implementation-status": "local_fixture_api_implemented_deployed_session_pending",
         "x-requirements": [
           "REQ-002"
         ],
@@ -1468,7 +1470,8 @@
           "TC-GOAL-001",
           "TC-GOAL-002",
           "TC-CYCLE-004",
-          "TC-DELETE-001"
+          "TC-DELETE-001",
+          "TC-API-003"
         ],
         "parameters": [
           {

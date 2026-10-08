@@ -107,6 +107,11 @@ export async function readLocalMe() {
   return validateMeProjection(data, fixture.userId);
 }
 
+export async function getLocalSessionClient() {
+  const fixture = await getFixtureClient();
+  return fixture?.client ?? null;
+}
+
 export function resetLocalFixtureSessionForTests() {
   fixtureClientPromise = undefined;
 }

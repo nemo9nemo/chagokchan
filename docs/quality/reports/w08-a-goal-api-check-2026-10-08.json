@@ -1,0 +1,56 @@
+{
+  "verified_at": "2026-10-08T09:03:51Z",
+  "work_item": "W08-A",
+  "status": "passed",
+  "scope": "goal_create_get_update_handler_allowlist_and_local_auth_boundary",
+  "source_basis": {
+    "base_commit": "7c43b8dee4cc7cf3b2031bff6388e989718e44e8",
+    "format": "SHA-256 per API implementation, route, local test, API contract, and test-case file; repository history identifies the resulting commit",
+    "files": [
+      { "path": "src/server/goal-api.mjs", "sha256": "c485baffc71023f3047cc4026c07933335f96f1520825556fff143e243859987" },
+      { "path": "src/server/local-user-session.mjs", "sha256": "e7fc2ca03f20119aee63b0520eb969a21913fd3ef1bd3777c3aa0452ec9f37ce" },
+      { "path": "src/app/api/v1/goals/route.ts", "sha256": "509f001cce419fc17085dbed5063642511f9b4f341885dfc1874cc1d2e1a9319" },
+      { "path": "src/app/api/v1/goals/[goal_id]/route.ts", "sha256": "bfb06db80a724d91a0a5382c583fe2c8e3dc15d9d77dff0cb153a3ca3e7e3378" },
+      { "path": "scripts/goal-api.test.mjs", "sha256": "fb2d4a931b8673df803c52d0b7632368cfb11867a240165c5520ac38b7503f99" },
+      { "path": "scripts/test-local-goal-api.mjs", "sha256": "d42d80178e951285ea5f2b1f94b412ef922299bf5f1ad28125cee7930de58fc1" },
+      { "path": "package.json", "sha256": "d93a422f7fd287186946be22a88f2695c9f0b005266bf2a61f375d362f978d79" },
+      { "path": "scripts/project.ps1", "sha256": "0e6363361086802c6aa488809b37ad344506f4a1b6c8f0de87881fae857a887b" },
+      { "path": "contracts/openapi.json", "sha256": "8acef06162e06ab67d63933861198f01dc439a3a32a45fc07c502476d5ca8820" },
+      { "path": "docs/quality/test-cases.json", "sha256": "22ba4f79b3fadeddf6ee006e9e9646f1b5d8218c4375e3bba850de66023c391d" }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "postgresql": "17.11",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false,
+    "auth_tokens_returned": false
+  },
+  "verification": {
+    "unit_command": "scripts/project.ps1 -Task check",
+    "goal_api_unit_cases": "8/8 passed",
+    "full_check": "passed 2026-10-08T09:02:44Z; Biome checked 38 files, typecheck passed, unit 61/61, artifact checks passed (25 JSON, 406 Markdown links, 691 OpenAPI refs, 60 test cases, 191 registered artifact paths)",
+    "build_check_command": "scripts/project.ps1 -Task build:check",
+    "build_check": "passed; GET /api/v1/goals/{goal_id}, PATCH /api/v1/goals/{goal_id}, and POST /api/v1/goals compiled as dynamic Node.js routes",
+    "local_api_command": "scripts/project.ps1 -Task api:goal-test",
+    "local_api_actor_runs": [
+      { "actor": "A", "checks_passed": 3, "status": "passed" },
+      { "actor": "B", "checks_passed": 3, "status": "passed" },
+      { "actor": "C", "checks_passed": 3, "status": "passed" }
+    ],
+    "local_api_database_mutation": false,
+    "route_to_database_success_integration": "not_run_to_preserve_local_fixture_data; W06 goal RPC tests remain separately passed",
+    "goal_list_rpc_and_route": "not_implemented",
+    "real_google_or_otp_login": "not_run",
+    "product_ui_and_acceptance_cases": "not_run"
+  },
+  "notes": [
+    "Goal create/update handler tests use a mock RPC client for argument and safe-response verification; they do not claim a live successful POST/PATCH transaction.",
+    "A/B/C integration requests use actual local Auth sessions and only read a random nonexistent goal or submit rejected requests, leaving product fixture data unchanged.",
+    "The local fixture adapter remains server-only at the route boundary; deployed user-session handling is deferred to W12."
+  ]
+}

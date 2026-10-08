@@ -1269,6 +1269,29 @@
       "expected": "앱 데이터 파기는 원자적이며 실패는 checkpoint부터 재시도한다. Auth 계정은 앱 데이터 정리 뒤 마지막에 삭제되고 UUID 재가입은 영구 marker로 차단된다.",
       "status": "passed",
       "evidence": "reports/w06-d2-account-deletion-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-API-003",
+      "requirement_ids": [
+        "REQ-002",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-ACCESS-001",
+        "POL-API-001",
+        "POL-SEC-001"
+      ],
+      "level": "unit_and_local_api_integration",
+      "title": "목표 API 소유 경계·필드 제한·CSRF",
+      "steps": [
+        "create_goal의 기본값·선택 공유 입력·멱등 키가 고정 RPC 인자로 전달되는지 단위 검사한다",
+        "goal detail이 OpenAPI allowlist 밖 필드를 거절하고 update_goal에 path UUID·revision patch만 전달하는지 단위 검사한다",
+        "A/B/C 실제 로컬 Auth 세션으로 임의 목표 404·잘못된 UUID 400·CSRF 없는 생성 403을 확인한다"
+      ],
+      "expected": "actor·owner UUID를 클라이언트에서 받지 않고, 목표 접근 불가 응답은 같은 404다. mutation은 동일 출처와 CSRF 검사를 통과해야 RPC를 호출한다. 검사에서 DB 쓰기는 없다.",
+      "status": "passed",
+      "evidence": "reports/w08-a-goal-api-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"
