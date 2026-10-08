@@ -50,7 +50,7 @@ if (-not (Test-Path -LiteralPath .env.development.local)) {
 
 ## 로컬 모드와 배포 모드
 
-서버 설정 검사는 [개발 정책](../../policies/development-policy.json)을 읽는다. 로컬 모드는 환경·개발 실행·앱/DB 주소·포트·바인딩·A/B/C 선택을 함께 확인한다. 잘못된 모드나 외부 주소는 시작을 실패시킨다. 배포 모드는 `supabase_session`과 HTTPS 주소를 요구하며 `LOCAL_DEV_` 설정을 거절한다. 이 검사는 환경 경계의 구현이며, 로그인 세션 검사·권한 검사의 구현은 W06/W07에 남아 있다.
+서버 설정 검사는 [개발 정책](../../policies/development-policy.json)을 읽는다. 로컬 모드는 환경·개발 실행·앱/DB 주소·포트·바인딩·A/B/C 선택을 함께 확인한다. 잘못된 모드나 외부 주소는 시작을 실패시킨다. 배포 모드는 `supabase_session`과 HTTPS 주소 및 환경별 32바이트 이상 CSRF 서명 키를 요구하고 local fixture 설정·키를 거절한다. W07에서 local 세션 `/me`와 개발용 CSRF/요청 guard 기반을 구현했다. 실제 배포 로그인·flow/session binding은 W12에서 진행한다.
 
 개발 설정은 `.env.development.local`에 두며 Git에서 제외한다. 일반 앱 실행에 관리 키를 추가하지 않는다. `next-env.d.ts`, `.next`, 설치 결과와 임시 로그도 Git에서 제외한다. `agentRules: false`로 개발 서버가 프로젝트의 AGENTS.md를 자동 변경하는 동작을 끈다. [설치 버전의 구성 설명](https://nextjs.org/docs/app/api-reference/config/next-config-js/agentRules)
 
@@ -64,4 +64,4 @@ DB·Auth·REST·Kong·Studio·DB 메타데이터·테스트 메일 서비스만 
 
 이번 환경에서는 Docker의 임시 소켓 오류를 먼저 해결해야 했다. 사용자의 실행 승인 후 0바이트 소켓만 있는 실행 폴더를 백업 이름으로 보존하고 Docker Desktop을 재시작했다. 백업 위치는 검사 JSON에 기록했다. 같은 증상에 대한 [Docker 이슈의 보고](https://github.com/docker/desktop-feedback/issues/554)를 참고했으며, 이 머신에서 엔진 정상 응답을 직접 확인했다.
 
-W05에서 ERD의 물리 제약·인덱스·마이그레이션과 합성 A/B/C 초기 데이터를 구현·검증했다. 다음으로 W06의 RPC/RLS·동시성 검사를 통과시키고 W07의 사용자 해석기·API를 연결한다. 실제 Google/OTP 연동과 실제 로그인 검사는 오픈 준비 단계에서 수행한다.
+W05에서 ERD의 물리 제약·인덱스·마이그레이션과 합성 A/B/C 초기 데이터를, W06에서 업무 RPC/RLS·동시성을, W07에서 local adapter·API security 기반을 구현·검증했다. 다음 작업은 W08 개인 목표·칭찬 API/UI다. 실제 Google/OTP 연동과 실제 로그인 검사는 오픈 준비 단계에서 수행한다.

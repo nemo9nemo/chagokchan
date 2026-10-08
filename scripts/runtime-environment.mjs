@@ -27,7 +27,8 @@ export function validateEnvironment(env, { command, bindingHost } = {}) {
     return Object.freeze({ appEnv, authMode: mode, baseUrl: base.origin, supabaseUrl: database.origin, actor });
   }
   if (!policy.deployed_auth.allowed_app_envs.includes(appEnv) || env.NODE_ENV !== "production") fail("deployed execution");
-  if (Object.keys(env).some((key) => (key.startsWith("LOCAL_DEV_") || key === "APP_LOCAL_FIXTURE_MANIFEST") && env[key])) fail("local fixture settings in deployed environment");
+  if (Object.keys(env).some((key) => (key.startsWith("LOCAL_DEV_") || key === "APP_LOCAL_FIXTURE_MANIFEST" || key === "APP_LOCAL_CSRF_SIGNING_SECRET") && env[key])) fail("local fixture settings in deployed environment");
+  if (typeof env.CSRF_SIGNING_SECRET !== "string" || Buffer.byteLength(env.CSRF_SIGNING_SECRET, "utf8") < 32) fail("CSRF_SIGNING_SECRET");
   for (const [name, url] of [["APP_BASE_URL", base], ["SUPABASE_URL", database]]) {
     if (localHost(url.hostname) || url.protocol !== "https:") fail(name);
   }

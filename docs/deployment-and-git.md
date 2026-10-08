@@ -52,7 +52,7 @@ Vercel의 프로젝트·환경별 설정을 구분하고 빌드 시작 전에 AP
 | SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY | 앱 서버의 일반 사용자 DB·Auth 연결 |
 | UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN | 앱 서버의 요청 제한 |
 | TURNSTILE_SECRET_KEY | 서버 검증. 공개 site key와 분리 |
-| CSRF·제한 키용 서명/HMAC 비밀 | 앱 서버. 환경별 생성·교체 |
+| `CSRF_SIGNING_SECRET`·제한 키용 HMAC 비밀 | 앱 서버. CSRF 키는 배포 환경별 32바이트 이상 난수로 생성·교체하며 local fixture 키를 재사용하지 않음 |
 | Resend SMTP 자격증명 | Supabase Auth SMTP 설정. 브라우저·Git에 포함하지 않음 |
 | Supabase 관리 토큰 / DB 연결 자격증명 | 지정된 마이그레이션·관리 작업만 사용 |
 | Vercel 배포 자격증명 | 지정된 배포 작업만 사용. 환경·프로젝트 접근 최소화 |

@@ -3,7 +3,7 @@
   "info": {
     "title": "차곡찬 (Chagokchan) API",
     "version": "0.2.0",
-    "description": "MVP 계약. GET /me의 로컬 fixture API를 구현했으며 나머지 operation과 배포 Auth 연결은 후속 작업이다. 서버 쿠키·CSRF·현재 권한 확인. 값은 policies/app-policy.json 기준. 첫 출시는 성인 개인 사용자. Auth 인증과 최초 앱 가입을 분리하고 현재 정책의 명시적 성인 확인 뒤 계정을 생성한다."
+    "description": "MVP 계약. GET /me와 개발용 GET /auth/csrf를 구현했고 나머지 operation과 배포 Auth flow/session binding은 후속 작업이다. 서버 쿠키·CSRF·현재 권한 확인. 값은 policies/app-policy.json 기준. 첫 출시는 성인 개인 사용자. Auth 인증과 최초 앱 가입을 분리하고 현재 정책의 명시적 성인 확인 뒤 계정을 생성한다."
   },
   "servers": [
     {
@@ -12,7 +12,7 @@
     }
   ],
   "x-policy-version": "0.2.0",
-  "x-implementation-status": "partial_w07_a_local_fixture_me_api",
+  "x-implementation-status": "partial_w07_a_w07_b_local_fixture_api_security",
   "security": [
     {
       "cookieSession": []
@@ -26,8 +26,8 @@
         "tags": [
           "auth"
         ],
-        "description": "CSRF 토큰 준비",
-        "x-implementation-status": "not_implemented",
+        "description": "로컬 개발에서는 현재 서버 프로세스의 서명 키로 CSRF 이중 제출 토큰을 발급한다. 배포의 로그인 flow/session binding은 W12에서 구현한다.",
+        "x-implementation-status": "local_fixture_csrf_implemented_deployed_flow_binding_pending",
         "x-requirements": [
           "REQ-001",
           "NFR-001"
@@ -48,7 +48,8 @@
           "TC-RATE-001",
           "TC-CACHE-001",
           "TC-UX-002",
-          "TC-AUDIENCE-001"
+          "TC-AUDIENCE-001",
+          "TC-API-002"
         ],
         "responses": {
           "200": {

@@ -14,7 +14,7 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
@@ -32,6 +32,7 @@
     "db:lifecycle-test": "node scripts/test-local-lifecycle-rpc.mjs",
     "db:deletion-test": "node scripts/test-local-account-deletion.mjs",
     "api:me-test": "node scripts/test-local-me-api.mjs",
+    "api:security-test": "node --test scripts/api-security.test.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs"
   },
   "dependencies": {

@@ -107,6 +107,12 @@ OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했
 
 `scripts/project.ps1 -Task api:me-test`를 A/B/C 각각 실행해 각 5/5 확인을 통과했다. `scripts/project.ps1 -Task check`는 Biome 30개 파일, typecheck, 단위 37/37, 산출물 교차참조 58 TC·691 OpenAPI refs·179 등록 경로를 통과했다. `scripts/project.ps1 -Task build:check`도 통과했고 GET `/api/v1/me`는 동적 route로 컴파일됐다. TC-API-001을 통과로 기록한다. 제품 수락 TC 36개와 실제 Google/OTP 로그인을 대신하지 않으며, 배포 세션 adapter·CSRF/변경 요청 경계·제품 UI는 후속 작업이다. [세부 증거](reports/w07-a-local-me-api-check-2026-10-08.json)
 
+## W07-B CSRF·동일 출처·본문 크기 요청 guard 검사
+
+`GET /api/v1/auth/csrf`는 로컬 프로세스 키로 만료가 포함된 HMAC 토큰을 발급하고 HttpOnly·SameSite=Lax·API 경로 범위 cookie와 no-store·request ID를 반환한다. 배포 모드에서는 flow/session binding이 구현될 때까지 endpoint가 닫혀 있다. `validateMutationRequest`는 Origin·Sec-Fetch-Site·application/json·서명된 cookie/header 이중 제출·JSON object와 `policies/app-policy.json`의 실제 32KB byte 상한을 검증한다. 배포 실행은 환경별 32바이트 이상 `CSRF_SIGNING_SECRET`을 요구하고 local key/manifest를 거절한다.
+
+`scripts/project.ps1 -Task api:security-test`는 HMAC 변조·만료·다른 key·cross-site/Origin·CSRF 불일치·비JSON·잘못된 JSON·실제/선언 본문 크기 경계를 14/14 통과했다. `api:me-test` A/B/C 각각 15/15에서 /me와 CSRF 응답의 쿠키·헤더를 확인했다. `check` unit 53/53과 build:check를 통과했다. TC-API-002는 통과로 기록한다. mutation 업무 route는 아직 없으며 구현 시 이 guard를 첫 경계로 붙인다. 배포 session-bound CSRF는 W12이고 제품 업무 API는 W08~W10이다. [세부 증거](reports/w07-b-api-security-check-2026-10-08.json)
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). W06-A 검사 전 단계의 범위다. 현재 두 기술 TC만 추가로 실행했으며 제품 업무·동시성·전체 API/E2E·실제 로그인 검사는 남아 있다.

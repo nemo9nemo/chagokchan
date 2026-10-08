@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { validateEnvironment } from "./runtime-environment.mjs";
@@ -10,12 +11,15 @@ if (command === "dev" && fs.existsSync(".env.development.local")) process.loadEn
 const env = { ...process.env, NODE_ENV: command === "dev" ? "development" : "production", NEXT_TELEMETRY_DISABLED: "1" };
 if (command === "build-check") {
   for (const key of Object.keys(env)) if (key.startsWith("LOCAL_DEV_")) delete env[key];
-  Object.assign(env, { APP_ENV: "preview", APP_AUTH_MODE: "supabase_session", APP_BASE_URL: "https://build-check.example.invalid", SUPABASE_URL: "https://database.example.invalid" });
+  Object.assign(env, { APP_ENV: "preview", APP_AUTH_MODE: "supabase_session", APP_BASE_URL: "https://build-check.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "build-check-only-csrf-key-not-for-runtime" });
 }
 const bindingHost = "127.0.0.1";
 if (command === "dev") env.CHAGOKCHAN_BIND_HOST = bindingHost;
 const config = validateEnvironment(env, { command: command === "dev" ? "dev" : "build", bindingHost });
-if (command === "dev") env.APP_LOCAL_FIXTURE_MANIFEST = fileURLToPath(new URL("../private-data/local-fixtures.json", import.meta.url));
+if (command === "dev") {
+  env.APP_LOCAL_FIXTURE_MANIFEST = fileURLToPath(new URL("../private-data/local-fixtures.json", import.meta.url));
+  env.APP_LOCAL_CSRF_SIGNING_SECRET = randomBytes(32).toString("base64url");
+}
 const next = fileURLToPath(new URL("../node_modules/next/dist/bin/next", import.meta.url));
 const port = new URL(config.baseUrl).port || (command === "dev" ? "80" : "443");
 const args = command === "dev" ? ["dev", "--hostname", bindingHost, "--port", port] : command === "start" ? ["start", "--hostname", bindingHost] : ["build"];

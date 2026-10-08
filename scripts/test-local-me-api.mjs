@@ -77,7 +77,20 @@ try {
   assert.equal(body.profile.user_id, expectedUserId);
   assert.equal(body.account_status, "active");
   assert.equal(/access_token|refresh_token|password|service_role/i.test(JSON.stringify(body)), false);
-  process.stdout.write(JSON.stringify({ status: "passed", actor: config.actor, checks: 5, fixture_credentials_printed: false, auth_tokens_returned: false }) + "\n");
+
+  const csrfResponse = await fetch(`http://127.0.0.1:${port}/api/v1/auth/csrf`, { signal: AbortSignal.timeout(4000) });
+  assert.equal(csrfResponse.status, 200, "GET /api/v1/auth/csrf should issue a local flow token");
+  assert.match(csrfResponse.headers.get("x-request-id") ?? "", /^[0-9a-f-]{36}$/i);
+  assert.match(csrfResponse.headers.get("cache-control") ?? "", /no-store/i);
+  const csrfBody = await csrfResponse.json();
+  assert.equal(typeof csrfBody.csrf_token, "string");
+  assert.ok(csrfBody.csrf_token.length >= 16 && csrfBody.csrf_token.length <= 1024);
+  const csrfCookie = csrfResponse.headers.get("set-cookie") ?? "";
+  assert.ok(csrfCookie.startsWith(`chagokchan_csrf=${csrfBody.csrf_token};`));
+  assert.match(csrfCookie, /HttpOnly/);
+  assert.match(csrfCookie, /SameSite=Lax/);
+  assert.match(csrfCookie, /Path=\/api\/v1/);
+  process.stdout.write(JSON.stringify({ status: "passed", actor: config.actor, checks: 15, fixture_credentials_printed: false, auth_tokens_returned: false }) + "\n");
 } finally {
   if (appIsRunning()) app.kill("SIGTERM");
   if (appIsRunning()) {

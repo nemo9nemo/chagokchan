@@ -2,7 +2,7 @@
 
 기준일: 2026-10-08 / 적용: MVP 개발
 
-S04 앱·실행 환경·로컬 DB 준비와 S05 W05 물리 스키마를 완료했다. W06-A~D2의 DB 업무 RPC·RLS·삭제 경계를 완료했다. 전체 DB 213/213, RPC 162/162, D1 세션 통합 4/4, D2 세션/Auth Admin 통합 6/6이 통과했다. W07 진행 중이며 W07-A에서 서버 전용 local fixture 세션과 GET /api/v1/me를 연결하고 현재 환경 actor 통합 검사를 통과했다. API 공통 CSRF/입력 경계와 나머지 제품 route·UI는 미구현이다. 독립 원장은 미설정이며 파기 worker gate는 기본 차단이다. 실제 Google/OTP 로그인·제품 수락·운영 파기/복원은 후속 단계다. [진행표](backlog.md), [W07-A 검사 증거](../quality/reports/w07-a-local-me-api-check-2026-10-08.json), [W06-D1 검사 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [W06-D2 검사 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json)에 결과를 기록한다.
+S04 앱·실행 환경·로컬 DB 준비와 S05 W05 물리 스키마를 완료했다. W06-A~D2의 DB 업무 RPC·RLS·삭제 경계를 완료했다. 전체 DB 213/213, RPC 162/162, D1 세션 통합 4/4, D2 세션/Auth Admin 통합 6/6이 통과했다. W07 서버 기반은 완료했다. local fixture 세션·`/me`, CSRF/Origin/JSON/32KB mutation 검증 기반과 A/B/C 통합을 구현했다. 다음은 W08 개인 목표·칭찬 API/UI다. 제품 수락 테스트, 실제 Google/OTP 로그인, 독립 삭제 원장과 운영 복원은 후속 단계다. [진행표](backlog.md), [W07-A 검사 증거](../quality/reports/w07-a-local-me-api-check-2026-10-08.json), [W07-B 검사 증거](../quality/reports/w07-b-api-security-check-2026-10-08.json), [W06-D1 검사 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json), [W06-D2 검사 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json)에 결과를 기록한다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 

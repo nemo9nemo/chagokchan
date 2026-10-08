@@ -2,13 +2,13 @@
 
 버전: 0.2.0 / 상태: GET /me의 로컬 API 구현·검증, 나머지 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
 
-OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me만 local fixture 세션으로 연결했고 배포 Auth adapter 및 그 외 operation은 아직 미구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
+OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me를, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반을 구현했다. 배포 Auth flow/session binding, 제품 변경 route와 나머지 operation은 후속 구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
 개발 중에는 [로컬 사용자 해석기](../development/local-development.md)가 가상 Auth 세션을 서버에서 준비한다. 아래 공개 인증·쿠키 계약을 변경하거나 클라이언트 actor 입력을 추가하지 않는다. 실제 Google/OTP 인증 API와 사용자 로그인 검증은 [진행표](../development/backlog.md)의 W12/W13에서 수행한다.
 
 ## 입력·응답
 
-모든 변경 API는 application/json과 X-CSRF-Token을 요구한다. 본문이 없는 명령도 빈 JSON 객체를 보낸다. CookieSession은 서버 관리 grape_auth를 기본 이름으로 하며 SDK의 분할 쿠키를 서버에서 조립·갱신한다. 클라이언트는 토큰을 직접 읽거나 JSON으로 받지 않는다.
+모든 변경 API는 application/json과 X-CSRF-Token을 요구한다. 본문이 없는 명령도 빈 JSON 객체를 보낸다. W07-B의 `validateMutationRequest`는 Origin·Fetch Metadata, signed CSRF cookie/header 일치, JSON object, 정책의 실제 바이트 상한을 확인한다. 새 mutation route는 업무 검증 전에 이 공통 guard를 호출해야 한다. CookieSession은 서버 관리 grape_auth를 기본 이름으로 하며 SDK의 분할 쿠키를 서버에서 조립·갱신한다. 클라이언트는 Auth 토큰을 직접 읽거나 JSON으로 받지 않는다.
 
 쿠키 이름은 Supabase SSR의 cookieOptions.name으로 지정하고, 각 요청마다 서버 클라이언트를 만든다. 실제 고정 SDK 버전에서 분할·갱신·HttpOnly와 no-store를 인증 spike로 확인한다. [Supabase SSR 서버 코드](https://github.com/supabase/ssr/blob/main/src/createServerClient.ts)
 
@@ -30,7 +30,7 @@ OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 
 
 ## 인증 흐름
 
-GET /auth/csrf는 현재 로그인 전 흐름 또는 세션에 묶인 토큰을 준비한다. Google start는 서버 PKCE URL을 반환하고 GET callback은 서버 흐름 쿠키·PKCE를 검증한 뒤 허용된 앱 경로로 303 복귀한다. next는 /goals·/connect·계정 설정 같은 등록된 내부 경로만 허용한다. /signup·삭제 진행 안내는 서버가 계정 상태로 선택하고 클라이언트 next만으로 가입 확인을 건너뛰지 않는다.
+GET /auth/csrf는 no-store 응답과 HttpOnly/SameSite 쿠키로 서명 토큰을 준비한다. 개발 모드는 서버 프로세스 전용 키를 사용한다. 현재 배포 route는 로그인 flow/session과 토큰을 결합하지 않으므로 배포에서는 503으로 닫혀 있고, session-bound 동작은 W12에서 구현한다. Google start는 서버 PKCE URL을 반환하고 GET callback은 서버 흐름 쿠키·PKCE를 검증한 뒤 허용된 앱 경로로 303 복귀한다. next는 /goals·/connect·계정 설정 같은 등록된 내부 경로만 허용한다. /signup·삭제 진행 안내는 서버가 계정 상태로 선택하고 클라이언트 next만으로 가입 확인을 건너뛰지 않는다.
 
 이메일 start는 CAPTCHA·제한 후 계정 존재 여부와 무관한 같은 안내를 반환한다. 서버는 flow_id·이메일·next·만료를 묶어 검증하며 verify로 UUID를 확인한다. 응답의 account_state는 signup_required/active/deleting이며 새 사용자는 /signup, 기존 사용자는 허용된 원래 목적지로 안내한다. Auth 결과에 access/refresh token을 반환하지 않는다.
 

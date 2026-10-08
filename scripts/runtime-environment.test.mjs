@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { ConfigurationError, validateEnvironment } from "./runtime-environment.mjs";
 const local = { APP_ENV: "local", APP_AUTH_MODE: "local_fixture", NODE_ENV: "development", APP_BASE_URL: "http://127.0.0.1:3000", SUPABASE_URL: "http://127.0.0.1:54321", LOCAL_DEV_ACTOR: "A" };
-const deployed = { APP_ENV: "staging", APP_AUTH_MODE: "supabase_session", NODE_ENV: "production", APP_BASE_URL: "https://staging.example.invalid", SUPABASE_URL: "https://database.example.invalid" };
+const deployed = { APP_ENV: "staging", APP_AUTH_MODE: "supabase_session", NODE_ENV: "production", APP_BASE_URL: "https://staging.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "test-only-signing-key-with-at-least-32-bytes" };
 const validateLocal = (env) => validateEnvironment(env, { command: "dev", bindingHost: "127.0.0.1" });
 test("local configuration selects fixture A", () => assert.equal(validateLocal(local).actor, "A"));
 test("local configuration accepts only the fixed B/C fixture names", () => {
@@ -27,6 +27,8 @@ test("external binding is rejected", () => assert.throws(() => validateEnvironme
 test("fixture mode cannot compile a release", () => assert.throws(() => validateEnvironment(local, { command: "build", bindingHost: "127.0.0.1" }), ConfigurationError));
 test("deployed mode rejects remaining fixture credentials", () => assert.throws(() => validateEnvironment({ ...deployed, LOCAL_DEV_PASSWORD: "synthetic" }, { command: "build" }), ConfigurationError));
 test("deployed mode rejects the local fixture manifest path", () => assert.throws(() => validateEnvironment({ ...deployed, APP_LOCAL_FIXTURE_MANIFEST: "C:/private/local-fixtures.json" }, { command: "build" }), ConfigurationError));
+test("deployed mode rejects local CSRF signing material", () => assert.throws(() => validateEnvironment({ ...deployed, APP_LOCAL_CSRF_SIGNING_SECRET: "local-only" }, { command: "build" }), ConfigurationError));
+test("deployed mode requires a separate CSRF signing secret", () => assert.throws(() => validateEnvironment({ ...deployed, CSRF_SIGNING_SECRET: "short" }, { command: "build" }), ConfigurationError));
 test("deployed mode rejects local database", () => assert.throws(() => validateEnvironment({ ...deployed, SUPABASE_URL: "https://localhost:54321" }, { command: "build" }), ConfigurationError));
 test("configuration failures never print credential values", () => {
   assert.throws(() => validateLocal({ ...local, SUPABASE_URL: "http://user:private-value@127.0.0.1:54321" }), (error) => error instanceof ConfigurationError && !error.message.includes("private-value"));

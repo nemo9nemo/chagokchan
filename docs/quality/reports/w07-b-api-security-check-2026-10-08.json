@@ -1,0 +1,89 @@
+{
+  "verified_at": "2026-10-08T08:48:04Z",
+  "work_item": "W07-B",
+  "status": "passed",
+  "scope": "csrf_same_origin_fetch_metadata_json_and_bounded_mutation_request_foundation",
+  "source_basis": {
+    "base_commit": "ae073aa86dc8d4b2e56187ca0f05ec4e957ee378",
+    "format": "SHA-256 per changed implementation, environment guard, API contract, template, and test-case file; repository history identifies the resulting commit",
+    "files": [
+      {
+        "path": "src/server/api-security.mjs",
+        "sha256": "1016bbe1a51a84177f426c54ffa0df6fd40ff99ab4b681e015dca645679a34d4"
+      },
+      {
+        "path": "src/app/api/v1/auth/csrf/route.ts",
+        "sha256": "cfb922d56649c50b0030b7880ad79d111037bc2f2e0373daa17c6bccef9aea70"
+      },
+      {
+        "path": "scripts/api-security.test.mjs",
+        "sha256": "906d635d9ca45466fa2a637c1f572663ae4d92ca83394a6404549a3ebd8fea57"
+      },
+      {
+        "path": "scripts/test-local-me-api.mjs",
+        "sha256": "4afc2cbc384f0829bc6a9caa25c63612aed846d7b515d2ea207cf58ab5082b1d"
+      },
+      {
+        "path": "scripts/app.mjs",
+        "sha256": "a30275ca5117dd0facf22888dea30fbfd64b3a0430bf71bf2c7064d9d8ac1d03"
+      },
+      {
+        "path": "scripts/runtime-environment.mjs",
+        "sha256": "293e65cfba24c3676e95208bd880b679caed4407ab68141bc15e4e6af333060a"
+      },
+      {
+        "path": "scripts/runtime-environment.test.mjs",
+        "sha256": "c93a5eeb668283630fd420900229490cbb17b0e0ffa2bdd53b94ee353295ac51"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "2cf3500f90bf6e0f5b8396a0e41f8d80ae7b046d910b61ddad2cb790233e345d"
+      },
+      {
+        "path": "package.json",
+        "sha256": "2dc14de165bfcd718a308a61bc37f2a232148856bba3db22b809dcce917511ed"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "30318a7ff6674ed30bbc588f8179b94c28bdded078b48cb45c58673b820e094b"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "f8f2bf9be30e623a9f4073306f22ebd8f1911511c4dca32e0bebe1f21ff52881"
+      },
+      {
+        "path": ".env.example",
+        "sha256": "5477b7adf0f58afe8033e2c00f0a5be89fe4b9c3dffb1d110801676be5096f85"
+      }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false
+  },
+  "verification": {
+    "security_unit_command": "scripts/project.ps1 -Task api:security-test",
+    "security_unit_result": "14/14 passed",
+    "local_api_command": "scripts/project.ps1 -Task api:me-test",
+    "local_api_actor_runs": [
+      { "actor": "A", "checks_passed": 15, "status": "passed" },
+      { "actor": "B", "checks_passed": 15, "status": "passed" },
+      { "actor": "C", "checks_passed": 15, "status": "passed" }
+    ],
+    "build_check": "passed; GET /api/v1/auth/csrf and GET /api/v1/me compiled as dynamic Node.js routes",
+    "deployment_guard": "passed by unit/build configuration checks; deployed CSRF endpoint deliberately returns 503 until flow/session binding is implemented",
+    "full_check": "passed; scripts/project.ps1 -Task check: Biome 33 files, typecheck passed, unit 53/53, artifact checks passed (24 JSON, 400 Markdown links, 691 OpenAPI refs, 59 test cases, 184 registered artifact paths)",
+    "mutation_business_routes": "not_implemented; guard is available for W08-W10 routes",
+    "real_google_or_otp_login": "not_run",
+    "business_acceptance_cases": "not_run"
+  },
+  "notes": [
+    "The local runner creates a random per-process CSRF signing key; a server restart invalidates its CSRF cookies.",
+    "Production and staging require an independent CSRF_SIGNING_SECRET of at least 32 bytes and reject local fixture paths and signing material."
+  ]
+}

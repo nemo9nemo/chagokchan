@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_d1_w06_d2_w07_a",
+  "phase": "partially_executed_w06_d1_w06_d2_w07_a_w07_b",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -701,6 +701,27 @@
       "expected": "가입·수집·보관·공개 안내가 확정 정책 및 실제 설정과 일치하고 자기 선언의 의미가 정확함. 공개 약관·개인정보 관련 동의는 별도로 구성. 아동/보호자 계정은 첫 출시 범위에 없음.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-API-002",
+      "requirement_ids": [
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-API-001",
+        "POL-SEC-001"
+      ],
+      "level": "api_security_unit_and_integration",
+      "title": "CSRF·동일 출처·JSON·요청 크기 경계",
+      "steps": [
+        "서버 발급 CSRF 토큰의 HMAC·만료·cookie/header 이중 제출을 확인",
+        "누락/외부 Origin·cross-site Fetch Metadata·누락/위조 CSRF 거절 확인",
+        "application/json 형식·UTF-8 JSON object·Content-Length 및 실제 32KB 본문 상한 검사",
+        "GET /api/v1/auth/csrf의 HttpOnly·SameSite·Path·no-store·request ID 응답 확인"
+      ],
+      "expected": "허용된 동일 출처의 서명 토큰·JSON 요청만 파싱한다. 변조·만료 토큰, 출처 오류, 잘못된 형식은 안전한 4xx로 거절하고 초과 본문은 413으로 거절한다.",
+      "status": "passed",
+      "evidence": "reports/w07-b-api-security-check-2026-10-08.json"
     },
     {
       "id": "TC-API-001",
