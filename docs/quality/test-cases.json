@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "partially_executed_w06_d1_w06_d2",
+  "phase": "partially_executed_w06_d1_w06_d2_w07_a",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -701,6 +701,26 @@
       "expected": "가입·수집·보관·공개 안내가 확정 정책 및 실제 설정과 일치하고 자기 선언의 의미가 정확함. 공개 약관·개인정보 관련 동의는 별도로 구성. 아동/보호자 계정은 첫 출시 범위에 없음.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-API-001",
+      "requirement_ids": [
+        "REQ-001"
+      ],
+      "policy_ids": [
+        "POL-DEV-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_api_integration",
+      "title": "로컬 세션 /me와 actor 위조 차단",
+      "steps": [
+        "허용된 LOCAL_DEV_ACTOR A/B/C 중 하나로 loopback 개발 서버를 시작",
+        "클라이언트 user_id·actor_id query, x-user-id·x-actor-id 및 임의 Authorization을 넣고 GET /api/v1/me 요청",
+        "응답 사용자·프로필 ID가 서버 환경의 Auth 세션과 일치하고 응답 필드·캐시 헤더·토큰 비노출 확인"
+      ],
+      "expected": "서버가 준비한 실제 로컬 Auth 세션과 get_me RPC/RLS를 사용한다. 클라이언트 actor 값은 사용자를 바꾸지 않고 본인 최소 필드만 반환하며 Auth 토큰을 응답하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w07-a-local-me-api-check-2026-10-08.json"
     },
     {
       "id": "TC-DEV-001",

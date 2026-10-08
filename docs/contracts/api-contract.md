@@ -1,8 +1,8 @@
 # API 계약과 구현 규칙
 
-버전: 0.2.0 / 상태: 구현 전 계약 / 기준: [OpenAPI](../../contracts/openapi.json)
+버전: 0.2.0 / 상태: GET /me의 로컬 API 구현·검증, 나머지 계약은 구현 전 / 기준: [OpenAPI](../../contracts/openapi.json)
 
-OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이며 현재 실행 중인 API는 없다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
+OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me만 local fixture 세션으로 연결했고 배포 Auth adapter 및 그 외 operation은 아직 미구현이다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
 개발 중에는 [로컬 사용자 해석기](../development/local-development.md)가 가상 Auth 세션을 서버에서 준비한다. 아래 공개 인증·쿠키 계약을 변경하거나 클라이언트 actor 입력을 추가하지 않는다. 실제 Google/OTP 인증 API와 사용자 로그인 검증은 [진행표](../development/backlog.md)의 W12/W13에서 수행한다.
 

@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-08",
-  "current_stage": "S05_w06_database_rpc_and_deletion_verified",
-  "next_stage": "S05_w07_local_user_adapter_and_server_api",
+  "current_stage": "S05_w07_local_me_api_implemented_remaining_api_pending",
+  "next_stage": "S05_w07_common_request_security_and_product_api",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -30,7 +30,7 @@
     {
       "id": "S05",
       "name": "DB·권한·로컬 사용자",
-      "status": "w06_database_rpc_rls_and_deletion_verified_w07_server_api_pending"
+      "status": "w06_database_rpc_rls_and_deletion_verified_w07_in_progress"
     },
     {
       "id": "S06",
@@ -85,14 +85,15 @@
     "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 57,
-    "application_tests_executed": 32,
-    "application_test_scope": "runtime_ports_and_fixture_manifest_units",
+    "planned_test_cases": 58,
+    "application_tests_executed": 37,
+    "application_test_scope": "runtime_ports_fixture_manifest_and_me_projection_units",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "database_tests_executed": 213,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
+    "local_api_tests_executed": 3,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
     "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_w06_d2_account_deletion",
@@ -114,7 +115,8 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 21
+    "technical_cases_passed": 22,
+    "w07_a_report": "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json"
   },
   "artifacts": [
     {
@@ -215,7 +217,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w06_d2_account_deletion",
+      "status": "documented_through_w07_a_local_me_api",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -233,7 +235,8 @@
         "docs/changes/2026-10-08-w06-c2-shared-board-rpcs.md",
         "docs/changes/2026-10-08-w06-c1-cursor-pagination.md",
         "docs/changes/2026-10-08-w06-d1-news-and-purge.md",
-        "docs/changes/2026-10-08-w06-d2-account-deletion.md"
+        "docs/changes/2026-10-08-w06-d2-account-deletion.md",
+        "docs/changes/2026-10-08-w07-a-local-me-api.md"
       ]
     },
     {
@@ -303,13 +306,16 @@
     {
       "id": "ART-016",
       "title": "앱·로컬 개발 설정",
-      "status": "app_runtime_build_local_database_verified",
+      "status": "app_runtime_build_local_database_w07_a_me_api_verified",
       "paths": [
         "package.json",
         "pnpm-lock.yaml",
         "tsconfig.json",
         "supabase/config.toml",
         "src/app/",
+        "src/server/local-user-session.mjs",
+        "scripts/local-user-session.test.mjs",
+        "scripts/test-local-me-api.mjs",
         ".node-version",
         ".nvmrc",
         ".npmrc",
@@ -330,7 +336,7 @@
     {
       "id": "ART-017",
       "title": "DB·RLS·RPC·기능 검사",
-      "status": "w06_a_through_d2_database_rpcs_and_deletion_boundaries_verified",
+      "status": "w06_a_through_d2_database_rpcs_and_deletion_boundaries_and_w07_a_local_me_api_verified",
       "paths": [
         "scripts/database-task.mjs",
         "scripts/test-local-rpc.mjs",
@@ -401,7 +407,8 @@
         "supabase/migrations/20261008024100_account_deletion_timezone_check_privilege.sql",
         "supabase/migrations/20261008024200_account_deletion_request_timestamp_privilege.sql",
         "supabase/tests/008_business_rpc_account_deletion.test.sql",
-        "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json"
+        "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
+        "docs/quality/reports/w07-a-local-me-api-check-2026-10-08.json"
       ],
       "planned_paths": [
         "tests/e2e/"
@@ -429,7 +436,7 @@
     {
       "id": "ART-020",
       "title": "개발 환경·무로그인·진행 규칙",
-      "status": "environment_and_fixture_setup_verified_session_adapter_pending",
+      "status": "environment_and_fixture_setup_and_local_me_session_adapter_verified",
       "paths": [
         "policies/development-policy.json",
         "docs/development/local-development.md",
@@ -523,12 +530,12 @@
       "preparation_report": "docs/quality/reports/project-handoff-preparation-2026-10-08.json",
       "draft_directory": "tmp/w06-draft",
       "draft_state": "unapplied_untested_git_ignored",
-      "continuation_work_item": "W06"
+      "continuation_work_item": "W07"
     }
   },
   "development_auth": {
     "policy": "policies/development-policy.json",
-    "status": "environment_and_fixture_setup_verified_session_adapter_not_implemented",
+    "status": "environment_and_fixture_setup_local_fixture_me_adapter_implemented_deployed_adapter_pending",
     "interactive_login_during_development": false,
     "local_mode": "local_fixture",
     "real_login_integration_and_tests": "pre_release_required",

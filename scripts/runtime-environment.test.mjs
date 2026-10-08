@@ -26,6 +26,7 @@ for (const [title, values] of [
 test("external binding is rejected", () => assert.throws(() => validateEnvironment(local, { command: "dev", bindingHost: "0.0.0.0" }), ConfigurationError));
 test("fixture mode cannot compile a release", () => assert.throws(() => validateEnvironment(local, { command: "build", bindingHost: "127.0.0.1" }), ConfigurationError));
 test("deployed mode rejects remaining fixture credentials", () => assert.throws(() => validateEnvironment({ ...deployed, LOCAL_DEV_PASSWORD: "synthetic" }, { command: "build" }), ConfigurationError));
+test("deployed mode rejects the local fixture manifest path", () => assert.throws(() => validateEnvironment({ ...deployed, APP_LOCAL_FIXTURE_MANIFEST: "C:/private/local-fixtures.json" }, { command: "build" }), ConfigurationError));
 test("deployed mode rejects local database", () => assert.throws(() => validateEnvironment({ ...deployed, SUPABASE_URL: "https://localhost:54321" }, { command: "build" }), ConfigurationError));
 test("configuration failures never print credential values", () => {
   assert.throws(() => validateLocal({ ...local, SUPABASE_URL: "http://user:private-value@127.0.0.1:54321" }), (error) => error instanceof ConfigurationError && !error.message.includes("private-value"));

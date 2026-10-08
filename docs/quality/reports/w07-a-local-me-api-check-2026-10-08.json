@@ -1,0 +1,117 @@
+{
+  "verified_at": "2026-10-08T08:36:16Z",
+  "work_item": "W07-A",
+  "status": "passed",
+  "scope": "server_local_fixture_auth_session_and_get_me_rpc_api",
+  "source_basis": {
+    "base_commit": "3fdf1968daab7119d3f9dabadbd35fcd4c92f7f0",
+    "format": "SHA-256 per implementation, environment guard, API contract and test-case file; repository history identifies the resulting commit",
+    "files": [
+      {
+        "path": "src/server/local-user-session.mjs",
+        "sha256": "55449380a486531e22d655d113fb2b05e4ca7c2275bf724b090ca5369a266d60"
+      },
+      {
+        "path": "src/app/api/v1/me/route.ts",
+        "sha256": "af9d929d53a9eac06e918ceaa6eb762eeb59b5a4f15afd9f99e0dd00ed80d6e7"
+      },
+      {
+        "path": "scripts/local-user-session.test.mjs",
+        "sha256": "e89336555b8eadf24233d4c7aeb06ad73aa87f6e91ee28dcfaab3a2abf5ae548"
+      },
+      {
+        "path": "scripts/test-local-me-api.mjs",
+        "sha256": "f95baa615ec2644a2833467f0bf6d3032fd83dd04e55611d086185c405e4cfa4"
+      },
+      {
+        "path": "scripts/app.mjs",
+        "sha256": "f0ba85d2b941a793742e2522bb23c4465aac636b7f13f4c52523369c0ce928ff"
+      },
+      {
+        "path": "scripts/runtime-environment.mjs",
+        "sha256": "4d5792ae364b6f58baa4fc552cf8afd9c53700e9279a430680857d7d200ebabe"
+      },
+      {
+        "path": "scripts/runtime-environment.test.mjs",
+        "sha256": "547e2459d3edc2a69667f4db8efef086e50820f952302185fdd39f092883595f"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "2a20a7e2cc7612b8222ffa4ed8368a40d4051b38521a802fdc9b00c3a89b70d5"
+      },
+      {
+        "path": "package.json",
+        "sha256": "7f4619168439af33eb09429efe792c1cce26bc329f58737296056c30e3a543e3"
+      },
+      {
+        "path": "contracts/openapi.json",
+        "sha256": "b449db9ad3b58f037e3ab44369351dfdcbe240fd2e5cb436fc148b90d1c9a566"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "52763d9d317fc57017aea2ebde8b7506308021d01963d52a29f4f2d627b89ef8"
+      }
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "supabase_sdk": "2.117.3",
+    "postgresql": "17.11",
+    "application_binding": "127.0.0.1",
+    "supabase_binding": "127.0.0.1:54321",
+    "fixture_credentials_printed": false
+  },
+  "verification": {
+    "local_api_command": "scripts/project.ps1 -Task api:me-test",
+    "local_api_result": "passed",
+    "local_api_actor_runs": [
+      {
+        "actor": "A",
+        "checks_passed": 5,
+        "status": "passed"
+      },
+      {
+        "actor": "B",
+        "checks_passed": 5,
+        "status": "passed"
+      },
+      {
+        "actor": "C",
+        "checks_passed": 5,
+        "status": "passed"
+      }
+    ],
+    "assertions": [
+      "Auth-issued local session validated by Supabase Auth",
+      "get_me RPC and authenticated RLS returned only the configured actor's Me projection",
+      "client user_id/actor_id query, x-user-id/x-actor-id and Authorization did not select an actor",
+      "response included no-store and X-Request-ID",
+      "response contained no Auth token or fixture credential fields"
+    ],
+    "projection_unit_tests": "4/4 passed",
+    "environment_guard_regression": "passed, including deployed rejection of APP_LOCAL_FIXTURE_MANIFEST",
+    "build_check": "passed; dynamic /api/v1/me route compiled without bundling the private fixture directory",
+    "full_check": {
+      "status": "passed",
+      "lint_files": 30,
+      "typecheck": "passed",
+      "unit_tests": "37/37 passed",
+      "artifact_consistency": {
+        "status": "passed",
+        "test_cases": 58,
+        "openapi_references": 691,
+        "markdown_links": 394,
+        "registered_paths": 179
+      }
+    },
+    "real_google_or_otp_login": "not_run",
+    "business_acceptance_cases": "not_run"
+  },
+  "notes": [
+    "A first build attempt exposed Turbopack tracing the private fixture directory from a statically assembled path. The dev runner now supplies the path at runtime, deployed configuration rejects it, and the repeat build passed.",
+    "The local Supabase status CLI could not access Docker from the default sandbox. The loopback API/Auth/RPC integration itself ran successfully with reviewed access to the ACL-protected fixture file."
+  ]
+}

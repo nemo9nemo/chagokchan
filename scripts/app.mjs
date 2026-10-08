@@ -15,6 +15,7 @@ if (command === "build-check") {
 const bindingHost = "127.0.0.1";
 if (command === "dev") env.CHAGOKCHAN_BIND_HOST = bindingHost;
 const config = validateEnvironment(env, { command: command === "dev" ? "dev" : "build", bindingHost });
+if (command === "dev") env.APP_LOCAL_FIXTURE_MANIFEST = fileURLToPath(new URL("../private-data/local-fixtures.json", import.meta.url));
 const next = fileURLToPath(new URL("../node_modules/next/dist/bin/next", import.meta.url));
 const port = new URL(config.baseUrl).port || (command === "dev" ? "80" : "443");
 const args = command === "dev" ? ["dev", "--hostname", bindingHost, "--port", port] : command === "start" ? ["start", "--hostname", bindingHost] : ["build"];

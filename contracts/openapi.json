@@ -3,16 +3,16 @@
   "info": {
     "title": "차곡찬 (Chagokchan) API",
     "version": "0.2.0",
-    "description": "MVP 설계 계약. 모든 operation은 아직 미구현. 서버 쿠키·CSRF·현재 권한 확인. 값은 policies/app-policy.json 기준. 첫 출시는 성인 개인 사용자. Auth 인증과 최초 앱 가입을 분리하고 현재 정책의 명시적 성인 확인 뒤 계정을 생성한다."
+    "description": "MVP 계약. GET /me의 로컬 fixture API를 구현했으며 나머지 operation과 배포 Auth 연결은 후속 작업이다. 서버 쿠키·CSRF·현재 권한 확인. 값은 policies/app-policy.json 기준. 첫 출시는 성인 개인 사용자. Auth 인증과 최초 앱 가입을 분리하고 현재 정책의 명시적 성인 확인 뒤 계정을 생성한다."
   },
   "servers": [
     {
       "url": "/api/v1",
-      "description": "동일 출처 상대 API 경로. 실제 서버 생성 전."
+      "description": "동일 출처 상대 API 경로. 구현 범위는 각 operation의 상태를 참조."
     }
   ],
   "x-policy-version": "0.2.0",
-  "x-implementation-status": "not_implemented",
+  "x-implementation-status": "partial_w07_a_local_fixture_me_api",
   "security": [
     {
       "cookieSession": []
@@ -996,7 +996,7 @@
           "me"
         ],
         "description": "active 앱 계정의 본인 프로필·설정·최초 성인 확인 시각/버전. 현재 Auth 세션은 유효하나 앱 계정이 없으면 403 REGISTRATION_REQUIRED. 확인 메타데이터는 공개 프로필에 포함하지 않는다.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_implemented_local_fixture_api_implemented_deployed_auth_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -1010,7 +1010,8 @@
           "TC-AUTH-003",
           "TC-UX-002",
           "TC-AUDIENCE-001",
-          "TC-AUTH-004"
+          "TC-AUTH-004",
+          "TC-API-001"
         ],
         "responses": {
           "200": {

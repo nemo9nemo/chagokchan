@@ -101,6 +101,12 @@ OpenAPI에는 DB RPC가 구현됐고 서버 API 연결이 남았다고 기록했
 
 `TC-DB-DELETE-003~004`를 통과로 기록한다. 제품 수락 TC 36개, BFF/API·UI·Google/OTP 로그인·스테이징/운영 원장·백업 복원은 미실행이거나 미설정이다. 이에 따라 W06 DB 작업만 완료했고 다음 W07 서버 API 구현과 오픈 전 W12/W13 실제 인증 검증은 별도다.
 
+## W07-A 로컬 세션 /me API 검사
+
+서버 전용 adapter가 loopback 개발 환경의 `LOCAL_DEV_ACTOR` A/B/C를 읽고, 보호된 fixture manifest의 합성 계정으로 Supabase Auth가 발급한 실제 로컬 세션을 준비·검증한다. 같은 세션으로 `get_me` RPC를 호출하고 DB RLS 결과를 OpenAPI `Me` 필드 allowlist로 응답한다. actor 선택에는 query·header·Authorization을 사용하지 않으며 JSON 응답에는 세션 token이나 fixture 자격증명을 포함하지 않는다.
+
+`scripts/project.ps1 -Task api:me-test`를 A/B/C 각각 실행해 각 5/5 확인을 통과했다. `scripts/project.ps1 -Task check`는 Biome 30개 파일, typecheck, 단위 37/37, 산출물 교차참조 58 TC·691 OpenAPI refs·179 등록 경로를 통과했다. `scripts/project.ps1 -Task build:check`도 통과했고 GET `/api/v1/me`는 동적 route로 컴파일됐다. TC-API-001을 통과로 기록한다. 제품 수락 TC 36개와 실제 Google/OTP 로그인을 대신하지 않으며, 배포 세션 adapter·CSRF/변경 요청 경계·제품 UI는 후속 작업이다. [세부 증거](reports/w07-a-local-me-api-check-2026-10-08.json)
+
 ## W05 물리 DB의 부분 검사
 
 2026-10-08 물리 스키마·ERD 컬럼 일치·초기 데이터 준비·pgTAP 51/51·준비 기록 단위 검사 5개(기존 환경/포트 포함 32/32)·빌드·잠금 파일을 확인했다. 준비 명령 재실행의 데이터 보존과 잘못된 환경 3개의 실제 거절을 추가 확인했다. [DB 검사 증거](reports/physical-database-check-2026-10-08.json). W06-A 검사 전 단계의 범위다. 현재 두 기술 TC만 추가로 실행했으며 제품 업무·동시성·전체 API/E2E·실제 로그인 검사는 남아 있다.

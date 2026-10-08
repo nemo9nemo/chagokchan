@@ -23,7 +23,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W04 | 개발 환경·앱 기반·로컬 DB 준비 | DONE | W02, W03. 다음 작업 | 고정 Node/pnpm·package/lock·타입/린트·Supabase 설정. 앱 빌드·DB 기동 재현 | **완료 2026-10-08**. 설치·린트·타입·환경/포트 27/27·빌드·HTTP·PostgreSQL 17.11·Auth/REST·포트 127.0.0.1 확인. [검사 증거](../quality/reports/foundation-check-2026-10-08.json) |
 | W05 | DB 물리 설계·마이그레이션·가상 데이터 | DONE | W04 | ERD를 SQL·제약·인덱스로 구현. 빈 로컬 DB 적용·A/B/C 초기 데이터 재현 | **완료 2026-10-08**. 빈 DB 적용·18테이블/ERD 컬럼·A/B/C·DB 51/51·준비 재실행 보존/환경 차단·소스 32/32·빌드. [DB 검사 증거](../quality/reports/physical-database-check-2026-10-08.json) |
 | W06 | 업무 RPC·RLS·트랜잭션·DB 검사 | DONE | W05 | 직접 접근 거절·집계·중복·동시성·권한 회수·삭제 상태 검사 통과 | **완료 2026-10-08.** W06-A~D2의 DB RPC·RLS와 삭제 경계를 검증했다. 전체 DB 213/213(물리 51·RPC 경계 21·업무 RPC 141), RPC 전용 162/162, D1 실제 세션 통합 4/4, D2 실제 세션/Auth Admin 통합 6/6. BFF/UI·제품 수락·실제 Google/OTP 로그인·운영 원장은 미완료. [D1 증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json)·[D2 증거](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
-| W07 | 서버 API 기반·로컬 사용자 연결 | TODO | W03, W06 | 로그인 화면 없이 A 사용, B/C로 같은 RPC/RLS 검사. 입력·CSRF·응답 제한·배포 차단 검증 | 로컬 사용자 해석기·API 미구현 |
+| W07 | 서버 API 기반·로컬 사용자 연결 | IN_PROGRESS | W03, W06 | 로그인 화면 없이 A 사용, B/C로 같은 RPC/RLS 검사. 입력·CSRF·응답 제한·배포 차단 검증 | W07-A에서 local fixture 세션·GET /me 연결 완료. 나머지 API 공통 보안·제품 route는 진행 중 |
 | W08 | 개인 목표·셀프 칭찬·회차·정리 | TODO | W07 | 목표→개인 칭찬→완성→지난 회차·취소. REQ-002/003/007/012 검증 | 화면·API 미구현 |
 | W09 | 사람 연결·판 권한·공유 칭찬 | TODO | W07, W08 | 초대→요청→수락→판 grant→칭찬. 연결만 된 B·무관한 C 거절 | REQ-004/005/006 미구현 |
 | W10 | 소식·보낸함·삭제·정리 작업 | TODO | W08, W09 | 최소 응답·재시도·파기·FK·접근 중단 검사. 실제 재인증 수락은 W12/W13 | REQ-008/009/010 미구현 |
@@ -72,3 +72,11 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | W06-D | 소식·요청 결과·삭제/파기 RPC와 FK 정리 경계 | DONE | idempotency·계정 접근 중단·작성자/수신자 삭제·재시도 검사 | **완료 2026-10-08**: D1·D2 하위 기능·권한 경계와 재시도를 구현하고 로컬에서 검증했다. 외부 독립 삭제 원장과 실제 제공자 로그인은 운영/오픈 준비 단계에서 설정·검증한다. |
 | W06-D1 | 소식·보낸 칭찬·목표 휴지통/복구·목표 파기 경계 | DONE | W06-C2 | 2026-10-08. DB pgTAP 20/20·발급 Auth 세션 통합 4/4: 최소 소식/커서·읽음 재시도·관계 해제 뒤 보낸함·소프트 삭제/권한 회수·복구·기한·외부 원장 gate·FK 정리. 기존 fixture 보존·probe 정리 통과. 원장 미설정으로 gate는 기본 차단. [증거](../quality/reports/w06-d1-news-and-purge-check-2026-10-08.json) |
 | W06-D2 | 재인증·계정 접근 중단·작성자/수신자 파기·Auth 삭제 재시도 | DONE | W06-D1 | **완료 2026-10-08.** DB pgTAP 32/32·발급 Auth 세션/Auth Admin 통합 6/6 통과. 외부 원장 gate 차단·실패 rollback·동일 원장 참조 retry·작성자 기록 scrub/수신자 소유 데이터 제거·Auth 최종 삭제·UUID 재가입 차단·fixture 보존 확인. 독립 원장 미설정으로 gate는 기본 차단; 로컬에서만 합성 참조 사용. [검사](../quality/reports/w06-d2-account-deletion-check-2026-10-08.json) |
+
+## W07 서버 API 기반·로컬 사용자 연결
+
+| ID | 기능 단위 | 상태 | 결과·다음 행동 |
+| --- | --- | --- | --- |
+| W07-A | 서버 전용 local fixture 세션과 GET /me | DONE | 개발 환경의 허용된 A/B/C만 서버에서 선택하고 Auth-issued local session으로 `get_me` RPC/RLS 호출. 응답을 OpenAPI Me allowlist로 제한·no-store. 현재 선택 actor에 대해 API 통합 검사 통과. [검사](../quality/reports/w07-a-local-me-api-check-2026-10-08.json) |
+| W07-B | API 공통 요청 경계·CSRF·입력·오류 처리 | TODO | 변경 요청 Origin/CSRF/JSON/32KB와 안정적인 API 오류·request ID 기반을 구현·검사 |
+| W07-C | 배포 Auth 세션 해석기와 일반 API client | DEFERRED | Google/OTP와 실사용 로그인을 미루는 사용자 결정에 따라 W12에서 구현. 배포 `/me`는 현재 세션 모드 미지원 시 401 |
