@@ -1,0 +1,134 @@
+{
+  "verified_at": "2026-10-08T03:19:11.000Z",
+  "work_item": "W06-B1",
+  "status": "passed",
+  "scope": "goal_owner_creation_detail_revision_state_and_limits",
+  "source_basis": {
+    "base_commit": "f0cd4c072a988ad0266bb35c42b91ec94bdcb5ac",
+    "format": "SHA-256 per path",
+    "files": [
+      { "path": "package.json", "sha256": "2be5e4f9ba5bdaaf53fdea91af27f0e391d7ff75d74cbbeb6be34022db20ebd6" },
+      { "path": "scripts/project.ps1", "sha256": "89ea39ddce87f0a66ccd34e134646ebf10e8ae5145804fbbe81cd7f25b9ace4e" },
+      { "path": "scripts/test-local-goal-rpc.mjs", "sha256": "b21adec3a9e3c51ad0fc14649c00ff9bc45b23530afac261509f8cd8bcad3a0e" },
+      { "path": "supabase/migrations/20261008021000_goal_rpc.sql", "sha256": "d7c06e284739068b7552a4db1da79ebab0871a746d757acba98a2c5e2979e784" },
+      { "path": "supabase/migrations/20261008021100_narrow_goal_rpc_privileges.sql", "sha256": "607cd521e0faa208325d68b6dec5abd32c3470832c68e8bb28935b4fdafaa29b" },
+      { "path": "supabase/migrations/20261008021200_goal_receipt_lookup_columns.sql", "sha256": "14107b5de991c9b5d3ba4c06fde6c2a8b34f459013730d180fde46cb29591b11" },
+      { "path": "supabase/migrations/20261008021300_receipt_retry_lock_privilege.sql", "sha256": "4e2f9cd941952db9f6b5f32879e2fe19c2b92af4792204b31dfa76c110ec8f4d" },
+      { "path": "supabase/tests/003_business_rpc.test.sql", "sha256": "58b63b1afecc103836a0b2cace2fe796894c39bbfc0a2792a09886d132c30b18" },
+      { "path": "docs/quality/test-cases.json", "sha256": "c4d5d037b60d2d7c0c6519b9a7f783ed6a88cb1eaff02ed6b73b2fd638b99204" }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008021000",
+      "20261008021100",
+      "20261008021200",
+      "20261008021300"
+    ],
+    "previous_applied_migrations_modified": false,
+    "goal_rpc_functions": [
+      "create_goal",
+      "get_goal",
+      "update_goal",
+      "complete_goal",
+      "archive_goal",
+      "resume_goal"
+    ],
+    "security": "SECURITY DEFINER functions use fixed search_path, a non-login non-BYPASSRLS owner, actor-scoped RLS, column grants and immutable receipt identity. API roles retain no direct goal-table access."
+  },
+  "database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "verified_at": "2026-10-08T03:16:36.400Z",
+    "status": "passed",
+    "executed": 90,
+    "passed": 90,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 18,
+    "real_login": 0,
+    "rpc_only_command": {
+      "command": "scripts/project.ps1 -Task db:rpc-test",
+      "verified_at": "2026-10-08T03:16:24.731Z",
+      "status": "passed",
+      "executed": 39,
+      "passed": 39,
+      "failed": 0
+    }
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:goal-test",
+    "verified_at": "2026-10-08T03:14:18.243Z",
+    "status": "passed",
+    "executed": 12,
+    "passed": 12,
+    "failed": 0,
+    "test_case_ids": [
+      "TC-DB-GOAL-001",
+      "TC-DB-GOAL-002"
+    ],
+    "same_key_parallel_requests": 10,
+    "same_key_results_created": 1,
+    "active_goal_limit": 20,
+    "concurrent_limit_requests": 5,
+    "concurrent_limit_requests_succeeded": 1,
+    "owner_and_foreign_actor_sessions": true,
+    "auth_sessions_issued_by_local_auth": true,
+    "service_role_used_for_app_rpc": false,
+    "probe_accounts_and_sessions_removed": true,
+    "existing_app_fixture_data_preserved": true,
+    "provider_login_tests_executed": 0
+  },
+  "session_boundary_regression": {
+    "command": "scripts/project.ps1 -Task db:session-test",
+    "verified_at": "2026-10-08T03:17:05.386Z",
+    "status": "passed",
+    "executed": 27,
+    "passed": 27,
+    "app_fixture_data_preserved": true,
+    "probe_cleanup_passed": true,
+    "provider_login_tests_executed": 0
+  },
+  "source_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "verified_at": "2026-10-08T03:20:27.832Z",
+    "status": "passed",
+    "lint_files": 21,
+    "typecheck": "passed",
+    "unit_tests": { "executed": 32, "passed": 32, "failed": 0 },
+    "artifact_structure": {
+      "status": "passed",
+      "planned_test_cases": 40,
+      "local_markdown_links": 361,
+      "openapi_local_references": 691,
+      "full_openapi_validator_executed": false,
+      "mermaid_render_executed": false
+    }
+  },
+  "build_check": {
+    "command": "scripts/project.ps1 -Task build:check",
+    "status": "passed",
+    "next": "16.4.0",
+    "build_mode": "offline_local"
+  },
+  "application_and_release_scope": {
+    "openapi_bff_implemented": false,
+    "product_acceptance_cases_completed": 0,
+    "human_or_provider_login_tests_executed": 0,
+    "business_features_still_pending": [
+      "personal praise and bunch transactions",
+      "connection, board grants and shared praise",
+      "notifications and deletion workflows"
+    ]
+  },
+  "diagnostic_note": "The first issued-session run found insufficient request_receipts metadata and retry-lock privileges. Follow-up migrations added only the lookup metadata columns and immutable result_id lock privilege; RLS and the record-identity trigger remain active. A state test was aligned with policy: archive preserves completed_at, and resume clears it."
+}

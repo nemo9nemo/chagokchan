@@ -797,6 +797,49 @@
       "expected": "교차 참조와 기록 의미를 바꾸는 입력은 거절되고 허용된 취소·작성자 삭제 상태만 정책에 맞게 유지됨.",
       "status": "passed",
       "evidence": "reports/w06-a-session-boundary-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-GOAL-001",
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-GOAL-002",
+        "POL-ACCESS-001"
+      ],
+      "level": "local_db_integration",
+      "title": "목표 생성·소유 조회·revision 상태 전이",
+      "steps": [
+        "실제 로컬 Auth 발급 세션으로 목표와 개인판 및 선택 공유판 생성",
+        "본인 목표 상세 응답 필드와 타 사용자 UUID의 404 비공개 확인",
+        "목표 수정 revision, 완료·보관·재개와 같은 상태 반복·낡은 revision 검사"
+      ],
+      "expected": "한 트랜잭션으로 목표와 개인판을 만들며 공유 입력만 별도 프로필로 저장한다. 타인의 목표는 노출되지 않고 상태 전이는 정책의 기록 시각·revision 규칙을 지킨다.",
+      "status": "passed",
+      "evidence": "reports/w06-b1-goal-rpc-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-GOAL-002",
+      "requirement_ids": [
+        "REQ-002"
+      ],
+      "policy_ids": [
+        "POL-API-001",
+        "POL-LIMIT-001",
+        "POL-GOAL-001"
+      ],
+      "level": "local_db_concurrency",
+      "title": "목표 생성 재시도와 동시 상한",
+      "steps": [
+        "같은 요청 키와 같은 입력 재시도, 같은 키의 다른 입력 충돌 확인",
+        "실패 입력에서 목표·판·영수증 부분 기록 없음 확인",
+        "10개 동일 키 병렬 요청과 활성 목표 상한 직전의 서로 다른 키 병렬 생성 실행"
+      ],
+      "expected": "같은 성공 요청은 하나의 결과만 반환하고 입력 변경은 충돌한다. 활성 목표는 20개를 넘지 않으며 부분 영수증·목표·판은 남지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w06-b1-goal-rpc-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"
