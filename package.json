@@ -23,7 +23,9 @@
     "db:stop": "node scripts/local-db.mjs stop",
     "db:migrate": "node scripts/database-task.mjs migrate",
     "db:seed": "node scripts/seed-local-fixtures.mjs",
-    "db:test": "node scripts/database-task.mjs test"
+    "db:test": "node scripts/database-task.mjs test",
+    "db:rpc-test": "node scripts/database-task.mjs rpc-test",
+    "db:session-test": "node scripts/test-local-rpc.mjs"
   },
   "dependencies": {
     "next": "16.4.0",

@@ -1,0 +1,21 @@
+# W06-A 현재 세션·계정 경계 구현
+
+- 작업 ID·제목: W06-A — 현재 Auth 세션·계정 경계와 본인 조회 구현
+- 날짜·담당: 2026-10-08 / Codex
+- 변경 목적·전후 동작: 초안 상태였던 세션 검사를 로컬 PostgreSQL에 적용했다. 이제 지정된 RPC 경로가 Auth가 발급한 현재 세션, 앱 계정 상태, 개인 `get_me` 응답 범위를 검증한다. 영구 참조/정체성 트리거가 판 종류·칭찬 출처·영수증·관계 당사자와 기록 의미를 보호한다.
+- 관련 REQ / POL / TC / API operation: REQ-001/003/004/005/007/010, POL-ACCOUNT-002, POL-ACCESS-001, POL-CYCLE-001, POL-DELETE-002, POL-DEV-001, POL-PRAISE-002, POL-SEC-001, TC-DB-SESSION-001, TC-DB-REFERENCE-001, OpenAPI `Me` schema / `GET /v1/me` 응답 모델
+- 기준 소스: 부모 commit `15531e5706a9d430373ab70b6d59d1e515dcf551`; 변경 파일 SHA-256은 [검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json)에 수록
+- 변경 파일·마이그레이션: 세션/get_me·참조/정체성 SQL, Auth 최소 권한 역할, Auth 열·스키마 권한 회수, 물리 회귀와 RPC 경계 pgTAP, 발급 세션 통합 검사, `db:rpc-test`·`db:session-test` Windows 명령, 테스트 케이스·ADR·진행표·등록부·인계·검증 문서
+- 정책·데이터 영향: 제품 테이블 18개와 W05 기준 데이터는 유지. Auth 관리 테이블은 변경하지 않음. `chagokchan_session_reader`는 `NOLOGIN`, Auth의 확인 열만 SELECT, 제품 테이블 권한 없음이며 Auth 관리 테이블의 RLS 때문에 `BYPASSRLS`를 가짐. API 역할은 이 역할을 가정할 수 없고 세션 검사 함수만 고정 `search_path`로 실행한다. 상세 제약은 [ADR-0005](../decisions/ADR-0005-local-auth-session-reader.md).
+- 실행 환경·도구 버전: Node 24.19.0, pnpm 11.19.0, Supabase CLI 2.120.0, SDK 2.117.3, PostgreSQL 17.11, loopback 전용 로컬 Supabase
+- 실행 명령 또는 수동 재현 단계:
+  - `scripts/project.ps1 -Task db:migrate`
+  - `scripts/project.ps1 -Task db:test`
+  - `scripts/project.ps1 -Task db:rpc-test`
+  - `scripts/project.ps1 -Task db:session-test`
+  - `scripts/project.ps1 -Task check`
+  - `scripts/project.ps1 -Task build:check`
+- 관찰 결과·증거 파일: 마이그레이션 `20261008020500`~`20261008020900` 적용. DB 72/72(물리 51, W06-A 경계 21), RPC 전용 21/21, Auth 발급 A/B/C 세션 통합 27/27, lint/typecheck/앱 단위 32/32 및 Next 16.4.0 오프라인 빌드 통과. 앱 fixture 보존, 합성 probe 계정·Auth 세션 정리 확인. [검사 증거](../quality/reports/w06-a-session-boundary-check-2026-10-08.json)
+- 통과 / 실패 / 미실행: W06-A 관련 검사 통과. 초기에 Auth 스키마 소유권 제약으로 grant가 무효인 것을 발견해 기존 적용 SQL은 수정하지 않고 후속 마이그레이션으로 reader 역할을 분리했다. 업무 쓰기 RPC·중복/동시성·연결/권한 회수 경합·삭제 업무 트랜잭션, 실제 제공자 로그인, 제품 수락 TC 36개는 미실행.
+- 결함과 해결: 최초 DB 검사에서 guard가 관리 `auth` 스키마를 사용할 수 없어 무세션 오류가 계획값과 달랐다. `20261008020600`의 GRANT는 로컬에서 효과가 없었다. `20261008020700`에서 Auth 열 범위를 제한한 세션 reader를 추가하고 `20261008020800`에서 guard의 불필요한 Auth 열 권한, `20261008020900`에서 환경별로 남을 수 있는 Auth 스키마 권한을 회수했다. 최종 검사 72/72·27/27 통과.
+- 다음 의존 작업: W06-B 목표·개인 칭찬·회차의 업무 RPC와 원자적 집계·재시도 구현. W06 전체는 IN_PROGRESS.

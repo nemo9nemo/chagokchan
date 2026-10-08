@@ -1,0 +1,177 @@
+{
+  "verified_at": "2026-10-08T02:59:28.796Z",
+  "work_item": "W06-A",
+  "status": "passed",
+  "scope": "current_auth_session_account_projection_and_permanent_reference_boundary",
+  "source_basis": {
+    "base_commit": "15531e5706a9d430373ab70b6d59d1e515dcf551",
+    "format": "SHA-256 per path",
+    "files": [
+      {
+        "path": "package.json",
+        "sha256": "f8d69d1c48d7059dc845fb3d8196df421b676786dd63017f466385dd237ff1b7"
+      },
+      {
+        "path": "scripts/database-task.mjs",
+        "sha256": "cb832df0b824edaa68c66dd52a524f8e81fbbe2a1edc94f72361276a988530be"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "b577af916fb24957ed9eeffe057c5eb60d9e5c435e37a51e63091a66a2220bdf6"
+      },
+      {
+        "path": "scripts/test-local-rpc.mjs",
+        "sha256": "2dba844d98f4803a7d367ccf72cf655f847bc5cfa5c5820d263a12869b7fcfa8"
+      },
+      {
+        "path": "supabase/migrations/20261008020500_session_rpc_boundary.sql",
+        "sha256": "dd770d1b489a4fbf547ff53ed72482167ca0859267bb715fa0ed3c75d5ff13d1"
+      },
+      {
+        "path": "supabase/migrations/20261008020600_grant_auth_schema_usage.sql",
+        "sha256": "18c19bee034c2e022903a291bb28d9385ac658d2c4acc0fd6772cbfb0a655e93"
+      },
+      {
+        "path": "supabase/migrations/20261008020700_isolate_auth_session_reader.sql",
+        "sha256": "8f51b47a5a3fa961da688a09c1ce9106c3b05cc78bec74b95ffdc9a29214ae4a"
+      },
+      {
+        "path": "supabase/migrations/20261008020800_revoke_auth_columns_from_guard.sql",
+        "sha256": "9d1c07996e5b07443744b0873a5f0f4c496b4950bc250a764fa32ffb7d8c3be2"
+      },
+      {
+        "path": "supabase/migrations/20261008020900_revoke_auth_schema_from_guard.sql",
+        "sha256": "e6c1e38658ecca158e65182d7b3dd18b6bddda81c0d40ec3a82214ae29ec3f7f"
+      },
+      {
+        "path": "supabase/tests/001_physical_integrity.test.sql",
+        "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d"
+      },
+      {
+        "path": "supabase/tests/002_rpc_boundary.test.sql",
+        "sha256": "53b2966c07c19dd76b56b2cefd463625eb03648b0af9bf2be8c03c1931f975a4"
+      }
+    ]
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "supabase_sdk": "2.117.3",
+    "postgresql": "17.11",
+    "database_target": "loopback_only_local_supabase"
+  },
+  "migrations": {
+    "status": "applied",
+    "versions": [
+      "20261008013000",
+      "20261008020500",
+      "20261008020600",
+      "20261008020700",
+      "20261008020800",
+      "20261008020900"
+    ],
+    "product_tables": 18,
+    "applied_migrations_modified": false,
+    "diagnostic_note": "20261008020600 could not grant managed auth schema USAGE because the migration role is not its owner; 20261008020700 uses an isolated Auth reader, 20261008020800 removes the guard's redundant Auth-column grants, and 20261008020900 revokes any schema grant that could succeed under a different migration-owner setup."
+  },
+  "database_tests": {
+    "command": "scripts/project.ps1 -Task db:test",
+    "status": "passed",
+    "executed": 72,
+    "passed": 72,
+    "failed": 0,
+    "physical_integrity": 51,
+    "rpc_boundary": 21,
+    "business_rpc": 0,
+    "real_login": 0,
+    "rpc_only_command": {
+      "command": "scripts/project.ps1 -Task db:rpc-test",
+      "status": "passed",
+      "executed": 21,
+      "passed": 21,
+      "failed": 0
+    }
+  },
+  "issued_session_integration": {
+    "command": "scripts/project.ps1 -Task db:session-test",
+    "status": "passed",
+    "executed": 27,
+    "passed": 27,
+    "failed": 0,
+    "actors": [
+      "A",
+      "B",
+      "C"
+    ],
+    "logged_out_unexpired_token_rejected": true,
+    "unregistered_and_deleting_accounts_rejected": true,
+    "private_and_auth_schemas_not_exposed": true,
+    "app_fixture_data_preserved": true,
+    "synthetic_probe_account_and_sessions_removed": true,
+    "provider_login_tests": 0,
+    "fabricated_tokens": false,
+    "service_role_used_for_app_rpc": false
+  },
+  "application_checks": {
+    "command": "scripts/project.ps1 -Task check",
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit_tests": {
+      "executed": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "artifact_check": "passed",
+    "artifact_report": "artifacts-check-2026-10-08-development.json",
+    "build_command": "scripts/project.ps1 -Task build:check",
+    "offline_build": "passed",
+    "next": "16.4.0"
+  },
+  "test_case_status": {
+    "planned_total": 38,
+    "w06_a_passed": [
+      "TC-DB-SESSION-001",
+      "TC-DB-REFERENCE-001"
+    ],
+    "product_business_acceptance_tests_executed": 0,
+    "provider_login_tests_executed": 0,
+    "remaining_planned_cases_not_run": 36
+  },
+  "auth_reader_boundary": {
+    "role": "chagokchan_session_reader",
+    "login": false,
+    "superuser": false,
+    "bypassrls": true,
+    "database_and_role_creation": false,
+    "api_roles_are_members": false,
+    "set_role_authenticated": false,
+    "product_table_privileges": false,
+    "auth_columns": [
+      "sessions.id",
+      "sessions.user_id",
+      "sessions.created_at",
+      "sessions.refreshed_at",
+      "sessions.not_after",
+      "users.id",
+      "users.banned_until",
+      "users.deleted_at",
+      "users.is_anonymous"
+    ],
+    "secret_columns_granted": false,
+    "function": "private.require_session_user",
+    "function_search_path": "pg_catalog",
+    "function_execute_granted_to": [
+      "chagokchan_guard"
+    ],
+    "rationale": "Supabase-managed auth.users and auth.sessions have RLS enabled without app policies; the non-login reader needs RLS bypass to read only the listed columns."
+  },
+  "remaining_w06_scope": [
+    "goal and personal praise business RPCs",
+    "atomic progress/completion/notification updates",
+    "idempotency and concurrent writes",
+    "connection, invite, grant and shared praise RPCs",
+    "revocation races",
+    "deletion and erasure transactions"
+  ]
+}

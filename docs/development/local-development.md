@@ -1,6 +1,6 @@
 # 로그인 없이 사용하는 로컬 개발
 
-기준일: 2026-10-08 / 상태: 환경 차단·합성 Auth 초기 준비·물리 DB 검증 완료, 로컬 Auth 세션·업무 API 미구현
+기준일: 2026-10-08 / 상태: 환경 차단·합성 Auth 초기 준비·물리 DB·W06-A 세션/get_me 경계 검증 완료, 로컬 사용자 해석기·업무 API 미구현
 
 사용자는 개발 중 로그인 화면 없이 앱을 이용하고, 실제 오픈을 준비하는 시점부터 로그인 테스트와 실사용을 진행한다. [개발 환경 정책](../../policies/development-policy.json)과 [ADR-0004](../decisions/ADR-0004-local-development-auth.md)가 이 결정의 기준이다. 출시용 [계정·권한 정책](../auth-and-permissions.md)과 제품 정책 버전은 유지한다.
 
@@ -27,7 +27,7 @@ Supabase의 로컬 스택에는 PostgreSQL과 Auth가 포함되고 CLI·컨테�
 
 `NODE_ENV` 하나만으로 허용하지 않는다. 환경, 인증 모드, 실제 바인딩 주소, 앱 URL, Supabase URL과 포트를 함께 확인한다. 로컬 개발 서버와 DB를 터널·공유 URL·외부 네트워크에 공개하지 않는다. 배포용 빌드에는 로컬 사용자 해석 경로가 연결되지 않게 하고, `local_fixture` 설정이나 가상 자격증명이 있으면 배포 전에 실패시킨다. 환경 변수명에 `NEXT_PUBLIC_`를 붙이지 않는다. [Next.js 환경 변수 안내](https://nextjs.org/docs/app/guides/environment-variables)
 
-개발 설정은 `.env.development.local`에 준비했고 Git에서 제외한다. Next.js가 배포 빌드에서 읽는 환경 파일과 개발용 fixture 설정을 분리한다. [.env.example](../../.env.example)은 설정 템플릿이다. 환경 검사와 앱 기반은 [실행 방법](runtime-setup.md)·[검사 JSON](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. A/B/C Auth 계정과 초기 데이터는 W05에서 [명시적인 로컬 준비](database-foundation.md)로 구현했다. 실제 로컬 세션과 업무 API는 W06/W07에 남아 있다.
+개발 설정은 `.env.development.local`에 준비했고 Git에서 제외한다. Next.js가 배포 빌드에서 읽는 환경 파일과 개발용 fixture 설정을 분리한다. [.env.example](../../.env.example)은 설정 템플릿이다. 환경 검사와 앱 기반은 [실행 방법](runtime-setup.md)·[검사 JSON](../quality/reports/foundation-check-2026-10-08.json)에 기록한다. A/B/C Auth 계정과 초기 데이터는 W05에서 [명시적인 로컬 준비](database-foundation.md)로 구현했다. W06-A에서 로컬 Auth가 발급한 현재 세션·계정 상태와 get_me 응답 경계를 DB에 적용하고 검증했다. Auth의 `sessions`·`users` 테이블은 관리 스키마이고 RLS가 활성화되어 앱 정책이 없다. 비로그인 `chagokchan_session_reader`는 필요한 Auth 메타데이터 열만 읽고 제품 테이블 권한은 갖지 않으며, API 역할이 이를 가정할 수 없다. 해당 역할의 SECURITY DEFINER 함수는 고정 `search_path`에서 세션·계정 상태만 확인한다. 자세한 권한 이유와 한계는 [ADR-0005](../decisions/ADR-0005-local-auth-session-reader.md), 실행 증거는 [W06-A 검사](../quality/reports/w06-a-session-boundary-check-2026-10-08.json)에 기록한다. 로컬 사용자 해석기·업무 API와 쓰기 RPC는 W06/W07에 남아 있다.
 
 ## DB와 검사 순서
 
@@ -39,3 +39,5 @@ Supabase의 로컬 스택에는 PostgreSQL과 Auth가 포함되고 CLI·컨테�
 6. 실제로 로그인한 여러 테스트 계정으로 권한·캐시·삭제 검사를 다시 실행한 뒤 공개한다.
 
 개발용 세션이 작동해도 실제 OAuth·메일 전달·로그아웃·재인증·가입 화면 검사가 통과한 것으로 기록하지 않는다. 계정 삭제 같은 민감 흐름은 로컬에서 상태·작업 로직을 검사할 수 있지만 실제 재인증 수락 검사는 출시 준비 때 수행한다. 상세 작업 순서와 상태는 [진행표](backlog.md), 검사 시점은 [검증 계획](../quality/verification-plan.md)에서 관리한다.
+
+W06-A의 로컬 DB 세션 검사는 고정 Node 환경의 Windows 실행 래퍼에서 `db:migrate`, `db:test`, `db:rpc-test`, `db:session-test`로 수행한다. 마지막 검사는 실제 Auth 발급 합성 세션만 사용하며, 관리 API 키는 일시적인 합성 probe 계정 생성·삭제에만 사용한다. 업무 RPC 호출과 probe 정리 뒤 앱 fixture 행과 기존 A/B/C 세션이 유지되는지 확인한다. 세션·계정 단위 검사로 실제 제공자 로그인이나 제품 업무 수락 검사를 완료한 것으로 간주하지 않는다.

@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "phase": "planned_not_executed",
+  "phase": "partially_executed",
   "cases": [
     {
       "id": "TC-AUTH-001",
@@ -747,6 +747,56 @@
       "expected": "허용 조건 밖 가상 모드는 빌드/시작/배포에서 실패하고 실제 인증 모드로 자동 전환하지 않음. 배포의 가상 자격증명·로컬 자동 로그인 연결은 거절. 정상 배포 무세션 요청은 401이며 비밀·토큰이 브라우저로 노출되지 않음.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-DB-SESSION-001",
+      "requirement_ids": [
+        "REQ-001",
+        "NFR-001",
+        "NFR-005"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-DEV-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_db_integration",
+      "title": "현재 발급 세션·계정 상태와 본인 정보 경계",
+      "steps": [
+        "역할만으로 get_me 호출, 만료·비활성·not_after·시간대 해석 경계 검사",
+        "로컬 Auth에서 발급된 A/B/C 세션으로 본인 get_me와 직접 테이블 접근 검사",
+        "로그아웃 뒤 메모리의 기존 토큰 재사용, 앱 미가입과 deleting 상태 검사"
+      ],
+      "expected": "유효한 현재 세션의 활성 계정만 정해진 본인 필드를 받음. 세션 폐기·계정 미생성/삭제 중·직접 접근은 거절되고 로컬 가상 계정 검사는 실제 제공자 로그인과 별도 집계됨.",
+      "status": "passed",
+      "evidence": "reports/w06-a-session-boundary-check-2026-10-08.json"
+    },
+    {
+      "id": "TC-DB-REFERENCE-001",
+      "requirement_ids": [
+        "REQ-001",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005",
+        "REQ-007",
+        "REQ-010"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001",
+        "POL-CYCLE-001",
+        "POL-PRAISE-002",
+        "POL-DELETE-002"
+      ],
+      "level": "local_db_integration",
+      "title": "기록 참조 종류와 역사 정체성 불변 조건",
+      "steps": [
+        "개인/공유 판 종류와 프로필·멤버십·칭찬 출처의 조합 검사",
+        "칭찬·요청·영수증 주체·결과 참조와 연결 당사자 일치 검사",
+        "초기 성인 확인·목표·판·회차·칭찬·성공 결과의 기록 정체성 수정 시도"
+      ],
+      "expected": "교차 참조와 기록 의미를 바꾸는 입력은 거절되고 허용된 취소·작성자 삭제 상태만 정책에 맞게 유지됨.",
+      "status": "passed",
+      "evidence": "reports/w06-a-session-boundary-check-2026-10-08.json"
     }
   ],
   "updated_on": "2026-10-08"

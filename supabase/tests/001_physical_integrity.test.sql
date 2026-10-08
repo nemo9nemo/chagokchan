@@ -11,7 +11,8 @@ select raw_app_meta_data->>'fixture_actor', id from auth.users
 where raw_app_meta_data->>'fixture_project' = 'chagokchan' and raw_app_meta_data->>'local_fixture' = 'true';
 insert into test_ids(key, value) select key, gen_random_uuid() from unnest(array[
   'goal','empty_goal','personal','shared','personal_bunch','shared_bunch','self_receipt','peer_receipt','self_praise','peer_praise',
-  'connection','invite_one','invite_two','request_one','request_two','notification','request_key','rate','deletion','erased_subject'
+  'connection','invite_one','invite_two','request_one','request_two','notification','request_key','rate','deletion','erased_subject',
+  'cross_bunch_receipt','cross_bunch_praise','cross_recipient_receipt','cross_recipient_praise'
 ]) as keys(key);
 create function pg_temp.test_id(name text) returns uuid language sql stable
 as $$ select value from pg_temp.test_ids where key = name $$;
@@ -47,8 +48,11 @@ insert into public.goals(id,owner_user_id,title) values (pg_temp.test_id('empty_
 select throws_ok($$insert into public.boards(goal_id, owner_user_id, kind) values (pg_temp.test_id('empty_goal'), pg_temp.test_id('B'), 'personal')$$, '23503', null, 'board cannot attach another owner to A goal');
 select throws_ok($$insert into public.boards(goal_id, owner_user_id, kind) values (pg_temp.test_id('goal'), pg_temp.test_id('A'), 'personal')$$, '23505', null, 'only one personal board per goal');
 select throws_ok($$update public.boards set current_bunch_id = pg_temp.test_id('shared_bunch') where id = pg_temp.test_id('personal')$$, '23503', null, 'current bunch must belong to the same board');
-select throws_ok($$update public.praises set bunch_id = pg_temp.test_id('shared_bunch') where id = pg_temp.test_id('self_praise')$$, '23503', null, 'praise cannot move into another board bunch');
-select throws_ok($$update public.praises set recipient_user_id = pg_temp.test_id('C') where id = pg_temp.test_id('peer_praise')$$, '23503', null, 'recipient must own the praise board');
+insert into public.request_receipts(id,actor_user_id,operation,request_key,input_hash,result_kind,result_id) values
+  (pg_temp.test_id('cross_bunch_receipt'),pg_temp.test_id('A'),'createPraise',gen_random_uuid(),repeat('5',64),'praise',pg_temp.test_id('cross_bunch_praise')),
+  (pg_temp.test_id('cross_recipient_receipt'),pg_temp.test_id('B'),'createPraise',gen_random_uuid(),repeat('6',64),'praise',pg_temp.test_id('cross_recipient_praise'));
+select throws_ok($$insert into public.praises(id,board_id,bunch_id,actor_user_id,recipient_user_id,request_receipt_id,source) values(pg_temp.test_id('cross_bunch_praise'),pg_temp.test_id('personal'),pg_temp.test_id('shared_bunch'),pg_temp.test_id('A'),pg_temp.test_id('A'),pg_temp.test_id('cross_bunch_receipt'),'self')$$, '23503', null, 'praise cannot reference another board bunch');
+select throws_ok($$insert into public.praises(id,board_id,bunch_id,actor_user_id,recipient_user_id,request_receipt_id,source) values(pg_temp.test_id('cross_recipient_praise'),pg_temp.test_id('shared'),pg_temp.test_id('shared_bunch'),pg_temp.test_id('B'),pg_temp.test_id('C'),pg_temp.test_id('cross_recipient_receipt'),'peer')$$, '23503', null, 'recipient must own the praise board');
 select throws_ok($$delete from public.request_receipts where id = pg_temp.test_id('self_receipt')$$, '23503', null, 'receipt deletion cannot cascade into a retained praise');
 
 -- 13..18: source, author erasure and cancellation cannot leave inconsistent bodies.
