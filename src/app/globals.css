@@ -367,6 +367,8 @@ input::placeholder, textarea::placeholder { color: var(--text-muted); }
   .shared-board-detail .goal-header { align-items: flex-start; flex-direction: column; }
   .app-shell button:not(.goal-card):not(.shared-board-card):not(.board-progress):not(.cycle-card),
   .app-shell a.button { min-height: 45px; }
+  .app-shell .brand-lockup { min-height: 45px; }
+  .app-shell .composer-bottom input[type="date"] { min-height: 45px; }
   .app-shell .icon-button { width: 45px; min-width: 45px; height: 45px; }
   .app-shell .checkbox-row { min-height: 45px; }
 }

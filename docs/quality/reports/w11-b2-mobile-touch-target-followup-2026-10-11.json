@@ -1,0 +1,162 @@
+{
+  "verified_at": "2026-10-11T14:01:29Z",
+  "work_item": "W11-B2",
+  "status": "css_viewport_followup_passed_native_device_acceptance_pending",
+  "scope": "mobile_responsive_screen_and_touch_target_followup",
+  "source_basis": {
+    "format": "SHA-256 per implementation, runtime, and acceptance input source; excludes result documentation and this report.",
+    "files": [
+      {
+        "path": "src/app/globals.css",
+        "sha256": "61cffd85c767fad2aebdb2981f6affc0c26e3f2271c61707e27e8cfd198d888a"
+      },
+      {
+        "path": "scripts/app.mjs",
+        "sha256": "a30275ca5117dd0facf22888dea30fbfd64b3a0430bf71bf2c7064d9d8ac1d03"
+      },
+      {
+        "path": "src/server/local-user-session.mjs",
+        "sha256": "e7fc2ca03f20119aee63b0520eb969a21913fd3ef1bd3777c3aa0452ec9f37ce"
+      },
+      {
+        "path": "scripts/test-local-me-api.mjs",
+        "sha256": "4afc2cbc384f0829bc6a9caa25c63612aed846d7b515d2ea207cf58ab5082b1d"
+      },
+      {
+        "path": "scripts/project.ps1",
+        "sha256": "89e9fc2110a833ce9b8bc0f47f32d6888d71c87e75cfaddf77fa1fcdfc9910da"
+      },
+      {
+        "path": "docs/quality/test-cases.json",
+        "sha256": "04aa2efd8c7881f4801fcf5bd41632c121f8c592f6fd975314c5b2a124fcd9b0"
+      },
+      {
+        "path": "docs/requirements/mvp-requirements.md",
+        "sha256": "af4b3cdde947635d85fa20274119865ff8cb08ce15392d214ef5c7db7e0eb99a"
+      },
+      {
+        "path": "docs/design/user-flows.md",
+        "sha256": "ca28153cf8a4c1300ec07008def4748eefc2b979b789b88ab89e1f872be4f478"
+      },
+      {
+        "path": "package.json",
+        "sha256": "8c9e37e43c98cd9e752f8384b73ec086451de52497a686f9a3d25199ad08551f"
+      }
+    ]
+  },
+  "environment": {
+    "host": "Windows desktop",
+    "runtime_versions": {
+      "node": "24.19.0",
+      "pnpm": "11.19.0",
+      "next": "16.4.0"
+    },
+    "browser": "Codex In-app Browser",
+    "browser_mode": "Desktop browser with CSS viewport override; iOS/Android user agent, native touch, zoom controls, and platform screen readers were not emulated.",
+    "local_app_binding": "127.0.0.1 loopback",
+    "auth_mode": "local synthetic fixture A",
+    "ios_device_or_simulator_exposed_by_current_test_tools": false,
+    "android_sdk_or_emulator_available": false
+  },
+  "baseline_issue": {
+    "brand_home_link_height_css_px": 26.9,
+    "praise_date_input_height_css_px": 36,
+    "expected_minimum_height_css_px": 44,
+    "fix": "Set mobile .brand-lockup and .composer-bottom input[type=date] minimum heights to 45px."
+  },
+  "viewport_matrix": [
+    {
+      "profile": "iPhone-width CSS viewport",
+      "content_width_css_px": 393,
+      "height_css_px": 852,
+      "unique_screens_verified": 5,
+      "screens": [
+        "goal_list",
+        "goal_detail",
+        "connections",
+        "received_shared_boards",
+        "trash"
+      ],
+      "expected_headings_visible": true,
+      "horizontal_overflow": false,
+      "visible_controls_below_44px": 0,
+      "controls_outside_viewport": 0
+    },
+    {
+      "profile": "Android-width CSS viewport",
+      "content_width_css_px": 360,
+      "height_css_px": 800,
+      "unique_screens_verified": 5,
+      "screens": [
+        "goal_list",
+        "goal_detail",
+        "connections",
+        "received_shared_boards",
+        "trash"
+      ],
+      "expected_headings_visible": true,
+      "horizontal_overflow": false,
+      "visible_controls_below_44px": 0,
+      "controls_outside_viewport": 0
+    },
+    {
+      "profile": "compact phone CSS viewport",
+      "content_width_css_px": 320,
+      "height_css_px": 640,
+      "unique_screens_verified": 5,
+      "screens": [
+        "goal_list",
+        "goal_detail",
+        "connections",
+        "received_shared_boards",
+        "trash"
+      ],
+      "expected_headings_visible": true,
+      "horizontal_overflow": false,
+      "visible_controls_below_44px": 0,
+      "controls_outside_viewport": 0
+    }
+  ],
+  "unique_viewport_screen_combinations": 15,
+  "measurement_scope": "Visible buttons, links, form controls, role-based controls, and checkbox labels were measured from the DOM after each screen transition. The four primary navigation controls were visible on list and secondary list screens; goal detail exposed its back control.",
+  "local_fixture_api": {
+    "command": "scripts/project.ps1 -Task api:me-test",
+    "status": "passed",
+    "actor": "A",
+    "checks": 15,
+    "fixture_credentials_printed": false,
+    "auth_tokens_returned": false
+  },
+  "data_safety": {
+    "product_mutation_controls_submitted": false,
+    "product_write_requests": 0,
+    "fixture_data_changed": false
+  },
+  "test_cases": {
+    "TC-WEB-006": "Responsive CSS viewport subset passed at three widths; overall case remains not_run because actual iOS/Android touch, zoom, VoiceOver/TalkBack acceptance was unavailable.",
+    "TC-CACHE-001": "not_run; account-switch and offline acceptance were not part of this screen test."
+  },
+  "commands": {
+    "project_check": {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 96,
+      "typecheck": "passed",
+      "unit_tests": 115,
+      "unit_tests_passed": 115,
+      "artifact_check": "passed",
+      "json_documents": 41,
+      "markdown_links": 515,
+      "openapi_paths": 55,
+      "openapi_local_references": 700,
+      "registered_artifacts": 294,
+      "artifact_errors": 0
+    },
+    "build_check": {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "nextjs_routes": 40,
+      "typescript": "passed"
+    }
+  }
+}
