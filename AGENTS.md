@@ -6,7 +6,7 @@
 
 현재 단계와 다음 작업은 docs/development/artifact-register.json, docs/development/backlog.md에서 확인한다. 프로젝트에서 이어서 개발할 때 docs/development/codex-project-handoff.md도 읽고 W06 미적용 초안과 실제 완료 범위를 구분한다. 요구사항·정책·설계 파일 생성과 기능 구현·검증 완료를 구분한다. 구현되지 않은 기능과 실행하지 않은 검사를 완료로 표시하지 않는다.
 
-개발의 기준 경로는 C:\Users\love0\nemo9Dev\chagokchan이다. 이전 경로는 참고 사본이며 복사 검증 후 새 경로에서만 개발 산출물과 상태를 갱신한다. 작업별 상태는 docs/development/backlog.md가 기준이다. 각 작업 완료 시 상태·완료 범위·검사 근거를 갱신하고 사용자에게 갱신한 진행표를 보여준다. 상위 단계는 등록부에 일치시킨다.
+개발은 사용자가 지정한 프로젝트 작업 공간에서 진행한다. 실행 시 저장소 루트와 Git 상태로 작업 공간을 확인하며, 머신별 절대 경로는 문서에 기록하지 않는다. 이전 작업 공간은 참고 사본이며 복사 검증 후 현재 저장소에서만 개발 산출물과 상태를 갱신한다. 작업별 상태는 docs/development/backlog.md가 기준이다. 각 작업 완료 시 상태·완료 범위·검사 근거를 갱신하고 사용자에게 갱신한 진행표를 보여준다. 상위 단계는 등록부에 일치시킨다.
 
 사용자는 개발 중 로그인 화면 없이 이용한다. policies/development-policy.json과 docs/development/local-development.md에 따라 로컬 가상 사용자·실제 로컬 세션을 서버가 준비한다. DB 권한·현재 세션 검사는 유지한다. 실제 Google/OTP 로그인 연동·테스트·실사용은 오픈 준비 시점부터 진행하고 공개 전 필수로 통과시킨다. 로컬 가상 계정 결과를 실제 로그인 검증 완료로 기록하지 않는다.
 

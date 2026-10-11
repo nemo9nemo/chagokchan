@@ -194,11 +194,9 @@ if (development?.progress.source !== "docs/development/backlog.md" || registry.w
 if (registry.development_auth?.interactive_login_during_development !== false || registry.development_auth?.real_login_integration_and_tests !== "pre_release_required") addError("development_consistency", "Registry login schedule mismatch");
 for (const id of ["TC-DEV-001", "TC-DEV-002"]) if (!testIds.has(id)) addError("development_consistency", "Missing planned scenario " + id);
 if (registry.workspace?.transfer_status === "verified") {
-  // Hosted CI uses a disposable checkout, not the developer's canonical workspace path.
-  const isGitHubActions = process.env.GITHUB_ACTIONS === "true";
-  if (!isGitHubActions && path.resolve(registry.workspace.canonical_path).toLowerCase() !== path.resolve(root).toLowerCase()) addError("development_consistency", "Verified workspace differs from execution root");
+  if (registry.workspace?.workspace_identity !== "configured_project_workspace" || !fs.existsSync(path.join(root, ".git"))) addError("development_consistency", "Execution root must be the configured Git project workspace");
   const transfer = json.get(registry.workspace.transfer_record);
-  if (!transfer?.source_hashes_matched_before_status_update || transfer.target !== registry.workspace.canonical_path) addError("development_consistency", "Missing matching workspace transfer evidence");
+  if (!transfer?.source_hashes_matched_before_status_update || transfer.source !== "previous_workspace_copy" || transfer.target !== registry.workspace.workspace_identity) addError("development_consistency", "Missing matching workspace transfer evidence");
   if (progressRows.find((row) => row[1] === "W00")?.[3] !== "DONE") addError("development_consistency", "Verified transfer work item not DONE");
 }
 checks.push({ id: "development_consistency", description: "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence", work_items: workIds.size, runtime_guards_executed: false });

@@ -2,12 +2,13 @@
   "prepared_at": "2026-10-08T02:30:10.028Z",
   "scope": "project_handoff_documents_and_unapplied_draft_transfer_only",
   "source_basis_commit": "229056f66a1534e479584b626af6e4bcff783076",
-  "canonical_workspace": "C:\\Users\\love0\\nemo9Dev\\chagokchan",
+  "workspace_identity": "configured_project_workspace",
   "github_repository": "https://github.com/nemo9nemo/chagokchan",
   "remote_head_matched_before_handoff": true,
   "codex_project_registered_by_tool": false,
   "codex_project_registration_status": "user_app_action_needed",
-  "current_chat_cwd": "C:\\Users\\love0\\Documents\\Codex\\2026-10-07\\new-chat",
+  "previous_chat_workspace": "previous_temporary_workspace",
+  "machine_specific_paths_redacted": true,
   "draft_copy_hashes_verified": true,
   "files": [
     {
