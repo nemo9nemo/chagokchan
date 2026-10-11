@@ -1,19 +1,16 @@
 # 차곡찬 프로젝트 개발 인계
 
-기준일: 2026-10-08. 사용자가 Git 연결 후 Codex의 프로젝트에서 남은 작업을 이어가기로 했다. 이 문서는 확인한 상태와 다음 절차를 보존한다. 실제 작업 상태의 기준은 [진행표](backlog.md)이며 이후 완료 때 함께 갱신한다.
+기준일: 2026-10-11. 현재 저장소 작업 공간에서 개발을 이어간다. 머신별 절대 경로는 문서에 기록하지 않는다. 실제 작업 상태의 기준은 [진행표](backlog.md)이며 완료할 때 함께 갱신한다.
 
 ## 작업 공간과 원격
 
-- 프로젝트 폴더: `C:\Users\love0\nemo9Dev\chagokchan`
-- GitHub: [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan), 공개(public)
-- 로컬 기본 브랜치: `main`, 원격: `origin`, 업스트림: `origin/main`
-- 인계 작성 전 검증된 로컬·원격 HEAD: `229056f66a1534e479584b626af6e4bcff783076`
-- 원격 연결·이력 보존·업스트림·비밀 제외 검사는 [연결 증거](../quality/reports/git-remote-connection-2026-10-08.json)에 기록했다. 이 문서의 커밋도 별도로 업로드한다.
-- W16-C GitHub Actions CI 워크플로와 main 브랜치 보호를 적용·검증했다. PR 필수·strict `quality`·관리자 포함·강제 push/삭제 금지; 1인 개발 기준 승인 리뷰 0명. 클라우드 서비스·공개 배포는 미설정이다.
+- 프로젝트: [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan), 공개 저장소
+- 기본 브랜치: `main`; 보호 규칙에 따라 모든 변경은 PR을 거쳐야 하며 `quality` 검사가 필요하다.
+- W11-B2 변경은 `codex/w11-b2-mobile-screen-check-20261009`에 push했다. 현재 작업 HEAD와 해당 업스트림은 일치한다.
+- main 직접 push는 보호 규칙에 의해 거부됐다. GitHub 연동의 PR 생성은 403 권한 오류, 브라우저는 로그아웃 상태여서 PR은 만들지 못했다. 강제 push로 우회하지 않는다.
+- W16-C GitHub Actions와 main 보호 설정은 [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json)에 기록했다. 클라우드 서비스·공개 배포는 미설정이다.
 
-2026-10-08 조회 시 이 폴더는 Codex의 저장된 프로젝트 목록에 없었다. 현재 도구에는 로컬 프로젝트 등록과 이 대화의 작업 경로 변경 기능이 없다. 앱에서 로컬 프로젝트를 추가하고 위 폴더를 기본 폴더로 지정한 뒤 프로젝트 대화에서 이어간다. 프로젝트·대화의 이동 완료로 기록하지 않는다. 폴더가 준비되어 있으므로 해당 폴더를 그대로 사용한다.
-
-프로젝트의 기본 폴더가 새 대화의 작업 경로와 Git·AGENTS.md 탐색 기준이 된다는 설명은 [OpenAI 공식 문서](https://learn.chatgpt.com/docs/projects#use-local-projects-for-folders-and-codebases)를 확인했다. 현재 대화의 기록된 작업 경로는 `C:\Users\love0\Documents\Codex\2026-10-07\new-chat`이다. 이 이전 폴더는 임시 작업 도구에만 사용했다.
+이 저장소의 W06 미적용 초안은 실제 완료로 계산하지 않는다. 현재 W06-A~D2 구현·DB 검증 완료 근거는 진행표와 각 검사 보고서에 있고, 예전 인계 준비 보고서는 당시의 임시 사본 작업 기록으로만 유지한다. 현재 저장소 루트는 Git 저장소와 `AGENTS.md` 위치로 확인한다.
 
 ## 새 프로젝트 대화에서 읽을 순서
 
@@ -39,12 +36,23 @@
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
-| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 검사했다. 작은 폭 넘침을 제거하고 앱 조작 영역을 45px로 보완했다. W11-C PWA 매니페스트·정적 캐시·오프라인 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006, A/B 계정 전환·실제 오프라인 TC-CACHE-001이 남았다. [모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
+| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 5화면 30/30을 검사했다. W11-C 정적 캐시 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006 및 PWA 계정 전환·실제 오프라인 TC-CACHE-001은 미실행이다. B2 기능 커밋은 원격 기능 브랜치에 올라갔고 main 반영은 PR·필수 CI 대기다. [모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
 | W16-C | DONE | `.github/workflows/ci.yml` lint/type/unit/artifact/build 검증. 로컬 check 115/115, 원격 run `37783463500`·`37783959708`의 `quality`와 build 통과. main PR·strict `quality`·관리자 보호·강제 push/삭제 금지를 적용하고 API로 재확인. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | TODO | 공개 배포·관찰 |
+
+## 남은 진행 항목과 대기 이유
+
+- **W11-B2 / TC-WEB-006:** 데스크톱 viewport 30/30은 통과했다. 실제 iOS/Android 확대·터치·VoiceOver/TalkBack은 플랫폼 접근성 수락을 확인할 실제 기기 또는 OS 에뮬레이터가 필요하다. 이 미완료 범위는 다른 로컬 개발을 막지 않는다.
+- **W11-C / TC-CACHE-001:** PWA 캐시 경계 단위 검사는 통과했지만, A/B 계정 전환과 오프라인 경로를 한 흐름으로 실행한 브라우저 수락 검사는 남아 있다. 구현이 막힌 것이 아니라 아직 시나리오 실행을 이어가지 않은 상태다.
+- **W10-C, W12/W13:** 실제 Google/OTP 제공자·세션 재인증은 사용자가 정한 오픈 준비 시점에 시작하고, 실제 다중 계정 권한 검사는 공개 전 필수다. 로컬 가상 계정 검사로 이 단계를 앞당기거나 대체하지 않는다.
+- **W14:** 운영 주체·지원 연락처·도메인·예산과 삭제 원장 저장소 선택이 외부 서비스/스테이징 전에 필요하다. 이 입력은 로컬 기능 개발의 선행 조건이 아니다.
+- **W15/W17:** 제품 수락 E2E·복원·부하·공개는 W11 기기 범위와 W13/W14 이후에 실행한다.
+- **원격 반영:** W11-B2 커밋은 기능 브랜치에 push했다. 보호된 `main`은 PR과 `quality` CI가 필요하다. PR 생성은 GitHub 연동 권한 오류 때문에 진행되지 않았고, 이는 main 반영만 막으며 로컬 개발을 막지 않는다.
+
+실제 기기·오픈 준비 입력·PR 권한 외에 현재 로컬 개발을 막는 사유는 없다. 이전 모바일 검사 이후 멈춘 직접 원인은 위 외부 제약을 전체 개발 중단 사유로 잘못 취급해 다음 로컬 검증으로 이어가지 않은 진행 관리였다.
 
 화면은 준비 화면이다. W07-A/B에서 GET /api/v1/me, 개발용 GET /api/v1/auth/csrf와 변경 요청 guard 기반을 구현했고, W08-A에서 목표 생성·상세·설명 수정 API를 연결했다. W08-A는 unit 8/8, A/B/C 비파괴 API 각 3/3, 전체 check 61/61, build:check 통과다. 실제 mutation의 route→DB 성공 통합 검사는 아직 하지 않았고 기존 DB RPC 검증은 W06 결과를 유지한다. 배포 CSRF flow/session binding 및 실제 Google/OTP 로그인은 W12/W13에서 검증한다. 36개 제품 수락 TC는 계속 미실행이다.
 

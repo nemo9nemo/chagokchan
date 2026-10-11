@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-09",
+  "updated_on": "2026-10-11",
   "current_stage": "S06_w11_mobile_viewport_and_touch_target_emulation_verified_physical_device_acceptance_pending",
   "next_stage": "S06_w11_device_accessibility_and_pwa_account_switch_offline_acceptance",
   "implementation_started": true,
@@ -251,7 +251,7 @@
     {
       "id": "ART-011",
       "title": "개발 기준 결정·변경 기록",
-      "status": "documented_through_w11_c_cache_unit_and_w11_mobile_emulation_device_checks_pending",
+      "status": "documented_through_w11_c_cache_unit_mobile_emulation_device_checks_pending_and_path_redacted",
       "paths": [
         "docs/decisions/ADR-0001-development-baseline.md",
         "docs/decisions/ADR-0002-adult-personal-audience.md",
@@ -286,6 +286,7 @@
         "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md",
         "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md",
         "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md",
+        "docs/changes/2026-10-11-document-path-redaction.md",
         "docs/changes/2026-10-08-w11-c-pwa-cache.md"
       ]
     },
@@ -312,7 +313,7 @@
     {
       "id": "ART-014",
       "title": "산출물 확인 도구·검사 결과",
-      "status": "static_w06_w11_c_pwa_w16_c_ci_and_w11_mobile_emulation_verified_physical_device_acceptance_pending",
+      "status": "static_w06_w11_c_pwa_w16_c_ci_w11_mobile_emulation_and_workspace_path_redaction_verified_physical_device_acceptance_pending",
       "paths": [
         "scripts/verify-artifacts.mjs",
         "docs/quality/reports/2026-10-07-baseline.md",
@@ -349,7 +350,8 @@
         "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
         "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
         "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
-        "docs/quality/reports/w16-c-ci-check-2026-10-08.json"
+        "docs/quality/reports/w16-c-ci-check-2026-10-08.json",
+        "docs/changes/2026-10-11-document-path-redaction.md"
       ]
     },
     {
@@ -661,19 +663,18 @@
     }
   },
   "workspace": {
-    "canonical_path": "C:\\Users\\love0\\nemo9Dev\\chagokchan",
-    "previous_path": "C:\\Users\\love0\\Documents\\Codex\\2026-10-07\\new-chat",
+    "workspace_identity": "configured_project_workspace",
+    "prior_workspace_identity": "previous_reference_copy",
     "transfer_status": "verified",
     "transfer_record": "docs/quality/reports/workspace-transfer-2026-10-08.json",
     "progress_source": "docs/development/backlog.md",
     "verified_at": "2026-10-07T22:52:36.1488226Z",
     "project_handoff": {
-      "status": "prepared_user_app_registration_pending",
+      "status": "active_w11_continuation_remote_feature_branch_pr_pending",
       "document": "docs/development/codex-project-handoff.md",
       "preparation_report": "docs/quality/reports/project-handoff-preparation-2026-10-08.json",
-      "draft_directory": "tmp/w06-draft",
       "draft_state": "unapplied_untested_git_ignored",
-      "continuation_work_item": "W09"
+      "continuation_work_item": "W11"
     }
   },
   "development_auth": {

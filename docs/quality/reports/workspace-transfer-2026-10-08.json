@@ -1,8 +1,9 @@
 {
   "checked_at": "2026-10-07T22:52:36.1488226Z",
   "status": "copied_and_hashes_verified",
-  "source": "C:\\Users\\love0\\Documents\\Codex\\2026-10-07\\new-chat",
-  "target": "C:\\Users\\love0\\nemo9Dev\\chagokchan",
+  "source": "previous_workspace_copy",
+  "target": "configured_project_workspace",
+  "machine_specific_paths_redacted": true,
   "copied_file_count": 53,
   "source_hashes_matched_before_status_update": true,
   "previous_workspace_preserved": true,

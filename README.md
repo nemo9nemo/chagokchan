@@ -2,9 +2,9 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 모바일 웹/PWA를 개발한다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **S06 사용자 기능 구현 중 — W11 진행 중**. W06 DB 권한부터 W10 목표 휴지통·복구까지 구현했고, W11-A·B1을 완료했다. W11-B2의 320/640px 재배치·두 테마 글자 대비 브라우저 검증과 W11-C PWA 설치·정적 캐시·오프라인 안내 단위 검증을 마쳤다. 실기기 확대·읽기 도구·터치 `TC-WEB-006`과 A/B 계정 전환·실제 오프라인 `TC-CACHE-001` 검증은 남아 있다. [진행표](docs/development/backlog.md), [W11-C 검사 증거](docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json).
+현재 단계: **S06 사용자 기능 구현 중 — W11 진행 중**. W06~W10의 주요 기능과 W11-A·B1을 완료했다. W11-B2는 합성 fixture를 사용해 모바일 폭 6종의 5개 화면을 30/30 확인했고, W11-C 정적 캐시 단위 검사도 통과했다. 실제 iOS/Android 확대·터치·VoiceOver/TalkBack `TC-WEB-006`, PWA 계정 전환·오프라인 `TC-CACHE-001`은 미실행이다. 현재 공개 원격 기능 브랜치는 PR을 거쳐야 main에 반영된다. [진행표](docs/development/backlog.md), [모바일 검사 증거](docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json), [W11-C 검사 증거](docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json).
 
-개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
+개발은 Codex에서 지정한 저장소 작업 공간을 기준으로 한다. 머신별 절대 경로는 문서에 남기지 않는다. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 
 - [개발 순서·현재 진행표](docs/development/backlog.md) — 작업 완료마다 상태와 검사 근거를 갱신한다.
 - [Codex 프로젝트 개발 인계](docs/development/codex-project-handoff.md) — W06 재개 순서와 미검증 초안 위치.
