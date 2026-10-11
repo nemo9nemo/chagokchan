@@ -6,8 +6,8 @@
 
 - 프로젝트: [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan), 공개 저장소
 - 기본 브랜치: `main`; 보호 규칙에 따라 모든 변경은 PR을 거쳐야 하며 `quality` 검사가 필요하다.
-- W11-B2 변경은 `codex/w11-b2-mobile-screen-check-20261009`에 push했다. 현재 작업 HEAD와 해당 업스트림은 일치한다.
-- main 직접 push는 보호 규칙에 의해 거부됐다. GitHub 연동의 PR 생성은 403 권한 오류, 브라우저는 로그아웃 상태여서 PR은 만들지 못했다. 강제 push로 우회하지 않는다.
+- W11-B2와 2026-10-11 보완 커밋은 `codex/w11-b2-mobile-screen-check-20261009`에 push했다. 로컬 HEAD·업스트림은 `30c4366c2045ff26b85103c0a27a2a6d36bbbcbe`로 일치한다.
+- [Draft PR #2](https://github.com/nemo9nemo/chagokchan/pull/2)를 만들었고 Actions run `38145866948`의 `quality` job이 통과했다. main merge는 검토 대기다. 한 차례 GitHub 연동에서 PR 생성 403이 있었지만 CLI에서 생성됐다. main 직접 push나 이력 재작성으로 우회하지 않는다.
 - W16-C GitHub Actions와 main 보호 설정은 [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json)에 기록했다. 클라우드 서비스·공개 배포는 미설정이다.
 
 이 저장소의 W06 미적용 초안은 실제 완료로 계산하지 않는다. 현재 W06-A~D2 구현·DB 검증 완료 근거는 진행표와 각 검사 보고서에 있고, 예전 인계 준비 보고서는 당시의 임시 사본 작업 기록으로만 유지한다. 현재 저장소 루트는 Git 저장소와 `AGENTS.md` 위치로 확인한다.
@@ -36,7 +36,7 @@
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
 | W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
-| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 5화면 30/30을 검사했다. 2026-10-11 추가 검사에서 iPhone형 393px·Android형 360px·320px CSS viewport의 다섯 화면 15/15를 확인하고 홈 링크·날짜 입력을 45px로 보완했다. W11-C 정적 캐시 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006 및 PWA 계정 전환·실제 오프라인 TC-CACHE-001은 미실행이다. B2 기능 커밋은 원격 기능 브랜치에 올라갔고 main 반영은 PR·필수 CI 대기다. [후속 화면 검사](../quality/reports/w11-b2-mobile-touch-target-followup-2026-10-11.json) · [기존 모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
+| W11 | IN_PROGRESS | W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 5화면 30/30을 검사했다. 2026-10-11 추가 검사에서 iPhone형 393px·Android형 360px·320px CSS viewport의 다섯 화면 15/15를 확인하고 홈 링크·날짜 입력을 45px로 보완했다. W11-C 정적 캐시 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006 및 PWA 계정 전환·실제 오프라인 TC-CACHE-001은 미실행이다. [Draft PR #2](https://github.com/nemo9nemo/chagokchan/pull/2)의 `quality` CI는 통과했고 main merge는 검토 대기다. [후속 화면 검사](../quality/reports/w11-b2-mobile-touch-target-followup-2026-10-11.json) · [기존 모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
 | W16-A/W16-B | DONE | 기능별 로컬 커밋·원격 이력 업로드 |
@@ -50,9 +50,9 @@
 - **W10-C, W12/W13:** 실제 Google/OTP 제공자·세션 재인증은 사용자가 정한 오픈 준비 시점에 시작하고, 실제 다중 계정 권한 검사는 공개 전 필수다. 로컬 가상 계정 검사로 이 단계를 앞당기거나 대체하지 않는다.
 - **W14:** 운영 주체·지원 연락처·도메인·예산과 삭제 원장 저장소 선택이 외부 서비스/스테이징 전에 필요하다. 이 입력은 로컬 기능 개발의 선행 조건이 아니다.
 - **W15/W17:** 제품 수락 E2E·복원·부하·공개는 W11 기기 범위와 W13/W14 이후에 실행한다.
-- **원격 반영:** W11-B2 커밋은 기능 브랜치에 push했다. 보호된 `main`은 PR과 `quality` CI가 필요하다. PR 생성은 GitHub 연동 권한 오류 때문에 진행되지 않았고, 이는 main 반영만 막으며 로컬 개발을 막지 않는다.
+- **원격 반영:** W11-B2 관련 커밋은 기능 브랜치에 push했고 draft PR #2의 `quality` CI가 통과했다. 보호된 `main`은 유지되며 merge 전이다. 이 상태는 다음 검토·merge 전까지의 대기 항목이고 새 로컬 개발을 막지 않는다.
 
-실제 기기·오픈 준비 입력·PR 권한 외에 현재 로컬 개발을 막는 사유는 없다. 이전 모바일 검사 이후 멈춘 직접 원인은 위 외부 제약을 전체 개발 중단 사유로 잘못 취급해 다음 로컬 검증으로 이어가지 않은 진행 관리였다.
+현재 남은 제약은 TC-WEB-006의 실제 기기 수락과 W12/W13·W14의 공개 준비 일정/운영 입력이다. 이 항목들은 해당 수락·공개 단계에서 필요하지만, 지금의 로컬 개발을 막지 않는다. 이전 모바일 검사 이후 멈춘 직접 원인은 외부 기기와 원격 절차를 전체 개발 중단 사유로 잘못 취급해 독립적으로 진행 가능한 작업을 이어가지 않은 진행 관리였다.
 
 화면은 준비 화면이다. W07-A/B에서 GET /api/v1/me, 개발용 GET /api/v1/auth/csrf와 변경 요청 guard 기반을 구현했고, W08-A에서 목표 생성·상세·설명 수정 API를 연결했다. W08-A는 unit 8/8, A/B/C 비파괴 API 각 3/3, 전체 check 61/61, build:check 통과다. 실제 mutation의 route→DB 성공 통합 검사는 아직 하지 않았고 기존 DB RPC 검증은 W06 결과를 유지한다. 배포 CSRF flow/session binding 및 실제 Google/OTP 로그인은 W12/W13에서 검증한다. 36개 제품 수락 TC는 계속 미실행이다.
 
