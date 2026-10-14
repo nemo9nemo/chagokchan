@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-09",
-  "current_stage": "S06_w11_mobile_viewport_and_touch_target_emulation_verified_physical_device_acceptance_pending",
-  "next_stage": "S06_w11_device_accessibility_and_pwa_account_switch_offline_acceptance",
+  "updated_on": "2026-10-13",
+  "current_stage": "S06_w11_local_scope_done_device_acceptance_moved_to_w15",
+  "next_stage": "S06_w10_ui09_news_sent_screen",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b1_w11_b2_mobile_emulation_verified_physical_device_accessibility_pending_w11_c_cache_unit_verified_device_acceptance_pending"
+      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b_c_done_device_acceptance_tc_web_006_tc_cache_001_moved_to_w15_ui09_screen_pending"
     },
     {
       "id": "S07",
