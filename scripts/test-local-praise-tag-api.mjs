@@ -18,6 +18,8 @@ let actorId;
 let beforeSnapshot;
 let beforeRates;
 let lastRates;
+const rateDeltas = new Map();
+let rateTrackingSafe = true;
 let cleanupPassed = false;
 let fixturePreserved = false;
 let phase = "local_environment";
@@ -37,6 +39,22 @@ function snapshot() {
 
 function rates() {
   return sql("select coalesce(jsonb_agg(to_jsonb(r) order by r.scope_key,r.window_start),'[]'::jsonb) from public.rate_usage r where actor_user_id=:'actor'::uuid;\n", { actor: actorId }).trim();
+}
+
+function rateChanges(before, after, expectedScopes) {
+  const previous = new Map(JSON.parse(before).map((row) => [row.id, row]));
+  const changes = [];
+  for (const row of JSON.parse(after)) {
+    const prior = previous.get(row.id);
+    previous.delete(row.id);
+    if (prior && JSON.stringify(prior) === JSON.stringify(row)) continue;
+    assert.equal(row.used_count - (prior?.used_count ?? 0), 1, "unexpected quota increment");
+    if (prior) assert.deepEqual(row, { ...prior, used_count: row.used_count, updated_at: row.updated_at });
+    changes.push({ id: row.id, scope_key: row.scope_key, window_start: row.window_start, used_count: 1 });
+  }
+  assert.equal(previous.size, 0, "quota rows disappeared during the check");
+  assert.deepEqual(changes.map((row) => row.scope_key).sort(), [...expectedScopes].sort(), "concurrent local A quota activity");
+  return changes;
 }
 
 async function reservePort() {
@@ -98,13 +116,25 @@ try {
   assert.equal(csrf.status, 200);
   const token = (await csrf.json()).csrf_token;
   const headers = { Origin: origin, "Content-Type": "application/json", "X-CSRF-Token": token, Cookie: `chagokchan_csrf=${token}` };
-  const mutate = async (route, method, body, key) => {
-    try {
-      return await response(route, { method, headers: { ...headers, ...(key ? { "Idempotency-Key": key } : {}) }, body: JSON.stringify(body) });
-    } finally {
-      // Remember the last observed counters, including a write whose HTTP reply was lost.
-      lastRates = rates();
+  const mutate = async (route, method, body, key, expectedScopes = []) => {
+    // A lost reply or an unexpected delta cannot establish which request consumed quota.
+    rateTrackingSafe = false;
+    assert.equal(rates(), lastRates, "concurrent local A activity before the request");
+    const result = await response(route, { method, headers: { ...headers, ...(key ? { "Idempotency-Key": key } : {}) }, body: JSON.stringify(body) });
+    const resultBody = await result.clone().json();
+    if (expectedScopes.length) {
+      assert.equal(result.ok, true, "quota attribution requires a successful response");
+      assert.equal(resultBody.replayed, false, "only a confirmed new mutation consumes quota");
     }
+    const currentRates = rates();
+    const changes = rateChanges(lastRates, currentRates, expectedScopes);
+    for (const change of changes) {
+      const prior = rateDeltas.get(change.id);
+      rateDeltas.set(change.id, { ...change, used_count: (prior?.used_count ?? 0) + 1 });
+    }
+    lastRates = currentRates;
+    rateTrackingSafe = true;
+    return result;
   };
   let boardId;
   let praise;
@@ -118,7 +148,7 @@ try {
     assert.match(boardId, /^[0-9a-f-]{36}$/i);
   });
   await record("tag_create_and_owner_list", async () => {
-    const created = await mutate(`/boards/${boardId}/praises`, "POST", { tag: "consistency" }, praiseKey);
+    const created = await mutate(`/boards/${boardId}/praises`, "POST", { tag: "consistency" }, praiseKey, ["praise_write_minute", "praise_write_day"]);
     assert.equal(created.status, 201);
     praise = await created.json();
     assert.equal(praise.replayed, false);
@@ -146,19 +176,19 @@ try {
   };
   await record("tag_change_and_patch_replay", async () => {
     for (const replayed of [false, true]) {
-      const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: "growth" });
+      const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: "growth" }, null, replayed ? [] : ["praise_state_change_minute"]);
       assert.equal(edited.status, 200);
       assert.equal((await edited.json()).replayed, replayed);
     }
     assert.equal((await currentRow()).tag, "growth");
   });
   await record("explicit_null_removes_tag", async () => {
-    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: null });
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: null }, null, ["praise_state_change_minute"]);
     assert.equal(edited.status, 200);
     assert.equal((await currentRow()).tag, null);
   });
   await record("tag_does_not_change_count_completion_or_notices", async () => {
-    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: "rest" });
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: "rest" }, null, ["praise_state_change_minute"]);
     assert.equal(edited.status, 200);
     const board = await response(`/boards/${boardId}`);
     assert.equal(board.status, 200);
@@ -168,7 +198,7 @@ try {
     assert.equal(sql("select count(*) from public.notifications where recipient_user_id=:'actor'::uuid and bunch_id=:'bunch'::uuid and type='bunch_completed';\n", { actor: actorId, bunch: praise.bunch_id }).trim(), "1");
   });
   await record("cancel_clears_tag", async () => {
-    const cancelled = await mutate(`/praises/${praise.id}/cancel`, "POST", {});
+    const cancelled = await mutate(`/praises/${praise.id}/cancel`, "POST", {}, null, ["praise_state_change_minute"]);
     assert.equal(cancelled.status, 200);
     const row = await currentRow();
     assert.ok(row.cancelled_at);
@@ -191,11 +221,26 @@ try {
       await new Promise((resolve) => { killer.once("close", resolve); killer.once("error", resolve); });
     } else if (app.exitCode === null) app.kill("SIGKILL");
   }
-  if (beforeSnapshot) {
+  if (beforeSnapshot && beforeRates) {
     try {
-      // Refuse to overwrite counters changed after our last request.
-      assert.equal(rates(), lastRates, "concurrent local A activity prevents safe quota restoration");
+      assert.equal(rateTrackingSafe, true, "unattributed quota changes prevent safe cleanup");
       sql(`begin;
+        -- Hold the writer lock from the comparison through compensation, including new windows.
+        lock table public.rate_usage in share row exclusive mode;
+        create temporary table w20_tag_rate_guard on commit drop as
+          select :'actor'::uuid as actor, :'last_rates'::jsonb as expected;
+        do $$ begin
+          if (select coalesce(jsonb_agg(to_jsonb(r) order by r.scope_key,r.window_start),'[]'::jsonb)
+              from public.rate_usage r where r.actor_user_id=(select actor from w20_tag_rate_guard))
+              is distinct from (select expected from w20_tag_rate_guard) then
+            raise exception 'Concurrent local A quota activity prevents safe cleanup';
+          end if;
+        end $$;
+        create temporary table w20_tag_rate_baseline on commit drop as
+          select * from jsonb_populate_recordset(null::public.rate_usage,:'rates'::jsonb);
+        create temporary table w20_tag_rate_deltas on commit drop as
+          select * from jsonb_to_recordset(:'deltas'::jsonb)
+            as d(id uuid, scope_key text, window_start timestamptz, used_count integer);
         create temporary table w20_tag_goals on commit drop as
           select result_id as id from public.request_receipts where actor_user_id=:'actor'::uuid
           and operation='createGoal' and request_key=:'goal_key'::uuid;
@@ -209,12 +254,22 @@ try {
         delete from public.boards where goal_id in (select id from w20_tag_goals);
         delete from public.goals where id in (select id from w20_tag_goals) and owner_user_id=:'actor'::uuid;
         delete from public.request_receipts where actor_user_id=:'actor'::uuid and request_key in (:'goal_key'::uuid,:'praise_key'::uuid);
-        delete from public.rate_usage where actor_user_id=:'actor'::uuid;
-        insert into public.rate_usage select * from jsonb_populate_recordset(null::public.rate_usage,:'rates'::jsonb);
-        commit;\n`, { actor: actorId, goal_key: goalKey, praise_key: praiseKey, rates: beforeRates });
+        delete from public.rate_usage r using w20_tag_rate_deltas d
+          where r.actor_user_id=:'actor'::uuid and r.id=d.id and r.scope_key=d.scope_key
+          and r.window_start=d.window_start and r.used_count=d.used_count
+          and not exists (select 1 from w20_tag_rate_baseline b where b.id=r.id);
+        update public.rate_usage r set used_count=r.used_count-d.used_count, updated_at=b.updated_at
+          from w20_tag_rate_deltas d, w20_tag_rate_baseline b
+          where r.actor_user_id=:'actor'::uuid and r.id=d.id and r.id=b.id
+          and r.scope_key=d.scope_key and r.window_start=d.window_start;
+        commit;\n`, { actor: actorId, goal_key: goalKey, praise_key: praiseKey, rates: beforeRates,
+        last_rates: lastRates, deltas: JSON.stringify([...rateDeltas.values()]) });
       fixturePreserved = snapshot() === beforeSnapshot;
       cleanupPassed = fixturePreserved;
-    } catch { cleanupPassed = false; }
+    } catch {
+      cleanupPassed = false;
+      failure ??= { phase: "cleanup", code: "UNSAFE_OR_FAILED_CLEANUP" };
+    }
   }
 }
 

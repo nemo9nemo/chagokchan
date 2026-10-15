@@ -2735,7 +2735,7 @@
         "description": "owner 개인판은 개인 칭찬 RPC를, 현재 grant·연결 세대가 유효한 contributor의 공유판은 peer 칭찬 RPC를 호출한다. 작성자·수신자·회차는 DB가 결정하고 결과는 ID·bunch ID·재시도 여부만 반환한다. contributor 공유 작성에는 occurred_on을 받지 않는다. 배포 세션 adapter는 W12 대기.",
         "x-implementation-status": "local_fixture_role_scoped_create_api_implemented_deployed_session_pending",
         "x-database-rpcs": [
-          "create_personal_praise(uuid,uuid,text,date)",
+          "create_personal_praise(uuid,uuid,text,date,text)",
           "create_peer_praise(uuid,uuid,text)"
         ],
         "x-requirements": [

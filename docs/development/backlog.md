@@ -34,7 +34,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W15 | 통합·보안·기기·복원·부하 검사 | TODO | W11, W13, W14 | 필수 TC 실행 증거·P0/P1 해결·복원·실측 성능·배포 차단 검사 | 소스 단위 32개·물리 DB 51개 통과. 제품 수락 TC 36개·업무 RPC·실제 로그인·통합/복원/부하 검사 미실행. [검증 계획](../quality/verification-plan.md) |
 | W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
-| W20 | 목업 기반 화면 재설계·칭찬 태그 | IN_PROGRESS | W08~W11 | W20-A 셀프 태그와 W20-B 화면 구현·검증 | **W20-A 완료 2026-10-15.** 셀프 칭찬 태그 DB/API 구현·통합 검증 통과(pgTAP 297/297, 태그 API 실제 세션 통과). W20-B 목업 기반 화면은 TODO. W20 기준을 적용하며 로컬 참고 브랜치 W18/W19와 구분한다. [W20-A 브리프](../plans/W20-A-praise-tags.md) |
+| W20 | 목업 기반 화면 재설계·칭찬 태그 | IN_PROGRESS | W08~W11 | W20-A 셀프 태그와 W20-B 화면 구현·검증 | **W20-A 완료 2026-10-15.** 셀프 칭찬 태그 DB/API 구현·통합 검증(pgTAP 297/297)·PR 리뷰 r2 수정 재검증 통과. W20-B 목업 기반 화면은 TODO. W20 기준을 적용하며 로컬 참고 브랜치 W18/W19와 구분한다. [W20-A 브리프](../plans/W20-A-praise-tags.md) |
 
 W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 진행한다. 이 두 입력 때문에 로컬 DB·기능 개발을 멈추지 않는다. 실제 로그인 없이 개발한다는 요구도 DB 권한·동시성 검사를 미루는 이유로 사용하지 않는다.
 
@@ -122,5 +122,5 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 
 | ID | 기능 단위 | 상태 | 결과·다음 행동 |
 | --- | --- | --- | --- |
-| W20-A | 셀프 칭찬 고정 태그·DB/API | DONE | 셀프 칭찬 태그(5개 코드, 0~1개, 취소 시 삭제, peer 금지)를 새 마이그레이션·RPC·API·계약에 반영했다. Claude 리뷰 재검증(Docker 29.1.3, Node 24.19.0): 마이그레이션 47개 적용, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-tag-test 9개 시나리오 통과(정리·fixture 보존), api:praise-test 10/10, api:board-test A/B/C 각 14/14, unit 120/120, lint·typecheck·산출물·build:check 통과. 화면 연결은 W20-B. [브리프](../plans/W20-A-praise-tags.md) · [검사 증거](../quality/reports/w20-a-praise-tag-check-2026-10-15.json) |
+| W20-A | 셀프 칭찬 고정 태그·DB/API | DONE | 셀프 칭찬 태그(5개 코드, 0~1개, 취소 시 삭제, peer 금지)를 새 마이그레이션·RPC·API·계약에 반영했다. r1 재검증: 마이그레이션 47개, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-test 10/10, api:board-test A/B/C 각 14/14, build:check 통과. PR 리뷰 r2 수정: 태그 API 검사가 자기 증가분만 rate_usage에서 차감하고 동시 변경 시 실패하게 했으며, RPC 계약 5인자·칭찬 unit 18개 기록을 맞췄다. r2 재검증(Docker 29.1.3, Node 24.19.0): api:praise-tag-test 2회 연속 통과(9개 시나리오, 정리 성공, rate_usage 포함 전체 snapshot 보존), unit 120/120, lint·typecheck·산출물 통과. 화면 연결은 W20-B. [브리프](../plans/W20-A-praise-tags.md) · [검사 증거](../quality/reports/w20-a-praise-tag-check-2026-10-15.json) |
 | W20-B | 목업 기반 목표 중심 화면 재설계 | TODO | W20-A 후 [화면 브리프](../plans/W20-B-mockup-ui.md)에 따라 진행. 브라우저 코드 변경은 W20-A 범위에서 제외. |

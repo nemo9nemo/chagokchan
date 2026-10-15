@@ -1,7 +1,7 @@
 {
   "verified_at": "2026-10-15T08:07:55.835Z",
   "work_item": "W20-A",
-  "status": "database_api_integration_passed_review_approved",
+  "status": "database_api_integration_passed_review_approved_pr_r2_fixed",
   "source": {
     "commit": "cf54261746459e3faa98b397df9f8a4ba33c3c43",
     "branch": "codex/W20-A-praise-tags",
@@ -407,6 +407,202 @@
   "committed": false,
   "pushed": false,
   "real_provider_login_verified": false,
+  "pr_review_r2_fix_verification": {
+    "verified_at": "2026-10-15T13:35:45.965Z",
+    "status": "sandbox_passed_integration_reverification_and_claude_review_pending",
+    "source": {
+      "commit": "4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb",
+      "branch": "codex/W20-A-praise-tags",
+      "working_tree_changes_uncommitted": true,
+      "sha256_format": "raw_file_bytes",
+      "sha256": {
+        "scripts/test-local-praise-tag-api.mjs": "0e833a2583d24aacb9ec6c6e1972c203f3a10d698d3a9c2a99d0b33ac4cd5224",
+        "contracts/openapi.json": "1c1d68782fb4f5a8a7618aaf7c5bf6784abd0ee65f93723e5a17700d7133b691",
+        "docs/development/artifact-register.json": "a1d3be4849d3122034c61233e5ee00dafde31ca0637ff20947edb93750cdac7d",
+        "docs/development/backlog.md": "73527d2463efdea613fe2abeb2fd243c90b90aa3c769ec7f52b655eef30f2747",
+        "docs/plans/W20-A-praise-tags.md": "77fd8f4a1f6d2b42932533c77b63e251ac172b41d0da5993397ccc8c9f1a55c5",
+        "docs/changes/2026-10-15-w20-a-praise-tag.md": "34147bf7300d6ecc0e2d702075082067ac69ec9adbcb4381159630b4b5c8a561"
+      }
+    },
+    "environment": {
+      "execution": "Windows PowerShell sandbox",
+      "node": "24.19.0",
+      "pnpm_actual": "11.25.0",
+      "pnpm_required": "11.19.0",
+      "docker_or_database_version_verified_this_run": false,
+      "biome": "2.5.15",
+      "typescript": "5.9.3"
+    },
+    "requirement_ids": [
+      "REQ-003",
+      "REQ-007"
+    ],
+    "policy_ids": [
+      "POL-PRAISE-001",
+      "POL-PRAISE-002"
+    ],
+    "test_case_id": "TC-PRAISE-TAG-001",
+    "changed_files": [
+      "scripts/test-local-praise-tag-api.mjs",
+      "contracts/openapi.json",
+      "docs/development/artifact-register.json",
+      "docs/development/backlog.md",
+      "docs/plans/W20-A-praise-tags.md",
+      "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
+      "docs/changes/2026-10-15-w20-a-praise-tag.md"
+    ],
+    "fixes": [
+      "r2 WARNING 1: Only confirmed successful non-replay writes with exactly the expected +1 per scope/window are attributed to the check; replay/conflict consume zero. Unexpected counters, lost replies or failure responses prevent quota compensation.",
+      "Cleanup compares the last confirmed actor snapshot under SHARE ROW EXCLUSIVE table lock, subtracts tracked per-row/scope/window deltas and restores existing updated_at, and deletes only new rows owned by those deltas. No actor-wide DELETE/INSERT restoration.",
+      "r2 P3 2: createPraise x-database-rpcs uses create_personal_praise(uuid,uuid,text,date,text).",
+      "r2 P3 3: Corrected praise API unit count from 19 to the verified 18 in the registry and Codex report."
+    ],
+    "checks": [
+      {
+        "order": 1,
+        "command": "pnpm lint",
+        "exit_code": 1,
+        "status": "not_run",
+        "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+      },
+      {
+        "order": 2,
+        "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+        "exit_code": 0,
+        "status": "passed"
+      },
+      {
+        "order": 3,
+        "command": "pnpm typecheck",
+        "exit_code": 1,
+        "status": "not_run",
+        "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+      },
+      {
+        "order": 4,
+        "command": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+        "exit_code": 0,
+        "status": "passed"
+      },
+      {
+        "order": 5,
+        "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs",
+        "exit_code": 0,
+        "status": "passed",
+        "executed": 120,
+        "passed": 120,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "order": 6,
+        "command": "pnpm check:artifacts",
+        "exit_code": 1,
+        "status": "not_run",
+        "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+      },
+      {
+        "order": 7,
+        "command": "node scripts/verify-artifacts.mjs",
+        "exit_code": 0,
+        "status": "passed"
+      },
+      {
+        "order": 8,
+        "command": ".\\scripts\\project.ps1 -Task api:praise-tag-test",
+        "exit_code": 1,
+        "status": "not_run",
+        "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+      },
+      {
+        "order": 9,
+        "command": "node scripts/test-local-praise-tag-api.mjs",
+        "exit_code": 1,
+        "status": "not_run",
+        "first_error_line": "Local database command failed (EPERM)."
+      },
+      {
+        "order": 10,
+        "command": "node --test --test-isolation=none scripts/praise-api.test.mjs",
+        "exit_code": 0,
+        "status": "passed",
+        "executed": 18,
+        "passed": 18,
+        "failed": 0
+      },
+      {
+        "order": 11,
+        "command": "PowerShell single-quoted here-string | node --input-type=module (in-memory harness extracting rateChanges, mutate and cleanup from scripts/test-local-praise-tag-api.mjs)",
+        "exit_code": 0,
+        "status": "passed",
+        "executed": 17,
+        "passed": 17,
+        "live_database_executed": false,
+        "sql_verification": "shape_only"
+      }
+    ],
+    "final_artifact_recheck": {
+      "command": "node scripts/verify-artifacts.mjs",
+      "exit_code": 0,
+      "status": "passed",
+      "checked_at": "2026-10-15T13:36:27.805Z",
+      "planned_test_cases": 75,
+      "basis_sha256": "b44968d39d4e34328d1349f220d6bc609e1c680b90c513bb09b0cd7b8012fd8e",
+      "scope": "artifact_structural_consistency_only"
+    },
+    "final_diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    "quota_guard_harness": {
+      "checks_passed": 17,
+      "execution": "Node stdin, no repository test file added",
+      "scope": "In-memory execution of helpers/mutation/cleanup extracted from the current script; cleanup SQL shape assertions only.",
+      "cases": [
+        "empty delta",
+        "existing row increment with untouched other scope",
+        "new quota row",
+        "new minute window with previous window preserved",
+        "replay zero delta",
+        "same-scope concurrent increment rejected",
+        "other-scope concurrent increment rejected",
+        "deleted row rejected",
+        "metadata change rejected",
+        "own mutation deltas accumulated",
+        "activity before request rejected before HTTP",
+        "concurrent change during HTTP rejected without attribution",
+        "lost reply rejected",
+        "failed response cannot attribute another request's increment",
+        "replay response cannot attribute increments",
+        "unsafe cleanup does not invoke SQL",
+        "cleanup SQL uses lock-before-compare, scoped subtraction/new-row deletion and no quota reinsertion"
+      ]
+    },
+    "integration": {
+      "command_attempted": true,
+      "scenarios_executed": 0,
+      "cleanup_sql_executed": false,
+      "live_concurrency_verified": false,
+      "fixture_preservation_reverified": false,
+      "first_error_line": "Local database command failed (EPERM).",
+      "status": "not_run"
+    },
+    "not_run_or_incomplete": [
+      "Docker/DB-dependent API success scenarios, cleanup SQL, real concurrency/new-window races and fixture preservation are unverified for this revision because the sandbox rejected the local Docker subprocess (EPERM).",
+      "Other DB regressions and build were not repeated in this revision; the user requested the split sandbox command sequence and the praise-tag integration attempt.",
+      "Prior Claude review DB/API/build successes describe the previous source revision and are not attributed to these r2 changes."
+    ],
+    "deviations": [
+      "No file or feature scope changes outside the brief.",
+      "Retained real local A session; chose confirmed per-scope/window deltas plus failure on concurrency instead of introducing probe accounts.",
+      "Used installed tools directly after the requested pnpm commands failed the pinned-version check; no version, dependency or lockfile edits.",
+      "No pnpm test/check, commit or push."
+    ],
+    "outside_brief_files_modified": false,
+    "committed": false,
+    "pushed": false
+  },
   "claude_review_verification": {
     "verified_at": "2026-10-15",
     "executor": "Claude Code outside Codex sandbox",
@@ -432,5 +628,16 @@
       "api_board_test": "A/B/C 14/14 each, fixture writes 0"
     },
     "real_provider_login_verified": false
+  },
+  "claude_pr_r2_reverification": {
+    "verified_at": "2026-10-15",
+    "source": "4313d2b + uncommitted r2 fixes",
+    "docker": "29.1.3",
+    "node": "24.19.0",
+    "api_praise_tag_test": "passed twice; 9 scenarios; cleanup passed; full public-table snapshot (incl. rate_usage) preserved",
+    "unit_tests": "120/120",
+    "lint": "passed",
+    "typecheck": "passed",
+    "artifacts": "passed"
   }
 }

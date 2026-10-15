@@ -1,6 +1,6 @@
 # W20-A 셀프 칭찬 태그
 
-- 상태: DONE (2026-10-15 구현 리뷰 APPROVED·통합 검증 통과)
+- 상태: DONE (2026-10-15 PR 리뷰 r2 수정 재검증 APPROVED)
 - 작성: Claude / 날짜: 2026-10-15
 - 구현 브랜치: codex/W20-A-praise-tags
 - 참조: REQ-003·REQ-007 / policies/app-policy.json `praise` / TC-PRAISE-TAG-001(신규) / operation createPraise·editSelfPraise·listBoardPraises / 진행표 W20-A(신규)
@@ -152,7 +152,7 @@ Codex 샌드박스에서는 lint·typecheck·unit(`node --test --test-isolation=
 - 설계·계약: `docs/data-erd.md`, `docs/diagrams/data-erd-core.mmd`, `docs/diagrams/data-erd-connections.mmd`, `docs/diagrams/data-erd-operations.mmd`, `docs/diagrams/data-erd-full.mmd`, `contracts/openapi.json` — nullable tag, owner 필수 응답, peer/취소 시 null 및 TC 연결. contributor 스키마는 유지.
 - DB: `supabase/migrations/20261008025000_praise_tag.sql` — 열·제약 3개·RPC 소유자 열 권한, 생성 함수 5인자 전환/옛 시그니처 제거, edit/cancel/owner 목록 변경. 태그가 null이면 기존 canonical input을 유지한다. 적용된 마이그레이션은 수정하지 않았다.
 - 서버: `src/server/praise-api.mjs` — self 생성·수정·owner 응답 검증, peer non-null tag 거절. contributor 투영은 유지.
-- 검사: `supabase/tests/004_business_rpc_praise.test.sql`, `supabase/tests/011_business_rpc_personal_praise_result.test.sql` — 허용된 함수 시그니처·OID 변경만 적용. 신규 `supabase/tests/015_business_rpc_praise_tag.test.sql`에 40개 DB assertion. `scripts/praise-api.test.mjs`는 19개(신규 태그 시나리오 5개 포함). 신규 `scripts/test-local-praise-tag-api.mjs`는 실제 서버 A 세션·합성 목표의 생성→조회→수정→취소·409·집계 불변과 제품 fixture snapshot 보존을 검사하도록 작성했다.
+- 검사: `supabase/tests/004_business_rpc_praise.test.sql`, `supabase/tests/011_business_rpc_personal_praise_result.test.sql` — 허용된 함수 시그니처·OID 변경만 적용. 신규 `supabase/tests/015_business_rpc_praise_tag.test.sql`에 40개 DB assertion. `scripts/praise-api.test.mjs`는 18개(신규 태그 시나리오 5개 포함). 신규 `scripts/test-local-praise-tag-api.mjs`는 실제 서버 A 세션·합성 목표의 생성→조회→수정→취소·409·집계 불변과 제품 fixture snapshot 보존을 검사하도록 작성했다.
 - 실행 task: `package.json`, `scripts/project.ps1` — `api:praise-tag-test` 추가. 의존성 변경 없음.
 - 추적·증거: `docs/quality/test-cases.json`, `docs/quality/verification-plan.md`, `docs/development/backlog.md`, `docs/development/artifact-register.json`, `docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json`, `docs/changes/2026-10-15-w20-a-praise-tag.md`, 이 브리프의 구현 보고.
 
@@ -206,6 +206,41 @@ node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/d
 - 사용자 지시에 따라 `check`·`pnpm test` 대신 lint→typecheck→격리 해제 unit→산출물 순서로 실행했다. pnpm 자체 버전 오류가 있어 설치된 도구 직접 실행을 추가했으며, 버전 고정 설정·잠금 파일은 변경하지 않았다.
 - DB/API 검증을 시도했지만 환경 오류로 실행하지 못해 완료 기준 체크박스는 남겨 두었다. 구현 승인·커밋은 후속 리뷰 단계이며 이번에는 수행하지 않았다.
 
+### r2 수정
+
+2026-10-15 / 기준 HEAD `4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb` / 브랜치 `codex/W20-A-praise-tags` / W20-A·REQ-003·REQ-007·POL-PRAISE-001·002·TC-PRAISE-TAG-001. 최신 PR 리뷰 r2에는 BLOCKED가 없고 WARNING 1번과 참고(P3) 2·3번을 수정했다. 기존 리뷰 기록과 작업 시작 전 브리프 변경은 보존했다. 커밋·push는 하지 않았다.
+
+변경 파일:
+
+- `scripts/test-local-praise-tag-api.mjs`: A의 `rate_usage` 전체 삭제·재삽입을 제거했다. 성공·비 replay 응답과 요청별 예상 scope 증가량(+1)이 일치할 때만 행 ID·scope·window별 검사 증가분을 누적한다. 재시도·409는 증가량 0을 요구한다. 요청 전후 다른 증가·행 삭제·메타데이터 변경, 실패·유실 응답은 안전한 귀속으로 인정하지 않는다. 정리는 `SHARE ROW EXCLUSIVE` 잠금 아래 현재 A 사용량과 마지막 확인값을 비교한 뒤, 기존 행은 검사 증가분만 차감하고 `updated_at`을 보존하며 검사가 새로 만든 행만 지운다. 불일치·귀속 불명 시 복원하지 않고 실패를 보고한다.
+- `contracts/openapi.json`: createPraise의 `x-database-rpcs`를 `create_personal_praise(uuid,uuid,text,date,text)`로 바로잡았다.
+- `docs/development/artifact-register.json`, 이 브리프: 칭찬 API unit 수를 19에서 실제 18로 수정했다. 등록부·`docs/development/backlog.md`의 W20-A는 r2 통합 재검증·리뷰 대기(`IN_PROGRESS`)로 맞췄다. 기존 r1 통합 검증 결과는 과거 실행 근거로 보존했다.
+- `docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json`, `docs/changes/2026-10-15-w20-a-praise-tag.md`: r2 변경·소스·실행 근거와 미실행 범위를 추가했다.
+
+실행 환경: Windows PowerShell 샌드박스, Node `24.19.0`, PATH pnpm `11.25.0`(고정 `11.19.0`과 불일치). 아래 순서로 실제 실행했으며 pnpm 버전 오류 직후 동일 설치 도구로 대체했다.
+
+| 순서 | 실행 명령 | 결과 |
+| --- | --- | --- |
+| 1 | `pnpm lint` | exit 1, `[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)` |
+| 1 대체 | `.\node_modules\.bin\biome.cmd lint --error-on-warnings .` | exit 0, 97파일, 경고·오류 없음 |
+| 2 | `pnpm typecheck` | exit 1, 같은 버전 오류 |
+| 2 대체 | `.\node_modules\.bin\tsc.cmd --noEmit` | exit 0 |
+| 3 | 아래 지정 unit 명령 | exit 0, 120/120, 실패·skip 0 |
+| 4 | `pnpm check:artifacts` | exit 1, 같은 버전 오류 |
+| 4 대체 | `node scripts/verify-artifacts.mjs` | exit 0, 75 TC·JSON·링크·계약·상호 참조 통과. 최종 문서 갱신 뒤에도 재확인 |
+| 5 | `.\scripts\project.ps1 -Task api:praise-tag-test` | exit 1, 같은 버전 오류 |
+| 5 직접 | `node scripts/test-local-praise-tag-api.mjs` | exit 1, `local_environment`에서 중단. 오류 첫 줄: `Local database command failed (EPERM).`, 성공 시나리오 0개 |
+
+```powershell
+node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs
+```
+
+보조 검사: `node --test --test-isolation=none scripts/praise-api.test.mjs`는 18/18. `node --input-type=module`에 PowerShell here-string으로 전달한 일회 메모리 harness는 실제 스크립트의 증가량 판별·mutation·cleanup 코드를 추출해 17개 검사를 통과했다. 기존/새 window·누적 차감량, replay 무증가, 동일 scope 동시 증가·다른 scope 변경·행 삭제·메타데이터 변경 거절, 요청 사이 경합, 응답 유실·실패·replay의 귀속 거절과 정리 차단을 확인했다. SQL은 잠금→비교→한정 삭제/차감 순서의 정적 확인만 했으며 실제 PostgreSQL 실행·경합 통과를 뜻하지 않는다. `git diff --check`도 통과했다.
+
+실행하지 못한 검사와 이유: Docker 호출이 샌드박스 `EPERM`으로 차단되어 수정된 정리 SQL, 실제 로컬 A 세션 API 9개 시나리오, 동시 요청·새 window 경합과 fixture 보존은 재검증하지 못했다. pnpm task의 첫 오류는 위 버전 오류다. 기존 r1의 DB·API·빌드 통과를 이번 수정의 통과로 기록하지 않았다. 나머지 DB 회귀·빌드는 이번 사용자 지정 검증 순서에 없으므로 다시 실행하지 않았다.
+
+다르게 한 부분: 파일·기능 범위 이탈 없음. A의 실제 로컬 세션을 유지하면서 검사 증가분 추적과 경합 시 실패 방식을 택했다. 사용자 지시에 따라 `pnpm test`·`check`는 실행하지 않았고, pnpm 버전 실패 시 설치 도구 직접 실행을 사용했다. 의존성·버전 고정·잠금 파일은 수정하지 않았다. r2 수정은 통합 재검증과 Claude 리뷰를 기다린다.
+
 ## 리뷰 기록
 
 - 브리프 리뷰 r1 (2026-10-15, Codex read-only): P1 3건(열 권한, 기존 pgTAP 004/011, W19 기준 충돌)과 P2·P3 지적을 이 판에 반영했다. W19 충돌은 사용자 결정(W20 기준)으로 해소했다.
@@ -234,3 +269,19 @@ node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/d
   - `api:praise-tag-test`: passed. 실제 로컬 A 세션으로 9개 시나리오(생성·조회, replay, 409, 수정·replay, null 삭제, 집계 불변, 취소 시 삭제)를 통과했고, 정리 성공과 fixture snapshot 보존을 확인했다.
   - `api:praise-test`: 10/10. `api:board-test`: A/B/C 각 14/14, fixture 쓰기 0.
   - 남은 일: 진행표 W20-A, TC-PRAISE-TAG-001 상태, 검사 증거 JSON, 변경 기록의 미실행 표기를 실제 결과로 갱신한 뒤 커밋한다.
+- PR 리뷰 r2 (2026-10-15, Codex read-only, PR #4 `cf54261..4313d2b`) — 판정: **WARNING**. Claude가 세 항목을 모두 직접 확인했다. 코드 경로의 보안·정확성 문제는 없고, 테스트 정리 방식과 기록 불일치를 고쳐야 한다.
+  1. WARNING `scripts/test-local-praise-tag-api.mjs:197,212-213`
+     - 문제: 정리 단계가 A의 `rate_usage` 전체를 지우고 테스트 전 값으로 되돌린다. `lastRates`는 매 요청 뒤 DB 현재값이라, 검사 중 다른 A 요청이 늘린 카운터도 함께 덮어쓴다.
+     - 근거: 다른 로컬 검사(`test-local-account-deletion.mjs:147`)는 합성 계정의 사용량만 지운다.
+     - 기대: 이 검사가 쓴 증가분만 되돌린다(테스트 전후 차이를 scope·window별로 빼기). 또는 합성 probe 계정을 쓰고 그 계정의 사용량만 지운다. 다른 요청과 겹치면 덮어쓰지 말고 실패로 보고한다.
+  2. 참고(P3) `contracts/openapi.json:2738`
+     - 문제: createPraise의 `x-database-rpcs`가 삭제된 `create_personal_praise(uuid,uuid,text,date)`를 가리킨다.
+     - 기대: `(uuid,uuid,text,date,text)`로 고친다.
+  3. 참고(P3) `docs/development/artifact-register.json:155`와 이 브리프 구현 보고
+     - 문제: 칭찬 API 단위 테스트를 19개로 적었다.
+     - 근거: `node --test scripts/praise-api.test.mjs`는 18/18이다.
+     - 기대: 18로 고친다.
+- PR 리뷰 r2 수정 확인 (2026-10-15, Claude) — 판정: **APPROVED**.
+  - WARNING 1: 사용량을 검사 증가분만 scope·window별로 차감하고, 정리는 잠금 아래 한 트랜잭션에서 마지막 확인값과 비교한 뒤 진행한다. 다른 요청이 끼어들면 덮어쓰지 않고 실패로 보고한다.
+  - P3 2·3: 반영을 확인했다.
+  - 재실행: `api:praise-tag-test` 2회 연속 통과(정리 성공, rate_usage 포함 전체 snapshot 보존), unit 120/120, lint·typecheck·산출물 통과.
