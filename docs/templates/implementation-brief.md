@@ -1,0 +1,52 @@
+# 구현 브리프 양식
+
+이 파일은 작성 양식이며 실행 증거가 아니다. 작업 때 `docs/plans/<작업ID>-<slug>.md`로 복사해 작성한다. 작성 규칙은 [Claude·Codex 분업](../development/claude-codex-workflow.md)을 따른다.
+
+```markdown
+# <작업 ID> <제목>
+
+- 상태: DRAFT | APPROVED | IN_REVIEW | DONE
+- 작성: Claude / 날짜:
+- 구현 브랜치: codex/<작업ID>-<slug>
+- 참조: REQ- / POL- / TC- / API operation / 진행표 행
+
+## 목표
+
+이번 작업이 끝나면 관찰 가능한 동작 1~3줄.
+
+## 범위
+
+- 수정할 파일과 영역
+- 새로 만들 파일
+
+## 하지 말 것
+
+- 적용한 마이그레이션 수정, 범위 밖 리팩터링, 의존성 추가 등 이 작업에서 금지할 것
+
+## 구현 단계
+
+1. `<파일>`: <정확한 작업>. 검증: `<명령>`
+2. ...
+
+## 함께 갱신할 기준 파일
+
+- 정책·계약·ERD·TC·진행표·변경 기록 중 해당 파일
+
+## 완료 기준
+
+- [ ] 관찰 가능한 기준
+- [ ] 권한 없음·중복·동시성 등 관련 실패 경로
+
+## 검증 명령
+
+.\scripts\project.ps1 -Task check
+.\scripts\project.ps1 -Task <관련 db:/api: 테스트>
+
+## Codex 구현 보고
+
+(Codex가 작성) 변경 파일, 실행한 명령과 결과, 실행하지 못한 검사와 이유, 브리프와 다르게 한 부분.
+
+## 리뷰 기록
+
+(Claude가 작성) 라운드별 판정 APPROVED | WARNING | BLOCKED와 지적 항목.
+```
