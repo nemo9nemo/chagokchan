@@ -1,0 +1,436 @@
+{
+  "verified_at": "2026-10-15T08:07:55.835Z",
+  "work_item": "W20-A",
+  "status": "database_api_integration_passed_review_approved",
+  "source": {
+    "commit": "cf54261746459e3faa98b397df9f8a4ba33c3c43",
+    "branch": "codex/W20-A-praise-tags",
+    "working_tree_changes_uncommitted": true,
+    "sha256_format": "raw_file_bytes",
+    "sha256": {
+      "src/server/praise-api.mjs": "0c045fb9c64a837030db55f8c764d8fe5c333c6f18ec0cbc38eb64c1c5aebcfe",
+      "scripts/praise-api.test.mjs": "7e0688cda2b5aec17910feb83b362662c7a1f3e3c6818213d6b4119fa670ccdb",
+      "scripts/test-local-praise-tag-api.mjs": "04fefba5b0be056176762db618c47722634fe60bd310abbdb458130dfea4dbb1",
+      "supabase/migrations/20261008025000_praise_tag.sql": "28c096d69466d3af04409390fb54b624bacb8e015bae4f0d94161321096e44c0",
+      "supabase/tests/004_business_rpc_praise.test.sql": "88fe97ff01efce729d4f68d39d8cdbd920c9bb7d6b783420d803022eaa6b7d76",
+      "supabase/tests/011_business_rpc_personal_praise_result.test.sql": "1198944e20fcaf942595fecf61e0965529bfa8aeef2c6837e8e67b40dbcc86c1",
+      "supabase/tests/015_business_rpc_praise_tag.test.sql": "8312f5b7bc44ab164fd626af813404fea089871c84c496c4cba576077019df10",
+      "contracts/openapi.json": "ac863987e2ec4f1b908781fc187e45538eb273a62452ad006fa10ada2d375d70",
+      "policies/app-policy.json": "76fa10967ceacf90706ddb056405b7c9af5a17e25d6330109257fd51443c9e6a",
+      "package.json": "69d7b483d2010b06def7f073367d57a02086e7221f867bb0921863a27df8dee8",
+      "scripts/project.ps1": "760cc51cbe64e95526595ae24461d515bdf580d53b07316bf1e9899cc08c4ae3"
+    }
+  },
+  "environment": {
+    "execution": "Windows PowerShell sandbox",
+    "node": "24.19.0",
+    "pnpm_actual": "11.25.0",
+    "pnpm_required": "11.19.0",
+    "biome": "2.5.15",
+    "typescript": "5.9.3",
+    "docker_version_verified_this_run": false,
+    "database_version_verified_this_run": false
+  },
+  "requirement_ids": [
+    "REQ-003",
+    "REQ-007"
+  ],
+  "policy_ids": [
+    "POL-PRAISE-001",
+    "POL-PRAISE-002"
+  ],
+  "test_case": {
+    "id": "TC-PRAISE-TAG-001",
+    "status": "passed",
+    "reason": "Unit, pgTAP and real local A-session API success paths passed in the Claude review run."
+  },
+  "changed_files": [
+    "policies/app-policy.json",
+    "docs/policies/product-rules.md",
+    "docs/requirements/mvp-requirements.md",
+    "docs/data-erd.md",
+    "docs/diagrams/data-erd-core.mmd",
+    "docs/diagrams/data-erd-connections.mmd",
+    "docs/diagrams/data-erd-operations.mmd",
+    "docs/diagrams/data-erd-full.mmd",
+    "contracts/openapi.json",
+    "supabase/migrations/20261008025000_praise_tag.sql",
+    "src/server/praise-api.mjs",
+    "supabase/tests/004_business_rpc_praise.test.sql",
+    "supabase/tests/011_business_rpc_personal_praise_result.test.sql",
+    "supabase/tests/015_business_rpc_praise_tag.test.sql",
+    "scripts/test-local-praise-tag-api.mjs",
+    "scripts/praise-api.test.mjs",
+    "package.json",
+    "scripts/project.ps1",
+    "docs/quality/test-cases.json",
+    "docs/quality/verification-plan.md",
+    "docs/development/backlog.md",
+    "docs/development/artifact-register.json",
+    "docs/changes/2026-10-15-w20-a-praise-tag.md",
+    "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
+    "docs/plans/W20-A-praise-tags.md"
+  ],
+  "scope_check": {
+    "outside_brief_files_modified": false,
+    "preexisting_untracked_W20_B_brief_untouched": true,
+    "applied_migrations_modified": false,
+    "browser_code_modified": false,
+    "contributor_projection_changed": false,
+    "create_peer_praise_changed": false,
+    "deletion_worker_changed": false,
+    "list_sent_praises_changed": false,
+    "dependency_or_lockfile_changed": false
+  },
+  "checks": [
+    {
+      "order": 1,
+      "command": "pnpm lint",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "order": 2,
+      "command": "pnpm typecheck",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "order": 3,
+      "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs",
+      "exit_code": 0,
+      "status": "passed",
+      "executed": 120,
+      "passed": 120,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "order": 4,
+      "command": "pnpm check:artifacts",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    }
+  ],
+  "direct_checks": [
+    {
+      "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+      "exit_code": 0,
+      "status": "passed",
+      "files": 97
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "node scripts/verify-artifacts.mjs",
+      "exit_code": 0,
+      "status": "passed",
+      "planned_test_cases": 75,
+      "scope": "artifact_structural_consistency_only",
+      "result": {
+        "checked_at": "2026-10-15T08:07:01.283Z",
+        "status": "passed",
+        "runtime": "v24.19.0",
+        "scope": "artifact_structural_consistency_only",
+        "full_openapi_validator_executed": false,
+        "mermaid_render_executed": false,
+        "application_or_database_tests_executed": 0,
+        "planned_test_cases": 75,
+        "checks": [
+          {
+            "id": "json",
+            "description": "JSON parse",
+            "count": 41,
+            "status": "passed"
+          },
+          {
+            "id": "links",
+            "description": "Local Markdown links",
+            "count": 520,
+            "status": "passed"
+          },
+          {
+            "id": "openapi",
+            "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+            "count": 55,
+            "local_references": 703,
+            "status": "passed"
+          },
+          {
+            "id": "traceability",
+            "description": "REQ/NFR/POL/TC/API cross references",
+            "requirements": 17,
+            "policies": 20,
+            "test_cases": 75,
+            "status": "passed"
+          },
+          {
+            "id": "policy_consistency",
+            "description": "Policy/API numeric values, names, restore fields",
+            "status": "passed"
+          },
+          {
+            "id": "projection",
+            "description": "Contributor/sent fields and canceled-body schema constraints",
+            "status": "passed"
+          },
+          {
+            "id": "audience_consistency",
+            "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+            "status": "passed"
+          },
+          {
+            "id": "erd_sources",
+            "description": "Embedded/source consistency, full entities and relationship endpoints",
+            "embedded_blocks": 3,
+            "entities": 21,
+            "relationships": 42,
+            "rendered": false,
+            "status": "passed"
+          },
+          {
+            "id": "registry",
+            "description": "Existing registered artifact paths",
+            "count": 296,
+            "status": "passed"
+          },
+          {
+            "id": "development_consistency",
+            "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+            "work_items": 19,
+            "runtime_guards_executed": false,
+            "status": "passed"
+          }
+        ],
+        "errors": [],
+        "basis": {
+          "inputs": [
+            ".env.example",
+            "AGENTS.md",
+            "contracts/openapi.json",
+            "docs/changes/2026-10-07-adult-audience.md",
+            "docs/contracts/api-contract.md",
+            "docs/data-erd.md",
+            "docs/decisions/ADR-0002-adult-personal-audience.md",
+            "docs/decisions/ADR-0004-local-development-auth.md",
+            "docs/design/user-flows.md",
+            "docs/development/README.md",
+            "docs/development/artifact-register.json",
+            "docs/development/backlog.md",
+            "docs/development/local-development.md",
+            "docs/diagrams/data-erd-connections.mmd",
+            "docs/diagrams/data-erd-core.mmd",
+            "docs/diagrams/data-erd-full.mmd",
+            "docs/diagrams/data-erd-operations.mmd",
+            "docs/policies/access-and-responses.md",
+            "docs/policies/audience-and-signup.md",
+            "docs/policies/data-lifecycle.md",
+            "docs/policies/product-rules.md",
+            "docs/quality/test-cases.json",
+            "docs/requirements/mvp-requirements.md",
+            "policies/app-policy.json",
+            "policies/development-policy.json",
+            "scripts/verify-artifacts.mjs"
+          ],
+          "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+          "sha256": "9e43b78d6d0d0c532a06b911a577128bd59663c9a858f6ff9992d6fc557a3f91"
+        }
+      }
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "status": "passed"
+    }
+  ],
+  "extra_engine_retries": [
+    {
+      "command": "$env:npm_config_engine_strict='false'; pnpm lint",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": "pnpm --config.engine-strict=false lint",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    }
+  ],
+  "brief_task_attempts": [
+    {
+      "command": ".\\scripts\\project.ps1 -Task db:migrate",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task db:test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task db:praise-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task db:praise-result-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task db:deletion-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:praise-tag-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:praise-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:board-test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task build:check",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    }
+  ],
+  "direct_integration_attempts": [
+    {
+      "command": "node scripts/database-task.mjs migrate",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Local database migrate failed. Check the local setup and SQL assertion output; raw command output is withheld."
+    },
+    {
+      "command": "node scripts/database-task.mjs test",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Local database test failed. Check the local setup and SQL assertion output; raw command output is withheld."
+    },
+    {
+      "command": "node scripts/test-local-personal-praise.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "command": "node scripts/test-local-personal-praise-result-rpc.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "command": "node scripts/test-local-account-deletion.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "local_environment: Local database command failed (EPERM)."
+    },
+    {
+      "command": "node scripts/test-local-praise-tag-api.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "command": "node scripts/test-local-personal-praise-api.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Error: The local app exited before the personal-praise API check."
+    },
+    {
+      "command": "node scripts/test-local-board-api.mjs",
+      "exit_code": 1,
+      "status": "not_run",
+      "first_error_line": "Error: Local app exited before board API checks completed."
+    },
+    {
+      "command": "node scripts/app.mjs build-check",
+      "exit_code": 1,
+      "status": "incomplete",
+      "first_error_line": "spawn EPERM",
+      "compilation_succeeded": true,
+      "build_completed": false
+    }
+  ],
+  "database": {
+    "migration": "20261008025000_praise_tag.sql",
+    "migration_applied": false,
+    "pgtap_assertions_planned": 40,
+    "pgtap_assertions_executed": 0,
+    "live_auth_database_assertions_executed": 0,
+    "tag_api_success_scenarios_executed": 0,
+    "product_data_mutated_by_tag_check": false,
+    "fixture_cleanup_verified": false,
+    "reason": "Local Docker command failed (EPERM) before database setup. Existing API scripts failed before the app became ready."
+  },
+  "implementation_notes": [
+    "Null tags are omitted from canonical_input to retain the old createPraise hash.",
+    "New create_praise and wrapper signatures are installed before old wrapper and old create_praise are dropped.",
+    "Only the chagokchan_rpc role receives tag SELECT/INSERT/UPDATE; existing RLS and SECURITY DEFINER boundaries are preserved.",
+    "Tag-only edits participate in no-op detection. Cancellation clears tag in the existing content UPDATE.",
+    "The local A API check uses an isolated disposable local DB, a uniquely keyed synthetic goal, cleanup and product table snapshot comparison."
+  ],
+  "not_run_or_incomplete": [
+    "Actual migration application, pgTAP and DB regression, Auth-issued API success paths and cleanup verification require pnpm 11.19.0 plus accessible Docker outside this sandbox.",
+    "Build compiled but did not complete: TypeScript subprocess spawn EPERM.",
+    "Full OpenAPI validation, Mermaid rendering and real Google/OTP login were not executed.",
+    "Claude implementation review pending. No commits or pushes."
+  ],
+  "brief_deviations": [
+    "No file or feature scope deviations.",
+    "User requested split lint/typecheck/unit/artifact commands instead of pnpm test/check. The exact requested commands were attempted in order, with same installed tools executed directly after pnpm engine errors.",
+    "Database/API/build commands were attempted but their checks remain not_run or incomplete due environment errors."
+  ],
+  "committed": false,
+  "pushed": false,
+  "real_provider_login_verified": false,
+  "claude_review_verification": {
+    "verified_at": "2026-10-15",
+    "executor": "Claude Code outside Codex sandbox",
+    "source": "cf54261 + uncommitted W20-A changes",
+    "environment": {
+      "node": "24.19.0",
+      "docker": "29.1.3",
+      "pnpm_note": "Runtime pnpm is 11.25.0 vs pinned 11.19.0; package.json script bodies were executed directly with the pinned Node."
+    },
+    "results": {
+      "lint": "passed (97 files)",
+      "typecheck": "passed",
+      "unit_tests": "120/120",
+      "artifacts": "passed",
+      "build_check": "passed",
+      "db_migrate": "47 migrations applied incl. 20261008025000",
+      "pgtap": "297/297 (015 praise tag 40/40, 004 26/26, 011 6/6)",
+      "db_praise_test": "passed",
+      "db_praise_result_test": "passed",
+      "db_deletion_test": "passed",
+      "api_praise_tag_test": "passed, 9 scenarios, cleanup passed, fixture snapshot preserved",
+      "api_praise_test": "10/10",
+      "api_board_test": "A/B/C 14/14 each, fixture writes 0"
+    },
+    "real_provider_login_verified": false
+  }
+}

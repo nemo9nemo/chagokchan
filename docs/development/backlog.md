@@ -1,6 +1,6 @@
 # 개발 순서와 진행표
 
-갱신일: 2026-10-09 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
+갱신일: 2026-10-15 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
 
 이 표가 **작업별 상태의 기준**이다. 완료할 때마다 상태·결과·근거를 갱신하고 사용자에게 표를 보여준다. 설계 작업의 DONE은 문서와 해당 정적 검사의 완료다. DB 적용·앱 기능·실제 로그인 검증은 각각의 구현 행에서 따로 완료한다.
 
@@ -34,6 +34,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W15 | 통합·보안·기기·복원·부하 검사 | TODO | W11, W13, W14 | 필수 TC 실행 증거·P0/P1 해결·복원·실측 성능·배포 차단 검사 | 소스 단위 32개·물리 DB 51개 통과. 제품 수락 TC 36개·업무 RPC·실제 로그인·통합/복원/부하 검사 미실행. [검증 계획](../quality/verification-plan.md) |
 | W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
+| W20 | 목업 기반 화면 재설계·칭찬 태그 | IN_PROGRESS | W08~W11 | W20-A 셀프 태그와 W20-B 화면 구현·검증 | **W20-A 완료 2026-10-15.** 셀프 칭찬 태그 DB/API 구현·통합 검증 통과(pgTAP 297/297, 태그 API 실제 세션 통과). W20-B 목업 기반 화면은 TODO. W20 기준을 적용하며 로컬 참고 브랜치 W18/W19와 구분한다. [W20-A 브리프](../plans/W20-A-praise-tags.md) |
 
 W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 진행한다. 이 두 입력 때문에 로컬 DB·기능 개발을 멈추지 않는다. 실제 로그인 없이 개발한다는 요구도 DB 권한·동시성 검사를 미루는 이유로 사용하지 않는다.
 
@@ -116,3 +117,10 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | W11-B1 | 본문 건너뛰기·비동기 상태·조회 오류 재시도 | DONE | W11-A | 키보드 본문 이동, 4개 목록의 busy 상태, 연결 조회 실패·재시도를 읽기 전용 smoke로 검증한다. |
 | W11-B2 | 작은 화면·대비·실기기 읽기 도구 | IN_PROGRESS | W11-B1 | 합성 fixture를 사용하는 320/345/360/375/412/641px 콘텐츠 폭에서 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 확인했다. 가로 넘침이 없고 노출된 앱 조작부가 44px 이상이며 빈 화면도 정상 렌더링됨을 확인했다. 실제 브라우저 확대·VoiceOver/TalkBack·기기 터치 `TC-WEB-006`은 미실행이다. [기존 재배치·대비 검사](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) · [모바일 뷰포트·조작 영역 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) |
 | W11-C | PWA 설치·정적 전용 캐시·오프라인 안내 | IN_PROGRESS | PWA 매니페스트·PNG 아이콘·운영 모드 서비스 워커와 정적 오프라인 문서를 구현했다. immutable 정적 파일만 허용하고 사용자 HTML/RSC/API/초대/query secret/변경 요청은 가로채지 않는 단위 검사 `TC-CACHE-002` 6/6 및 build:check를 통과했다. 홈 문서·API는 no-store, 브라우저는 오프라인 경고와 미확인 기록 안내를 표시한다. A/B 계정 전환 및 실제 기기 오프라인 `TC-CACHE-001`은 미실행으로 남긴다. [검사](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) |
+
+## W20 목업 기반 화면 재설계·칭찬 태그
+
+| ID | 기능 단위 | 상태 | 결과·다음 행동 |
+| --- | --- | --- | --- |
+| W20-A | 셀프 칭찬 고정 태그·DB/API | DONE | 셀프 칭찬 태그(5개 코드, 0~1개, 취소 시 삭제, peer 금지)를 새 마이그레이션·RPC·API·계약에 반영했다. Claude 리뷰 재검증(Docker 29.1.3, Node 24.19.0): 마이그레이션 47개 적용, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-tag-test 9개 시나리오 통과(정리·fixture 보존), api:praise-test 10/10, api:board-test A/B/C 각 14/14, unit 120/120, lint·typecheck·산출물·build:check 통과. 화면 연결은 W20-B. [브리프](../plans/W20-A-praise-tags.md) · [검사 증거](../quality/reports/w20-a-praise-tag-check-2026-10-15.json) |
+| W20-B | 목업 기반 목표 중심 화면 재설계 | TODO | W20-A 후 [화면 브리프](../plans/W20-B-mockup-ui.md)에 따라 진행. 브라우저 코드 변경은 W20-A 범위에서 제외. |

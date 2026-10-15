@@ -25,12 +25,12 @@ function mutationRequest(path, body, extraHeaders = {}) {
   });
 }
 
-test("create praise input maps only the board, idempotency key, message, and date", () => {
+test("create praise input maps only the board, idempotency key, message, date, and tag", () => {
   assert.deepEqual(validateCreatePraiseInput({ message: "기록", occurred_on: "2026-10-07" }, praiseId, boardId), {
-    p_request_key: praiseId, p_board_id: boardId, p_message: "기록", p_occurred_on: "2026-10-07",
+    p_request_key: praiseId, p_board_id: boardId, p_message: "기록", p_occurred_on: "2026-10-07", p_tag: null,
   });
   assert.deepEqual(validateCreatePraiseInput({}, praiseId, boardId), {
-    p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null,
+    p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null, p_tag: null,
   });
 });
 
@@ -52,7 +52,7 @@ test("create praise checks CSRF before invoking the full result RPC and returns 
         shared_title: null, shared_description: null, current_bunch: null }, error: null };
     }
     assert.equal(name, "create_personal_praise");
-    assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null });
+    assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null, p_tag: null });
     return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
   } };
   const blocked = await createPraiseResponse(boardId, new Request("https://chagokchan.test", { method: "POST" }), client, { expectedOrigin: "https://chagokchan.test", secret });
@@ -182,7 +182,7 @@ test("board praise owner projection keeps only owner fields", async () => {
   const row = {
     viewer_role: "owner", id: praiseId, bunch_id: bunchId, source: "self",
     actor: { user_id: actorId, nickname: "나", avatar_key: "grape" }, actor_label: "나",
-    message: "기록", occurred_on: "2026-10-08", recorded_at: now,
+    message: "기록", occurred_on: "2026-10-08", tag: "consistency", recorded_at: now,
     cancelled_at: null, hidden_at: null, excluded_at: null, author_erased_at: null,
   };
   const response = await listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), {
@@ -195,6 +195,7 @@ test("board praise owner projection keeps only owner fields", async () => {
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.items[0].actor_label, "나");
+  assert.equal(body.items[0].tag, "consistency");
   assert.equal("email" in body.items[0], false);
   assert.equal(response.headers.get("cache-control"), "no-store");
 });
@@ -212,5 +213,100 @@ test("board praise contributor projection excludes owner profile and moderation 
   const leaked = await listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), {
     rpc: async () => ({ data: { items: [{ ...row, hidden_at: null }], next_cursor: null }, error: null }),
   });
+  assert.equal(leaked.status, 503);
+});
+
+test("self praise accepts exactly the five fixed tag codes or null and preserves patch omission", () => {
+  for (const tag of [null, "consistency", "courage", "care", "growth", "rest"]) {
+    assert.equal(validateCreatePraiseInput({ tag }, praiseId, boardId).p_tag, tag);
+    assert.deepEqual(validateEditSelfPraiseInput({ tag }, praiseId), { p_praise_id: praiseId, p_patch: { tag } });
+  }
+  assert.deepEqual(validateEditSelfPraiseInput({ message: "유지" }, praiseId).p_patch, { message: "유지" });
+  for (const tag of ["", "unknown", "꾸준함", "CARE", " rest", [], ["care"], {}, 1, true, undefined]) {
+    assert.throws(() => validateCreatePraiseInput({ tag }, praiseId, boardId), { status: 400, code: "INVALID_INPUT" });
+    assert.throws(() => validateEditSelfPraiseInput({ tag }, praiseId), { status: 400, code: "INVALID_INPUT" });
+  }
+});
+
+test("self praise create forwards tag and maps tag idempotency conflicts", async () => {
+  for (const tag of ["care", null]) {
+    const client = { rpc: async (name, input) => {
+      if (name === "get_board") return { data: {
+        viewer_role: "owner", id: boardId, goal_id: actorId, kind: "personal", revision: 1,
+        next_target_count: 20, shared_title: null, shared_description: null, current_bunch: null,
+      }, error: null };
+      assert.equal(name, "create_personal_praise");
+      assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null, p_tag: tag });
+      return { data: null, error: { code: "PT409", message: "idempotency_conflict" } };
+    } };
+    const result = await createPraiseResponse(boardId, mutationRequest("/praises", { tag }, { "Idempotency-Key": praiseId }), client, { expectedOrigin: "https://chagokchan.test", secret });
+    assert.equal(result.status, 409);
+    assert.equal((await result.json()).error.code, "IDEMPOTENCY_CONFLICT");
+  }
+});
+
+test("peer praise rejects non-null tags before writes and accepts explicit null without forwarding it", async () => {
+  let writes = 0;
+  const client = { rpc: async (name, input) => {
+    if (name === "get_board") return { data: {
+      viewer_role: "contributor", id: boardId, kind: "shared", shared_title: "응원판", shared_description: null,
+      owner: { user_id: actorId, nickname: "주인", avatar_key: "grape" }, goal_state: "active", current_bunch: null, can_praise: true,
+    }, error: null };
+    writes++;
+    assert.equal(name, "create_peer_praise");
+    assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null });
+    return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
+  } };
+  for (const tag of ["care", "unknown", false, []]) {
+    const result = await createPraiseResponse(boardId, mutationRequest("/praises", { tag }, { "Idempotency-Key": praiseId }), client, { expectedOrigin: "https://chagokchan.test", secret });
+    assert.equal(result.status, 400);
+    assert.equal((await result.json()).error.code, "INVALID_INPUT");
+  }
+  assert.equal(writes, 0);
+  const result = await createPraiseResponse(boardId, mutationRequest("/praises", { tag: null }, { "Idempotency-Key": praiseId }), client, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(result.status, 201);
+  assert.equal(writes, 1);
+});
+
+test("self praise tag patches reach only edit_self_praise and map database validation errors", async () => {
+  for (const tag of ["growth", null]) {
+    const result = await editSelfPraiseResponse(praiseId, mutationRequest("/praises", { tag }), {
+      rpc: async (name, input) => {
+        assert.equal(name, "edit_self_praise");
+        assert.deepEqual(input, { p_praise_id: praiseId, p_patch: { tag } });
+        return { data: { id: praiseId, replayed: false }, error: null };
+      },
+    }, { expectedOrigin: "https://chagokchan.test", secret });
+    assert.equal(result.status, 200);
+    assert.equal((await result.json()).replayed, false);
+  }
+  const invalid = await editSelfPraiseResponse(praiseId, mutationRequest("/praises", { tag: "care" }), {
+    rpc: async () => ({ data: null, error: { code: "PT400", message: "invalid_praise_patch" } }),
+  }, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(invalid.status, 400);
+  assert.equal((await invalid.json()).error.code, "INVALID_INPUT");
+});
+
+test("owner tag projection rejects missing, unknown, peer, and cancelled tags", async () => {
+  const base = {
+    viewer_role: "owner", id: praiseId, bunch_id: bunchId, source: "self", actor: null, actor_label: "나",
+    message: null, occurred_on: null, tag: null, recorded_at: now,
+    cancelled_at: null, hidden_at: null, excluded_at: null, author_erased_at: null,
+  };
+  const project = (row) => listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), {
+    rpc: async () => ({ data: { items: [row], next_cursor: null }, error: null }),
+  });
+  for (const tag of [null, "consistency", "courage", "care", "growth", "rest"]) {
+    const result = await project({ ...base, tag });
+    assert.equal(result.status, 200);
+    assert.equal((await result.json()).items[0].tag, tag);
+  }
+  const { tag: _tag, ...missing } = base;
+  for (const row of [missing, { ...base, tag: "invalid" }, { ...base, tag: [] }, { ...base, source: "peer", tag: "care" }, { ...base, cancelled_at: now, tag: "care" }]) {
+    assert.equal((await project(row)).status, 503);
+  }
+  assert.equal((await project({ ...base, source: "peer" })).status, 200);
+  assert.equal((await project({ ...base, cancelled_at: now })).status, 200);
+  const leaked = await project({ viewer_role: "contributor", id: praiseId, bunch_id: bunchId, source: "peer", message: null, recorded_at: now, cancelled_at: null, tag: null });
   assert.equal(leaked.status, 503);
 });

@@ -44,7 +44,8 @@
     "api:news-test": "node scripts/test-local-news-api.mjs",
     "api:trash-test": "node scripts/test-local-trash-api.mjs",
     "api:security-test": "node --test scripts/api-security.test.mjs",
-    "db:session-test": "node scripts/test-local-rpc.mjs"
+    "db:session-test": "node scripts/test-local-rpc.mjs",
+    "api:praise-tag-test": "node scripts/test-local-praise-tag-api.mjs"
   },
   "dependencies": {
     "next": "16.4.0",
