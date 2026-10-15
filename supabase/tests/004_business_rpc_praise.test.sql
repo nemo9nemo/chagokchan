@@ -14,13 +14,13 @@ select ok((select not rolcanlogin and not rolsuper and not rolbypassrls and not 
   from pg_roles where rolname='chagokchan_rpc'), 'business RPC owner keeps RLS and has no login or administrative powers');
 select ok(not has_schema_privilege('chagokchan_rpc','public','CREATE') and not has_schema_privilege('chagokchan_rpc','private','CREATE'),
   'temporary ownership-transfer CREATE grants are removed');
-select ok(has_function_privilege('authenticated','public.create_praise(uuid,uuid,text,date)','EXECUTE') and
+select ok(has_function_privilege('authenticated','public.create_praise(uuid,uuid,text,date,text)','EXECUTE') and
   has_function_privilege('authenticated','public.edit_self_praise(uuid,jsonb)','EXECUTE') and
   has_function_privilege('authenticated','public.cancel_praise(uuid)','EXECUTE') and
   has_function_privilege('authenticated','public.update_board(uuid,jsonb)','EXECUTE'),
   'authenticated users can enter the owner RPC boundary');
 select ok((select bool_and(not has_function_privilege(role_name, signature, 'EXECUTE')) from (values
-  ('anon','public.create_praise(uuid,uuid,text,date)'),('service_role','public.create_praise(uuid,uuid,text,date)'),
+  ('anon','public.create_praise(uuid,uuid,text,date,text)'),('service_role','public.create_praise(uuid,uuid,text,date,text)'),
   ('authenticated','private.consume_rate_limit(uuid,text,integer,timestamptz,timestamptz)')) denied(role_name,signature)),
   'anonymous, service and authenticated roles cannot bypass the public RPC boundary or call its helper');
 select ok(not has_table_privilege('anon','public.praises','SELECT,INSERT,UPDATE,DELETE') and

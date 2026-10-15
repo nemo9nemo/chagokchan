@@ -2630,7 +2630,8 @@
           "TC-ACCESS-001",
           "TC-ACCESS-002",
           "TC-ACCESS-003",
-          "TC-API-006"
+          "TC-API-006",
+          "TC-PRAISE-TAG-001"
         ],
         "parameters": [
           {
@@ -2734,7 +2735,7 @@
         "description": "owner 개인판은 개인 칭찬 RPC를, 현재 grant·연결 세대가 유효한 contributor의 공유판은 peer 칭찬 RPC를 호출한다. 작성자·수신자·회차는 DB가 결정하고 결과는 ID·bunch ID·재시도 여부만 반환한다. contributor 공유 작성에는 occurred_on을 받지 않는다. 배포 세션 adapter는 W12 대기.",
         "x-implementation-status": "local_fixture_role_scoped_create_api_implemented_deployed_session_pending",
         "x-database-rpcs": [
-          "create_personal_praise(uuid,uuid,text,date)",
+          "create_personal_praise(uuid,uuid,text,date,text)",
           "create_peer_praise(uuid,uuid,text)"
         ],
         "x-requirements": [
@@ -2760,7 +2761,8 @@
           "TC-DB-SHARED-004",
           "TC-TIME-001",
           "TC-ACCESS-001",
-          "TC-API-006"
+          "TC-API-006",
+          "TC-PRAISE-TAG-001"
         ],
         "parameters": [
           {
@@ -3196,7 +3198,8 @@
           "TC-PRAISE-001",
           "TC-PRAISE-002",
           "TC-TIME-001",
-          "TC-API-006"
+          "TC-API-006",
+          "TC-PRAISE-TAG-001"
         ],
         "parameters": [
           {
@@ -6157,9 +6160,20 @@
                 "type": "null"
               }
             ]
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PraiseTag"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
           }
         },
-        "description": "occurred_on은 personal 판의 주인만 허용. 빈 본문은 NULL 정규화."
+        "description": "occurred_on은 personal 판의 주인만 허용. 빈 본문은 NULL 정규화. tag는 셀프 전용이며 생략/null은 태그 없음, peer는 non-null tag를 거절한다."
       },
       "EditSelfPraise": {
         "type": "object",
@@ -6186,10 +6200,21 @@
                 "type": "null"
               }
             ]
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PraiseTag"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
           }
         },
         "minProperties": 1,
-        "description": "본인 self 기록만, 미취소·목표 미삭제. peer 문구 편집 미제공."
+        "description": "본인 self 기록만, 미취소·목표 미삭제. peer 문구 편집 미제공. tag 키 생략은 유지, null은 삭제, 문자열은 고정 목록에서 1개만 허용한다."
       },
       "PraiseOwner": {
         "type": "object",
@@ -6295,6 +6320,17 @@
                 "type": "null"
               }
             ]
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PraiseTag"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
           }
         },
         "required": [
@@ -6310,7 +6346,8 @@
           "cancelled_at",
           "hidden_at",
           "excluded_at",
-          "author_erased_at"
+          "author_erased_at",
+          "tag"
         ],
         "allOf": [
           {
@@ -6330,6 +6367,9 @@
                   "type": "null"
                 },
                 "occurred_on": {
+                  "type": "null"
+                },
+                "tag": {
                   "type": "null"
                 }
               }
@@ -6355,6 +6395,25 @@
                   "type": "null"
                 },
                 "occurred_on": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "source": {
+                  "const": "peer"
+                }
+              },
+              "required": [
+                "source"
+              ]
+            },
+            "then": {
+              "properties": {
+                "tag": {
                   "type": "null"
                 }
               }
@@ -7709,6 +7768,17 @@
           "adult_confirmed",
           "registration_policy_version"
         ]
+      },
+      "PraiseTag": {
+        "type": "string",
+        "enum": [
+          "consistency",
+          "courage",
+          "care",
+          "growth",
+          "rest"
+        ],
+        "description": "셀프 칭찬 전용 고정 태그. 꾸준함·용기·배려·성장·쉼 중 0~1개."
       }
     },
     "responses": {

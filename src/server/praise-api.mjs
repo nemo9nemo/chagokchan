@@ -4,6 +4,11 @@ import { projectBoardView } from "./board-api.mjs";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const PRAISE_TAGS = ["consistency", "courage", "care", "growth", "rest"];
+
+function validTag(value) {
+  return value === null || PRAISE_TAGS.includes(value);
+}
 
 function exactObject(value, fields) {
   return value !== null && typeof value === "object" && !Array.isArray(value) &&
@@ -23,24 +28,26 @@ function validDate(value) {
 function validOptionalPraiseFields(value) {
   return (!Object.hasOwn(value, "message") || value.message === null ||
       (typeof value.message === "string" && [...value.message].length <= 1000)) &&
-    (!Object.hasOwn(value, "occurred_on") || value.occurred_on === null || validDate(value.occurred_on));
+    (!Object.hasOwn(value, "occurred_on") || value.occurred_on === null || validDate(value.occurred_on)) &&
+    (!Object.hasOwn(value, "tag") || validTag(value.tag));
 }
 
 export function validateCreatePraiseInput(value, idempotencyKey, boardId) {
   if (typeof boardId !== "string" || !UUID.test(boardId) ||
-      !exactObject(value, ["message", "occurred_on"]) || !validOptionalPraiseFields(value) ||
+      !exactObject(value, ["message", "occurred_on", "tag"]) || !validOptionalPraiseFields(value) ||
       typeof idempotencyKey !== "string" || !UUID.test(idempotencyKey)) invalidInput();
   return {
     p_request_key: idempotencyKey,
     p_board_id: boardId,
     p_message: value.message ?? null,
     p_occurred_on: value.occurred_on ?? null,
+    p_tag: value.tag ?? null,
   };
 }
 
 export function validateEditSelfPraiseInput(value, praiseId) {
   if (typeof praiseId !== "string" || !UUID.test(praiseId) ||
-      !exactObject(value, ["message", "occurred_on"]) || Object.keys(value).length < 1 ||
+      !exactObject(value, ["message", "occurred_on", "tag"]) || Object.keys(value).length < 1 ||
       !validOptionalPraiseFields(value)) invalidInput();
   return { p_praise_id: praiseId, p_patch: value };
 }
@@ -81,7 +88,7 @@ function isTimestampOrNull(value) {
 }
 
 function projectOwnerPraise(value) {
-  const fields = ["viewer_role", "id", "bunch_id", "source", "actor", "actor_label", "message", "occurred_on", "recorded_at", "cancelled_at", "hidden_at", "excluded_at", "author_erased_at"];
+  const fields = ["viewer_role", "id", "bunch_id", "source", "actor", "actor_label", "message", "occurred_on", "tag", "recorded_at", "cancelled_at", "hidden_at", "excluded_at", "author_erased_at"];
   const actorFields = ["user_id", "nickname", "avatar_key"];
   if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || value.viewer_role !== "owner" ||
       !UUID.test(value.id) || !UUID.test(value.bunch_id) || !["self", "peer"].includes(value.source) ||
@@ -91,9 +98,10 @@ function projectOwnerPraise(value) {
       typeof value.actor_label !== "string" || [...value.actor_label].length > 80 ||
       !(value.message === null || (typeof value.message === "string" && [...value.message].length <= 1000)) ||
       !(value.occurred_on === null || validDate(value.occurred_on)) || !isTimestamp(value.recorded_at) ||
+      !validTag(value.tag) || (value.source === "peer" && value.tag !== null) ||
       !isTimestampOrNull(value.cancelled_at) || !isTimestampOrNull(value.hidden_at) ||
       !isTimestampOrNull(value.excluded_at) || !isTimestampOrNull(value.author_erased_at) ||
-      (value.cancelled_at !== null && (value.message !== null || value.occurred_on !== null)) ||
+      (value.cancelled_at !== null && (value.message !== null || value.occurred_on !== null || value.tag !== null)) ||
       (value.author_erased_at !== null && (value.actor !== null || value.message !== null || value.occurred_on !== null))) {
     throw new Error("Praise response did not match its owner allowlist.");
   }
@@ -170,7 +178,7 @@ export async function createPraiseResponse(boardId, request, client, { expectedO
       rpc = "create_personal_praise";
       input = validateCreatePraiseInput(body, requestKey, boardId);
     } else if (board.viewer_role === "contributor" && board.kind === "shared") {
-      if (!exactObject(body, ["message"]) ||
+      if (!exactObject(body, ["message", "tag"]) || (Object.hasOwn(body, "tag") && body.tag !== null) ||
           (Object.hasOwn(body, "message") && body.message !== null &&
             (typeof body.message !== "string" || [...body.message].length > 1000))) invalidInput();
       rpc = "create_peer_praise";

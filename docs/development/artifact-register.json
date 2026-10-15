@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-13",
-  "current_stage": "S06_w11_local_scope_done_device_acceptance_moved_to_w15",
-  "next_stage": "S06_w10_ui09_news_sent_screen",
+  "updated_on": "2026-10-15",
+  "current_stage": "S06_w20_a_praise_tags_verified_pr_r2_fixed_w20_b_mockup_ui_pending",
+  "next_stage": "S06_w20_b_mockup_ui",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w08_a_b1_b2_c_d_w09_a_b_c_w10_a_b_w11_a_b_c_done_device_acceptance_tc_web_006_tc_cache_001_moved_to_w15_ui09_screen_pending"
+      "status": "in_progress_w20_a_praise_tags_verified_w20_b_ui_todo_w11_device_acceptance_moved_to_w15"
     },
     {
       "id": "S07",
@@ -82,12 +82,12 @@
   },
   "verification": {
     "artifact_check_status": "passed",
-    "artifact_report": "docs/quality/reports/artifacts-check-2026-10-08-development.json",
+    "artifact_report": "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 74,
-    "application_tests_executed": 115,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units",
+    "planned_test_cases": 75,
+    "application_tests_executed": 120,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
@@ -148,7 +148,28 @@
     "w11_a_report": "docs/quality/reports/w11-a-theme-switch-check-2026-10-08.json",
     "w11_b1_report": "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
     "w11_b2_report": "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
-    "w16_c_report": "docs/quality/reports/w16-c-ci-check-2026-10-08.json"
+    "w16_c_report": "docs/quality/reports/w16-c-ci-check-2026-10-08.json",
+    "w20_a": {
+      "status": "database_api_integration_and_review_passed_pr_r2_fixed",
+      "report": "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
+      "praise_api_unit_tests_passed": 18,
+      "all_unit_tests_passed": 120,
+      "planned_praise_tag_database_assertions": 40,
+      "database_migration_applied": true,
+      "database_api_integration_executed": true,
+      "implementation_review": "approved_2026-10-15_pr_r2_fixes_verified",
+      "pgtap_tests_passed": 297,
+      "praise_tag_database_assertions_passed": 40,
+      "praise_tag_api_scenarios_passed": 9,
+      "pr_r2": {
+        "source_commit": "4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb",
+        "working_tree_changes_uncommitted": true,
+        "sandbox_unit_tests_passed": 120,
+        "quota_guard_in_memory_checks_passed": 17,
+        "praise_tag_api_reverification": "passed_twice_cleanup_and_full_snapshot_preserved",
+        "review": "approved"
+      }
+    }
   },
   "artifacts": [
     {
@@ -592,6 +613,19 @@
       "status": "copy_hashes_verified",
       "paths": [
         "docs/quality/reports/workspace-transfer-2026-10-08.json"
+      ]
+    },
+    {
+      "id": "ART-022",
+      "title": "W20-A 셀프 칭찬 태그 구현·검사",
+      "status": "database_api_integration_verified_review_approved",
+      "paths": [
+        "docs/plans/W20-A-praise-tags.md",
+        "supabase/migrations/20261008025000_praise_tag.sql",
+        "supabase/tests/015_business_rpc_praise_tag.test.sql",
+        "scripts/test-local-praise-tag-api.mjs",
+        "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
+        "docs/changes/2026-10-15-w20-a-praise-tag.md"
       ]
     }
   ],

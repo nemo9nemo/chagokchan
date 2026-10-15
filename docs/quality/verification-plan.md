@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-09
 
-[테스트 케이스](test-cases.json)에 74개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W11-C 기술 TC 35개는 각 범위별 근거에 따라 통과 처리했다. W11-B2 후속 브라우저 검사에서 합성 fixture를 사용하는 320/345/360/375/412/641px 콘텐츠 폭의 다섯 화면(30/30)에서 레이아웃·빈 상태·44px 이상 조작 영역을 확인했다. 실제 브라우저 확대·iOS/Android 스크린리더·터치 통합 TC-WEB-006과 A/B 계정 전환·실제 기기 오프라인 PWA TC-CACHE-001은 미실행이며, 2026-10-13 사용자 결정으로 W13 이후 배포 환경에서 실행하도록 W15로 이관했다. W11-C 서비스 워커 캐시 경계 단위 검사 TC-CACHE-002는 통과했다. [모바일 에뮬레이션 검사](reports/w11-b2-mobile-emulation-check-2026-10-09.json). 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
+[테스트 케이스](test-cases.json)에 75개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W11-C 기술 TC 35개는 각 범위별 근거에 따라 통과 처리했다. W11-B2 후속 브라우저 검사에서 합성 fixture를 사용하는 320/345/360/375/412/641px 콘텐츠 폭의 다섯 화면(30/30)에서 레이아웃·빈 상태·44px 이상 조작 영역을 확인했다. 실제 브라우저 확대·iOS/Android 스크린리더·터치 통합 TC-WEB-006과 A/B 계정 전환·실제 기기 오프라인 PWA TC-CACHE-001은 미실행이며, 2026-10-13 사용자 결정으로 W13 이후 배포 환경에서 실행하도록 W15로 이관했다. W11-C 서비스 워커 캐시 경계 단위 검사 TC-CACHE-002는 통과했다. [모바일 에뮬레이션 검사](reports/w11-b2-mobile-emulation-check-2026-10-09.json). 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
 ## 검증 계층
 
@@ -188,3 +188,8 @@ UI06 연결 센터에서 일회 초대 발급/미리보기, 요청 수락·거�
 로컬 fixture A 화면에서 첫 Tab이 “본문으로 건너뛰기” 링크에 초점을 두고 Enter 뒤 `#workspace-content` 영역으로 포커스를 옮겼다. `client-app.tsx`의 목표 목록·연결·공유판·휴지통 root 네 곳에서 `aria-busy` 속성을 확인했다. 초기 연결 화면의 요청 로딩 문구가 브라우저 접근성 트리에 나타났다.
 
 Next 화면 프로세스는 그대로 두고 로컬 Supabase API 게이트웨이만 중지하자 연결 GET 요청에 401/503 오류가 발생했고 경고 문구와 다시 불러오기 버튼이 표시됐다. 게이트웨이를 다시 시작하고 그 버튼을 누른 뒤 연결·초대·요청 2종·차단의 GET 다섯 개가 모두 200으로 복구되고 경고가 사라졌다. 서버 로그에 POST/PUT/DELETE는 없고 fixture 변경도 없다. 전체 `scripts/project.ps1 -Task check`는 Biome 90 files·typecheck·unit 109/109·artifact JSON 36·링크 473·traceability 71을 통과했고 `scripts/project.ps1 -Task build:check`는 36 route entry로 성공했다. 실제 기기 스크린리더, 대비 측정, 작은 화면 suite는 수행하지 않았다. [W11-B1 증거](reports/w11-b1-accessibility-recovery-check-2026-10-08.json)
+
+
+## W20-A 셀프 칭찬 태그
+
+TC-PRAISE-TAG-001은 API 단위·pgTAP·실제 로컬 A 세션을 함께 검증하며 통과했다. Codex 샌드박스에서는 pnpm 고정 버전 불일치와 EPERM으로 DB·API·빌드를 실행하지 못했다. Claude 리뷰 재검증(Docker 29.1.3, Node 24.19.0): 마이그레이션 47개 적용, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-tag-test 9개 시나리오 통과(정리·fixture 보존), api:praise-test 10/10, api:board-test A/B/C 각 14/14, unit 120/120, lint·typecheck·산출물·build:check 통과. 실제 Google/OTP 로그인 검증은 포함하지 않는다. [W20-A 검사 증거](reports/w20-a-praise-tag-check-2026-10-15.json)

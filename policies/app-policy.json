@@ -1,7 +1,7 @@
 {
   "policy_version": "0.2.0",
   "effective_for": "mvp_development_baseline",
-  "updated_on": "2026-10-07",
+  "updated_on": "2026-10-15",
   "audience": {
     "mode": "adult_personal_beta",
     "initial_market": "KR",
@@ -69,7 +69,33 @@
     "hide_reversible": true,
     "exclude_affects_count": true,
     "exclude_reversible_in_mvp": false,
-    "author_erasure_preserves_valid_event": true
+    "author_erasure_preserves_valid_event": true,
+    "tags_enabled_for": [
+      "self"
+    ],
+    "tags_per_praise_max": 1,
+    "tag_catalog": [
+      {
+        "code": "consistency",
+        "label": "꾸준함"
+      },
+      {
+        "code": "courage",
+        "label": "용기"
+      },
+      {
+        "code": "care",
+        "label": "배려"
+      },
+      {
+        "code": "growth",
+        "label": "성장"
+      },
+      {
+        "code": "rest",
+        "label": "쉼"
+      }
+    ]
   },
   "time": {
     "storage_timezone": "UTC",

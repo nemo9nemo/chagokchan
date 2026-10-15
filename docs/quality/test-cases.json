@@ -1618,7 +1618,30 @@
       "expected": "실제 플랫폼 읽기 도구가 콘텐츠·진행·오류 상태를 구분해 안내하고 필요한 조작을 화면 밖으로 밀지 않는다. 제품 쓰기는 계획된 fixture 동작만 수행한다.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-PRAISE-TAG-001",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-PRAISE-002"
+      ],
+      "level": "unit_database_integration",
+      "title": "셀프 칭찬 고정 태그·멱등성·최소 응답",
+      "steps": [
+        "셀프 칭찬에 5개 코드/null을 생성·수정하고 생략 유지와 null 삭제를 확인",
+        "같은 키·같은 태그 replay, 다른 태그 충돌, 태그 없는 요청의 기존 canonical hash를 확인",
+        "잘못된 코드·peer 태그·취소 후 태그를 DB/API에서 검증",
+        "owner 목록의 tag와 contributor의 키 부재, 열 권한과 옛 함수 제거, 개수·완성 불변을 확인",
+        "실제 로컬 A 세션 API로 합성 목표에서 생성→조회→수정→취소 후 fixture snapshot을 복원"
+      ],
+      "expected": "self만 태그 0~1개, 입력 오류 PT400/HTTP 400, 멱등 불일치 PT409/HTTP 409. 취소 후 null. contributor 태그 비노출. 기존 무태그 해시·집계·권한 유지.",
+      "status": "passed",
+      "evidence": "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json"
     }
   ],
-  "updated_on": "2026-10-08"
+  "updated_on": "2026-10-15"
 }
