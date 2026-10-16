@@ -1,0 +1,377 @@
+{
+  "work_item": "W09-D",
+  "date": "2026-10-16",
+  "status": "database_api_integration_passed_review_approved",
+  "source": {
+    "base_commit": "9d68e2f51f97156c56070d3c897c4048f9b1e49a",
+    "branch": "codex/W09-D-shared-count-cancel-fix",
+    "working_tree_changes_uncommitted": true,
+    "sha256_format": "raw_file_bytes",
+    "sha256": {
+      "package.json": "c6f6db37052dfbd58795c1ada44bb401fae450dd7d8e47678026fc72a6c402e3",
+      "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql": "e79d4092e367ac20290f00dc4fe00e2ac76bf5ddf0cb910efe3c8a9463b89768",
+      "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql": "08048393d3bb55863797aff8bfc347b06b5e50a7f22fab8b5f3a10b0274cc179"
+    }
+  },
+  "environment": {
+    "execution": "Windows PowerShell workspace-write sandbox",
+    "node": "24.19.0",
+    "biome": "2.5.15",
+    "typescript": "5.9.3",
+    "docker_engine_verified": false,
+    "database_version_verified": false
+  },
+  "requirement_ids": [
+    "REQ-004",
+    "REQ-007",
+    "REQ-009",
+    "REQ-012"
+  ],
+  "policy_ids": [
+    "POL-CYCLE-001",
+    "POL-PRAISE-001",
+    "POL-PRAISE-002"
+  ],
+  "test_case_ids": [
+    "TC-SHARED-COUNT-001",
+    "TC-CYCLE-001",
+    "TC-CYCLE-002",
+    "TC-PRAISE-002"
+  ],
+  "changed_files": [
+    "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
+    "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql",
+    "docs/decisions/ADR-0006-shared-cycle-counter-role.md",
+    "docs/policies/product-rules.md",
+    "docs/quality/test-cases.json",
+    "docs/quality/verification-plan.md",
+    "docs/development/backlog.md",
+    "docs/development/artifact-register.json",
+    "docs/deployment-and-git.md",
+    "docs/changes/2026-10-16-w09-d-shared-count-cancel.md",
+    "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
+    "docs/plans/W09-D-shared-count-cancel-fix.md"
+  ],
+  "commands": [
+    {
+      "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+      "status": "passed",
+      "exit_code": 0,
+      "checked_files": 102
+    },
+    {
+      "command": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+      "status": "passed",
+      "exit_code": 0
+    },
+    {
+      "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "executed": 126,
+      "passed": 126,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node scripts/verify-artifacts.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "planned_test_cases": 77,
+      "json_files": 43,
+      "local_markdown_links": 545,
+      "basis_sha256": "9a26b6d8d7a3380ba045d7533bc2911bdf0b7fcedee37358616a8fe944c0da64"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "exit_code": 0
+    },
+    {
+      "command": "docker version --format '{{.Server.Version}}'",
+      "status": "not_run_engine_unreachable",
+      "attempt_exit_code": 1,
+      "first_error_line": "permission denied while trying to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine"
+    },
+    {
+      "task": "db:migrate",
+      "command": "node scripts/database-task.mjs migrate",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database migrate failed. Check the local setup and SQL assertion output; raw command output is withheld."
+    },
+    {
+      "task": "db:test",
+      "command": "node scripts/database-task.mjs test",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database test failed. Check the local setup and SQL assertion output; raw command output is withheld."
+    },
+    {
+      "task": "db:shared-test",
+      "command": "node scripts/test-local-shared-board-rpc.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "local_environment: Local database command failed (EPERM)."
+    },
+    {
+      "task": "db:praise-test",
+      "command": "node scripts/test-local-personal-praise.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "task": "db:praise-result-test",
+      "command": "node scripts/test-local-personal-praise-result-rpc.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "task": "db:connection-test",
+      "command": "node scripts/test-local-connection-rpc.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database command failed (EPERM)."
+    },
+    {
+      "task": "db:deletion-test",
+      "command": "node scripts/test-local-account-deletion.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "local_environment: Local database command failed (EPERM)."
+    },
+    {
+      "task": "db:lifecycle-test",
+      "command": "node scripts/test-local-lifecycle-rpc.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "local_environment: Local database command failed (EPERM)."
+    },
+    {
+      "task": "api:board-test",
+      "command": "node scripts/test-local-board-api.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Error: Local app exited before board API checks completed."
+    },
+    {
+      "task": "api:praise-tag-test",
+      "command": "node scripts/test-local-praise-tag-api.mjs",
+      "status": "not_run_environment_precondition_failed",
+      "attempt_exit_code": 1,
+      "business_assertions_executed": 0,
+      "first_error_line": "Local database command failed (EPERM)."
+    }
+  ],
+  "static_source_checks": {
+    "peer_rpc_compared_to": "20261008022500_shared_praise_cycle_column_fix.sql",
+    "peer_rpc_changes": "Only aggregate/update block replaced by recount helper; completion is based on its result.",
+    "new_function_definitions": [
+      "private.lock_praise_cycle",
+      "private.recount_bunch",
+      "public.create_peer_praise",
+      "public.cancel_praise"
+    ],
+    "new_rls_policies": 0,
+    "pgtap_planned": 39,
+    "pgtap_assertions_in_source": 39
+  },
+  "verification": {
+    "migration_applied": false,
+    "new_pgtap_executed": 0,
+    "new_pgtap_passed": 0,
+    "db_api_business_regressions_executed": 0,
+    "real_concurrency_tests_executed": 0,
+    "real_google_otp_login_tests_executed": 0,
+    "tc_shared_count_status": "not_run",
+    "work_status": "IN_PROGRESS",
+    "parent_w09_status": "IN_PROGRESS",
+    "existing_history_is_not_current_sql_evidence": true,
+    "artifact_structural_consistency": "passed"
+  },
+  "scope": {
+    "outside_scope_files_changed": [],
+    "w10_d_sha256_before": "76950d41b3cb269fe5b7023a9d2835dc58c90c004357c567f4bc4a6b1a8051e6",
+    "w10_d_sha256_after": "76950d41b3cb269fe5b7023a9d2835dc58c90c004357c567f4bc4a6b1a8051e6",
+    "w10_d_unchanged": true,
+    "existing_migrations_changed": false,
+    "committed": false,
+    "pushed": false
+  },
+  "brief_differences": [
+    "Per the user's current instruction, run check components directly and add --test-isolation=none; DB/API attempts use the exact node script bodies from package.json rather than the project.ps1/pnpm wrapper.",
+    "docs/data-erd.md has no database-role/privilege inventory; the brief's conditional ERD update does not apply.",
+    "No existing tests expected praise_not_author/PT403 from cancel_praise; no existing tests needed changes."
+  ],
+  "next_steps": [
+    "Claude: apply migration and run complete pgTAP and specified DB/API regressions outside the sandbox.",
+    "Claude: verify concurrency/lock ordering and review implementation; no commit was requested."
+  ],
+  "latest_revision": "r2",
+  "revision_reports": [
+    {
+      "round": "r2",
+      "date": "2026-10-16",
+      "status": "fixes_sandbox_checked_database_and_claude_rereview_pending",
+      "review_findings": [
+        "BLOCKED: set local role chagokchan_counter before each helper revoke/grant, then reset role, following 20261008020700 and 20261008023300.",
+        "WARNING: reject counter membership in other roles and API-role membership in counter; allow Supabase's postgres membership with a documented platform-default exception.",
+        "BLOCKED: cast both sides of all four jsonb pgTAP comparisons to text; preserve 39 planned assertions."
+      ],
+      "source": {
+        "base_commit": "9d68e2f51f97156c56070d3c897c4048f9b1e49a",
+        "branch": "codex/W09-D-shared-count-cancel-fix",
+        "working_tree_changes_uncommitted": true,
+        "sha256_format": "raw_file_bytes",
+        "sha256": {
+          "package.json": "c6f6db37052dfbd58795c1ada44bb401fae450dd7d8e47678026fc72a6c402e3",
+          "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql": "e0390b268996adfae9a467870070f47991e762e05ab978788f6558c494260001",
+          "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql": "0cd6e4695e8d3941c00efd0aa4f29fe21683a0d9d9bc3a44ade1de097ee9099c"
+        }
+      },
+      "environment": {
+        "execution": "Windows PowerShell workspace-write sandbox",
+        "node": "24.19.0",
+        "biome": "2.5.15",
+        "typescript": "5.9.3"
+      },
+      "changed_files": [
+        "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
+        "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql",
+        "docs/decisions/ADR-0006-shared-cycle-counter-role.md",
+        "docs/development/backlog.md",
+        "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
+        "docs/plans/W09-D-shared-count-cancel-fix.md"
+      ],
+      "commands": [
+        {
+          "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+          "status": "passed",
+          "exit_code": 0,
+          "checked_files": 102
+        },
+        {
+          "command": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+          "status": "passed",
+          "exit_code": 0
+        },
+        {
+          "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs",
+          "status": "passed",
+          "exit_code": 0,
+          "package_test_files": 13,
+          "executed": 126,
+          "passed": 126,
+          "failed": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        {
+          "command": "node scripts/verify-artifacts.mjs",
+          "status": "passed",
+          "exit_code": 0,
+          "planned_test_cases": 77,
+          "json_files": 43,
+          "local_markdown_links": 545,
+          "basis_sha256": "76af976e71ad9d8bf18dc9f4eac0dfa0a838417212071f6dbcddfc4cf69e5cc7"
+        },
+        {
+          "command": "git diff --check",
+          "status": "passed",
+          "exit_code": 0
+        }
+      ],
+      "static_source_checks": {
+        "owner_role_acl_blocks": 2,
+        "pgtap_planned": 39,
+        "pgtap_assertions_in_source": 39,
+        "jsonb_comparisons_cast_to_text": 4,
+        "note": "Source inspection only; no SQL execution or pgTAP runtime validation."
+      },
+      "not_run": {
+        "tasks": [
+          "db:migrate",
+          "db:test",
+          "db:shared-test",
+          "db:praise-test",
+          "db:praise-result-test",
+          "db:connection-test",
+          "db:deletion-test",
+          "db:lifecycle-test",
+          "api:board-test",
+          "api:praise-tag-test"
+        ],
+        "status": "not_run_sandbox_unavailable",
+        "attempted_this_revision": false,
+        "reason": "The user instructed that DB checks are unavailable in the sandbox; DB/API checks are left for Claude outside the sandbox.",
+        "migration_applied": false,
+        "new_pgtap_executed": 0,
+        "db_api_business_regressions_executed": 0,
+        "real_concurrency_tests_executed": 0
+      },
+      "verification": {
+        "work_status": "IN_PROGRESS",
+        "parent_w09_status": "IN_PROGRESS",
+        "implementation_review_status": "r1_BLOCKED_r2_rereview_pending",
+        "review_approval_claimed": false
+      },
+      "scope": {
+        "existing_committed_migrations_changed": false,
+        "outside_scope_files_changed": [],
+        "committed": false,
+        "pushed": false
+      },
+      "initial_implementation_evidence_preserved": true,
+      "next_steps": [
+        "Claude: reset the disposable local DB, reseed, then apply the corrected uncommitted 20261008025100 migration as specified by implementation review r1.",
+        "Claude: execute all 39 pgTAP 016 assertions, full DB/API regressions, and implementation rereview."
+      ]
+    }
+  ],
+  "claude_review_verification": {
+    "verified_at": "2026-10-16",
+    "docker": "29.1.3",
+    "node": "24.19.0",
+    "local_database_reset": "supabase db reset --local --no-seed, restarted with loopback-only binding, reseeded; previous fixture manifest backed up outside the repo",
+    "migrations_applied": 48,
+    "helper_acl": {
+      "lock_praise_cycle": "chagokchan_counter, chagokchan_rpc",
+      "recount_bunch": "chagokchan_counter, chagokchan_rpc",
+      "authenticated_execute": false
+    },
+    "pgtap": "336/336 (016 39/39)",
+    "regressions_passed": [
+      "db:shared-test",
+      "db:praise-test",
+      "db:praise-result-test",
+      "db:connection-test",
+      "db:lifecycle-test",
+      "db:deletion-test",
+      "api:board-test (A/B/C 14/14)",
+      "api:praise-tag-test"
+    ],
+    "flaky_note": "db:praise-test and db:deletion-test failed once immediately after the reset while the Auth container was starting; both passed on every rerun including a full ordered rerun.",
+    "static": {
+      "lint": "passed",
+      "typecheck": "passed",
+      "unit_tests": "126/126",
+      "build_check": "passed"
+    },
+    "real_provider_login_verified": false
+  },
+  "test_case": {
+    "id": "TC-SHARED-COUNT-001",
+    "status": "passed"
+  }
+}
