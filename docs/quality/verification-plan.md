@@ -1,6 +1,12 @@
 # 검증 계획과 증거 기준
 
-버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행 / 갱신일: 2026-10-09
+버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W20-A·W20-B 구현·리뷰 완료(TC-UI-MOCKUP-001 전체 수락은 W15) / 갱신일: 2026-10-16
+
+W20-B는 [화면 브리프](../plans/W20-B-mockup-ui.md)의 REQ-002·003·004·011/NFR-002 및 TC-UI-003·TC-UX-001·TC-WEB-003·004·005, 신규 TC-UI-MOCKUP-001을 추적한다. 총 계획 시나리오는 76개이며 아래 75개 설명은 W20-B 이전 기준이다. 기존 W11 통과 기록은 당시 소스의 근거로 보존하고 재설계 수락 완료로 재사용하지 않는다.
+
+샌드박스에서 pnpm lint → pnpm typecheck → package.json 목록 전체의 node --test --test-isolation=none → pnpm check:artifacts 순서로 시도한다. pnpm 11.25.0/고정 11.19.0 불일치 시 node_modules/.bin의 biome·tsc와 node scripts/verify-artifacts.mjs를 직접 실행한다. 포도 순수 배치의 지정 목표 1/15/20/100·1~100 전체의 폭 경계 검사 포함 126개 unit은 통과했다. 브리프의 project.ps1 check/build:check/api:praise-test/api:goal-test/api:connection-test도 시도했으나 pnpm 버전 차단으로 실행되지 않았다. Node 직접 실행은 빌드의 TypeScript 단계 spawn EPERM, API 검사 전 로컬 앱 종료로 완료하지 못했다. Docker 엔진은 named pipe 권한 거부로 접속하지 못했다.
+
+TC-UI-MOCKUP-001은 not_run이다. 2026-10-16 Claude 리뷰에서 일부 단계만 실행했다: 판 화면 320/360/393/768/1280px 무넘침·44px·포도 테마 대비, 정원 테마 393px 대비, 저장 실패 시 입력 보존과 같은 요청 키·본문 재전송. 성공 후 pop 1회·replay 미재생 브라우저 확인, reduced-motion, B02 생성·1/15/100알, 초대 생성·복사·폐기·secret 제거, UI06/UI08/UI10 폭 측정은 W15 제품 수락에서 실행한다. [검사 증거](reports/w20-b-mockup-ui-check-2026-10-15.json). 실기기 TC-WEB-006/TC-CACHE-001도 W15에 유지한다.
 
 [테스트 케이스](test-cases.json)에 75개 시나리오를 입력·기대 결과·요구·정책 ID로 기록했다. 제품 수락 시나리오 36개는 아직 미실행이며 W06~W11-C 기술 TC 35개는 각 범위별 근거에 따라 통과 처리했다. W11-B2 후속 브라우저 검사에서 합성 fixture를 사용하는 320/345/360/375/412/641px 콘텐츠 폭의 다섯 화면(30/30)에서 레이아웃·빈 상태·44px 이상 조작 영역을 확인했다. 실제 브라우저 확대·iOS/Android 스크린리더·터치 통합 TC-WEB-006과 A/B 계정 전환·실제 기기 오프라인 PWA TC-CACHE-001은 미실행이며, 2026-10-13 사용자 결정으로 W13 이후 배포 환경에서 실행하도록 W15로 이관했다. W11-C 서비스 워커 캐시 경계 단위 검사 TC-CACHE-002는 통과했다. [모바일 에뮬레이션 검사](reports/w11-b2-mobile-emulation-check-2026-10-09.json). 정책·문서 검사 결과는 [기준 산출물 검사 기록](reports/2026-10-07-baseline.md)과 분리한다.
 
