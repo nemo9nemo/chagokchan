@@ -38,9 +38,10 @@ Claude Code 안에서 `/codex-implement`를 쓰면 다음 형태로 Codex를 비
 
 ```bash
 R="$USERPROFILE/.cache/codex-runtimes/codex-primary-runtime/dependencies"
-PATH="$R/node/bin:$R/bin/fallback:$PATH" codex exec -C "C:\Users\love0\nemo9Dev\chagokchan" -s workspace-write -c windows.sandbox='"unelevated"' -c mcp_servers.node_repl.enabled=false -o tmp/codex/<작업ID>-r<라운드>.md "<브리프 기반 지시>"
+PATH="$R/node/bin:$R/bin/fallback:$PATH" codex exec -C "C:\Users\love0\nemo9Dev\chagokchan" -s workspace-write -c windows.sandbox='"unelevated"' -c mcp_servers.node_repl.enabled=false -o tmp/codex/<작업ID>-r<라운드>.md "<브리프 기반 지시>" < /dev/null
 ```
 
+- `< /dev/null`: 백그라운드 실행에서 stdin을 닫지 않으면 `codex exec`가 추가 입력을 기다리며 멈춘다(2026-10-16 확인).
 - `windows.sandbox="unelevated"`: 사용자 설정의 `elevated` 샌드박스는 CLI 실행 시 초기화가 실패해 모든 셸 명령이 거절된다(2026-10-13 확인). unelevated도 workspace-write 쓰기 제한은 유지한다.
 - PATH: 고정 Node 24.19.0·pnpm 11.19.0이 Codex 앱 런타임 경로에만 있어 앱 밖에서는 직접 지정한다.
 
