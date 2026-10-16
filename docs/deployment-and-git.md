@@ -21,6 +21,8 @@
 | Git 연결 후 | 사용자 지정 공개 GitHub 저장소 연결 완료. Actions + Vercel CLI는 후속 설정 |
 | 운영 공개 | DB 마이그레이션 → 운영 빌드·검증 → 도메인 연결 |
 
+W17에서 W09-D 집계 보정 마이그레이션을 운영에 적용할 때는 트래픽을 중단하고 실행 중인 구버전 RPC가 모두 끝난 뒤 적용한다. 기존 호출이 보정값을 덮어쓰지 않도록 하며 현재 W09-D는 로컬 적용·검증 대기다([ADR-0006](decisions/ADR-0006-shared-cycle-counter-role.md)).
+
 서울은 DB와 서버 함수의 배치 기준이다. CDN·Google 로그인·인증 메일·로그 등 모든 처리 위치가 국내로 제한된다는 뜻은 아니다. 서비스 개설 시 각 서비스의 실제 처리·보관 설정을 운영 기록에 남긴다. [Vercel 리전](https://vercel.com/docs/regions), [Supabase 리전](https://supabase.com/docs/guides/platform/regions)
 
 운영은 유료 플랜을 기준으로 잡는다. Vercel Hobby는 개인의 비상업적 용도에 제한되며, Supabase Free는 비활성 일시 중지와 백업 접근 제한이 있다. 스테이징도 운영과 같은 Auth 세션 정책을 검증할 수 있게 Pro로 잡는다. 도메인·메일·Redis·추가 프로젝트 비용을 포함한 실제 예산은 개설 시 기록한다. 이 문서 작성은 결제 승인이 아니다. [Vercel Hobby](https://vercel.com/docs/plans/hobby), [Supabase 운영 전 확인](https://supabase.com/docs/guides/deployment/going-into-prod)

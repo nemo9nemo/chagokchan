@@ -1662,7 +1662,27 @@
       "expected": "판=목표 1:1·개인/공유 독립 집계 유지. 성공 전 미반영·실패 입력/키 보존·성공 재조회·ID당 pop 1회, reduced-motion 정지 링/저장됨. 지정 5개 폭 무넘침/주 조작 44px/양 테마 대비 통과. 연결 코드와 판 권한 분리·secret 비영속. 기존 수락 기록으로 새 화면을 통과 처리하지 않는다.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-SHARED-COUNT-001",
+      "requirement_ids": ["REQ-004", "REQ-007", "REQ-009", "REQ-012"],
+      "policy_ids": ["POL-CYCLE-001", "POL-PRAISE-001", "POL-PRAISE-002"],
+      "level": "database_business_rpc",
+      "title": "복수 기여자 공유판 집계와 권한 종료 후 작성자 취소",
+      "steps": [
+        "마이그레이션 적용 직후 모든 회차의 valid_count가 실제 유효 칭찬 수와 같은지 확인한다",
+        "NOLOGIN·BYPASSRLS 전용 역할의 열 권한·멤버십 부재·헬퍼 소유권·고정 search_path·실행 권한 제한을 검사한다",
+        "두 기여자가 1건과 2건을 남기면 공유 회차 개수 3, 첫 작성자 취소와 재시도 뒤 2인지 확인한다",
+        "여러 작성자로 목표 수를 채워 complete·completed_at·완성 소식 1건을 확인하고 취소 후 incomplete·null, 재완성 후 소식 중복 없음을 검사한다",
+        "연결 inactive·멤버 revoked 상태 및 연결이 활성인 판 권한 종료 상태에서 작성자 본인 취소와 실제 개수 재집계를 검사한다",
+        "제외된 칭찬 취소·취소 재시도에서 추가 감소가 없고 셀프 취소가 본문·실천일·태그를 함께 제거하는지 확인한다",
+        "타인·없는 칭찬·삭제된 목표는 PT404이며 취소 후 목표 삭제 뒤 재시도도 PT404인지 확인한다",
+        "취소 goal → bunch → praise 잠금 순서를 검토하고 기존 공유·개인·정리·삭제·연결·생명주기 DB/API 회귀를 실행한다"
+      ],
+      "expected": "기여자 RLS와 관계없이 실제 유효 칭찬 수·완성 상태가 일치하고 개인/공유 집계는 독립이다. 권한 종료 후에도 본인만 취소하며 타인/삭제 대상은 404다. 기존 원본과 RLS 정책을 넓히지 않고 최소 열 권한의 내부 헬퍼만 사용한다.",
+      "status": "passed",
+      "evidence": "reports/w09-d-shared-count-cancel-check-2026-10-16.json"
     }
   ],
-  "updated_on": "2026-10-15"
+  "updated_on": "2026-10-16"
 }

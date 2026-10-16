@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-16",
-  "current_stage": "S06_w20_mockup_ui_and_praise_tags_done_ui09_and_w15_acceptance_pending",
-  "next_stage": "S06_w10_ui09_news_sent_screen",
+  "current_stage": "S06_w09_d_shared_count_fix_done_w10_d_news_ui_next",
+  "next_stage": "S06_w10_d_news_sent_screen",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w20_a_b_done_ui09_screen_pending_w20_b_browser_acceptance_and_w11_device_acceptance_in_w15"
+      "status": "in_progress_w09_d_database_and_review_pending_w20_done_ui09_and_w15_acceptance_pending"
     },
     {
       "id": "S07",
@@ -82,10 +82,10 @@
   },
   "verification": {
     "artifact_check_status": "passed",
-    "artifact_report": "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json",
+    "artifact_report": "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 76,
+    "planned_test_cases": 77,
     "application_tests_executed": 126,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout",
     "database_connectivity_verified": true,
@@ -180,7 +180,12 @@
         "praise_tag_api_reverification": "passed_twice_cleanup_and_full_snapshot_preserved",
         "review": "approved"
       }
-    }
+    },
+    "w09_d_report": "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
+    "w09_d_status": "implemented_sandbox_checks_passed_database_and_review_pending",
+    "w09_d_migration_applied": false,
+    "w09_d_pgtap_planned": 39,
+    "w09_d_pgtap_executed": 0
   },
   "artifacts": [
     {
@@ -654,6 +659,19 @@
         "scripts/grape-layout.test.mjs",
         "docs/changes/2026-10-15-w20-b-mockup-ui.md",
         "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json"
+      ]
+    },
+    {
+      "id": "ART-024",
+      "title": "W09-D shared cycle count and sender cancellation fix",
+      "status": "implemented_sandbox_checked_database_and_review_pending",
+      "paths": [
+        "docs/plans/W09-D-shared-count-cancel-fix.md",
+        "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
+        "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql",
+        "docs/decisions/ADR-0006-shared-cycle-counter-role.md",
+        "docs/changes/2026-10-16-w09-d-shared-count-cancel.md",
+        "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json"
       ]
     }
   ],

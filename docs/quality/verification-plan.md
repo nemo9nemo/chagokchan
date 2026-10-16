@@ -2,7 +2,7 @@
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W20-A·W20-B 구현·리뷰 완료(TC-UI-MOCKUP-001 전체 수락은 W15) / 갱신일: 2026-10-16
 
-W20-B는 [화면 브리프](../plans/W20-B-mockup-ui.md)의 REQ-002·003·004·011/NFR-002 및 TC-UI-003·TC-UX-001·TC-WEB-003·004·005, 신규 TC-UI-MOCKUP-001을 추적한다. 총 계획 시나리오는 76개이며 아래 75개 설명은 W20-B 이전 기준이다. 기존 W11 통과 기록은 당시 소스의 근거로 보존하고 재설계 수락 완료로 재사용하지 않는다.
+W20-B는 [화면 브리프](../plans/W20-B-mockup-ui.md)의 REQ-002·003·004·011/NFR-002 및 TC-UI-003·TC-UX-001·TC-WEB-003·004·005, 신규 TC-UI-MOCKUP-001을 추적한다. W09-D의 TC-SHARED-COUNT-001 추가 후 총 계획 시나리오는 77개이며 아래 75개 설명은 W20-B 이전 기준이다. 기존 W11 통과 기록은 당시 소스의 근거로 보존하고 재설계 수락 완료로 재사용하지 않는다.
 
 샌드박스에서 pnpm lint → pnpm typecheck → package.json 목록 전체의 node --test --test-isolation=none → pnpm check:artifacts 순서로 시도한다. pnpm 11.25.0/고정 11.19.0 불일치 시 node_modules/.bin의 biome·tsc와 node scripts/verify-artifacts.mjs를 직접 실행한다. 포도 순수 배치의 지정 목표 1/15/20/100·1~100 전체의 폭 경계 검사 포함 126개 unit은 통과했다. 브리프의 project.ps1 check/build:check/api:praise-test/api:goal-test/api:connection-test도 시도했으나 pnpm 버전 차단으로 실행되지 않았다. Node 직접 실행은 빌드의 TypeScript 단계 spawn EPERM, API 검사 전 로컬 앱 종료로 완료하지 못했다. Docker 엔진은 named pipe 권한 거부로 접속하지 못했다.
 
@@ -178,6 +178,14 @@ UI06 연결 센터에서 일회 초대 발급/미리보기, 요청 수락·거�
 화면의 공유판 목록을 위해 `20261008024800_list_my_shared_boards_rpc.sql`과 GET `/api/v1/shared-boards`를 추가했다. DB는 호출자의 현재 연결 generation, 양방향 차단, 명시적 grant, 삭제 목표 상태를 매번 확인한다. 최대 50개 순서형 페이지와 contributor 최소 projection을 반환한다. UI 디렉터리도 이어보기 cursor를 사용한다.
 
 신규 `TC-API-009`는 pgTAP 013 5/5, 전체 DB 252/252, 실제 Auth-issued 공유 RPC 통합 8/8, A/B/C board API 경계 각 14/14, unit 100/100으로 통과 처리한다. A/B/C API 검사는 기존 제품 fixture 쓰기 없이 종료했고 합성 probe 계정/세션 정리와 fixture snapshot 보존을 확인했다. Biome·typecheck·artifact check·`build:check`는 W09-C 완료 시 다시 실행해 보고서에 결과를 기록한다. UI 검사는 invalid synthetic invite token을 이용한 읽기 전용 UI06 렌더 smoke 한 건이며, 실제 초대·관계·grant·칭찬 mutation submit, 제품 수락, 스크린리더·기기 E2E, 실제 Google/OTP 로그인은 포함하지 않는다. [W09-C 검사 증거](reports/w09-c-shared-board-ui-check-2026-10-08.json)
+
+## W09-D 공유판 회차 집계·작성자 취소 결함 수정
+
+[TC-SHARED-COUNT-001](test-cases.json)은 새 pgTAP 016의 39개 assertion으로 최소 역할/열 권한·헬퍼 ACL·다중 작성자 집계·독립 개인 회차·완성/재완성 소식·연결 및 판 권한 종료 후 취소·제외 후 취소·replay·타인/삭제 목표 404·보정 후 불일치 0행을 검사하도록 작성했다. `create_peer_praise`는 기존 집계 블록만 바꾸고 취소 잠금은 goal → bunch → praise로 통일했다. 잠금 순서의 소스 비교와 assertion 수 확인은 실행 DB 경합 검증을 대신하지 않는다.
+
+2026-10-16 Codex 샌드박스에서 node_modules/.bin의 Biome lint·tsc와 package.json test 목록 전체의 `node --test --test-isolation=none`을 실행해 126/126 통과했다. Docker 연결 및 브리프의 DB/API 대상은 각각 시도했으나 named pipe 권한 거부·자식 프로세스 EPERM·로컬 앱 기동 실패로 업무 검사에 진입하지 못했다. 마이그레이션 적용·신규 pgTAP·기존 DB/API 회귀·실제 경합은 미실행이며 TC는 `not_run`, W09-D와 W09 상위 행은 `IN_PROGRESS`다. 산출물 검사와 명령별 결과·오류 첫 줄은 [W09-D 증거](reports/w09-d-shared-count-cancel-check-2026-10-16.json)를 따른다. Claude가 샌드박스 밖에서 DB 적용·전체 회귀·구현 리뷰를 이어간다. 실제 Google/OTP 검증은 포함하지 않는다.
+Claude 리뷰 재검증(2026-10-16): 로컬 DB 초기화 후 마이그레이션 48개 적용, pgTAP 336/336(016 39/39), DB·API 회귀 8종 통과로 TC-SHARED-COUNT-001을 passed로 바꿨다. [검사 증거](reports/w09-d-shared-count-cancel-check-2026-10-16.json)
+
 
 ## W10-A 소식·보낸 peer 칭찬 API 검사
 
