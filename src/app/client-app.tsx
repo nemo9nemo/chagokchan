@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idempotent-request.mjs";
 import GrapeCluster from "./grape-cluster";
+import NewsPanel, { type NewsNotification, type NewsTab, type SentPraise } from "./news-panel";
+import { canOpenConnections } from "./news-labels.mjs";
 import PraiseSheet, { praiseTags, type PraiseTag } from "./praise-sheet";
 import SharePanel from "./share-panel";
 
@@ -23,7 +25,8 @@ type ConnectionRequest = { id: string; direction: "incoming" | "outgoing"; other
 type Block = { id: string; blocked_user: Profile; created_at: string };
 type BoardMember = { user: Profile; role: "contributor"; status: "active" | "revoked"; connection_generation: number };
 type ConnectionInvite = { id: string; link_path: string; code: string; expires_at: string };
-type WorkspaceView = "goals" | "connections" | "shared" | "trash";
+type WorkspaceView = "goals" | "connections" | "shared" | "trash" | "news";
+type NewsPage<T> = Page<T> & { loading: boolean; error: string };
 
 class ApiFailure extends Error {
   status: number;
@@ -226,6 +229,22 @@ async function mutate<T>(path: string, method: "POST" | "PUT" | "PATCH" | "DELET
   return apiJson<T>(path, { method, headers, body: JSON.stringify(body) });
 }
 
+async function readNewsPages<T>(path: string, cursor: string | null, pageCount: number) {
+  const items: T[] = [];
+  let firstItems: T[] = [];
+  let pages = 0;
+  do {
+    const query = new URLSearchParams({ limit: "20" });
+    if (cursor) query.set("cursor", cursor);
+    const page = await apiJson<Page<T>>(`${path}?${query}`);
+    if (pages === 0) firstItems = page.items;
+    items.push(...page.items);
+    cursor = page.next_cursor;
+    pages += 1;
+  } while (cursor && pages < pageCount);
+  return { items, next_cursor: cursor, firstItems, pages };
+}
+
 function newRequestKey() {
   return globalThis.crypto.randomUUID();
 }
@@ -385,6 +404,100 @@ export default function ChagokchanApp() {
   const [peerAttempt, setPeerAttempt] = useState<IdempotentAttempt | null>(null);
   const [peerSending, setPeerSending] = useState(false);
   const [peerError, setPeerError] = useState("");
+  const [newsTab, setNewsTab] = useState<NewsTab>("received");
+  const [notifications, setNotifications] = useState<NewsPage<NewsNotification>>({ items: [], next_cursor: null, loading: true, error: "" });
+  const [sentPraises, setSentPraises] = useState<NewsPage<SentPraise>>({ items: [], next_cursor: null, loading: true, error: "" });
+  const [hasUnreadNews, setHasUnreadNews] = useState(false);
+  const [notificationBusyId, setNotificationBusyId] = useState("");
+  const [notificationRowError, setNotificationRowError] = useState<{ id: string; message: string } | null>(null);
+  const [sentRowError, setSentRowError] = useState<{ id: string; message: string } | null>(null);
+  const [sentCancelTarget, setSentCancelTarget] = useState<SentPraise | null>(null);
+  const [cancellingSentPraise, setCancellingSentPraise] = useState(false);
+  const notificationSequence = useRef(0);
+  const sentSequence = useRef(0);
+  const notificationPages = useRef(1);
+  const sentPages = useRef(1);
+  const notificationRetry = useRef({ cursor: null as string | null, pageCount: 1 });
+  const sentRetry = useRef({ cursor: null as string | null, pageCount: 1 });
+  const notificationOperation = useRef(false);
+  const sentOperation = useRef(false);
+
+  const loadNotifications = useCallback(async (cursor: string | null = null, pageCount = 1) => {
+    const sequence = ++notificationSequence.current;
+    notificationRetry.current = { cursor, pageCount };
+    setNotifications((previous) => ({ ...previous, loading: true, error: "" }));
+    try {
+      const page = await readNewsPages<NewsNotification>("/api/v1/notifications", cursor, pageCount);
+      if (sequence !== notificationSequence.current) return;
+      if (!cursor) setHasUnreadNews(page.firstItems.some((item) => item.read_at === null));
+      notificationPages.current = cursor ? notificationPages.current + page.pages : page.pages;
+      setNotifications((previous) => ({ items: cursor ? [...new Map([...previous.items, ...page.items].map((item) => [item.id, item])).values()] : page.items, next_cursor: page.next_cursor, loading: false, error: "" }));
+    } catch {
+      if (sequence === notificationSequence.current) setNotifications((previous) => ({ ...previous, loading: false, error: "소식을 불러오지 못했어요. 다시 시도해 주세요." }));
+    }
+  }, []);
+
+  const loadSentPraises = useCallback(async (cursor: string | null = null, pageCount = 1) => {
+    const sequence = ++sentSequence.current;
+    sentRetry.current = { cursor, pageCount };
+    setSentPraises((previous) => ({ ...previous, loading: true, error: "" }));
+    try {
+      const page = await readNewsPages<SentPraise>("/api/v1/sent-praises", cursor, pageCount);
+      if (sequence !== sentSequence.current) return;
+      sentPages.current = cursor ? sentPages.current + page.pages : page.pages;
+      setSentPraises((previous) => ({ items: cursor ? [...new Map([...previous.items, ...page.items].map((item) => [item.id, item])).values()] : page.items, next_cursor: page.next_cursor, loading: false, error: "" }));
+    } catch {
+      if (sequence === sentSequence.current) setSentPraises((previous) => ({ ...previous, loading: false, error: "보낸 칭찬을 불러오지 못했어요. 다시 시도해 주세요." }));
+    }
+  }, []);
+
+  useEffect(() => { void loadNotifications(); }, [loadNotifications]);
+  useEffect(() => {
+    if (workspaceView === "news") {
+      void loadNotifications();
+      void loadSentPraises();
+    } else {
+      setSentCancelTarget(null);
+    }
+  }, [workspaceView, loadNotifications, loadSentPraises]);
+
+  async function readNotification(item: NewsNotification, openConnections = false) {
+    if (notificationOperation.current || notifications.loading || (openConnections && !canOpenConnections(item.type))) return;
+    notificationOperation.current = true;
+    setNotificationBusyId(item.id);
+    setNotificationRowError(null);
+    try {
+      if (item.read_at === null) {
+        await mutate(`/api/v1/notifications/${item.id}`, "PATCH", { read: true });
+        const refresh = loadNotifications(null, notificationPages.current);
+        if (!openConnections) await refresh;
+      }
+    } catch {
+      if (!openConnections) setNotificationRowError({ id: item.id, message: "읽음으로 표시하지 못했어요. 다시 누르면 같은 요청으로 확인해요." });
+    } finally {
+      notificationOperation.current = false;
+      setNotificationBusyId("");
+      if (openConnections) setWorkspaceView("connections");
+    }
+  }
+
+  async function cancelSentPraise() {
+    const item = sentCancelTarget;
+    if (!item?.can_cancel || sentOperation.current || sentPraises.loading) return;
+    sentOperation.current = true;
+    setCancellingSentPraise(true);
+    setSentRowError(null);
+    try {
+      await mutate(`/api/v1/praises/${item.id}/cancel`, "POST", {});
+      setSentCancelTarget(null);
+      await loadSentPraises(null, sentPages.current);
+    } catch {
+      setSentRowError({ id: item.id, message: "취소 결과를 확인하지 못했어요. 다시 누르면 같은 요청으로 확인해요." });
+    } finally {
+      sentOperation.current = false;
+      setCancellingSentPraise(false);
+    }
+  }
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -1119,10 +1232,23 @@ export default function ChagokchanApp() {
           <button type="button" disabled={interactionLocked} aria-current={workspaceView === "connections" ? "page" : undefined} onClick={() => { setWorkspaceView("connections"); setShowPraise(false); }}>연결 관리</button>
           <button type="button" disabled={interactionLocked} aria-current={workspaceView === "shared" ? "page" : undefined} onClick={() => { setWorkspaceView("shared"); setSelectedSharedBoard(null); setShowPraise(false); }}>받은 공유판</button>
           <button type="button" disabled={interactionLocked} aria-current={workspaceView === "trash" ? "page" : undefined} onClick={() => { setWorkspaceView("trash"); setShowPraise(false); }}>휴지통</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "news" ? "page" : undefined} onClick={() => { setWorkspaceView("news"); setShowPraise(false); }}>소식{hasUnreadNews && <><span className="news-unread-dot" aria-hidden="true" /><span className="visually-hidden">읽지 않은 소식 있음</span></>}</button>
         </nav></aside>
         <section id="workspace-content" className="main-panel" tabIndex={-1} aria-busy={loadingDetail || praiseSending}>
           <div className="status-region" aria-live="polite">{praiseSending && <p role="status">저장 중…</p>}{notice && <p className="notice-banner" role="status">{notice}<button type="button" aria-label="알림 닫기" onClick={() => setNotice("")}>닫기</button></p>}</div>
-          {workspaceView === "connections" ? <ConnectionsPanel
+          {workspaceView === "news" ? <NewsPanel
+            tab={newsTab} onTab={setNewsTab} formatDate={shortDate}
+            notifications={notifications.items} notificationCursor={notifications.next_cursor} notificationLoading={notifications.loading} notificationError={notifications.error}
+            notificationBusyId={notificationBusyId} notificationRowError={notificationRowError}
+            onRead={(item) => void readNotification(item)} onConnections={(item) => void readNotification(item, true)}
+            onRetryNotifications={() => void loadNotifications(notificationRetry.current.cursor, notificationRetry.current.pageCount)}
+            onMoreNotifications={() => { if (notifications.next_cursor) void loadNotifications(notifications.next_cursor); }}
+            sentPraises={sentPraises.items} sentCursor={sentPraises.next_cursor} sentLoading={sentPraises.loading} sentError={sentPraises.error} sentRowError={sentRowError}
+            cancelTarget={sentCancelTarget} cancelling={cancellingSentPraise} onCancelTarget={(item) => { if (item) setSentRowError(null); setSentCancelTarget(item); }}
+            onConfirmCancel={() => void cancelSentPraise()}
+            onRetrySent={() => void loadSentPraises(sentRetry.current.cursor, sentRetry.current.pageCount)}
+            onMoreSent={() => { if (sentPraises.next_cursor) void loadSentPraises(sentPraises.next_cursor); }}
+          /> : workspaceView === "connections" ? <ConnectionsPanel
             loading={connectionLoading} error={connectionError} connections={connections} invites={connectionInvites}
             requests={connectionRequests} blocks={blocks} inviteResult={inviteResult} invitePreview={invitePreview}
             inviteToken={inviteToken} inviteCode={inviteCode} previewError={invitePreviewError}
