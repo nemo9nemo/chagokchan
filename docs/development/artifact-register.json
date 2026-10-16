@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-15",
-  "current_stage": "S06_w20_a_praise_tags_verified_pr_r2_fixed_w20_b_mockup_ui_pending",
-  "next_stage": "S06_w20_b_mockup_ui",
+  "updated_on": "2026-10-16",
+  "current_stage": "S06_w20_mockup_ui_and_praise_tags_done_ui09_and_w15_acceptance_pending",
+  "next_stage": "S06_w10_ui09_news_sent_screen",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w20_a_praise_tags_verified_w20_b_ui_todo_w11_device_acceptance_moved_to_w15"
+      "status": "in_progress_w20_a_b_done_ui09_screen_pending_w20_b_browser_acceptance_and_w11_device_acceptance_in_w15"
     },
     {
       "id": "S07",
@@ -82,12 +82,12 @@
   },
   "verification": {
     "artifact_check_status": "passed",
-    "artifact_report": "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
+    "artifact_report": "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 75,
-    "application_tests_executed": 120,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags",
+    "planned_test_cases": 76,
+    "application_tests_executed": 126,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
@@ -149,6 +149,17 @@
     "w11_b1_report": "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
     "w11_b2_report": "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
     "w16_c_report": "docs/quality/reports/w16-c-ci-check-2026-10-08.json",
+    "w20_b": {
+      "status": "ui_implemented_sandbox_checks_passed_integration_browser_review_pending",
+      "report": "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json",
+      "all_unit_tests_passed": 126,
+      "grape_layout_tests_passed": 6,
+      "build_completed": false,
+      "database_api_integration_completed": false,
+      "browser_acceptance_executed": false,
+      "implementation_review": "pending",
+      "commit_created": false
+    },
     "w20_a": {
       "status": "database_api_integration_and_review_passed_pr_r2_fixed",
       "report": "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
@@ -626,6 +637,23 @@
         "scripts/test-local-praise-tag-api.mjs",
         "docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json",
         "docs/changes/2026-10-15-w20-a-praise-tag.md"
+      ]
+    },
+    {
+      "id": "ART-023",
+      "title": "W20-B 목업 UI·포도 그래픽·입력/공유 패널",
+      "status": "implemented_sandbox_checked_browser_and_review_pending",
+      "paths": [
+        "docs/plans/W20-B-mockup-ui.md",
+        "src/app/client-app.tsx",
+        "src/app/globals.css",
+        "src/app/grape-layout.mjs",
+        "src/app/grape-cluster.tsx",
+        "src/app/praise-sheet.tsx",
+        "src/app/share-panel.tsx",
+        "scripts/grape-layout.test.mjs",
+        "docs/changes/2026-10-15-w20-b-mockup-ui.md",
+        "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json"
       ]
     }
   ],

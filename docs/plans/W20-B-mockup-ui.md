@@ -1,6 +1,6 @@
 # W20-B 목업 기반 화면 재설계
 
-- 상태: APPROVED (2026-10-15 사용자 승인, Codex 브리프 리뷰 2회)
+- 상태: DONE (2026-10-16 구현 리뷰 r2 APPROVED, TC-UI-MOCKUP-001 전체 수락은 W15)
 - 작성: Claude / 날짜: 2026-10-15
 - 구현 브랜치: codex/W20-B-mockup-ui
 - 선행: W20-A(태그 API)가 main에 병합되어 있어야 한다.
@@ -108,8 +108,119 @@ docs/design/user-flows.md, docs/quality/test-cases.json, docs/quality/verificati
 
 ## Codex 구현 보고
 
-(Codex가 작성)
+- 구현일: 2026-10-15 / 소스 기준: `c391d8f073bec68b08935377e61336f2703cbcad` + 미커밋 변경 / 브랜치: `codex/W20-B-mockup-ui`
+- 상태: **구현·샌드박스 검사 완료, 통합/브라우저 검사·Claude 리뷰 대기. W20-B IN_PROGRESS.** 사용자 지시로 커밋·push하지 않았다. 아래 브라우저 완료 조건은 아직 통과 처리하지 않았다.
+
+### 변경 파일
+
+| 파일 | 변경 |
+| --- | --- |
+| `src/app/client-app.tsx` | B01~B04 판 목록/생성/상세, 태그·자동 닉네임 연결, 성공 bunch_id/목록 재조회·replay pop 억제, B07 상세/취소 시트, 공유 패널/기존 권한 관리, UI08 읽기 전용 포도 그래픽 |
+| `src/app/globals.css` | 흑백 바탕·기본 포도/정원 의미 토큰·포커스·44px 조작부·반응형 시트/패널·pop/reduced-motion |
+| `src/app/grape-layout.mjs`, `scripts/grape-layout.test.mjs` | 순수 배치 함수, 1/15/20/100 행·개수 및 1~100 전체의 폭/경계 검사 6개 |
+| `src/app/grape-cluster.tsx` | 단일 SVG·줄기/잎·순차 알·다음 빈 알 단축 조작·상태 링/애니메이션 |
+| `src/app/praise-sheet.tsx` | native dialog의 좁은 폭 modal 시트/넓은 폭 패널, 자동 시각/실제 닉네임·고정 태그·메모·실천일 접힘·재시도 |
+| `src/app/share-panel.tsx` | 초대 메타·마스킹/보기/복사·개별 폐기·생성 실패 재조회·닫을 때 secret 제거 |
+| `package.json` | 기존 test 목록 끝에 grape-layout 테스트 추가, 의존성 변경 없음 |
+| `docs/design/user-flows.md`, `docs/quality/test-cases.json`, `docs/quality/verification-plan.md` | 화면 대응·TC-UI-MOCKUP-001(not_run)·기본 포도 테마·검증 계획/한계 |
+| `docs/development/backlog.md`, `docs/development/artifact-register.json`, `docs/development/codex-project-handoff.md` | W20-B IN_PROGRESS·검사 범위·다음 Claude 리뷰 인계 |
+| `docs/changes/2026-10-15-w20-b-mockup-ui.md`, `docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json`, 이 브리프 | 변경/명령/오류/소스 증거와 구현 보고 |
+
+### 실행 명령과 결과
+
+환경: Windows PowerShell 샌드박스, Node `24.19.0`, pnpm 실제 `11.25.0`/고정 `11.19.0`, Biome `2.5.15`, TypeScript `5.9.3`.
+
+| 순서·명령 | 실제 결과 |
+| --- | --- |
+| 1. `pnpm lint` | 버전 검사 실패. 첫 오류: `[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)` |
+| 1 대체. `.\node_modules\.bin\biome.cmd lint --error-on-warnings .` | 초기 lint 지적 수정 후 통과, 102파일·오류/경고 0 |
+| 2. `pnpm typecheck` | 같은 pnpm 버전 오류로 실패 |
+| 2 대체. `.\node_modules\.bin\tsc.cmd --noEmit` | 통과 |
+| 3. `node --test --test-isolation=none <package.json scripts.test의 전체 13개 파일>` | 새 grape-layout 6개 포함 **126/126 통과**, 실패/skip 0. 실제 전체 인자는 검사 증거 JSON에 기록 |
+| 4. `pnpm check:artifacts` | 같은 pnpm 버전 오류로 실패 |
+| 4 대체. `node scripts/verify-artifacts.mjs` | JSON·링크·REQ/POL/TC·등록부·개발 상태 구조 검사 통과. 문서 갱신 뒤 재실행 결과도 증거에 기록 |
+| `.\scripts\project.ps1 -Task check` | pnpm 버전 오류. 사용자 지시에 따라 pnpm test/check 우회는 위 직접 lint/type/unit/artifact로 수행 |
+| `.\scripts\project.ps1 -Task build:check` | pnpm 버전 오류 |
+| `.\scripts\project.ps1 -Task api:praise-test` | pnpm 버전 오류 |
+| `.\scripts\project.ps1 -Task api:goal-test` | pnpm 버전 오류 |
+| `.\scripts\project.ps1 -Task api:connection-test` | pnpm 버전 오류 |
+| `node scripts/app.mjs build-check` | Next 16.4.0 컴파일 성공 뒤 TypeScript 단계 실패. 첫 오류: `spawn EPERM`. 빌드 완료 아님 |
+| `node scripts/test-local-personal-praise-api.mjs` | 검사 전 앱 종료. 첫 오류: `Error: The local app exited before the personal-praise API check.` |
+| `node scripts/test-local-goal-api.mjs` | 검사 전 앱 종료. 첫 오류: `Error: The local app exited before the goal API check.` |
+| `node scripts/test-local-connection-api.mjs` | 검사 전 앱 종료. 첫 오류: `Error: Local app exited before connection API checks completed.` |
+| `docker version --format '{{.Client.Version}} / {{.Server.Version}}'` | CLI 29.1.3, 엔진 조회 실패. 첫 오류: `permission denied while trying to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine` |
+
+### 실행하지 못한 검사와 이유
+
+- 빌드 전체와 실제 DB/API 통합: 위 명령을 실제 시도했으나 샌드박스/pnpm 제약으로 완료하지 못했다. DB 버전·적용 상태·실제 제공자 로그인 검증을 이번 결과로 주장하지 않는다.
+- TC-UI-MOCKUP-001 브라우저 검사: 브리프가 Claude 리뷰 단계에서 수행하도록 지정한 5개 폭 넘침/44px/대비·reduced-motion·저장 전 미반영/후 재조회·실패 입력/같은 키·replay·초대 secret 검사는 미실행. 기존 W11 통과 기록으로 대체하지 않았다.
+- 실기기 TC-WEB-006/TC-CACHE-001: 기존 W15 범위로 유지.
+
+### 브리프와 다르게 한 부분·범위 밖 필요 사항
+
+- 기존 서버가 `active_invite_limit`, `invite_already_used`, 만료/폐기 세부 사유를 `STATE_CONFLICT` 또는 `OBJECT_NOT_AVAILABLE`로 통합한다. 서버/계약 변경은 범위 밖이므로 수정하지 않았다. 목록 메타의 사용 완료/만료/폐기는 구분하고 생성 409 뒤 활성 초대 5개를 확인할 때 상한 문구를 표시한다. 받은 코드의 실패 사유를 HTTP 응답만으로 항상 구분하는 완료 조건은 충족했다고 표시하지 않았다. 세부 오류 노출이 필요하면 별도 서버 브리프가 필요하다.
+- 불확실한 칭찬 재시도 중에는 같은 본문/키가 다른 판으로 전송되지 않도록 판·메뉴 전환을 잠근다. 완성 회차는 기존 다음 칭찬 시 새 회차 생성 모델에 맞춰 “다음 회차 시작하기”에서 입력을 연다.
+- 성공 응답의 과거 bunch_id가 첫 회차 페이지 밖이면 찾을 때까지 다음 페이지를 읽는다. 공유 초대/연결도 페이지 끝까지 읽어 오래된 활성 초대와 연결을 누락하지 않는다.
+- 목업 사본은 읽기 참고만 했고, 서버·DB·마이그레이션·API 계약·정책·의존성/잠금 파일은 변경하지 않았다.
+
+### r2 수정
+
+- 수정일: 2026-10-16 / 기준: 구현 리뷰 r1의 WARNING 1건 / 소스: `c391d8f073bec68b08935377e61336f2703cbcad` + 기존 미커밋 변경 / 브랜치: `codex/W20-B-mockup-ui`.
+- 변경 파일: `src/app/share-panel.tsx`, `docs/plans/W20-B-mockup-ui.md`(이 보고). 코드 생성 성공 뒤 목록 재조회 실패 문구를 정확히 "코드를 만들었어요. 사용 중인 코드 목록을 다시 불러와 주세요."로 바꿨다. 참고 2~4번과 기존 미커밋 변경은 수정하지 않았다. 커밋·push하지 않았다.
+- 화면 문구 점검: `node` 표준 입력 스크립트로 TypeScript AST의 JSX 본문·문자열·템플릿·접근성/입력 안내 속성을 확인하고, 메타데이터·PWA/오프라인 문구·태그 이름·CSS 생성 문구도 읽었다. `src`와 `public`의 소스 58개를 문자권별로 검색해 수정 후 일본어(히라가나·가타카나·한자), 키릴·아랍·그리스·데바나가리 문자 일치 0건을 확인했다. 사용자 입력과 실제 브라우저 표시 전체를 검증한 결과는 아니다.
+- 추가 발견(점검만): `src/app/client-app.tsx`에 기존 영어 보조 제목 11곳이 남아 있다. `PEOPLE & PERMISSIONS`(58), `ONE-TIME INVITE`(64), `REQUESTS`(83), `CONNECTIONS`(92), `INVITES`(100), `BLOCKED`(111), `GOAL TRASH`(124), `SHARED WITH ME`(146), `A WORD FOR YOUR FRIEND`(162), `PRAISES I SENT`(165), `GOAL SETTINGS`(1196). WARNING 수정 외에는 문구 점검만 수행했으므로 변경하지 않았고, 한국어 아닌 화면 문구가 전혀 없다고 판정하지 않았다. 브랜드 영문 `Chagokchan`도 기존 표기를 유지한다.
+
+환경: Windows PowerShell 샌드박스, Node `24.19.0`, Biome `2.5.15`, TypeScript `5.9.3`. 사용자 지정 검증을 실제 실행했다.
+
+| 실행 명령 | 결과 |
+| --- | --- |
+| `.\node_modules\.bin\biome.cmd lint --error-on-warnings .` | 통과(exit 0), 102파일, 오류·경고 0, 자동 수정 없음 |
+| `.\node_modules\.bin\tsc.cmd --noEmit` | 통과(exit 0) |
+| 아래 전체 13파일의 `node --test --test-isolation=none ...` | 126/126 통과(exit 0), 실패·취소·skip·todo 0 |
+| `node scripts/verify-artifacts.mjs` | 통과(exit 0), JSON 42개·로컬 Markdown 링크 532개·등록 산출물 306개·REQ/POL/TC/개발 상태 구조 검사. 보고 추가 후에도 재실행 |
+
+실제 단위 테스트 명령(파일 목록은 `package.json`의 `scripts.test`에서 읽음):
+
+```powershell
+node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs
+```
+
+미실행: 빌드·DB/API 통합·브라우저·실기기 검사는 이번 문구 수정에서 재실행하지 않았다. 사용자 지정 검증 4종과 소스 문구 점검을 수행했으며, 이전 리뷰 결과를 이번 실행 결과로 대체하지 않았다.
+
+| 작업 | 상태 | 완료 범위·다음 행동 |
+| --- | --- | --- |
+| W20-B r2 | IN_PROGRESS | WARNING 문구 수정·지정 검사 통과·화면 문구 점검 완료. 영어 보조 제목 잔존 보고, Claude 재리뷰 대기. 상위 작업 상태와 완료 체크는 변경하지 않음 |
 
 ## 리뷰 기록
 
 - 브리프 리뷰 r1 (2026-10-15, Codex read-only): 나중에 공유판을 추가하는 경로 없음(P1), 초대 코드의 의미·상한·실패 구분(P2), 성공 후 +1 대신 재조회(P2), W19 기준 충돌을 반영했다.
+- 구현 리뷰 r1 (2026-10-15, Claude) — 판정: **WARNING**. 동작·경계 위반은 없고, 사용자에게 보이는 문구 1건을 고쳐야 한다.
+  - 직접 재실행(기준 `c391d8f` + 미커밋 변경, Node 24.19.0, Docker 29.1.3):
+    - lint: 102파일 통과. typecheck 통과.
+    - unit(격리 모드): 126/126.
+    - verify-artifacts 통과. build:check 통과(빌드 완료).
+    - API: `api:praise-test` 10/10, `api:goal-test` 3/3, `api:connection-test` A/B/C 각 12/12, `api:praise-tag-test` 통과.
+  - 브라우저(로컬 A, 개발 서버):
+    - 판 화면을 320·360·393·768·1280px에서 측정했다. 가로 넘침 0, 노출된 조작부 중 44px 미만 0, 대비 미달 글자 0. 정원 테마도 393px에서 대비 미달 0, 넘침 0.
+    - 393px 칭찬 시트와 공유 패널의 배치를 확인했다.
+    - 저장 실패 경로: fetch를 가로채 POST만 실패시켜 DB에 쓰지 않고 확인했다. 결과는 다음과 같다.
+      - `role=alert`가 표시되고 입력(태그 용기, 메모)이 보존된다.
+      - "다시 저장"이 같은 Idempotency-Key·같은 본문을 보낸다.
+      - 그래픽 aria-label(20알 중 0알), 최근 기록 0개가 그대로다.
+    - 저장 성공 경로는 fixture 보존을 위해 브라우저로 실행하지 않았다. 대신 코드로 확인했다: 성공 후 `openGoal(..., result.bunch_id)`로 다시 조회하고, `lastAnimatedId`로 replay 재생을 막는다. 성공 경로 자체는 `api:praise-tag-test`로 검증된다.
+  1. WARNING `src/app/share-panel.tsx:43`
+     - 문제: 코드 생성 뒤 목록 재조회가 실패하면 일본어 문구 "コードは作成できました。使用中のコード一覧を再読込してください。"를 보여 준다.
+     - 근거: 한국어 서비스이고 AGENTS.md는 한국어 소통을 요구한다. 다른 모든 문구는 한국어다.
+     - 기대: "코드를 만들었어요. 사용 중인 코드 목록을 다시 불러와 주세요." 같은 한국어 문구로 바꾼다.
+  2. 참고 `src/app/praise-sheet.tsx:4`
+     - 문제: 태그 목록을 쓰려고 `policies/app-policy.json` 전체를 브라우저 번들에 넣는다. 한도·rate limit 수치 등 공개 가능한 정책값이라 비밀 노출은 아니다.
+     - 대안: 필요한 값(tag_catalog, backdate 일수)만 담은 작은 모듈로 줄이면 번들이 작아진다.
+  3. 참고 `src/app/grape-cluster.tsx:29`
+     - 문제: success 상태가 저장한 칭찬이 목록 맨 위에 있는 동안 유지된다. 판·회차를 바꿨다 돌아오면 SVG가 다시 마운트돼 pop 애니메이션이 한 번 더 재생될 수 있다.
+     - 근거: 브리프는 같은 praise id에 대한 재생을 금지한다. 다만 지금 막는 대상은 요청 replay다.
+  4. 참고 (Codex 보고): 초대 생성 실패의 세부 사유(상한·사용 완료·만료·폐기)는 서버가 `STATE_CONFLICT`·`OBJECT_NOT_AVAILABLE`로 합쳐 보내 HTTP 응답만으로 구분할 수 없다. 목록 메타로 구분하고, 409 뒤 활성 초대가 5개면 상한 문구를 보여 준다. 완전한 구분은 서버 브리프가 별도로 필요하다.
+- 구현 리뷰 r2 (2026-10-16, Claude) — 판정: **APPROVED**.
+  - `share-panel.tsx:43` 문구가 한국어로 바뀐 것을 확인했고, `src` 전체에서 가나 문자가 0건이다.
+  - 재실행: lint 102파일, typecheck, unit 126/126, 산출물, build:check 모두 통과.
+  - Codex가 보고한 영어 보조 제목 11곳은 W20-B 이전부터 있던 장식용 영문 제목이다(main 19곳에서 줄었다). 이번 범위 밖이라 그대로 두고 참고로 남긴다.
+  - r1의 참고 2~4는 수정하지 않았다(사용자 결정 대기).

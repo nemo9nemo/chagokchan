@@ -4,6 +4,8 @@
 
 ## 작업 공간과 원격
 
+2026-10-16 W20 완료 인계: W20-A(셀프 칭찬 태그 DB/API)와 W20-B(목업 기반 화면)를 구현·리뷰했다. W20-B는 B01~B07 화면, 1~100알 포도 그래픽, 태그·메모 칭찬 시트, 공유 패널을 담는다. Claude가 샌드박스 밖에서 다음을 통과시켰다: build:check, API 통합 4종, 5개 폭 넘침·44px·양 테마 대비, 저장 실패 시 입력 보존과 같은 키 재시도. TC-UI-MOCKUP-001의 나머지 브라우저 단계(성공 pop, reduced-motion, 생성·초대 흐름, UI06/UI08/UI10 폭)는 W15에서 실행한다. 다음 로컬 작업은 W10 UI09 소식·보낸함 화면이다. 연결 API가 초대 오류 세부 사유를 하나로 묶는 한계는 별도 서버 작업으로 남는다. [W20-B 브리프](../plans/W20-B-mockup-ui.md) · [증거](../quality/reports/w20-b-mockup-ui-check-2026-10-15.json)
+
 - 프로젝트 폴더: `C:\Users\love0\nemo9Dev\chagokchan`
 - GitHub: [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan), 공개(public)
 - 로컬 기본 브랜치: `main`, 원격: `origin`, 업스트림: `origin/main`

@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idempotent-request.mjs";
+import GrapeCluster from "./grape-cluster";
+import PraiseSheet, { praiseTags, type PraiseTag } from "./praise-sheet";
+import SharePanel from "./share-panel";
 
 type GoalStatus = "active" | "completed" | "archived";
 type Bunch = { id: string; cycle_no: number; target_count: number; valid_count: number; progress_state: "incomplete" | "complete"; completed_at: string | null };
@@ -10,7 +13,7 @@ type TrashGoal = { id: string; title: string; deleted_at: string; purge_after: s
 type Board = { viewer_role: "owner"; id: string; goal_id: string; kind: "personal" | "shared"; revision: number; next_target_count: number; shared_title: string | null; shared_description: string | null; current_bunch: Bunch | null };
 type ContributorBoard = { viewer_role: "contributor"; id: string; kind: "shared"; shared_title: string; shared_description: string | null; owner: { user_id: string; nickname: string | null; avatar_key: string | null }; goal_state: GoalStatus; current_bunch: Bunch | null; can_praise: boolean };
 type GoalDetail = { goal: GoalSummary; boards: Board[] };
-type Praise = { viewer_role: "owner" | "contributor"; id: string; bunch_id: string; source: "self" | "peer"; actor: { user_id: string; nickname: string | null; avatar_key: string | null } | null; actor_label: string; message: string | null; occurred_on: string | null; recorded_at: string; cancelled_at: string | null; hidden_at: string | null; excluded_at: string | null; author_erased_at: string | null };
+type Praise = { viewer_role: "owner" | "contributor"; id: string; bunch_id: string; source: "self" | "peer"; actor: { user_id: string; nickname: string | null; avatar_key: string | null } | null; actor_label: string; message: string | null; occurred_on: string | null; tag: PraiseTag | null; recorded_at: string; cancelled_at: string | null; hidden_at: string | null; excluded_at: string | null; author_erased_at: string | null };
 type Page<T> = { items: T[]; next_cursor: string | null };
 type IdempotentAttempt = { key: string; body: Record<string, unknown> };
 type Profile = { user_id: string; nickname: string | null; avatar_key: string | null };
@@ -122,7 +125,7 @@ function TrashPanel(props: {
     <p className="section-intro">삭제한 목표는 30일 동안 복구할 수 있어요. 기한이 지나면 자동 정리 대상이 됩니다. 복구해도 공유 권한은 돌아오지 않아요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
     {props.loading && props.goals.length === 0 ? <p className="loading-inline" role="status">휴지통을 불러오고 있어요.</p> : null}
-    {!props.loading && props.goals.length === 0 && !props.error ? <div className="empty-records"><b aria-hidden="true">⌑</b><h3>휴지통이 비어 있어요</h3><p>삭제한 목표가 여기에 표시됩니다.</p></div> : null}
+    {!props.loading && props.goals.length === 0 && !props.error ? <div className="empty-records"><h3>휴지통이 비어 있어요</h3><p>삭제한 목표가 여기에 표시됩니다.</p></div> : null}
     {props.goals.length > 0 && <ul className="trash-list">{props.goals.map((goal) => <li key={goal.id}>
       <div className="trash-goal-copy"><b>{goal.title}</b><span>삭제 {shortDate(goal.deleted_at)} · {shortDate(goal.purge_after)}까지 복구 가능</span></div>
       <button className="button button-secondary" type="button" disabled={props.restoringId === goal.id} onClick={() => props.onRestore(goal)}>{props.restoringId === goal.id ? "복구 중…" : "목표 복구"}</button>
@@ -152,16 +155,17 @@ function SharedBoardsPanel(props: {
         {props.cursor && <button className="text-button history-more" type="button" onClick={props.onMoreBoards}>공유판 더 보기</button>}
       </nav>
       <div className="shared-board-detail">
-        {!props.selectedBoard ? <div className="empty-records"><b aria-hidden="true">♡</b><h3>함께할 공유판을 골라 주세요</h3><p>지인이 권한을 준 공유판만 목록에 보여요.</p></div> : <>
+        {!props.selectedBoard ? <div className="empty-records"><h3>함께할 공유판을 골라 주세요</h3><p>지인이 권한을 준 공유판만 목록에 보여요.</p></div> : <>
           <div className="goal-header"><div className="goal-heading-copy"><p className="eyebrow">{props.selectedBoard.owner.nickname ?? "지인"} 님의 공유판</p><div className="title-row"><h3>{props.selectedBoard.shared_title}</h3><span className={`status-pill status-${props.selectedBoard.goal_state}`}>{goalStatusLabel(props.selectedBoard.goal_state)}</span></div>{props.selectedBoard.shared_description && <p className="goal-description">{props.selectedBoard.shared_description}</p>}</div><button className="button button-secondary" type="button" onClick={props.onBack}>목록으로</button></div>
           {props.selectedBoard.current_bunch && <section className="shared-progress" aria-label="공유판 현재 회차"><div className="board-progress-top"><span className="board-label">현재 회차 진행</span><span className="board-count">{props.selectedBoard.current_bunch.valid_count} / {props.selectedBoard.current_bunch.target_count}</span></div><span className="progress-track" role="progressbar" aria-label="공유판 현재 회차 진행" aria-valuemin={0} aria-valuemax={props.selectedBoard.current_bunch.target_count} aria-valuenow={props.selectedBoard.current_bunch.valid_count}><span style={{ width: `${Math.min(100, props.selectedBoard.current_bunch.valid_count / props.selectedBoard.current_bunch.target_count * 100)}%` }} /></span><span className="progress-caption">개인 기록과 개수를 합산하지 않아요.</span></section>}
-          {props.selectedBoard.can_praise ? <section className="praise-composer" aria-labelledby="peer-composer-heading"><div className="composer-heading"><span className="composer-spark" aria-hidden="true">♡</span><div><p className="eyebrow">A WORD FOR YOUR FRIEND</p><h3 id="peer-composer-heading">응원 한마디 보내기</h3></div></div><form onSubmit={props.onSubmit}><fieldset disabled={props.sending || props.attempt}><label className="visually-hidden" htmlFor="peer-praise-message">공유판에 보낼 칭찬</label><textarea id="peer-praise-message" maxLength={1000} rows={3} value={props.message} onChange={(event) => props.onMessage(event.target.value)} placeholder="작은 응원도 큰 힘이 돼요." /></fieldset>{props.formError && <p className="form-error" role="alert">{props.formError}</p>}{props.attempt ? <div className="composer-retry"><p>결과가 불확실해 같은 요청으로 확인해요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "확인 중…" : "같은 칭찬 다시 확인"}</button><button className="text-button" type="button" onClick={props.onRetryPraises}>기록 새로고침</button></div> : <div className="composer-submit"><p>성공 확인 후 공유판 개수에만 반영돼요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "보내는 중…" : "칭찬 보내기"}</button></div>}</form></section> : <div className="locked-note"><i aria-hidden="true">◷</i><div><b>{props.selectedBoard.goal_state === "completed" ? "완료된 목표예요" : "보관한 목표예요"}</b><p>이전 기록은 읽을 수 있고 새 칭찬은 보낼 수 없어요.</p></div></div>}
+          {currentBunch && <GrapeCluster target={currentBunch.target_count} filled={currentBunch.valid_count} />}
+          {props.selectedBoard.can_praise ? <section className="praise-composer" aria-labelledby="peer-composer-heading"><div className="composer-heading"><div><p className="eyebrow">A WORD FOR YOUR FRIEND</p><h3 id="peer-composer-heading">응원 한마디 보내기</h3></div></div><form onSubmit={props.onSubmit}><fieldset disabled={props.sending || props.attempt}><label className="visually-hidden" htmlFor="peer-praise-message">공유판에 보낼 칭찬</label><textarea id="peer-praise-message" maxLength={1000} rows={3} value={props.message} onChange={(event) => props.onMessage(event.target.value)} placeholder="작은 응원도 큰 힘이 돼요." /></fieldset>{props.formError && <p className="form-error" role="alert">{props.formError}</p>}{props.attempt ? <div className="composer-retry"><p>결과가 불확실해 같은 요청으로 확인해요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "확인 중…" : "같은 칭찬 다시 확인"}</button><button className="text-button" type="button" onClick={props.onRetryPraises}>기록 새로고침</button></div> : <div className="composer-submit"><p>성공 확인 후 공유판 개수에만 반영돼요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "보내는 중…" : "칭찬 보내기"}</button></div>}</form></section> : <div className="locked-note"><div><b>{props.selectedBoard.goal_state === "completed" ? "완료된 목표예요" : "보관한 목표예요"}</b><p>이전 기록은 읽을 수 있고 새 칭찬은 보낼 수 없어요.</p></div></div>}
           <div className="record-toolbar"><fieldset className="board-tabs"><legend className="visually-hidden">공유 회차 선택</legend>{props.bunches.map((bunch) => <button key={bunch.id} type="button" className={props.selectedBunchId === bunch.id ? "active" : ""} aria-pressed={props.selectedBunchId === bunch.id} onClick={() => props.onBunch(bunch.id)}>{bunch.cycle_no}회차 · {bunch.valid_count}/{bunch.target_count}</button>)}</fieldset>{currentBunch && <p className="cycle-label">{currentBunch.progress_state === "complete" ? "완성" : "진행 중"}</p>}</div>
           {props.bunchCursor && <button className="text-button history-more" type="button" onClick={props.onMoreBunches}>지난 회차 더 보기</button>}
           <div className="records-heading"><div><p className="eyebrow">PRAISES I SENT</p><h3>내가 보낸 칭찬</h3></div><span className="record-total">{currentBunch ? `${currentBunch.valid_count}개` : "기록 없음"}</span></div>
           {props.loadingPraises && <p className="loading-inline" role="status">보낸 칭찬을 불러오고 있어요.</p>}
-          {!props.loadingPraises && props.praises.length === 0 && <div className="empty-records"><b aria-hidden="true">♡</b><h4>이 회차에 보낸 칭찬이 없어요</h4><p>첫 응원을 보내면 이곳에 표시돼요.</p></div>}
-          <ol className="praise-list" aria-label="내가 보낸 공유 칭찬">{props.praises.map((praise) => <li className={`praise-entry ${praise.cancelled_at ? "cancelled" : ""}`} key={praise.id}><span className="entry-marker peer-marker" aria-hidden="true">♡</span><div className="entry-content"><div className="entry-meta"><span>내가 보낸 칭찬</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></div>{praise.cancelled_at ? <p className="cancelled-copy">취소된 칭찬이에요.</p> : <p className="entry-message">{praise.message || "짧은 마음을 남겼어요."}</p>}</div></li>)}</ol>
+          {!props.loadingPraises && props.praises.length === 0 && <div className="empty-records"><h4>이 회차에 보낸 칭찬이 없어요</h4><p>첫 응원을 보내면 이곳에 표시돼요.</p></div>}
+          <ol className="praise-list" aria-label="내가 보낸 공유 칭찬">{props.praises.map((praise) => <li className={`praise-entry ${praise.cancelled_at ? "cancelled" : ""}`} key={praise.id}><div className="entry-content"><div className="entry-meta"><span>내가 보낸 칭찬</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></div>{praise.cancelled_at ? <p className="cancelled-copy">취소된 칭찬이에요.</p> : <p className="entry-message">{praise.message || "짧은 마음을 남겼어요."}</p>}</div></li>)}</ol>
           {props.praiseCursor && <button className="button button-secondary button-wide" type="button" onClick={props.onMorePraises}>칭찬 더 보기</button>}
         </>}
       </div>
@@ -227,8 +231,43 @@ function newRequestKey() {
 }
 
 function errorMessage(error: unknown) {
+  if (error instanceof ApiFailure) {
+    const inviteMessages: Record<string, string> = {
+      active_invite_limit: "사용 중인 코드가 많아요. 이전 코드를 폐기한 뒤 만들어 주세요.",
+      invite_already_used: "이미 사용된 코드예요", invite_expired: "만료된 코드예요", invite_revoked: "폐기한 코드예요",
+    };
+    if (inviteMessages[error.code]) return inviteMessages[error.code];
+  }
   return error instanceof Error ? error.message : "요청을 처리하지 못했습니다.";
 }
+
+async function readShareInvites(): Promise<InviteMeta[]> {
+  const items: InviteMeta[] = [];
+  let cursor: string | null = null;
+  do {
+    const query = new URLSearchParams({ limit: "50" });
+    if (cursor) query.set("cursor", cursor);
+    const page = await apiJson<Page<InviteMeta>>(`/api/v1/connection-invites?${query}`);
+    items.push(...page.items); cursor = page.next_cursor;
+  } while (cursor);
+  return items;
+}
+
+async function createShareInvite() {
+  try { return await mutate<ConnectionInvite>("/api/v1/connection-invites", "POST", {}); }
+  catch (error) {
+    if (error instanceof ApiFailure && error.code === "STATE_CONFLICT") {
+      const items = await readShareInvites();
+      if (items.filter((item) => !item.revoked_at && !item.redeemed_at && Date.parse(item.expires_at) > Date.now()).length >= 5) {
+        throw new Error("사용 중인 코드가 많아요. 이전 코드를 폐기한 뒤 만들어 주세요.");
+      }
+    }
+    throw error;
+  }
+}
+
+function revokeShareInvite(id: string) { return mutate(`/api/v1/connection-invites/${id}`, "DELETE", {}); }
+function recordTime(value: string) { return new Date(value).toLocaleString("ko-KR"); }
 
 function mutationOutcome(error: unknown) {
   if (!(error instanceof ApiFailure)) return "retry_same_key";
@@ -250,15 +289,28 @@ function goalStatusLabel(status: GoalStatus) {
   return status === "active" ? "진행 중" : status === "completed" ? "완료" : "보관";
 }
 
-function boardProgress(board: Board | undefined, status: GoalStatus) {
+function boardProgress(board: Board | undefined) {
   if (!board) return null;
-  if (!board.current_bunch) return status === "active" ? `0/${board.next_target_count}` : null;
-  return `${board.current_bunch.valid_count}/${board.current_bunch.target_count}`;
+  if (!board.current_bunch) return `0 / ${board.next_target_count}`;
+  return `${board.current_bunch.valid_count} / ${board.current_bunch.target_count}`;
 }
 
 export default function ChagokchanApp() {
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("goals");
-  const [theme, setTheme] = useState<"garden" | "grape">("garden");
+  const [theme, setTheme] = useState<"garden" | "grape">("grape");
+  const [nickname, setNickname] = useState<string | null>(null);
+  const [profileError, setProfileError] = useState("");
+  const [showPraise, setShowPraise] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [praiseTag, setPraiseTag] = useState<PraiseTag | null>(null);
+  const [praiseTimestamp, setPraiseTimestamp] = useState("");
+  const [savedPraise, setSavedPraise] = useState<{ id: string; boardId: string; bunchId: string } | null>(null);
+  const lastAnimatedId = useRef("");
+  const [recordDetail, setRecordDetail] = useState<Praise | null>(null);
+  const recordDialog = useRef<HTMLDialogElement>(null);
+  const cancelDialog = useRef<HTMLDialogElement>(null);
+  const [cancelTarget, setCancelTarget] = useState<Praise | null>(null);
+  const [cancellingPraise, setCancellingPraise] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
   const [goals, setGoals] = useState<GoalSummary[]>([]);
   const [goalDetails, setGoalDetails] = useState<Record<string, GoalDetail>>({});
@@ -289,16 +341,17 @@ export default function ChagokchanApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [deleteAttempt, setDeleteAttempt] = useState<{ goalId: string; expected_revision: number } | null>(null);
   const [deletingGoal, setDeletingGoal] = useState(false);
-  const [goalDraft, setGoalDraft] = useState({ title: "", description: "", personalTarget: 20, sharedEnabled: false, sharedTitle: "", sharedDescription: "", sharedTarget: 10 });
+  const [goalDraft, setGoalDraft] = useState({ title: "", description: "", personalTarget: 20, sharedEnabled: false, sharedDescription: "" });
   const [goalAttempt, setGoalAttempt] = useState<IdempotentAttempt | null>(null);
   const [goalSending, setGoalSending] = useState(false);
   const [goalFormError, setGoalFormError] = useState("");
+  const [nameError, setNameError] = useState(false);
   const [praiseMessage, setPraiseMessage] = useState("");
   const [praiseDate, setPraiseDate] = useState(localToday());
   const [praiseAttempt, setPraiseAttempt] = useState<IdempotentAttempt | null>(null);
   const [praiseSending, setPraiseSending] = useState(false);
   const [praiseFormError, setPraiseFormError] = useState("");
-  const [editingPraise, setEditingPraise] = useState<{ id: string; message: string; occurredOn: string } | null>(null);
+  const [editingPraise, setEditingPraise] = useState<{ id: string; message: string; occurredOn: string; tag: PraiseTag | null } | null>(null);
   const [savingSettings, setSavingSettings] = useState(false);
   const [savingPraiseEdit, setSavingPraiseEdit] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -318,6 +371,7 @@ export default function ChagokchanApp() {
   const [boardMembers, setBoardMembers] = useState<BoardMember[]>([]);
   const [memberError, setMemberError] = useState("");
   const [memberSaving, setMemberSaving] = useState("");
+  const [memberLoading, setMemberLoading] = useState(false);
   const [sharedBoards, setSharedBoards] = useState<ContributorBoard[]>([]);
   const sharedBoardsRef = useRef<ContributorBoard[]>([]);
   const [sharedBoardsCursor, setSharedBoardsCursor] = useState<string | null>(null);
@@ -333,10 +387,18 @@ export default function ChagokchanApp() {
   const [peerError, setPeerError] = useState("");
 
   useEffect(() => {
-    if (theme === "grape") document.documentElement.dataset.theme = "grape";
-    else delete document.documentElement.dataset.theme;
+    document.documentElement.dataset.theme = theme;
     return () => { delete document.documentElement.dataset.theme; };
   }, [theme]);
+
+  const loadProfile = useCallback(async () => {
+    setProfileError("");
+    try { const me = await apiJson<{ profile: Profile }>("/api/v1/me"); setNickname(me.profile.nickname ?? "나"); }
+    catch { setProfileError("작성자 정보를 불러오지 못했어요."); }
+  }, []);
+  useEffect(() => { void loadProfile(); }, [loadProfile]);
+  useEffect(() => { if (recordDetail) recordDialog.current?.showModal(); }, [recordDetail]);
+  useEffect(() => { if (cancelTarget) cancelDialog.current?.showModal(); }, [cancelTarget]);
 
   useEffect(() => {
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
@@ -479,6 +541,7 @@ export default function ChagokchanApp() {
       if (requestSeq !== praiseRequestSeq.current) return;
       setPraises((previous) => append ? [...previous, ...page.items] : page.items);
       setPraiseCursor(page.next_cursor);
+      return page;
     } catch (error) {
       if (requestSeq !== praiseRequestSeq.current) return;
       setDetailError(errorMessage(error));
@@ -502,6 +565,11 @@ export default function ChagokchanApp() {
       const bunchPages = await Promise.all(nextDetail.boards.map(async (board) => {
         const query = new URLSearchParams({ limit: "50" });
         const page = await apiJson<Page<Bunch>>(`/api/v1/boards/${board.id}/bunches?${query.toString()}`);
+        while (board.id === preferredBoardId && preferredBunchId && page.next_cursor && !page.items.some((bunch) => bunch.id === preferredBunchId)) {
+          query.set("cursor", page.next_cursor);
+          const older = await apiJson<Page<Bunch>>(`/api/v1/boards/${board.id}/bunches?${query}`);
+          page.items.push(...older.items); page.next_cursor = older.next_cursor;
+        }
         return [board.id, page] as const;
       }));
       if (requestSeq !== goalRequestSeq.current) return;
@@ -521,7 +589,8 @@ export default function ChagokchanApp() {
       setSelectedBoardId(nextBoard.id);
       setSelectedBunchId(nextBunchId);
       setEditingPraise(null);
-      await loadPraises(nextBoard.id, nextBunchId);
+      const page = await loadPraises(nextBoard.id, nextBunchId);
+      return { bunch: boardBunches.find((bunch: Bunch) => bunch.id === nextBunchId) as Bunch | undefined, page };
     } catch (error) {
       if (requestSeq !== goalRequestSeq.current) return;
       setDetail(null);
@@ -532,9 +601,6 @@ export default function ChagokchanApp() {
   }, [loadPraises]);
 
   useEffect(() => { void loadGoals(); }, [loadGoals]);
-  useEffect(() => {
-    if (!showCreate && !selectedGoalIdRef.current && goals[0]) void openGoal(goals[0].id);
-  }, [goals, openGoal, showCreate]);
 
   const selectedGoal = useMemo(() => goals.find((goal) => goal.id === selectedGoalId) ?? detail?.goal ?? null, [goals, selectedGoalId, detail]);
   const selectedBoard = detail?.boards.find((board) => board.id === selectedBoardId);
@@ -672,12 +738,21 @@ export default function ChagokchanApp() {
   async function loadBoardMembers(boardId: string) {
     setManagingBoardId(boardId);
     setMemberError("");
+    setMemberLoading(true);
+    setBoardMembers([]);
     try {
       const page = await apiJson<Page<BoardMember>>(`/api/v1/boards/${boardId}/members?limit=50`);
-      setBoardMembers(page.items);
-      const connectionPage = await apiJson<Page<Connection>>("/api/v1/connections?limit=50");
-      setConnections(connectionPage.items);
+      const people: Connection[] = [];
+      let cursor: string | null = null;
+      do {
+        const query = new URLSearchParams({ limit: "50" });
+        if (cursor) query.set("cursor", cursor);
+        const connectionPage = await apiJson<Page<Connection>>(`/api/v1/connections?${query}`);
+        people.push(...connectionPage.items); cursor = connectionPage.next_cursor;
+      } while (cursor);
+      setBoardMembers(page.items); setConnections(people);
     } catch (error) { setMemberError(errorMessage(error)); setBoardMembers([]); }
+    finally { setMemberLoading(false); }
   }
 
   async function changeBoardMember(boardId: string, userId: string, granted: boolean) {
@@ -763,15 +838,20 @@ export default function ChagokchanApp() {
 
   async function submitGoal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (goalSending) return;
+    if (!goalAttempt && (!goalDraft.title.trim() || [...goalDraft.title].length > 80)) {
+      setNameError(true); document.getElementById("goal-title")?.focus(); return;
+    }
+    setNameError(false);
     setGoalFormError("");
     const payload: Record<string, unknown> = goalAttempt?.body ?? {
       title: goalDraft.title,
       private_description: goalDraft.description || null,
       personal_target_count: Number(goalDraft.personalTarget),
       ...(goalDraft.sharedEnabled ? { shared_board: {
-        title: goalDraft.sharedTitle,
+        title: goalDraft.title,
         description: goalDraft.sharedDescription || null,
-        target_count: Number(goalDraft.sharedTarget),
+        target_count: Number(goalDraft.personalTarget),
       } } : {}),
     };
     const attempt = createIdempotentRequest(payload, goalAttempt, newRequestKey);
@@ -782,7 +862,7 @@ export default function ChagokchanApp() {
       setGoalAttempt(null);
       selectedGoalIdRef.current = result.id;
       setSelectedGoalId(result.id);
-      setGoalDraft({ title: "", description: "", personalTarget: 20, sharedEnabled: false, sharedTitle: "", sharedDescription: "", sharedTarget: 10 });
+      setGoalDraft({ title: "", description: "", personalTarget: 20, sharedEnabled: false, sharedDescription: "" });
       setNotice(result.replayed ? "같은 요청으로 만든 목표를 확인했어요." : "새 목표를 만들었어요.");
       await loadGoals();
       await openGoal(result.id);
@@ -801,11 +881,12 @@ export default function ChagokchanApp() {
 
   async function submitPraise(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (selectedBoard?.kind !== "personal" || selectedGoal?.status !== "active") return;
+    if (praiseSending || selectedBoard?.kind !== "personal" || selectedGoal?.status !== "active") return;
     setPraiseFormError("");
     const payload: Record<string, unknown> = praiseAttempt?.body ?? {
       message: praiseMessage.trim() || null,
       occurred_on: praiseDate || null,
+      tag: praiseTag,
     };
     const attempt = createIdempotentRequest(payload, praiseAttempt, newRequestKey);
     setPraiseAttempt(attempt);
@@ -815,13 +896,22 @@ export default function ChagokchanApp() {
       setPraiseAttempt(null);
       setPraiseMessage("");
       setPraiseDate(localToday());
-      setNotice(result.replayed ? "이전에 보낸 요청이 기록된 것을 확인했어요." : "오늘의 칭찬을 기록했어요.");
+      setPraiseTag(null); setShowPraise(false);
       await loadGoals();
-      await openGoal(selectedGoal.id, selectedBoard.id, result.bunch_id);
+      const refreshed = await openGoal(selectedGoal.id, selectedBoard.id, result.bunch_id);
+      if (refreshed?.bunch?.progress_state === "complete") {
+        setSavedPraise(null); setNotice("회차가 완성됐어요. 다음 회차에도 칭찬을 쌓아 보세요.");
+      } else if (refreshed?.page?.items[0]?.id === result.id && !refreshed.page.items[0].cancelled_at && !refreshed.page.items[0].excluded_at) {
+        if (lastAnimatedId.current !== result.id) {
+          lastAnimatedId.current = result.id;
+          setSavedPraise({ id: result.id, boardId: selectedBoard.id, bunchId: result.bunch_id });
+        }
+        setNotice(result.replayed ? "이전에 저장한 칭찬을 확인했어요." : "칭찬을 저장했어요.");
+      } else setNotice(refreshed?.page ? "저장한 칭찬과 최신 회차를 확인했어요." : "저장은 확인됐어요. 최신 기록을 다시 불러와 주세요.");
     } catch (error) {
       const outcome = mutationOutcome(error);
       if (outcome === "retry_same_key") {
-        setPraiseFormError(`${errorMessage(error)} 응답이 불확실해요. 같은 요청 키와 내용을 유지했습니다.`);
+        setPraiseFormError("연결이 끊겼어요. 입력한 내용은 그대로 있어요. 같은 요청으로 다시 저장해요.");
       } else {
         setPraiseAttempt(null);
         setPraiseFormError(errorMessage(error));
@@ -948,9 +1038,11 @@ export default function ChagokchanApp() {
       await mutate(`/api/v1/praises/${editingPraise.id}`, "PATCH", {
         message: String(form.get("message") ?? "") || null,
         occurred_on: String(form.get("occurredOn") ?? "") || null,
+        tag: editingPraise.tag,
       });
       setEditingPraise(null);
       setNotice("기록을 수정했어요.");
+      setRecordDetail(null);
       await loadPraises(selectedBoardId, selectedBunchId);
     } catch (error) {
       setDetailError(errorMessage(error));
@@ -960,18 +1052,21 @@ export default function ChagokchanApp() {
   }
 
   async function cancelPraise(praise: Praise) {
-    if (!window.confirm("이 기록을 취소할까요? 회차 개수에서 빠지고 메모와 실천일은 제거됩니다.")) return;
+    if (cancellingPraise) return;
+    setCancellingPraise(true);
     try {
       await mutate(`/api/v1/praises/${praise.id}/cancel`, "POST", {});
-      setNotice("기록을 취소했어요. 해당 메모와 실천일은 삭제됐습니다.");
+      setCancelTarget(null); setRecordDetail(null);
+      setNotice("기록을 취소했어요. 해당 메모와 실천일·태그는 삭제됐습니다.");
       await loadGoals();
       await refreshCurrentGoal();
     } catch (error) {
       setDetailError(errorMessage(error));
-    }
+    } finally { setCancellingPraise(false); }
   }
 
   function chooseBoard(board: Board) {
+    setShowPraise(false); setSavedPraise(null);
     setSelectedBoardId(board.id);
     const nextBunchId = board.current_bunch?.id ?? bunchesByBoard[board.id]?.[0]?.id ?? "";
     setSelectedBunchId(nextBunchId);
@@ -980,94 +1075,60 @@ export default function ChagokchanApp() {
   }
 
   function chooseBunch(bunchId: string) {
+    setShowPraise(false); setSavedPraise(null);
     setSelectedBunchId(bunchId);
     setEditingPraise(null);
     void loadPraises(selectedBoardId, bunchId);
   }
 
+  function returnToBoards() {
+    goalRequestSeq.current += 1; praiseRequestSeq.current += 1;
+    selectedGoalIdRef.current = null;
+    setSelectedGoalId(null); setDetail(null); setLoadingDetail(false);
+    setShowCreate(false); setShowPraise(false); setShowShare(false); setDetailError("");
+    setWorkspaceView("goals");
+  }
+
+  function openPraiseComposer() {
+    if (!praiseAttempt) setPraiseTimestamp(recordTime(new Date().toISOString()));
+    setSavedPraise(null); setShowPraise(true);
+  }
+
+  const interactionLocked = loadingDetail || praiseSending || Boolean(praiseAttempt);
+  const sharedBoard = detail?.boards.find((board) => board.kind === "shared");
+  const canAddPraise = !loadingDetail && detail?.goal.id === selectedGoalId && selectedBoard?.kind === "personal" && selectedGoal?.status === "active" &&
+    (!selectedBunch || selectedBunch.id === selectedBoard.current_bunch?.id);
+  const savedInView = savedPraise?.boardId === selectedBoardId && savedPraise.bunchId === selectedBunchId && praises[0]?.id === savedPraise.id;
+  const recordOrdinal = (praise: Praise) => Math.max(1, (selectedBunch?.valid_count ?? 0) - praises.slice(0, praises.findIndex((item) => item.id === praise.id)).filter((item) => !item.cancelled_at && !item.excluded_at).length);
+
   return (
     <main id="app-shell" className="app-shell">
       <a className="skip-link" href="#workspace-content">본문으로 건너뛰기</a>
       <header className="topbar">
-        <a className="brand-lockup" href="/" aria-label="차곡찬 홈">
-          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-          <span className="brand-name">차곡찬</span>
-        </a>
-        <p className="topbar-note">나를 알아보는 작은 기록</p>
-        <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === "garden" ? "grape" : "garden")}
-          aria-label="화면 색상 테마" aria-pressed={theme === "grape"}>
-          테마 · {theme === "garden" ? "정원" : "포도"}
-        </button>
-        <span className="profile-chip">오늘도 나</span>
+        <button className="back-link" type="button" disabled={interactionLocked} onClick={returnToBoards}>판 고르기</button>
+        <a className="brand-lockup" href="/" aria-label="차곡찬 홈" onClick={(event) => { event.preventDefault(); if (!interactionLocked) returnToBoards(); }}><span className="brand-name">차곡찬</span></a>
+        {workspaceView === "goals" && detail && !showCreate && (sharedBoard
+          ? <button className="badge share-badge" type="button" disabled={interactionLocked} onClick={() => { setShowShare(true); void loadBoardMembers(sharedBoard.id); }}>공유 켬</button>
+          : <span className="badge" title="공유판은 판을 만들 때 켤 수 있어요">공유 끔</span>)}
+        <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === "garden" ? "grape" : "garden")} aria-label="화면 색상 테마" aria-pressed={theme === "grape"}>테마 · {theme === "garden" ? "정원" : "포도"}</button>
       </header>
-
-      {isOnline === false && <div className="offline-banner" role="status" aria-live="polite">
-        <span>오프라인이에요. 다시 연결한 뒤 기록을 확인해 주세요. 오프라인 전송은 저장되거나 성공 처리되지 않아요.</span>
-      </div>}
-
+      {isOnline === false && <div className="offline-banner" role="status" aria-live="polite">오프라인이에요. 다시 연결한 뒤 기록을 확인해 주세요. 오프라인 전송은 저장되거나 성공 처리되지 않아요.</div>}
       <div className="workspace">
-        <aside className={`goal-sidebar ${workspaceView === "goals" && selectedGoalId ? "has-selection" : ""}`} aria-label="차곡찬 메뉴">
-          <div className="sidebar-heading">
-            <div>
-              <p className="eyebrow">CHAGOKCHAN</p>
-              <h1>{workspaceView === "goals" ? "내 목표" : workspaceView === "connections" ? "연결" : workspaceView === "shared" ? "받은 공유판" : "휴지통"}</h1>
-            </div>
-            {workspaceView === "goals" && <button className="icon-button add-button" type="button" aria-label="새 목표 만들기" onClick={() => { setShowCreate(true); setGoalFormError(""); setGoalAttempt(null); }}>
-              <span aria-hidden="true">＋</span>
-            </button>}
-          </div>
-
-          <nav className="workspace-nav" aria-label="주요 화면">
-            <button type="button" aria-current={workspaceView === "goals" ? "page" : undefined} className={workspaceView === "goals" ? "active" : ""} onClick={() => setWorkspaceView("goals")}>내 목표</button>
-            <button type="button" aria-current={workspaceView === "connections" ? "page" : undefined} className={workspaceView === "connections" ? "active" : ""} onClick={() => setWorkspaceView("connections")}>연결 관리</button>
-            <button type="button" aria-current={workspaceView === "shared" ? "page" : undefined} className={workspaceView === "shared" ? "active" : ""} onClick={() => { setWorkspaceView("shared"); setSelectedSharedBoard(null); }}>받은 공유판</button>
-            <button type="button" aria-current={workspaceView === "trash" ? "page" : undefined} className={workspaceView === "trash" ? "active" : ""} onClick={() => setWorkspaceView("trash")}>휴지통</button>
-          </nav>
-
-          {workspaceView === "goals" ? <>
-          {goalListError && <div className="inline-alert" role="alert"><span>{goalListError}</span><button type="button" onClick={() => void loadGoals()}>다시 불러오기</button></div>}
-          {loadingGoals && goals.length === 0 ? <div className="skeleton-list" role="status"><span className="visually-hidden">목표를 불러오는 중</span><span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" /></div> : null}
-          {!loadingGoals && goals.length === 0 && !goalListError ? (
-            <section className="empty-sidebar">
-              <span className="empty-spark" aria-hidden="true">✳</span>
-              <h2>첫 목표를 만들어 볼까요?</h2>
-              <p>작은 바람도 목표가 되면 차곡차곡 쌓여요.</p>
-              <button className="button button-primary button-wide" type="button" onClick={() => setShowCreate(true)}>목표 시작하기</button>
-            </section>
-          ) : null}
-          <nav className="goal-list" aria-label="목표 목록" aria-busy={loadingGoals}>
-            {goals.map((goal) => {
-              const boards = goalDetails[goal.id]?.boards ?? [];
-              const personal = boards.find((board) => board.kind === "personal");
-              const shared = boards.find((board) => board.kind === "shared");
-              return (
-                <button key={goal.id} className={`goal-card ${selectedGoalId === goal.id ? "selected" : ""}`} type="button" aria-current={selectedGoalId === goal.id ? "page" : undefined} onClick={() => void openGoal(goal.id)}>
-                  <span className="goal-card-title">{goal.title}</span>
-                  <span className={`status-pill status-${goal.status}`}>{goalStatusLabel(goal.status)}</span>
-                  <span className="goal-card-progress">
-                    <span>개인 <b>{boardProgress(personal, goal.status) ?? "—"}</b></span>
-                    {shared ? <span>공유 <b>{boardProgress(shared, goal.status) ?? "—"}</b></span> : null}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-          {goalCursor && <button className="text-button load-more" type="button" onClick={() => void loadMoreGoals()}>목표 더 보기</button>}
-          <p className="sidebar-footnote">개인판과 공유판은 각각 따로 쌓여요.</p>
-          </> : <p className="sidebar-footnote">{workspaceView === "trash" ? "복구 기한은 삭제 후 30일이에요." : "연결과 공유판 권한은 각각 따로 관리해요."}</p>}
-        </aside>
-
-        <section id="workspace-content" className="main-panel" aria-label="목표와 기록" tabIndex={-1}>
-          {notice && <p className="notice-banner" role="status">{notice}<button type="button" aria-label="알림 닫기" onClick={() => setNotice("")}>닫기</button></p>}
-
+        <aside className="goal-sidebar" aria-label="차곡찬 메뉴"><nav className="workspace-nav" aria-label="주요 화면">
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "goals" ? "page" : undefined} onClick={returnToBoards}>내 판</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "connections" ? "page" : undefined} onClick={() => { setWorkspaceView("connections"); setShowPraise(false); }}>연결 관리</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "shared" ? "page" : undefined} onClick={() => { setWorkspaceView("shared"); setSelectedSharedBoard(null); setShowPraise(false); }}>받은 공유판</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "trash" ? "page" : undefined} onClick={() => { setWorkspaceView("trash"); setShowPraise(false); }}>휴지통</button>
+        </nav></aside>
+        <section id="workspace-content" className="main-panel" tabIndex={-1} aria-busy={loadingDetail || praiseSending}>
+          <div className="status-region" aria-live="polite">{praiseSending && <p role="status">저장 중…</p>}{notice && <p className="notice-banner" role="status">{notice}<button type="button" aria-label="알림 닫기" onClick={() => setNotice("")}>닫기</button></p>}</div>
           {workspaceView === "connections" ? <ConnectionsPanel
             loading={connectionLoading} error={connectionError} connections={connections} invites={connectionInvites}
             requests={connectionRequests} blocks={blocks} inviteResult={inviteResult} invitePreview={invitePreview}
             inviteToken={inviteToken} inviteCode={inviteCode} previewError={invitePreviewError}
             previewLoading={invitePreviewLoading} requestAttempt={inviteRequestAttempt !== null}
             onCreateInvite={() => void createInvite()} onPreview={(secret) => void previewInvite(secret)}
-            onRefresh={() => void refreshConnectionCenter()}
-            onInviteCodeChange={setInviteCode} onRequest={requestConnection} onClearInvite={clearInviteSecret}
+            onRefresh={() => void refreshConnectionCenter()} onInviteCodeChange={setInviteCode} onRequest={requestConnection} onClearInvite={clearInviteSecret}
             onResolveRequest={(item, action) => void resolveConnectionRequest(item, action)}
             onDisconnect={(item) => void disconnectConnection(item)} onBlock={(userId) => void blockUser(userId)}
             onRevokeBlock={(item) => void revokeBlock(item)} onRevokeInvite={(item) => void revokeInvite(item)}
@@ -1084,61 +1145,55 @@ export default function ChagokchanApp() {
           /> : workspaceView === "trash" ? <TrashPanel
             goals={trashGoals} cursor={trashCursor} loading={trashLoading} error={trashError} restoringId={restoringGoalId}
             onRefresh={() => void loadTrashGoals()} onMore={() => trashCursor && void loadTrashGoals(trashCursor, true)} onRestore={(goal) => void restoreGoal(goal)}
-          /> : showCreate ? (
-            <section className="content-card create-card" aria-labelledby="create-heading">
-              <button className="back-link mobile-only" type="button" onClick={() => setShowCreate(false)}>← 목표 목록</button>
-              <p className="eyebrow">A SMALL START</p>
-              <h2 id="create-heading">새 목표를 시작해요</h2>
-              <p className="section-intro">나를 위한 목표부터 천천히 적어 보세요. 공유판은 나중에 따로 열 수 있어요.</p>
-              <form className="stack-form" onSubmit={(event) => void submitGoal(event)}>
-                <fieldset disabled={goalSending || Boolean(goalAttempt)}>
-                  <label htmlFor="goal-title">목표 이름 <span className="required-mark">필수</span></label>
-                  <input id="goal-title" name="title" autoComplete="off" maxLength={80} required value={goalDraft.title} onChange={(event) => setGoalDraft({ ...goalDraft, title: event.target.value })} placeholder="예: 매일 조금씩 걷기" />
-                  <label htmlFor="goal-description">나만의 메모 <span className="optional-mark">선택</span></label>
-                  <textarea id="goal-description" name="description" maxLength={1000} rows={3} value={goalDraft.description} onChange={(event) => setGoalDraft({ ...goalDraft, description: event.target.value })} placeholder="이 목표를 시작한 이유를 적어도 좋아요." />
-                  <label htmlFor="personal-target">개인판 회차 목표</label>
-                  <div className="input-suffix"><input id="personal-target" type="number" min={1} max={100} value={goalDraft.personalTarget} onChange={(event) => setGoalDraft({ ...goalDraft, personalTarget: Number(event.target.value) })} /><span>번의 칭찬</span></div>
-                  <label className="checkbox-row"><input type="checkbox" checked={goalDraft.sharedEnabled} onChange={(event) => setGoalDraft({ ...goalDraft, sharedEnabled: event.target.checked })} /><span>나중에 공유할 판도 함께 준비하기</span></label>
-                  {goalDraft.sharedEnabled && <div className="shared-fields">
-                    <label htmlFor="shared-title">공유판 이름</label>
-                    <input id="shared-title" maxLength={80} required value={goalDraft.sharedTitle} onChange={(event) => setGoalDraft({ ...goalDraft, sharedTitle: event.target.value })} placeholder="예: 함께 응원해요" />
-                    <label htmlFor="shared-description">공유판 소개 <span className="optional-mark">선택</span></label>
-                    <textarea id="shared-description" maxLength={1000} rows={2} value={goalDraft.sharedDescription} onChange={(event) => setGoalDraft({ ...goalDraft, sharedDescription: event.target.value })} />
-                    <label htmlFor="shared-target">공유판 회차 목표</label>
-                    <div className="input-suffix"><input id="shared-target" type="number" min={1} max={100} value={goalDraft.sharedTarget} onChange={(event) => setGoalDraft({ ...goalDraft, sharedTarget: Number(event.target.value) })} /><span>번의 칭찬</span></div>
-                    <p className="field-hint">공유판을 만들더라도 개인판 기록과 개수는 독립적으로 유지돼요.</p>
-                  </div>}
-                </fieldset>
-                {goalFormError && <p className="form-error" role="alert">{goalFormError}</p>}
-                {goalAttempt && <div className="retry-panel" role="status"><p>응답을 받지 못해 요청 결과를 확인 중이에요. 같은 내용으로 다시 보내면 중복 목표가 생기지 않아요.</p><button className="button button-secondary" type="submit" disabled={goalSending}>{goalSending ? "확인 중…" : "같은 요청으로 다시 확인"}</button></div>}
-                {!goalAttempt && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => setShowCreate(false)}>취소</button><button className="button button-primary" type="submit" disabled={goalSending}>{goalSending ? "저장 중…" : "목표 만들기"}</button></div>}
-              </form>
-            </section>
-          ) : loadingDetail ? (
-            <div className="loading-panel" role="status"><span className="loading-orbit" aria-hidden="true" /><p>목표를 불러오고 있어요.</p></div>
-          ) : !detail && selectedGoalId && detailError ? (
-            <section className="welcome-panel"><span className="welcome-mark" aria-hidden="true">⌑</span><h2>목표를 열지 못했어요</h2><p>{detailError}</p><div className="form-actions"><button className="button button-secondary" type="button" onClick={() => { selectedGoalIdRef.current = null; setSelectedGoalId(null); setDetailError(""); }}>목표 목록</button><button className="button button-primary" type="button" onClick={() => void openGoal(selectedGoalId)}>다시 시도</button></div></section>
-          ) : detail && selectedGoal ? (
-            <>
-              <div className="goal-header">
-                <button className="back-link mobile-only" type="button" onClick={() => { goalRequestSeq.current += 1; selectedGoalIdRef.current = null; setSelectedGoalId(null); setDetail(null); setLoadingDetail(false); }}>← 목표 목록</button>
-                <div className="goal-heading-copy">
-                  <p className="eyebrow">A GOAL TO GROW</p>
-                  <div className="title-row"><h2>{detail.goal.title}</h2><span className={`status-pill status-${detail.goal.status}`}>{goalStatusLabel(detail.goal.status)}</span></div>
-                  {detail.goal.private_description && <p className="goal-description">{detail.goal.private_description}</p>}
-                </div>
+          /> : showCreate ? <section className="content-card create-card" aria-labelledby="create-heading">
+            <button className="back-link" type="button" disabled={goalSending} onClick={returnToBoards}>판 고르기</button>
+            <h1 id="create-heading">판 만들기</h1>
+            <div className="selected-template"><div className="mini-grape"><GrapeCluster target={15} filled={4} /></div><div><span className="eyebrow">선택한 판</span><h2>포도판</h2></div></div>
+            <form className="stack-form" onSubmit={(event) => void submitGoal(event)}>
+              <fieldset disabled={goalSending || Boolean(goalAttempt)}>
+                <label htmlFor="goal-title">이름 <span className="required-mark">필수</span></label>
+                <input id="goal-title" name="title" autoComplete="off" maxLength={80} required aria-invalid={nameError} aria-describedby={nameError ? "goal-name-error" : "goal-name-hint"} value={goalDraft.title} onInvalid={() => setNameError(true)} onChange={(event) => { setNameError(false); setGoalDraft({ ...goalDraft, title: event.target.value }); }} placeholder="예: 매일 조금씩 걷기" />
+                {nameError ? <p id="goal-name-error" className="form-error" role="alert">이름을 확인해 주세요</p> : <p id="goal-name-hint" className="field-hint">1~80자로 적어 주세요.</p>}
+                <label htmlFor="personal-target">알 개수</label><input id="personal-target" type="number" min={1} max={100} step={1} required value={goalDraft.personalTarget} onChange={(event) => setGoalDraft({ ...goalDraft, personalTarget: Number(event.target.value) })} />
+                <label className="checkbox-row"><input type="checkbox" role="switch" aria-checked={goalDraft.sharedEnabled} checked={goalDraft.sharedEnabled} onChange={(event) => setGoalDraft({ ...goalDraft, sharedEnabled: event.target.checked })} /><span>공유 {goalDraft.sharedEnabled ? "켬" : "끔"}</span></label>
+                <p className="field-hint">{goalDraft.sharedEnabled ? "켜면 이 판의 공유판이 함께 만들어져요. 지인은 연결한 뒤 이 판에 초대해야 칭찬할 수 있어요." : "끄면 공유판을 만들지 않아요."}</p>
+                <p className="field-hint">공유는 판을 만들 때만 켤 수 있어요. 나중에 켤 수 없어요.</p>
+                <details><summary>더 보기</summary><label htmlFor="goal-description">개인 메모 <span className="optional-mark">선택</span></label><textarea id="goal-description" maxLength={1000} rows={3} value={goalDraft.description} onChange={(event) => setGoalDraft({ ...goalDraft, description: event.target.value })} />
+                  {goalDraft.sharedEnabled && <><label htmlFor="shared-description">공유 설명 <span className="optional-mark">선택</span></label><textarea id="shared-description" maxLength={1000} rows={2} value={goalDraft.sharedDescription} onChange={(event) => setGoalDraft({ ...goalDraft, sharedDescription: event.target.value })} /></>}
+                </details>
+              </fieldset>
+              {goalFormError && <p className="form-error" role="alert">{goalFormError}</p>}
+              {goalAttempt && <p>결과가 불확실하면 같은 요청으로 확인해요. 판이 중복 생성되지 않아요.</p>}
+              <div className="form-actions"><button className="button button-secondary" type="button" disabled={goalSending} onClick={returnToBoards}>취소</button><button className="button button-primary" type="submit" disabled={goalSending}>{goalSending ? "저장 중…" : goalAttempt ? "같은 요청으로 다시 확인" : "판 만들기"}</button></div>
+            </form>
+          </section> : loadingDetail && (!detail || detail.goal.id !== selectedGoalId) ? <div className="loading-panel" role="status"><span className="loading-orbit" aria-hidden="true" /><p>판을 불러오고 있어요.</p></div>
+          : !detail && selectedGoalId && detailError ? <section className="welcome-panel"><h1>판을 열지 못했어요</h1><p>{detailError}</p><button className="button button-primary" type="button" onClick={() => void openGoal(selectedGoalId)}>다시 시도</button></section>
+          : !detail && <section className="board-directory" aria-labelledby="boards-heading" aria-busy={loadingGoals}>
+            <div className="settings-title"><h1 id="boards-heading">판 고르기</h1>{goals.length > 0 && <button className="button button-primary" type="button" onClick={() => { setShowCreate(true); setGoalFormError(""); setNameError(false); }}>새 판 만들기</button>}</div>
+            {goalListError && <div className="inline-alert" role="alert">{goalListError}<button type="button" onClick={() => void loadGoals()}>다시 불러오기</button></div>}
+            {loadingGoals && <p role="status">판을 불러오고 있어요.</p>}
+            {!loadingGoals && goals.length === 0 && !goalListError && <><p>아직 판이 없어요. 판을 하나 골라 시작해요.</p><button className="template-card" type="button" onClick={() => setShowCreate(true)}><span className="mini-grape"><GrapeCluster target={15} filled={4} /></span><span><b>포도판</b><span>알을 눌러 칭찬을 쌓아요</span></span></button></>}
+            <div className="goal-list">{goals.map((goal) => {
+              const boards = goalDetails[goal.id]?.boards ?? [];
+              const personal = boards.find((board) => board.kind === "personal");
+              return <button className="goal-card" key={goal.id} type="button" onClick={() => void openGoal(goal.id)}><span className="goal-card-title">{goal.title}</span><span className="status-pill">{goalStatusLabel(goal.status)}</span><span className="goal-card-progress">기록 {boardProgress(personal) ?? "확인 중"}</span>{boards.some((board) => board.kind === "shared") && <span className="badge">공유 켬</span>}</button>;
+            })}</div>
+            {goalCursor && <button className="text-button" type="button" onClick={() => void loadMoreGoals()}>판 더 보기</button>}
+          </section>}
+          {workspaceView === "goals" && !showCreate && detail && detail.goal.id === selectedGoalId && selectedGoal && <>
+            <div className="goal-header"><div className="goal-heading-copy"><p className="eyebrow">포도판</p><div className="title-row"><h1>{detail.goal.title}</h1><span className="status-pill">{goalStatusLabel(detail.goal.status)}</span></div>{detail.goal.private_description && <p className="goal-description">{detail.goal.private_description}</p>}{!sharedBoard && <p className="field-hint">공유판은 판을 만들 때 켤 수 있어요.</p>}</div></div>
+            <fieldset className="goal-actions-fieldset" disabled={interactionLocked}>
                 <div className="goal-actions">
-                  <button className="button button-secondary" type="button" onClick={() => { setShowCreate(true); setGoalFormError(""); setGoalAttempt(null); }}>새 목표</button>
-                  <button className="button button-secondary" type="button" onClick={() => { setShowSettings((value) => !value); setDetailError(""); }}>{showSettings ? "설정 닫기" : "목표 설정"}</button>
+                  <button className="button button-secondary" type="button" onClick={() => { setShowCreate(true); setGoalFormError(""); setGoalAttempt(null); }}>새 판</button>
+                  <button className="button button-secondary" type="button" onClick={() => { setShowSettings((value) => !value); setDetailError(""); }}>{showSettings ? "설정 닫기" : "판 설정"}</button>
                   {detail.goal.status === "active" && <button className="button button-quiet" type="button" onClick={() => void transitionGoal("complete")}>완료</button>}
                   {detail.goal.status !== "archived" && <button className="button button-quiet" type="button" onClick={() => void transitionGoal("archive")}>보관</button>}
                   {detail.goal.status !== "active" && <button className="button button-primary" type="button" onClick={() => void transitionGoal("resume")}>다시 시작</button>}
                   {deleteAttempt?.goalId === detail.goal.id ? <button className="button button-danger" type="button" disabled={deletingGoal} onClick={() => void deleteGoal(true)}>{deletingGoal ? "확인 중…" : "같은 삭제 다시 확인"}</button> : <button className="button button-quiet danger-link" type="button" disabled={deletingGoal} onClick={() => void deleteGoal()}>{deletingGoal ? "삭제 중…" : "휴지통으로"}</button>}
                 </div>
-              </div>
-
+            </fieldset>
               {showSettings && <section className="settings-panel" aria-labelledby="settings-heading">
-                <div className="settings-title"><div><p className="eyebrow">GOAL SETTINGS</p><h3 id="settings-heading">목표와 판 설정</h3></div><button className="icon-button close-button" type="button" aria-label="설정 닫기" onClick={() => setShowSettings(false)}>×</button></div>
+                <div className="settings-title"><div><p className="eyebrow">GOAL SETTINGS</p><h3 id="settings-heading">판 설정</h3></div><button className="icon-button close-button" type="button" aria-label="설정 닫기" onClick={() => setShowSettings(false)}><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></svg></button></div>
                 <form className="settings-form" onSubmit={(event) => void saveGoalSettings(event)}>
                   <label htmlFor="edit-goal-title">목표 이름</label><input id="edit-goal-title" name="title" maxLength={80} required defaultValue={detail.goal.title} />
                   <label htmlFor="edit-goal-description">나만의 메모</label><textarea id="edit-goal-description" name="description" maxLength={1000} rows={2} defaultValue={detail.goal.private_description ?? ""} />
@@ -1150,121 +1205,60 @@ export default function ChagokchanApp() {
                   <label htmlFor={`target-${board.id}`}>다음 회차 목표</label><div className="input-suffix"><input id={`target-${board.id}`} name="target" type="number" min={1} max={100} defaultValue={board.next_target_count} /><span>번</span></div>
                   <button className="button button-secondary" type="submit" disabled={savingSettings}>{savingSettings ? "저장 중…" : `${board.kind === "personal" ? "개인판" : "공유판"} 저장`}</button>
                 </form>)}
-                {detail.boards.filter((board) => board.kind === "shared").map((board) => <section className="member-manager" key={`members-${board.id}`} aria-labelledby={`members-heading-${board.id}`}>
-                  <div className="settings-title"><div><p className="eyebrow">SHARE ACCESS</p><h4 id={`members-heading-${board.id}`}>공유 대상</h4></div><button className="button button-secondary" type="button" onClick={() => managingBoardId === board.id ? setManagingBoardId("") : void loadBoardMembers(board.id)}>{managingBoardId === board.id ? "권한 관리 닫기" : "권한 관리"}</button></div>
-                  {managingBoardId === board.id && <>
-                    <p className="field-hint">연결된 사람 중 공유판에 초대한 대상만 볼 수 있어요. 연결을 다시 맺어도 회수한 권한은 복구되지 않아요.</p>
-                    {memberError && <p className="form-error" role="alert">{memberError}</p>}
-                    {connections.filter((connection) => connection.status === "active" && connection.other_user).length === 0 ? <p className="history-empty">먼저 연결을 맺으면 공유 대상으로 선택할 수 있어요.</p> : <ul className="member-list">
-                      {connections.filter((connection) => connection.status === "active" && connection.other_user).map((connection) => {
-                        const person = connection.other_user;
-                        if (!person) return null;
-                        const member = boardMembers.find((entry) => entry.user.user_id === person.user_id);
-                        const hasGrant = member?.status === "active";
-                        const mutationId = `${board.id}:${person.user_id}`;
-                        return <li key={person.user_id}><div><b>{person.nickname ?? "연결된 사용자"}</b><span>{hasGrant ? "이 공유판을 볼 수 있어요" : member ? "이전 권한은 회수됐어요" : "아직 이 판은 볼 수 없어요"}</span></div><button className={`button ${hasGrant ? "button-secondary" : "button-primary"}`} type="button" disabled={memberSaving === mutationId} onClick={() => void changeBoardMember(board.id, person.user_id, hasGrant)}>{memberSaving === mutationId ? "저장 중…" : hasGrant ? "권한 회수" : "공유 허용"}</button></li>;
-                      })}
-                    </ul>}
-                  </>}
-                </section>)}
               </section>}
 
-              {detailError && <div className="inline-alert detail-alert" role="alert"><span>{detailError}</span><button type="button" onClick={() => void refreshCurrentGoal()}>다시 불러오기</button></div>}
 
-              <section className="progress-section" aria-label="판별 진행 상황">
-                {detail.boards.map((board) => {
-                  const bunch = board.current_bunch;
-                  return <button className={`board-progress ${selectedBoardId === board.id ? "active-board" : ""}`} type="button" key={board.id} onClick={() => chooseBoard(board)} aria-pressed={selectedBoardId === board.id}>
-                    <span className="board-progress-top"><span className="board-label">{board.kind === "personal" ? "나의 개인판" : "함께 나누는 공유판"}</span><span className="board-count">{bunch ? `${bunch.valid_count} / ${bunch.target_count}` : "첫 회차 전"}</span></span>
-                    <span className="progress-track" role="progressbar" aria-label={`${board.kind === "personal" ? "개인판" : "공유판"} 진행`} aria-valuemin={0} aria-valuemax={bunch?.target_count ?? board.next_target_count} aria-valuenow={bunch?.valid_count ?? 0}><span style={{ width: `${bunch ? Math.min(100, bunch.valid_count / bunch.target_count * 100) : 0}%` }} /></span>
-                    <span className="progress-caption">{bunch ? `${bunch.cycle_no}회차 · ${bunch.progress_state === "complete" ? "완성" : "차곡차곡 쌓는 중"}` : `다음 회차 목표 ${board.next_target_count}번`}</span>
-                  </button>;
-                })}
+            {detailError && <div className="inline-alert" role="alert"><span>{detailError}</span><button type="button" onClick={() => void refreshCurrentGoal()}>다시 불러오기</button></div>}
+            <div className="record-toolbar"><fieldset className="board-tabs" disabled={interactionLocked}><legend className="visually-hidden">기록을 볼 판 선택</legend>{detail.boards.map((board) => <button key={board.id} type="button" aria-pressed={selectedBoardId === board.id} onClick={() => chooseBoard(board)}>{board.kind === "personal" ? "개인 기록" : "받은 칭찬"}</button>)}</fieldset>
+              <details className="cycle-picker"><summary>지난 회차 {selectedBunch ? `· ${selectedBunch.cycle_no}회차` : ""}</summary><fieldset className="cycle-list" disabled={interactionLocked}>{selectedBunches.map((bunch) => <button className="cycle-card" type="button" key={bunch.id} aria-pressed={selectedBunchId === bunch.id} onClick={() => chooseBunch(bunch.id)}>{bunch.cycle_no}회차 · {bunch.valid_count} / {bunch.target_count} · {bunch.progress_state === "complete" ? "완성" : "진행 중"}</button>)}{bunchCursors[selectedBoardId] && <button className="text-button" type="button" onClick={() => void loadMoreBunches(selectedBoardId)}>회차 더 보기</button>}</fieldset></details>
+            </div>
+            <div className="board-workspace">
+              <section className="graphic-section" aria-label="선택한 판의 포도 그래픽">
+                <p className="record-count"><strong>기록 {selectedBunch?.valid_count ?? 0}</strong><span>/ {selectedBunch?.target_count ?? selectedBoard?.next_target_count ?? 20}</span></p>
+                <GrapeCluster target={selectedBunch?.target_count ?? selectedBoard?.next_target_count ?? 20} filled={selectedBunch?.valid_count ?? 0} state={praiseSending ? "saving" : savedInView ? "success" : "idle"} onNext={canAddPraise && selectedBunch?.progress_state !== "complete" ? openPraiseComposer : undefined} />
+                {canAddPraise && selectedBunch?.progress_state !== "complete" && <button className="button button-primary button-wide" type="button" disabled={praiseSending} onClick={openPraiseComposer}>칭찬 남기기</button>}
+                {canAddPraise && selectedBunch?.progress_state === "complete" && <div className="completion-note" role="status"><h2>이 회차를 완성했어요</h2><p>다음 칭찬은 새 회차에 쌓여요.</p><button className="button button-primary button-wide" type="button" disabled={praiseSending} onClick={openPraiseComposer}>다음 회차 시작하기</button></div>}
+                {selectedGoal.status !== "active" && <p className="locked-note">{selectedGoal.status === "completed" ? "완료한 판이에요." : "보관한 판이에요."} 다시 시작하면 칭찬을 쌓을 수 있어요.</p>}
+                {selectedBunch && selectedBunch.id !== selectedBoard?.current_bunch?.id && <p className="locked-note">지난 회차는 읽기 전용이에요. 현재 회차를 선택해 기록해 주세요.</p>}
+                <p className="privacy-note">{selectedBoard?.kind === "shared" ? "받은 칭찬은 개인 기록과 따로 쌓여요." : "개인 기록은 나에게만 보여요. 공유판과 개수를 합치지 않아요."}</p>
               </section>
-
-              <div className="record-toolbar">
-                <fieldset className="board-tabs">
-                  <legend className="visually-hidden">기록을 볼 판 선택</legend>
-                  {detail.boards.map((board) => <button key={board.id} type="button" aria-pressed={selectedBoardId === board.id} className={selectedBoardId === board.id ? "active" : ""} onClick={() => chooseBoard(board)}>{board.kind === "personal" ? "개인 기록" : "받은 칭찬"}</button>)}
-                </fieldset>
-                {selectedBunch && <p className="cycle-label">{selectedBunch.cycle_no}회차 <em>{selectedBunch.progress_state === "complete" ? "완성" : "진행 중"}</em></p>}
-              </div>
-
-              <div className="record-layout">
-                <section className="record-column" aria-label="선택한 회차 기록">
-                  {selectedBoard?.kind === "personal" && selectedGoal.status === "active" && (!selectedBunch || selectedBunch.id === selectedBoard.current_bunch?.id) && <section className="praise-composer" aria-labelledby="composer-heading">
-                    <div className="composer-heading"><span className="composer-spark" aria-hidden="true">✳</span><div><p className="eyebrow">A KIND WORD TO YOURSELF</p><h3 id="composer-heading">오늘의 나를 칭찬해요</h3></div></div>
-                    <form onSubmit={(event) => void submitPraise(event)}>
-                      <fieldset disabled={praiseSending || Boolean(praiseAttempt)}>
-                        <label className="visually-hidden" htmlFor="praise-message">나에게 남길 칭찬 메모</label>
-                        <textarea id="praise-message" maxLength={1000} rows={3} value={praiseMessage} onChange={(event) => setPraiseMessage(event.target.value)} placeholder="작은 일도 좋아요. 오늘 해낸 일을 적어 보세요." />
-                        <div className="composer-bottom"><label htmlFor="praise-date">실천한 날 <span className="optional-mark">선택</span></label><input id="praise-date" type="date" value={praiseDate} onChange={(event) => setPraiseDate(event.target.value)} /></div>
-                      </fieldset>
-                      {praiseFormError && <p className="form-error" role="alert">{praiseFormError}</p>}
-                      {praiseAttempt ? <div className="composer-retry"><p>기록 결과를 확인 중이에요. 입력을 바꾸지 않고 같은 요청으로 확인해요.</p><button className="button button-primary" type="submit" disabled={praiseSending}>{praiseSending ? "확인 중…" : "같은 기록 다시 확인"}</button><button className="text-button" type="button" onClick={() => void loadPraises(selectedBoard.id, selectedBunchId)}>기록 목록 새로고침</button></div>
-                        : <div className="composer-submit"><p>성공 확인 후에만 개수에 반영돼요.</p><button className="button button-primary" type="submit" disabled={praiseSending || selectedBunch?.progress_state === "complete"}>{praiseSending ? "기록 중…" : "칭찬 쌓기"}<span aria-hidden="true"> ↗</span></button></div>}
-                    </form>
-                  </section>}
-
-                  {selectedBoard?.kind === "personal" && selectedGoal.status !== "active" && <div className="locked-note"><i aria-hidden="true">◷</i><div><b>{selectedGoal.status === "completed" ? "완료된 목표예요" : "보관한 목표예요"}</b><p>이전 기록은 볼 수 있고, 새 칭찬은 다시 시작한 뒤 쌓을 수 있어요.</p></div></div>}
-                  {selectedBoard?.kind === "personal" && selectedGoal.status === "active" && selectedBunch && selectedBunch.id !== selectedBoard.current_bunch?.id && <div className="locked-note"><i aria-hidden="true">◷</i><div><b>지난 회차는 읽기 전용이에요</b><p>새 칭찬은 현재 회차에 쌓여요. 개인판에서 현재 회차를 선택해 기록할 수 있어요.</p></div></div>}
-                  {selectedBoard?.kind === "shared" && <div className="shared-note"><i aria-hidden="true">♡</i><p>공유판 칭찬은 개인 기록과 별도로 쌓여요. 이 화면에서는 받은 기록을 볼 수 있어요.</p></div>}
-
-                  <div className="records-heading"><div><p className="eyebrow">YOUR NOTES</p><h3>{selectedBoard?.kind === "shared" ? "받은 칭찬" : "차곡차곡 쌓인 기록"}</h3></div><span className="record-total">{selectedBunch ? `${selectedBunch.valid_count}개` : "기록 없음"}</span></div>
-                  {loadingPraises && <p className="loading-inline" role="status">기록을 불러오고 있어요.</p>}
-                  {!loadingPraises && praises.length === 0 && <div className="empty-records"><b aria-hidden="true">✳</b><h4>{selectedBoard?.kind === "shared" ? "아직 도착한 칭찬이 없어요" : "첫 칭찬을 기다리고 있어요"}</h4><p>{selectedBoard?.kind === "shared" ? "친구가 이 목표를 응원하면 여기에 보여요." : "오늘 해낸 작은 일부터 기록해 보세요."}</p></div>}
-                  <ol className="praise-list" aria-label="칭찬 기록 목록">
-                    {praises.map((praise) => {
-                      const canEdit = praise.source === "self" && praise.cancelled_at === null && praise.author_erased_at === null && selectedBoard?.kind === "personal";
-                      const isCancelled = praise.cancelled_at !== null;
-                      const isExcluded = praise.excluded_at !== null;
-                      return <li className={`praise-entry ${isCancelled ? "cancelled" : ""}`} key={praise.id}>
-                        <span className={`entry-marker ${praise.source === "peer" ? "peer-marker" : ""}`} aria-hidden="true">{isCancelled ? "–" : praise.source === "peer" ? "♡" : "✳"}</span>
-                        <div className="entry-content">
-                          <div className="entry-meta"><span>{praise.source === "self" ? "나" : praise.actor_label || "친구"}</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></div>
-                          {isCancelled ? <p className="cancelled-copy">취소한 기록 · 본문과 실천일이 삭제됐어요.</p> : <>
-                            {praise.message ? <p className="entry-message">{praise.message}</p> : <p className="entry-message quiet-message">짧은 마음을 남겼어요.</p>}
-                            {praise.occurred_on && <p className="entry-date">실천한 날 {shortDate(praise.occurred_on)}</p>}
-                            {isExcluded && <p className="entry-date">회차 개수에서 제외된 기록</p>}
-                            {praise.hidden_at && <p className="entry-date">나에게만 숨긴 기록</p>}
-                          </>}
-                          {canEdit && <div className="entry-actions"><button className="text-button" type="button" onClick={() => setEditingPraise({ id: praise.id, message: praise.message ?? "", occurredOn: praise.occurred_on ?? "" })}>수정</button><button className="text-button danger-link" type="button" onClick={() => void cancelPraise(praise)}>취소</button></div>}
-                          {selectedBoard?.kind === "shared" && praise.source === "peer" && !isCancelled && <div className="entry-actions"><button className="text-button" type="button" onClick={() => void moderatePeerPraise(praise, praise.hidden_at ? "unhide" : "hide")}>{praise.hidden_at ? "다시 표시" : "나에게만 숨기기"}</button>{!isExcluded && <button className="text-button danger-link" type="button" onClick={() => void moderatePeerPraise(praise, "exclude")}>회차에서 제외</button>}</div>}
-                          {editingPraise?.id === praise.id && <form className="edit-praise-form" onSubmit={(event) => void savePraiseEdit(event)}>
-                            <label htmlFor={`edit-message-${praise.id}`}>칭찬 메모</label><textarea id={`edit-message-${praise.id}`} name="message" maxLength={1000} rows={3} defaultValue={editingPraise.message} />
-                            <label htmlFor={`edit-date-${praise.id}`}>실천한 날</label><input id={`edit-date-${praise.id}`} name="occurredOn" type="date" defaultValue={editingPraise.occurredOn} />
-                            <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => setEditingPraise(null)}>취소</button><button className="button button-primary" type="submit" disabled={savingPraiseEdit}>{savingPraiseEdit ? "저장 중…" : "변경 저장"}</button></div>
-                          </form>}
-                        </div>
-                      </li>;
-                    })}
-                  </ol>
-                  {praiseCursor && <button className="button button-secondary button-wide" type="button" onClick={() => void loadPraises(selectedBoardId, selectedBunchId, praiseCursor, true)}>기록 더 보기</button>}
-                </section>
-
-                <aside className="history-column" aria-labelledby="history-heading">
-                  <div className="history-heading"><div><p className="eyebrow">YOUR JOURNEY</p><h3 id="history-heading">지난 회차</h3></div><span className="history-count">{selectedBunches.length}</span></div>
-                  {selectedBunches.length === 0 ? <p className="history-empty">아직 시작한 회차가 없어요.</p> : <ol className="cycle-list">
-                    {selectedBunches.map((bunch) => <li key={bunch.id}>
-                      <button className={`cycle-card ${selectedBunchId === bunch.id ? "current" : ""}`} type="button" aria-pressed={selectedBunchId === bunch.id} onClick={() => chooseBunch(bunch.id)}>
-                        <span className="cycle-number">{bunch.cycle_no}회차</span><span className="cycle-count">{bunch.valid_count} / {bunch.target_count}</span><span className={`cycle-state ${bunch.progress_state}`}>{bunch.progress_state === "complete" ? "완성" : "진행 중"}</span>
-                      </button>
-                    </li>)}
-                  </ol>}
-                  {bunchCursors[selectedBoardId] && <button className="text-button history-more" type="button" onClick={() => void loadMoreBunches(selectedBoardId)}>회차 더 보기</button>}
-                  <div className="privacy-note"><i aria-hidden="true">⌑</i><p>{selectedBoard?.kind === "shared" ? "개인 기록은 이 화면에 표시되지 않아요. 공유판에 받은 기록만 보여요." : "개인 기록은 나에게만 보여요. 공유판과 개수를 합치지 않아요."}</p></div>
-                </aside>
-              </div>
-            </>
-          ) : loadingGoals ? (
-            <div className="loading-panel" role="status"><span className="loading-orbit" aria-hidden="true" /><p>차곡찬을 준비하고 있어요.</p></div>
-          ) : goalListError ? (
-            <section className="welcome-panel"><span className="welcome-mark" aria-hidden="true">✳</span><h2>목표를 불러오지 못했어요</h2><p>{goalListError}</p><button className="button button-primary" type="button" onClick={() => void loadGoals()}>다시 시도</button></section>
-          ) : (
-            <section className="welcome-panel"><span className="welcome-mark" aria-hidden="true">✳</span><p className="eyebrow">SMALL THINGS COUNT</p><h2>작은 수고도<br />차곡차곡.</h2><p>오늘의 나를 알아보고, 작은 칭찬을 쌓아 보세요.</p><button className="button button-primary" type="button" onClick={() => setShowCreate(true)}>첫 목표 만들기</button></section>
-          )}
+              {showPraise && canAddPraise && <div className="composer-panel">{profileError && <div className="inline-alert" role="alert">{profileError}<button type="button" onClick={() => void loadProfile()}>다시 불러오기</button></div>}{nickname !== null ? <PraiseSheet title={detail.goal.title} ordinal={selectedBunch?.progress_state === "complete" ? 1 : (selectedBunch?.valid_count ?? 0) + 1} nickname={nickname} timestamp={praiseTimestamp} message={praiseMessage} date={praiseDate} tag={praiseTag} sending={praiseSending} retry={Boolean(praiseAttempt)} error={praiseFormError} onMessage={setPraiseMessage} onDate={setPraiseDate} onTag={setPraiseTag} onSubmit={submitPraise} onClose={() => setShowPraise(false)} /> : <p role="status">작성자 정보를 확인하고 있어요.</p>}</div>}
+              <section className="recent-records" aria-labelledby="recent-records-heading" aria-busy={loadingPraises}>
+                <div className="records-heading"><h2 id="recent-records-heading">최근 기록</h2><span>{selectedBunch?.valid_count ?? 0}개</span></div>
+                {loadingPraises && <p role="status">기록을 불러오고 있어요.</p>}
+                {!loadingPraises && praises.length === 0 && <p className="empty-records">{selectedBoard?.kind === "shared" ? "아직 받은 칭찬이 없어요." : "첫 칭찬을 남겨 보세요."}</p>}
+                <ol className="praise-list">{praises.map((praise) => <li key={praise.id} className="praise-entry"><button className="record-open" type="button" onClick={() => { setEditingPraise(null); setRecordDetail(praise); }}><span className="entry-meta"><span>{praise.source === "self" ? "나" : praise.actor_label}</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></span><span className="entry-message">{praise.cancelled_at ? "취소한 기록" : praise.message || "칭찬 1건"}</span>{praise.tag && <span className="badge">{praiseTags.find((tag) => tag.code === praise.tag)?.label}</span>}{praise.excluded_at && <span>회차에서 제외됨</span>}{praise.hidden_at && <span>나에게만 숨김</span>}{savedInView && savedPraise?.id === praise.id && <><span className="badge just-now">방금</span><span className="badge saved-still">저장됨</span></>}</button></li>)}</ol>
+                {praiseCursor && <button className="button button-secondary button-wide" type="button" onClick={() => void loadPraises(selectedBoardId, selectedBunchId, praiseCursor, true)}>기록 더 보기</button>}
+              </section>
+            </div>
+          </>}
         </section>
       </div>
+      {showShare && sharedBoard && detail && <SharePanel title={detail.goal.title} loadInvites={readShareInvites} createInvite={createShareInvite} revokeInvite={revokeShareInvite} describeError={errorMessage} onClose={() => { setShowShare(false); setManagingBoardId(""); setBoardMembers([]); }}>
+        <p>연결된 사람 중 이 판에 허용한 사람만 볼 수 있어요. 연결을 다시 맺어도 이전 권한은 돌아오지 않아요.</p>
+        {memberLoading && <p role="status">연결과 권한을 확인하고 있어요.</p>}
+        {memberError && <p className="form-error" role="alert">{memberError}</p>}
+        <button className="text-button" type="button" onClick={() => void loadBoardMembers(sharedBoard.id)}>권한 목록 다시 불러오기</button>
+        {connections.filter((connection) => connection.status === "active" && connection.other_user).length === 0 && <p>먼저 연결을 맺으면 이 판에 허용할 수 있어요.</p>}
+        <ul className="member-list">{connections.filter((connection) => connection.status === "active").map((connection) => {
+          const person = connection.other_user;
+          if (!person) return null;
+          const member = boardMembers.find((entry) => entry.user.user_id === person.user_id);
+          const granted = member?.status === "active";
+          return <li key={person.user_id}><div><b>{person.nickname ?? "연결된 사용자"}</b><span>{granted ? "이 판에 칭찬할 수 있어요" : "아직 허용하지 않았어요"}</span></div><button className="button button-secondary" type="button" disabled={memberLoading || Boolean(memberSaving) || Boolean(memberError)} onClick={() => void changeBoardMember(sharedBoard.id, person.user_id, granted)}>{memberSaving === `${sharedBoard.id}:${person.user_id}` ? "저장 중…" : granted ? "권한 회수" : "공유 허용"}</button></li>;
+        })}</ul>
+      </SharePanel>}
+      {recordDetail && <dialog ref={recordDialog} className="modal-panel record-detail" aria-labelledby="record-detail-heading" onCancel={(event) => { event.preventDefault(); setRecordDetail(null); }}>
+        <div className="settings-title"><div><p>{detail?.goal.title}</p><h2 id="record-detail-heading">{recordDetail.cancelled_at ? "취소한 기록" : `${recordOrdinal(recordDetail)}번째 알`}</h2></div><button className="icon-button" type="button" onClick={() => setRecordDetail(null)} aria-label="기록 상세 닫기"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></svg></button></div>
+        {detailError && <p className="form-error" role="alert">{detailError}</p>}
+        <p className="detail-message">{recordDetail.cancelled_at ? "취소한 기록 · 메모·실천일·태그가 삭제됐어요." : recordDetail.message || "칭찬 1건"}</p>
+        {recordDetail.tag && <span className="badge">{praiseTags.find((tag) => tag.code === recordDetail.tag)?.label}</span>}
+        <dl className="record-definitions"><div><dt>작성자</dt><dd>{recordDetail.actor?.nickname ?? recordDetail.actor_label}</dd></div><div><dt>날짜·시간</dt><dd><time dateTime={recordDetail.recorded_at}>{recordTime(recordDetail.recorded_at)}</time></dd></div>{recordDetail.occurred_on && <div><dt>실천한 날</dt><dd>{shortDate(recordDetail.occurred_on)}</dd></div>}</dl>
+        {recordDetail.source === "self" && !recordDetail.cancelled_at && !recordDetail.author_erased_at && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => setEditingPraise({ id: recordDetail.id, message: recordDetail.message ?? "", occurredOn: recordDetail.occurred_on ?? "", tag: recordDetail.tag })}>수정</button><button className="text-button" type="button" onClick={() => setCancelTarget(recordDetail)}>기록 취소</button></div>}
+        {recordDetail.source === "peer" && !recordDetail.cancelled_at && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => { void moderatePeerPraise(recordDetail, recordDetail.hidden_at ? "unhide" : "hide"); setRecordDetail(null); }}>{recordDetail.hidden_at ? "다시 표시" : "나에게만 숨기기"}</button>{!recordDetail.excluded_at && <button className="button button-secondary" type="button" onClick={() => { void moderatePeerPraise(recordDetail, "exclude"); setRecordDetail(null); }}>회차에서 제외</button>}</div>}
+        {editingPraise && <form className="stack-form" onSubmit={savePraiseEdit}><fieldset disabled={savingPraiseEdit}><label htmlFor="edit-praise-message">메모</label><textarea id="edit-praise-message" name="message" maxLength={1000} rows={3} defaultValue={editingPraise.message} /><label htmlFor="edit-praise-date">실천한 날</label><input id="edit-praise-date" name="occurredOn" type="date" defaultValue={editingPraise.occurredOn} /><p>태그 <span className="optional-mark">선택</span></p><div className="tag-chips">{praiseTags.map((tag) => <button key={tag.code} type="button" aria-pressed={editingPraise.tag === tag.code} onClick={() => setEditingPraise({ ...editingPraise, tag: editingPraise.tag === tag.code ? null : tag.code as PraiseTag })}>{tag.label}</button>)}</div></fieldset><div className="form-actions"><button className="button button-secondary" type="button" disabled={savingPraiseEdit} onClick={() => setEditingPraise(null)}>취소</button><button className="button button-primary" type="submit" disabled={savingPraiseEdit}>{savingPraiseEdit ? "저장 중…" : "변경 저장"}</button></div></form>}
+      </dialog>}
+      {cancelTarget && <dialog ref={cancelDialog} className="modal-panel cancel-sheet" aria-labelledby="cancel-record-heading" aria-busy={cancellingPraise} onCancel={(event) => { event.preventDefault(); if (!cancellingPraise) setCancelTarget(null); }}><div className="sheet-handle" aria-hidden="true" /><h2 id="cancel-record-heading">이 기록을 취소할까요?</h2><p>회차 개수에서 빠지고 메모와 실천일·태그는 제거됩니다. 취소한 기록은 되돌릴 수 없어요.</p>{detailError && <p className="form-error" role="alert">{detailError}</p>}<div className="form-actions"><button className="button button-secondary" type="button" disabled={cancellingPraise} onClick={() => setCancelTarget(null)}>취소</button><button className="button button-primary" type="button" disabled={cancellingPraise} onClick={() => void cancelPraise(cancelTarget)}>{cancellingPraise ? "처리 중…" : "확인"}</button></div></dialog>}
     </main>
   );
 }

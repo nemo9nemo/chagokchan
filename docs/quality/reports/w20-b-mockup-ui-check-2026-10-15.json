@@ -1,0 +1,410 @@
+{
+  "work_item": "W20-B",
+  "date": "2026-10-15",
+  "status": "implemented_review_approved_partial_browser_acceptance",
+  "source": {
+    "commit": "c391d8f073bec68b08935377e61336f2703cbcad",
+    "branch": "codex/W20-B-mockup-ui",
+    "sha256": {
+      "package.json": "c6f6db37052dfbd58795c1ada44bb401fae450dd7d8e47678026fc72a6c402e3",
+      "src/app/client-app.tsx": "96db22897b50ef555a20449fde0b6e74b999371cf7d64bcee2029fbd6e826c64",
+      "src/app/globals.css": "48db6c83dfafc71f5d0c071c57fc0aad910d09080c13a7c5999317e922162a2e",
+      "src/app/grape-layout.mjs": "0ade3614f4aac43ba35299347c1fca458cc7c58083d9af9ff3f18ca0089a39b6",
+      "src/app/grape-cluster.tsx": "9826c9f4f6381ceab3a8cc8311799a6821d6c3e00a8df83ed4123bdd68d33ff7",
+      "src/app/praise-sheet.tsx": "93efb50eb1f402c83208fd23259f6f39c5894fbda68dc85915282295c85f4d5b",
+      "src/app/share-panel.tsx": "592cf63a3284997c4655b04b062e81c9750be23b753dd1cf55b1aae103295ca1",
+      "scripts/grape-layout.test.mjs": "8684a91342b19ba17f5411a010b3dc178ba47766f890c9f6c1f49c62de3d6e97"
+    },
+    "working_tree_changes_uncommitted": true,
+    "sha256_format": "raw_file_bytes"
+  },
+  "environment": {
+    "execution": "Windows PowerShell sandbox",
+    "node": "24.19.0",
+    "pnpm_actual": "11.25.0",
+    "pnpm_required": "11.19.0",
+    "biome": "2.5.15",
+    "typescript": "5.9.3",
+    "docker_client": "29.1.3",
+    "docker_engine_verified": false,
+    "database_version_verified": false
+  },
+  "requirement_ids": [
+    "REQ-002",
+    "REQ-003",
+    "REQ-004",
+    "REQ-011",
+    "NFR-002"
+  ],
+  "policy_ids": [
+    "POL-GOAL-001",
+    "POL-PRAISE-001",
+    "POL-PRAISE-002",
+    "POL-SEC-001"
+  ],
+  "changed_files": [
+    "src/app/client-app.tsx",
+    "src/app/globals.css",
+    "src/app/grape-layout.mjs",
+    "src/app/grape-cluster.tsx",
+    "src/app/praise-sheet.tsx",
+    "src/app/share-panel.tsx",
+    "scripts/grape-layout.test.mjs",
+    "package.json",
+    "docs/design/user-flows.md",
+    "docs/quality/test-cases.json",
+    "docs/quality/verification-plan.md",
+    "docs/development/backlog.md",
+    "docs/development/artifact-register.json",
+    "docs/development/codex-project-handoff.md",
+    "docs/changes/2026-10-15-w20-b-mockup-ui.md",
+    "docs/plans/W20-B-mockup-ui.md",
+    "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json"
+  ],
+  "verification_order": [
+    "pnpm lint (fallback biome)",
+    "pnpm typecheck (fallback tsc)",
+    "node --test --test-isolation=none with package.json test file list",
+    "pnpm check:artifacts (fallback node scripts/verify-artifacts.mjs)"
+  ],
+  "commands": [
+    {
+      "command": "pnpm lint",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": "pnpm check:artifacts",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+      "status": "passed",
+      "files": 102,
+      "warnings": 0,
+      "errors": 0
+    },
+    {
+      "command": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+      "status": "passed"
+    },
+    {
+      "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs",
+      "status": "passed",
+      "tests": 126,
+      "failures": 0,
+      "skipped": 0,
+      "grape_layout_tests": 6
+    },
+    {
+      "command": "node scripts/verify-artifacts.mjs",
+      "status": "passed"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task check",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task build:check",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:praise-test",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:goal-test",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:connection-test",
+      "status": "failed_before_task",
+      "exit_code": 1,
+      "first_error_line": "[ERR_PNPM_UNSUPPORTED_ENGINE] Unsupported environment (bad pnpm and/or Node.js version)"
+    },
+    {
+      "command": "node scripts/app.mjs build-check",
+      "status": "incomplete",
+      "exit_code": 1,
+      "compiled": true,
+      "failed_stage": "Running TypeScript",
+      "first_error_line": "spawn EPERM",
+      "last_output": "▲ Next.js 16.4.0 (Turbopack)\n✓ Running next.config.mjs took 22ms\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 1368ms\n  Running TypeScript ...\nspawn EPERM"
+    },
+    {
+      "command": "node scripts/test-local-personal-praise-api.mjs",
+      "status": "incomplete",
+      "exit_code": 1,
+      "first_output_line": "file:///C:/Users/love0/nemo9Dev/chagokchan/scripts/test-local-personal-praise-api.mjs:52",
+      "first_error_line": "Error: The local app exited before the personal-praise API check."
+    },
+    {
+      "command": "node scripts/test-local-goal-api.mjs",
+      "status": "incomplete",
+      "exit_code": 1,
+      "first_output_line": "file:///C:/Users/love0/nemo9Dev/chagokchan/scripts/test-local-goal-api.mjs:48",
+      "first_error_line": "Error: The local app exited before the goal API check."
+    },
+    {
+      "command": "node scripts/test-local-connection-api.mjs",
+      "status": "incomplete",
+      "exit_code": 1,
+      "first_output_line": "file:///C:/Users/love0/nemo9Dev/chagokchan/scripts/test-local-connection-api.mjs:51",
+      "first_error_line": "Error: Local app exited before connection API checks completed."
+    },
+    {
+      "command": "docker version --format '{{.Client.Version}} / {{.Server.Version}}'",
+      "status": "incomplete",
+      "exit_code": 1,
+      "first_output_line": "29.1.3 / ",
+      "first_error_line": "permission denied while trying to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine"
+    }
+  ],
+  "browser_acceptance": {
+    "test_case": "TC-UI-MOCKUP-001",
+    "status": "not_run",
+    "assigned_phase": "Claude review per approved brief",
+    "widths_px": [
+      320,
+      360,
+      393,
+      768,
+      1280
+    ],
+    "pending": [
+      "horizontal overflow and 44px controls",
+      "both themes text contrast",
+      "saving/pending state and no optimistic update",
+      "same-key retry and replay without repeated animation",
+      "reduced-motion stationary ring and saved badge",
+      "share secret lifecycle and invite failure states"
+    ]
+  },
+  "limitations": [
+    "No server/API/DB/contracts/policy/dependency changes. Existing connection API collapses detailed invite failures into STATE_CONFLICT or OBJECT_NOT_AVAILABLE.",
+    "Invite metadata distinguishes used/expired/revoked. A creation STATE_CONFLICT followed by five active invites is shown as the active invite limit; unknown received-code errors cannot be reliably distinguished without a separate server brief.",
+    "Build compilation succeeded but build as a whole did not complete; no API integration success or DB state verification is claimed.",
+    "Prior W11 browser evidence is historical and is not acceptance of the W20-B UI."
+  ],
+  "deviations": [
+    "While a self-praise outcome is uncertain, navigation and draft inputs remain locked so the same request cannot be sent to another board.",
+    "Completed cycles retain the server model: the next praise creates the next cycle, using the Next cycle start action.",
+    "Read invite/connection pages to the end and search older bunch pages for a replay response bunch_id."
+  ],
+  "committed": false,
+  "pushed": false,
+  "review": "pending",
+  "verified_at": "2026-10-15T14:38:18.359Z",
+  "artifact_check": {
+    "checked_at": "2026-10-15T14:38:18.359Z",
+    "status": "passed",
+    "runtime": "v24.19.0",
+    "scope": "artifact_structural_consistency_only",
+    "full_openapi_validator_executed": false,
+    "mermaid_render_executed": false,
+    "application_or_database_tests_executed": 0,
+    "planned_test_cases": 76,
+    "checks": [
+      {
+        "id": "json",
+        "description": "JSON parse",
+        "count": 42,
+        "status": "passed"
+      },
+      {
+        "id": "links",
+        "description": "Local Markdown links",
+        "count": 532,
+        "status": "passed"
+      },
+      {
+        "id": "openapi",
+        "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+        "count": 55,
+        "local_references": 703,
+        "status": "passed"
+      },
+      {
+        "id": "traceability",
+        "description": "REQ/NFR/POL/TC/API cross references",
+        "requirements": 17,
+        "policies": 20,
+        "test_cases": 76,
+        "status": "passed"
+      },
+      {
+        "id": "policy_consistency",
+        "description": "Policy/API numeric values, names, restore fields",
+        "status": "passed"
+      },
+      {
+        "id": "projection",
+        "description": "Contributor/sent fields and canceled-body schema constraints",
+        "status": "passed"
+      },
+      {
+        "id": "audience_consistency",
+        "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+        "status": "passed"
+      },
+      {
+        "id": "erd_sources",
+        "description": "Embedded/source consistency, full entities and relationship endpoints",
+        "embedded_blocks": 3,
+        "entities": 21,
+        "relationships": 42,
+        "rendered": false,
+        "status": "passed"
+      },
+      {
+        "id": "registry",
+        "description": "Existing registered artifact paths",
+        "count": 306,
+        "status": "passed"
+      },
+      {
+        "id": "development_consistency",
+        "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+        "work_items": 19,
+        "runtime_guards_executed": false,
+        "status": "passed"
+      }
+    ],
+    "errors": [],
+    "basis": {
+      "inputs": [
+        ".env.example",
+        "AGENTS.md",
+        "contracts/openapi.json",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/contracts/api-contract.md",
+        "docs/data-erd.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/decisions/ADR-0004-local-development-auth.md",
+        "docs/design/user-flows.md",
+        "docs/development/README.md",
+        "docs/development/artifact-register.json",
+        "docs/development/backlog.md",
+        "docs/development/local-development.md",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-full.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/policies/access-and-responses.md",
+        "docs/policies/audience-and-signup.md",
+        "docs/policies/data-lifecycle.md",
+        "docs/policies/product-rules.md",
+        "docs/quality/test-cases.json",
+        "docs/requirements/mvp-requirements.md",
+        "policies/app-policy.json",
+        "policies/development-policy.json",
+        "scripts/verify-artifacts.mjs"
+      ],
+      "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+      "sha256": "6ff2ed8a160a18d8195c02c5c222bdc9aa6ea43fee79dc2a8e124980066350be"
+    }
+  },
+  "final_sandbox_sequence": [
+    {
+      "command": "pnpm lint",
+      "exit_code": 1,
+      "fallback": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+      "fallback_exit_code": 0,
+      "files": 102
+    },
+    {
+      "command": "pnpm typecheck",
+      "exit_code": 1,
+      "fallback": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+      "fallback_exit_code": 0
+    },
+    {
+      "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs",
+      "exit_code": 0,
+      "tests": 126,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "command": "pnpm check:artifacts",
+      "exit_code": 1,
+      "fallback": "node scripts/verify-artifacts.mjs",
+      "fallback_exit_code": 0
+    }
+  ],
+  "static_review": {
+    "git_diff_check": "passed",
+    "allowed_file_scope": "passed",
+    "changed_files": 17,
+    "client_storage_or_supabase_imports": "none",
+    "utf8_replacement_characters": "none",
+    "secrets_in_added_diff": "none"
+  },
+  "claude_review_verification": {
+    "verified_at": "2026-10-16",
+    "source": "c391d8f + uncommitted W20-B changes incl. r2 fix",
+    "node": "24.19.0",
+    "docker": "29.1.3",
+    "results": {
+      "lint": "passed (102 files)",
+      "typecheck": "passed",
+      "unit_tests": "126/126",
+      "artifacts": "passed",
+      "build_check": "passed",
+      "api_praise_test": "10/10",
+      "api_goal_test": "3/3",
+      "api_connection_test": "A/B/C 12/12 each",
+      "api_praise_tag_test": "passed"
+    },
+    "browser": {
+      "actor": "local A (dev server)",
+      "board_widths_px": [
+        320,
+        360,
+        393,
+        768,
+        1280
+      ],
+      "horizontal_overflow": 0,
+      "visible_controls_under_44px": 0,
+      "contrast_failures_grape": 0,
+      "garden_theme_393": {
+        "contrast_failures": 0,
+        "horizontal_overflow": 0
+      },
+      "praise_sheet_393": "layout checked",
+      "share_panel_393": "layout checked; invite list read only, no invite created",
+      "save_failure_path": "POST intercepted to fail (no DB write): alert shown, inputs preserved, retry re-sent same Idempotency-Key and body, graphic label and list unchanged"
+    },
+    "not_run": [
+      "success save pop once / replay no-replay in browser",
+      "prefers-reduced-motion",
+      "B02 create and 1/15/100 unit graphics",
+      "invite create/copy/revoke",
+      "UI06/UI08/UI10 width measurements"
+    ],
+    "test_case": {
+      "id": "TC-UI-MOCKUP-001",
+      "status": "not_run",
+      "reason": "Only part of the steps ran; remaining steps deferred to W15 acceptance."
+    },
+    "real_provider_login_verified": false
+  }
+}
