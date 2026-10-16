@@ -119,6 +119,13 @@ details > label { margin-top: 12px; }
 .input-suffix { display: flex; align-items: center; gap: 12px; }
 .input-suffix input { width: min(100%, 180px); }
 .board-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.news-unread-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: currentColor; }
+.news-tabs { margin-bottom: 24px; }
+.news-list { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 12px; }
+.news-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px; border: 1.5px solid var(--border); border-radius: 14px; }
+.news-row-copy { display: grid; gap: 8px; flex: 1 1 180px; min-width: 0; }
+.news-row-copy p { margin-bottom: 0; }
+.news-row-copy time { font-size: .85rem; }
 .cycle-picker { max-width: 100%; }
 .cycle-list { display: grid; gap: 8px; list-style: none; padding: 0; }
 .cycle-card { width: 100%; }

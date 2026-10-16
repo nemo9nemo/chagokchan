@@ -4,7 +4,7 @@
 
 ## 작업 공간과 원격
 
-2026-10-16 W20 완료 인계: W20-A(셀프 칭찬 태그 DB/API)와 W20-B(목업 기반 화면)를 구현·리뷰했다. W20-B는 B01~B07 화면, 1~100알 포도 그래픽, 태그·메모 칭찬 시트, 공유 패널을 담는다. Claude가 샌드박스 밖에서 다음을 통과시켰다: build:check, API 통합 4종, 5개 폭 넘침·44px·양 테마 대비, 저장 실패 시 입력 보존과 같은 키 재시도. TC-UI-MOCKUP-001의 나머지 브라우저 단계(성공 pop, reduced-motion, 생성·초대 흐름, UI06/UI08/UI10 폭)는 W15에서 실행한다. 다음 로컬 작업은 W10 UI09 소식·보낸함 화면이다. 연결 API가 초대 오류 세부 사유를 하나로 묶는 한계는 별도 서버 작업으로 남는다. [W20-B 브리프](../plans/W20-B-mockup-ui.md) · [증거](../quality/reports/w20-b-mockup-ui-check-2026-10-15.json)
+2026-10-16 W20 완료 인계: W20-A(셀프 칭찬 태그 DB/API)와 W20-B(목업 기반 화면)를 구현·리뷰했다. W20-B는 B01~B07 화면, 1~100알 포도 그래픽, 태그·메모 칭찬 시트, 공유 패널을 담는다. Claude가 샌드박스 밖에서 다음을 통과시켰다: build:check, API 통합 4종, 5개 폭 넘침·44px·양 테마 대비, 저장 실패 시 입력 보존과 같은 키 재시도. TC-UI-MOCKUP-001의 나머지 브라우저 단계(성공 pop, reduced-motion, 생성·초대 흐름, UI06/UI08/UI10 폭)는 W15에서 실행한다. W10-D의 UI09는 아래 2026-10-16 구현 인계 기준으로 진행하며 다음은 Claude의 샌드박스 밖 검사·리뷰다. 연결 API가 초대 오류 세부 사유를 하나로 묶는 한계는 별도 서버 작업으로 남는다. [W20-B 브리프](../plans/W20-B-mockup-ui.md) · [증거](../quality/reports/w20-b-mockup-ui-check-2026-10-15.json)
 
 - 프로젝트 폴더: `C:\Users\love0\nemo9Dev\chagokchan`
 - GitHub: [nemo9nemo/chagokchan](https://github.com/nemo9nemo/chagokchan), 공개(public)
@@ -40,7 +40,7 @@
 | W07 | DONE | local Auth session·GET /me·CSRF/Origin/JSON/32KB guard 기반 구현. A/B/C 통합·보안 단위·배포 빌드 경계 검사 완료 |
 | W08 | DONE | W08-A/B1/B2/C API와 W08-D 기본 UI 완료. unit 82/82·build-check·조회 전용 브라우저 smoke 통과. 실제 UI mutation submit E2E·제품 수락은 미실행으로 남김. [W08-D 증거](../quality/reports/w08-d-goal-record-ui-check-2026-10-08.json) |
 | W09 | DONE | W09-A~C 연결 API·판 권한/칭찬 API·UI06~UI08 완료. 공유판 디렉터리 013 pgTAP 5/5·실제 Auth 공유 RPC 8/8·A/B/C board API 각 14/14·unit 100/100·전체 DB 252/252. 다음 W10 소식/삭제·정리 |
-| W10 | IN_PROGRESS | W10-A/B 완료: 소식·보낸함 API, 목표 휴지통·복구 API/UI10. 전체 unit 109/109·A/B/C trash API 각 11/11·W06-D1 Auth 세션 4/4·전체 DB 257/257. W10-C 실제 재인증 orchestration은 W12/W13에 구현. |
+| W10 | IN_PROGRESS | W10-A/B/D 완료(2026-10-16 W10-D UI09 소식·보낸 칭찬 화면 구현·리뷰·브라우저 확인). 남은 W10-C 계정 탈퇴 재인증은 W12/W13으로 유예한다. [W10-D 브리프](../plans/W10-D-news-sent-ui.md) |
 | W11 | DONE | 2026-10-13 로컬 구현·검사 범위로 마감했다. W11-A·B1 완료. W11-B2에서 로컬 Supabase에 49개 마이그레이션 적용·합성 A 세션 API 15/15를 확인하고, 6개 콘텐츠 폭에서 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 검사했다. 작은 폭 넘침을 제거하고 앱 조작 영역을 45px로 보완했다. W11-C PWA 매니페스트·정적 캐시·오프라인 단위 검증도 통과했다. 실기기 확대·VoiceOver/TalkBack·터치 TC-WEB-006, A/B 계정 전환·실제 오프라인 TC-CACHE-001은 not_run 그대로 W15로 이관했다. [모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 증거](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 증거](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12/W13 | DEFERRED | 오픈 준비 시 실제 로그인 구현·검증 |
 | W14/W15 | TODO | 운영 입력·별도 스테이징·통합/보안/복원/부하 |
@@ -209,3 +209,10 @@ W11-A/B/C의 로컬 구현·검사 범위를 완료로 마감했다. 실기기 �
 ```text
 차곡찬 개발을 이어서 진행해. AGENTS.md와 docs/development/codex-project-handoff.md, 진행표·등록부를 읽고 W06부터 재개해. 개발 중 로그인 화면 없이 이용하고 실제 로그인은 오픈 준비 때 적용한다. 기능별 검증·문서·상태 갱신·작업과 이유가 드러나는 커밋을 함께 진행하고 원격에 반영해.
 ```
+
+
+## W10-D 소식·보낸 칭찬 화면 구현 인계 (2026-10-16)
+
+소식 메뉴와 미읽음 점, 받은 소식/보낸 칭찬 전환·커서 목록, 읽음·연결 관리 이동, can_cancel 확인 시트·취소 후 재조회를 구현했다. 응답은 메모리에만 두며 상대 정보·판·개수는 표시하지 않는다. 열어 둔 페이지는 변경 성공 후 다시 조회하고, 늦게 끝난 과거 조회는 순번으로 무시한다. 신규 순수 문구/이동 함수 검사 6개를 포함해 unit 132/132, lint·typecheck·산출물 검사를 통과했다.
+
+W10-D는 2026-10-16 완료했다. Claude가 샌드박스 밖에서 build:check·api:news-test·api:praise-test를 통과시켰다. 브라우저에서는 5개 폭, 읽음 표시, 연결 이동, 취소, 오류 재시도, 더 보기를 합성 응답으로 확인했다(DB 쓰기 없음). [검사 증거](../quality/reports/w10-d-news-sent-ui-check-2026-10-16.json)

@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-16",
-  "current_stage": "S06_w09_d_shared_count_fix_done_w10_d_news_ui_next",
-  "next_stage": "S06_w10_d_news_sent_screen",
+  "current_stage": "S06_local_feature_scope_done_w10_c_w12_w13_w14_w15_pending",
+  "next_stage": "S06_review_remaining_local_backlog_then_w14_operational_inputs",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w09_d_database_and_review_pending_w20_done_ui09_and_w15_acceptance_pending"
+      "status": "in_progress_w20_done_ui09_implemented_integration_browser_review_and_w15_acceptance_pending"
     },
     {
       "id": "S07",
@@ -82,12 +82,12 @@
   },
   "verification": {
     "artifact_check_status": "passed",
-    "artifact_report": "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
+    "artifact_report": "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 77,
-    "application_tests_executed": 126,
-    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout",
+    "planned_test_cases": 78,
+    "application_tests_executed": 132,
+    "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
@@ -185,7 +185,18 @@
     "w09_d_status": "implemented_sandbox_checks_passed_database_and_review_pending",
     "w09_d_migration_applied": false,
     "w09_d_pgtap_planned": 39,
-    "w09_d_pgtap_executed": 0
+    "w09_d_pgtap_executed": 0,
+    "w10_d": {
+      "status": "ui_implemented_sandbox_checks_passed_integration_browser_review_pending",
+      "report": "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json",
+      "all_unit_tests_passed": 132,
+      "news_label_tests_passed": 6,
+      "build_completed": false,
+      "database_api_integration_completed": false,
+      "browser_acceptance_executed": false,
+      "implementation_review": "pending",
+      "commit_created": false
+    }
   },
   "artifacts": [
     {
@@ -271,7 +282,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "ui02_ui08_basic_ui09_pending_ui10_trash_ui_w11_a_theme_w11_b1_accessibility_recovery_w11_b2_browser_reflow_contrast_verified_w11_c_pwa_static_cache_unit_verified_device_check_pending",
+      "status": "ui09_implemented_w10_d_build_api_browser_and_review_pending",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -279,7 +290,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "partially_executed_w06_through_w11_c_pwa_cache_unit_device_acceptance_check_pending",
+      "status": "w10_d_ui_news_scenario_added_not_run_previous_verification_preserved",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -323,7 +334,8 @@
         "docs/changes/2026-10-08-w11-b1-accessibility-recovery.md",
         "docs/changes/2026-10-08-w11-b2-small-screen-contrast.md",
         "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md",
-        "docs/changes/2026-10-08-w11-c-pwa-cache.md"
+        "docs/changes/2026-10-08-w11-c-pwa-cache.md",
+        "docs/changes/2026-10-16-w10-d-news-sent-ui.md"
       ]
     },
     {
@@ -386,7 +398,8 @@
         "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
         "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
         "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
-        "docs/quality/reports/w16-c-ci-check-2026-10-08.json"
+        "docs/quality/reports/w16-c-ci-check-2026-10-08.json",
+        "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json"
       ]
     },
     {
@@ -482,7 +495,10 @@
         "docs/quality/reports/w11-b1-accessibility-recovery-check-2026-10-08.json",
         "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
         "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
-        "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md"
+        "docs/changes/2026-10-09-w11-b2-mobile-screen-check.md",
+        "src/app/news-panel.tsx",
+        "src/app/news-labels.mjs",
+        "scripts/news-labels.test.mjs"
       ]
     },
     {

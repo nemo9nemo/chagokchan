@@ -1,0 +1,191 @@
+{
+  "work_item": "W10-D",
+  "date": "2026-10-16",
+  "status": "implemented_review_approved_browser_smoke_passed",
+  "source": {
+    "base_commit": "2b0ae6724eb1adf671d654dbd430189abd7ab878",
+    "branch": "codex/W10-D-news-sent-ui",
+    "working_tree_changes_uncommitted": true,
+    "sha256_format": "raw_file_bytes",
+    "sha256": {
+      "src/app/client-app.tsx": "f5851b3f6b09b597360fd39cfda0c353d9dc15e252960474bb3b2bb1a497a17b",
+      "src/app/news-panel.tsx": "594591df8f08be61bf9524c04d62ab2692bdf1f3ab096bc8bd900d5ca031aa0d",
+      "src/app/news-labels.mjs": "d7264cb1a1387cbe130cf29c82a7e8d4dbdeee16c9945fc71d8c9bffd12176b1",
+      "scripts/news-labels.test.mjs": "fe3b033cf4b406d4682f39745212d9951f849cdb117d67929f7029151b449582",
+      "src/app/globals.css": "714d36bc5dfe0240c200201e7b14500b34b19b79e8e307d83d466e7e310ad2c0",
+      "package.json": "eed98a5dee0e2a32975baf1391e0ba8328ce7b4518b6fe5d44ef5e25a1ccaf12"
+    }
+  },
+  "environment": {
+    "execution": "Windows PowerShell workspace-write sandbox",
+    "node": "24.19.0",
+    "biome": "2.5.15",
+    "typescript": "5.9.3",
+    "docker_engine_verified": false,
+    "database_version_verified": false
+  },
+  "requirement_ids": [
+    "REQ-008",
+    "REQ-009"
+  ],
+  "policy_ids": [
+    "POL-PRAISE-002"
+  ],
+  "test_case_ids": [
+    "TC-UI-NEWS-001"
+  ],
+  "product_acceptance_out_of_scope": [
+    "TC-NOTIFY-001"
+  ],
+  "operations": [
+    "listNotifications",
+    "markNotificationRead",
+    "listSentPraises",
+    "cancelPraise"
+  ],
+  "changed_files": [
+    "src/app/client-app.tsx",
+    "src/app/news-panel.tsx",
+    "src/app/news-labels.mjs",
+    "scripts/news-labels.test.mjs",
+    "src/app/globals.css",
+    "package.json",
+    "docs/design/user-flows.md",
+    "docs/quality/test-cases.json",
+    "docs/quality/verification-plan.md",
+    "docs/development/backlog.md",
+    "docs/development/artifact-register.json",
+    "docs/development/codex-project-handoff.md",
+    "docs/changes/2026-10-16-w10-d-news-sent-ui.md",
+    "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json",
+    "docs/plans/W10-D-news-sent-ui.md"
+  ],
+  "commands": [
+    {
+      "command": ".\\node_modules\\.bin\\biome.cmd lint --error-on-warnings .",
+      "status": "passed",
+      "exit_code": 0,
+      "checked_files": 105
+    },
+    {
+      "command": ".\\node_modules\\.bin\\tsc.cmd --noEmit",
+      "status": "passed",
+      "exit_code": 0
+    },
+    {
+      "command": "node --test --test-isolation=none scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs",
+      "execution_note": "PowerShell에서 package.json scripts.test의 파일 목록을 읽어 node --test --test-isolation=none에 배열 인수로 전달했다.",
+      "status": "passed",
+      "exit_code": 0,
+      "executed": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0,
+      "news_label_tests": 6
+    },
+    {
+      "command": "node scripts/verify-artifacts.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "planned_test_cases": 78,
+      "checks_passed": 10,
+      "basis_sha256": "7f7938acdbec8a830e8a9cd383761ef96e26cd94608eb7f53608ad3527151f39"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    {
+      "command": ".\\scripts\\project.ps1 -Task build:check",
+      "reason": "사용자가 빌드는 샌드박스에서 불가하므로 미실행으로 남기라고 지시했다. Claude 리뷰 단계에서 샌드박스 밖 실행 필요."
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:news-test",
+      "reason": "사용자 지시 및 샌드박스 제약으로 앱·로컬 DB에 대한 API 통합 검사는 실행하지 않았다."
+    },
+    {
+      "command": ".\\scripts\\project.ps1 -Task api:praise-test",
+      "reason": "사용자 지시 및 샌드박스 제약으로 앱·로컬 DB에 대한 API 통합 검사는 실행하지 않았다."
+    },
+    {
+      "test_case": "TC-UI-NEWS-001",
+      "status": "not_run",
+      "reason": "브라우저 실행은 사용자 지시로 미실행. 두 목록·빈/오류/더 보기·읽음/연결/취소 및 320/360/393/768/1280px 무넘침·44px·키보드 초점은 Claude 리뷰 단계에서 검사."
+    },
+    {
+      "test_case": "TC-NOTIFY-001",
+      "status": "not_run",
+      "reason": "제품 수락 TC는 이 브리프 범위 밖이며 이번 단위 검사로 통과 처리하지 않는다."
+    }
+  ],
+  "implementation_notes": [
+    "소식은 주요 메뉴 다섯 번째이며 첫 페이지의 미읽음만 점/숨김 텍스트로 표시한다. 첫 로드·진입·명시 재조회 외 폴링은 없다.",
+    "읽음·취소는 기존 mutate/CSRF를 쓰며 API 성공 후 목록 재조회 결과만 반영한다. 성공 전 낙관 갱신은 없다.",
+    "추가 페이지에서 변경해도 해당 기록이 보이도록 이미 펼친 페이지 수만큼 재조회한다. 이전 조회 응답은 순번으로 무시하고 페이지 합침은 ID로 중복을 제거한다.",
+    "변경 실패는 기존 목록과 동일 ID/본문을 유지한다. 연결 관리 이동의 읽음 실패는 오류를 노출하지 않고 이동한다.",
+    "모든 새 화면 문구는 한국어다. 상대 프로필·판·개수·숨김/제외 상태는 표시하거나 추측하지 않는다.",
+    "두 목록 응답은 React 메모리에만 두며 저장소·쿠키·서비스 워커를 수정하지 않았다."
+  ],
+  "brief_differences": [
+    "기능·파일 범위 변경 없음. 기존 목록을 유지하기 위해 변경 성공 뒤 이미 펼친 페이지까지 재조회한다.",
+    "검증은 사용자 지시에 따라 project.ps1 대신 node_modules/.bin biome·tsc, 격리 없는 전체 node:test, 산출물 검사를 직접 실행한다. 빌드·API·브라우저는 미실행이다."
+  ],
+  "progress": {
+    "W10": "IN_PROGRESS",
+    "W10_D": "IN_PROGRESS",
+    "TC_UI_NEWS_001": "not_run",
+    "implementation_review": "pending",
+    "next": "Claude의 샌드박스 밖 빌드·API·브라우저 검사와 구현 리뷰"
+  },
+  "out_of_scope_files_modified": false,
+  "commit_created": false,
+  "push_performed": false,
+  "manual_source_review": {
+    "scope": "브리프의 파일 허용 목록·UI 문구·응답 필드 표시·API 호출 경로·낙관 갱신/영속 저장 부재를 diff와 소스로 확인했다. 브라우저 실행 결과는 아니다.",
+    "out_of_scope_existing_untracked_file": ".claude/launch.json (작업 시작 전부터 존재, 수정하지 않음)"
+  },
+  "claude_review_verification": {
+    "verified_at": "2026-10-16",
+    "node": "24.19.0",
+    "docker": "29.1.3",
+    "static": {
+      "lint": "passed (105 files)",
+      "typecheck": "passed",
+      "unit_tests": "132/132",
+      "artifacts": "passed",
+      "build_check": "passed"
+    },
+    "api": {
+      "api_news_test": "A/B/C 11/11 each",
+      "api_praise_test": "passed"
+    },
+    "browser": {
+      "actor": "local A dev server",
+      "real_api_empty_state": "passed",
+      "synthetic_responses": "GET lists replaced in-page; PATCH/POST intercepted; no database writes",
+      "widths_px": [
+        320,
+        360,
+        393,
+        768,
+        1280
+      ],
+      "horizontal_overflow": 0,
+      "controls_under_44px": 0,
+      "unread_dot": "shown with visually hidden text",
+      "read": "PATCH {read:true} then list refetch, badge cleared",
+      "connections_navigation": "passed",
+      "cancel": "confirm sheet copy, POST then refetch, shows cancelled badge",
+      "load_error_retry": "503 shows alert, retry recovers",
+      "more": "cursor request appends item"
+    },
+    "test_case": {
+      "id": "TC-UI-NEWS-001",
+      "status": "passed"
+    },
+    "real_provider_login_verified": false
+  }
+}
