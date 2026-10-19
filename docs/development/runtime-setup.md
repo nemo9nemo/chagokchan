@@ -25,6 +25,8 @@ Next.js 앱의 시작 화면, 환경 검사, 빌드와 로컬 실행을 구현�
 
 Node와 pnpm의 고정 버전을 준비한 뒤 프로젝트 루트에서 실행한다. Windows에서는 `scripts/project.ps1`이 고정 버전의 Node를 찾아 PATH에 적용한다. 별도 설치 위치는 `CHAGOKCHAN_NODE_PATH`에 지정할 수 있다.
 
+2026-10-19 실행 보완: PATH의 pnpm이 프로젝트의 `engines.pnpm`과 다르면 설치된 Corepack을 고정 Node로 실행하고 `.cache/corepack`·`.cache/corepack-shims`에 프로젝트 전용 캐시와 실행 파일을 준비한다. 중첩 `pnpm` 명령도 같은 버전을 사용한다. 첫 준비에는 공식 패키지 다운로드가 필요할 수 있고 전역 pnpm·Node·잠금 파일은 변경하지 않는다. 별도 pnpm은 `CHAGOKCHAN_PNPM_PATH`로 지정할 수 있으며 버전이 다르면 실패한다. Corepack이 없는 환경은 정확한 pnpm 버전을 설치하거나 해당 경로를 지정한다.
+
 ```powershell
 pnpm install --frozen-lockfile
 if (-not (Test-Path -LiteralPath .env.development.local)) {

@@ -1,0 +1,462 @@
+{
+  "work_items": [
+    "W21",
+    "W22"
+  ],
+  "date": "2026-10-19",
+  "captured_at": "2026-10-19T09:18:01.345Z",
+  "status": "local_verification_passed_claude_review_blocked",
+  "source": {
+    "base_commit": "86d5be9448353cf0f504eae68e18011ec98de344",
+    "branch": "codex/w21-local-closeout-launch-strategy",
+    "captured_before_commit": true,
+    "application_rpc_rls_migrations_package_lock_unchanged": true,
+    "sha256_format": "raw_file_bytes",
+    "sha256": {
+      "scripts/project.ps1": "713110289e245f130280fe8bbc440ddc1cdecd8d5f18b453a7fdf0bc6b0dbb0d",
+      "scripts/test-local-personal-praise.mjs": "867f20167ff960b4187452f4931e79fbf357fe5d3bb5eb096c765760e52315ef",
+      "scripts/test-local-shared-board-rpc.mjs": "98effc42281d2f9268d2d91dad7c33b5dfff0134dbc7430ec8f13004fa9b2dc8",
+      "policies/development-policy.json": "70e4ce710f82c0bbfd923e2bfe6095f4cf7489ee97c2e61af72ae7561f8bd922",
+      "docs/launch-and-growth-plan.md": "da765c33a5f39c396ed7e7a35400ffeb978dec4efad1ec0453db9bf3ffdbe2ba",
+      "docs/marketing/launch-kit.md": "294d69daff1d11da20937ffe5d5193f97e901f935ae7f79f5e6b1e80f45940e0"
+    }
+  },
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "ambient_pnpm_before_selection": "11.25.0",
+    "docker": "29.1.3",
+    "postgresql": "17.11",
+    "applied_migrations": 48,
+    "app_origin": "http://127.0.0.1:3000",
+    "auth_mode": "local_fixture",
+    "database_reset_performed": false
+  },
+  "requirement_ids": [
+    "NFR-005",
+    "NFR-001",
+    "REQ-002",
+    "REQ-003",
+    "REQ-004",
+    "REQ-007",
+    "REQ-008",
+    "REQ-009"
+  ],
+  "policy_ids": [
+    "POL-DEV-001",
+    "POL-SEC-001",
+    "POL-OPS-001",
+    "POL-PRAISE-002"
+  ],
+  "test_case_scope": {
+    "existing_api_cases": "TC-API-001 through TC-API-011",
+    "shared_count_case": "TC-SHARED-COUNT-001",
+    "browser_smoke": "W21 bounded read-only screen matrix; not full TC-UI-MOCKUP-001 or TC-DEV-001 acceptance"
+  },
+  "commands": [
+    {
+      "command": "scripts/project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 105,
+      "typecheck": "passed",
+      "unit_tests": {
+        "executed": 132,
+        "passed": 132,
+        "failed": 0
+      },
+      "artifact_check": "passed"
+    },
+    {
+      "command": "scripts/project.ps1 -Task build:check",
+      "status": "passed",
+      "scope": "synthetic production-check configuration, no deployment or real login"
+    },
+    {
+      "command": "scripts/project.ps1 -Task db:test",
+      "status": "passed",
+      "executed": 336,
+      "passed": 336,
+      "physical": 51,
+      "rpc_boundary": 21,
+      "business": 264
+    },
+    {
+      "command": "explicit CHAGOKCHAN_PNPM_PATH pointing to pnpm 11.25.0; invoke db:status",
+      "status": "passed",
+      "assertion": "version mismatch rejected before task execution"
+    }
+  ],
+  "database_rpc_regressions": {
+    "status": "passed",
+    "executed": 96,
+    "suites": [
+      {
+        "script_report": "local-rpc-tests",
+        "verified_at": "2026-10-19T08:46:19.622Z",
+        "executed": 27,
+        "passed": 27,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-goal-rpc-tests",
+        "verified_at": "2026-10-19T08:47:06.410Z",
+        "executed": 12,
+        "passed": 12,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-goal-list-rpc-tests",
+        "verified_at": "2026-10-19T08:47:28.782Z",
+        "executed": 5,
+        "passed": 5,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-goal-lifecycle-tests",
+        "verified_at": "2026-10-19T08:47:53.440Z",
+        "executed": 6,
+        "passed": 6,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-personal-praise-tests",
+        "verified_at": "2026-10-19T08:51:33.291Z",
+        "executed": 12,
+        "passed": 12,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-personal-praise-result-tests",
+        "verified_at": "2026-10-19T08:51:51.261Z",
+        "executed": 3,
+        "passed": 3,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-connection-tests",
+        "verified_at": "2026-10-19T08:52:56.867Z",
+        "executed": 13,
+        "passed": 13,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-shared-board-tests",
+        "verified_at": "2026-10-19T08:57:02.377Z",
+        "executed": 8,
+        "passed": 8,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-lifecycle-tests",
+        "verified_at": "2026-10-19T08:57:34.235Z",
+        "executed": 4,
+        "passed": 4,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      },
+      {
+        "script_report": "local-account-deletion-tests",
+        "verified_at": "2026-10-19T08:58:14.926Z",
+        "executed": 6,
+        "passed": 6,
+        "cleanup_passed": true,
+        "existing_fixture_preserved": true
+      }
+    ],
+    "executed_sequentially_after_failed_overlap": true,
+    "temporary_fault_triggers_remaining": 0,
+    "failed_result_probe_accounts_remaining": 0
+  },
+  "api_regressions": {
+    "status": "passed",
+    "unique_boundary_checks": 261,
+    "scenarios": [
+      {
+        "task": "api:me-test",
+        "actor": "A",
+        "checks": 15,
+        "status": "passed"
+      },
+      {
+        "task": "api:me-test",
+        "actor": "B",
+        "checks": 15,
+        "status": "passed"
+      },
+      {
+        "task": "api:me-test",
+        "actor": "C",
+        "checks": 15,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-test",
+        "actor": "A",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-test",
+        "actor": "B",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-test",
+        "actor": "C",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-list-test",
+        "actor": "A",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-list-test",
+        "actor": "B",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-list-test",
+        "actor": "C",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-management-test",
+        "actor": "A",
+        "checks": 8,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-management-test",
+        "actor": "B",
+        "checks": 8,
+        "status": "passed"
+      },
+      {
+        "task": "api:goal-management-test",
+        "actor": "C",
+        "checks": 8,
+        "status": "passed"
+      },
+      {
+        "task": "api:praise-test",
+        "actor": "A",
+        "checks": 10,
+        "status": "passed"
+      },
+      {
+        "task": "api:praise-test",
+        "actor": "B",
+        "checks": 10,
+        "status": "passed"
+      },
+      {
+        "task": "api:praise-test",
+        "actor": "C",
+        "checks": 10,
+        "status": "passed"
+      },
+      {
+        "task": "api:board-test",
+        "actor": "A",
+        "checks": 14,
+        "status": "passed"
+      },
+      {
+        "task": "api:board-test",
+        "actor": "B",
+        "checks": 14,
+        "status": "passed"
+      },
+      {
+        "task": "api:board-test",
+        "actor": "C",
+        "checks": 14,
+        "status": "passed"
+      },
+      {
+        "task": "api:connection-test",
+        "actor": "A",
+        "checks": 12,
+        "status": "passed"
+      },
+      {
+        "task": "api:connection-test",
+        "actor": "B",
+        "checks": 12,
+        "status": "passed"
+      },
+      {
+        "task": "api:connection-test",
+        "actor": "C",
+        "checks": 12,
+        "status": "passed"
+      },
+      {
+        "task": "api:news-test",
+        "actor": "A",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "task": "api:news-test",
+        "actor": "B",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "task": "api:news-test",
+        "actor": "C",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "task": "api:trash-test",
+        "actor": "A",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "task": "api:trash-test",
+        "actor": "B",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "task": "api:trash-test",
+        "actor": "C",
+        "checks": 11,
+        "status": "passed"
+      }
+    ],
+    "successful_write_tag_scenarios": {
+      "count": 9,
+      "actor": "A",
+      "status": "passed",
+      "goal_create_praise_save_replay_edit_cancel": true,
+      "cleanup_passed": true,
+      "full_product_fixture_and_quota_snapshot_preserved": true
+    },
+    "unique_checks_including_tag": 270,
+    "repeated_invocations_not_added_to_unique_total": true,
+    "standalone_trash_recheck": "A/B/C 11/11 each passed"
+  },
+  "browser": {
+    "status": "passed_with_bounded_scope",
+    "environment": "Codex in-app Chromium, actual local A API",
+    "css_viewport_widths": [
+      320,
+      360,
+      393,
+      768,
+      1280
+    ],
+    "viewport_rounding": "controller 319/392 resulted in exact CSS innerWidth 320/393; measured widths recorded",
+    "screen_views_checked": 45,
+    "views": [
+      "goal detail",
+      "praise sheet",
+      "share panel without code creation",
+      "connections with seeded connection",
+      "received shared-board empty state",
+      "trash empty state",
+      "news received empty state",
+      "goal directory",
+      "create form without submit"
+    ],
+    "horizontal_overflow_failures": 0,
+    "visible_controls_under_44px": 0,
+    "login_fields_present": false,
+    "create_form": {
+      "default_target": 20,
+      "min_target": 1,
+      "max_target": 100,
+      "shared_default": false,
+      "empty_name_submit_rejected_with_aria_invalid": true
+    },
+    "theme": {
+      "grape_to_garden_and_back": "passed",
+      "displayed_praise_count_unchanged": true
+    },
+    "business_mutation_requests_sent": 0,
+    "static_dev_server_log_mutation_count": 0,
+    "full_browser_mutation_or_replay_or_reduced_motion_acceptance_executed": false,
+    "viewport_override_reset": true
+  },
+  "failed_attempts_and_resolution": [
+    {
+      "issue": "ambient pnpm version mismatch",
+      "resolution": "project-local Corepack shims use declared pnpm with pinned Node; full check and build passed"
+    },
+    {
+      "issue": "temporary notification probe RPC missing from PostgREST schema cache",
+      "resolution": "bounded retry only for PGRST202 on rollback-only temporary probe; full personal praise regression 12/12 passed"
+    },
+    {
+      "issue": "two global-fault-trigger/snapshot suites accidentally overlapped",
+      "resolution": "verified zero leftover result probe accounts and fault triggers; all ten suites rerun sequentially, fixture and cleanup checks passed"
+    },
+    {
+      "issue": "shared revoke race was coupled to preceding exhausted board/day quota",
+      "resolution": "fresh synthetic race board; full shared suite 8/8 passed, production guards unchanged"
+    },
+    {
+      "issue": "last redundant api:trash-test invocation returned exit 1 without a retained error detail",
+      "resolution": "initial A/B invocations had passed all three internal actors; standalone A/B/C recheck passed 11/11 each; cause of this one transient failure not established",
+      "exact_cause_confirmed": false
+    }
+  ],
+  "implementation_review": {
+    "reviewer": "Claude Code",
+    "version": "2.1.296",
+    "status": "blocked_before_model_execution",
+    "api_error_status": 403,
+    "api_error_code": "oauth_not_allowed_for_organization",
+    "explanation": "organization disabled Claude subscription access for Claude Code",
+    "model_input_tokens": 0,
+    "approval_claimed": false,
+    "files_changed_by_reviewer": false,
+    "next": "organization access or an approved Anthropic API setup must be prepared, then rerun Claude review; keep PR draft meanwhile"
+  },
+  "not_run": [
+    "real Google/OTP login and registration",
+    "full TC-DEV-001/002",
+    "full TC-UI-MOCKUP-001",
+    "device TC-WEB-006 and TC-CACHE-001",
+    "staging/production backup restore, load and full product acceptance",
+    "Android/iOS packaging, store submission and billing",
+    "full OpenAPI validator and Mermaid render"
+  ],
+  "delivery": {
+    "phase_one": "local_validation_complete_review_blocked",
+    "phase_two": "deferred_per_user",
+    "platform_order": [
+      "mobile_web_pwa",
+      "android",
+      "ios"
+    ],
+    "public_deployment_performed": false,
+    "paid_service_created": false,
+    "marketing_published": false,
+    "monetization_implemented": false
+  },
+  "business_plan_validation": {
+    "source_check_date": "2026-10-19",
+    "official_platform_cost_and_policy_pages_opened": true,
+    "revenue_arithmetic_checked": true,
+    "prices_conversion_rates_and_marketing_targets_are_hypotheses": true
+  }
+}

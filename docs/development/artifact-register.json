@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-16",
-  "current_stage": "S06_local_feature_scope_done_w10_c_w12_w13_w14_w15_pending",
-  "next_stage": "S06_review_remaining_local_backlog_then_w14_operational_inputs",
+  "updated_on": "2026-10-19",
+  "current_stage": "S06_phase_one_local_verification_done_claude_review_blocked",
+  "next_stage": "restore_claude_review_access_then_phase_two_w14_w12_w13_w15_w17",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "in_progress_w20_done_ui09_implemented_integration_browser_review_and_w15_acceptance_pending"
+      "status": "local_features_verified_w21_claude_review_blocked_product_acceptance_pending"
     },
     {
       "id": "S07",
@@ -82,7 +82,7 @@
   },
   "verification": {
     "artifact_check_status": "passed",
-    "artifact_report": "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json",
+    "artifact_report": "docs/quality/reports/w21-local-closeout-check-2026-10-19.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
     "planned_test_cases": 78,
@@ -91,14 +91,14 @@
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
-    "database_tests_executed": 257,
+    "database_tests_executed": 336,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
-    "local_api_tests_executed": 216,
+    "local_api_tests_executed": 270,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
     "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_goal_delete_retry_w06_d2_account_deletion_w08_b1_goal_list_w08_b2_goal_lifecycle_bunch_history_w08_c_personal_praise_result_w09_b_peer_praise_moderation_w09_c_shared_board_directory",
-    "business_rpc_tests_executed": 185,
+    "business_rpc_tests_executed": 264,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
@@ -150,15 +150,16 @@
     "w11_b2_report": "docs/quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json",
     "w16_c_report": "docs/quality/reports/w16-c-ci-check-2026-10-08.json",
     "w20_b": {
-      "status": "ui_implemented_sandbox_checks_passed_integration_browser_review_pending",
+      "status": "implemented_review_approved_partial_browser_checked_full_acceptance_w15",
       "report": "docs/quality/reports/w20-b-mockup-ui-check-2026-10-15.json",
       "all_unit_tests_passed": 126,
       "grape_layout_tests_passed": 6,
-      "build_completed": false,
-      "database_api_integration_completed": false,
+      "build_completed": true,
+      "database_api_integration_completed": true,
       "browser_acceptance_executed": false,
-      "implementation_review": "pending",
-      "commit_created": false
+      "implementation_review": "approved_2026-10-16_r2",
+      "commit_created": true,
+      "browser_smoke_completed": true
     },
     "w20_a": {
       "status": "database_api_integration_and_review_passed_pr_r2_fixed",
@@ -182,20 +183,32 @@
       }
     },
     "w09_d_report": "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json",
-    "w09_d_status": "implemented_sandbox_checks_passed_database_and_review_pending",
-    "w09_d_migration_applied": false,
+    "w09_d_status": "database_api_integration_passed_review_approved_2026-10-16_r3",
+    "w09_d_migration_applied": true,
     "w09_d_pgtap_planned": 39,
-    "w09_d_pgtap_executed": 0,
+    "w09_d_pgtap_executed": 39,
     "w10_d": {
-      "status": "ui_implemented_sandbox_checks_passed_integration_browser_review_pending",
+      "status": "implemented_build_api_browser_smoke_passed_review_approved",
       "report": "docs/quality/reports/w10-d-news-sent-ui-check-2026-10-16.json",
       "all_unit_tests_passed": 132,
       "news_label_tests_passed": 6,
-      "build_completed": false,
-      "database_api_integration_completed": false,
-      "browser_acceptance_executed": false,
-      "implementation_review": "pending",
-      "commit_created": false
+      "build_completed": true,
+      "database_api_integration_completed": true,
+      "browser_acceptance_executed": true,
+      "implementation_review": "approved_2026-10-16_r1",
+      "commit_created": true
+    },
+    "w21": {
+      "status": "local_verification_passed_claude_review_blocked",
+      "report": "docs/quality/reports/w21-local-closeout-check-2026-10-19.json",
+      "unit_tests_passed": 132,
+      "database_tests_passed": 336,
+      "rpc_session_scenarios_passed": 96,
+      "unique_api_checks_passed": 270,
+      "browser_screen_views_checked": 45,
+      "build_completed": true,
+      "claude_review": "blocked_403_oauth_not_allowed_for_organization",
+      "real_login_tests_executed": 0
     }
   },
   "artifacts": [
@@ -282,7 +295,7 @@
     {
       "id": "ART-009",
       "title": "화면·상태·오류 흐름",
-      "status": "ui09_implemented_w10_d_build_api_browser_and_review_pending",
+      "status": "ui09_review_approved_w20_partial_browser_checked_full_acceptance_w15",
       "paths": [
         "docs/design/user-flows.md"
       ]
@@ -290,7 +303,7 @@
     {
       "id": "ART-010",
       "title": "검증 설계",
-      "status": "w10_d_ui_news_scenario_added_not_run_previous_verification_preserved",
+      "status": "ui_news_smoke_passed_full_product_device_acceptance_pending",
       "paths": [
         "docs/quality/verification-plan.md",
         "docs/quality/test-cases.json"
@@ -650,7 +663,7 @@
     {
       "id": "ART-022",
       "title": "W20-A 셀프 칭찬 태그 구현·검사",
-      "status": "database_api_integration_verified_review_approved",
+      "status": "database_api_verified_review_approved_2026-10-15",
       "paths": [
         "docs/plans/W20-A-praise-tags.md",
         "supabase/migrations/20261008025000_praise_tag.sql",
@@ -663,7 +676,7 @@
     {
       "id": "ART-023",
       "title": "W20-B 목업 UI·포도 그래픽·입력/공유 패널",
-      "status": "implemented_sandbox_checked_browser_and_review_pending",
+      "status": "implemented_review_approved_partial_browser_checked_full_acceptance_w15",
       "paths": [
         "docs/plans/W20-B-mockup-ui.md",
         "src/app/client-app.tsx",
@@ -680,7 +693,7 @@
     {
       "id": "ART-024",
       "title": "W09-D shared cycle count and sender cancellation fix",
-      "status": "implemented_sandbox_checked_database_and_review_pending",
+      "status": "database_api_verified_review_approved_2026-10-16",
       "paths": [
         "docs/plans/W09-D-shared-count-cancel-fix.md",
         "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
@@ -688,6 +701,18 @@
         "docs/decisions/ADR-0006-shared-cycle-counter-role.md",
         "docs/changes/2026-10-16-w09-d-shared-count-cancel.md",
         "docs/quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json"
+      ]
+    },
+    {
+      "id": "ART-025",
+      "title": "1차 마무리·2차 출시·수익화·마케팅 실행안",
+      "status": "plans_documented_local_verification_done_claude_review_blocked_not_deployed",
+      "paths": [
+        "docs/launch-and-growth-plan.md",
+        "docs/marketing/launch-kit.md",
+        "docs/development/phase-one-closeout.md",
+        "docs/quality/reports/w21-local-closeout-check-2026-10-19.json",
+        "docs/changes/2026-10-19-w21-local-closeout-and-launch-plan.md"
       ]
     }
   ],
@@ -769,7 +794,7 @@
       "preparation_report": "docs/quality/reports/project-handoff-preparation-2026-10-08.json",
       "draft_directory": "tmp/w06-draft",
       "draft_state": "unapplied_untested_git_ignored",
-      "continuation_work_item": "W09"
+      "continuation_work_item": "W21"
     }
   },
   "development_auth": {
@@ -801,5 +826,16 @@
     "remote_connection_report": "docs/quality/reports/git-remote-connection-2026-10-08.json",
     "branch_protection": "main_required_pr_quality_enforce_admins_no_force_push_no_deletion",
     "branch_protection_report": "docs/quality/reports/w16-c-ci-check-2026-10-08.json"
+  },
+  "delivery_milestones": {
+    "source": "docs/launch-and-growth-plan.md",
+    "phase_one": "BLOCKED_claude_review_403_local_verification_complete",
+    "phase_two": "DEFERRED",
+    "release_platform_order": [
+      "mobile_web_pwa",
+      "android",
+      "ios"
+    ],
+    "phase_one_public_access": false
   }
 }

@@ -1,8 +1,10 @@
 # 개발 순서와 진행표
 
-갱신일: 2026-10-16 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
+갱신일: 2026-10-19 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
 
 이 표가 **작업별 상태의 기준**이다. 완료할 때마다 상태·결과·근거를 갱신하고 사용자에게 표를 보여준다. 설계 작업의 DONE은 문서와 해당 정적 검사의 완료다. DB 적용·앱 기능·실제 로그인 검증은 각각의 구현 행에서 따로 완료한다.
+
+2026-10-19 사용자 결정: **1차는 로그인 없는 로컬 기능 마무리**, **2차는 실제 로그인과 공개 출시**다. 출시 순서는 모바일 웹/PWA → Android → iOS다. [단계·수익화·마케팅 실행안](../launch-and-growth-plan.md)을 따른다.
 
 W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [이번 산출물 검사](../quality/reports/artifacts-check-2026-10-08-workspace.json)에 기록한다. 설계 완료 후 정책을 바꾸면 해당 검사도 다시 실행한다.
 
@@ -35,6 +37,10 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
 | W20 | 목업 기반 화면 재설계·칭찬 태그 | DONE | W08~W11 | W20-A 셀프 태그와 W20-B 화면 구현·검증 | **완료 2026-10-16.** W20-A 셀프 칭찬 태그 DB/API(pgTAP 297/297)와 W20-B 목업 기반 화면(B01~B07, 포도 그래픽, 칭찬 시트, 공유 패널)을 구현·리뷰했다. TC-UI-MOCKUP-001 전체 브라우저 수락은 W15. W20 기준을 적용하며 로컬 참고 브랜치 W18/W19와 구분한다. [W20-B 브리프](../plans/W20-B-mockup-ui.md) |
+| W21 | 1차 로컬 무로그인 마무리·상태 동기화·회귀 | BLOCKED | W08~W11, W20 / 실제 로그인 제외 | 로컬 검증 완료 후 Claude 구현 리뷰 | 단위 132/132·DB 336/336·RPC 세션 96/96·API 270개·브라우저 45화면·build:check 통과. Claude Code 조직의 구독 인증 차단 403으로 리뷰 실행 불가. 직접 요청의 검증 커밋·초안 PR까지 준비하며 merge/APPROVED는 보류. [1차 기록](phase-one-closeout.md) · [증거](../quality/reports/w21-local-closeout-check-2026-10-19.json) |
+| W22 | 출시·수익화·마케팅 실행안과 준비 문안 | DONE | 사용자 직접 요청 2026-10-19 | 공식 자료 확인·플랫폼 순서·비용·상품/가격 가설·매출 계산·4주 실행 계획 | 문서 작성 완료. [실행안](../launch-and-growth-plan.md) · [마케팅 준비물](../marketing/launch-kit.md). 서비스 개설·결제·게시·매출 검증은 미실행 |
+| W23 | Android 설치형 앱·스토어·결제 경로 | DEFERRED | 2차 모바일 웹/PWA 공개 검증 뒤 | 포장 방식·실기기 인증 복귀·서명·Data safety·계정 삭제·스토어 테스트/심사 | 플랫폼 순서만 확정. 설치형 코드·개발자 계정 결제·제출 미실행 |
+| W24 | iOS 앱·로그인 대안·스토어 심사 | DEFERRED | 2차 Android 뒤 | iOS 앱 효용·동등 로그인·TestFlight·구매 복원·심사 | 플랫폼 순서만 확정. Sign in with Apple·네이티브·스토어 제출 미구현 |
 
 W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 진행한다. 이 두 입력 때문에 로컬 DB·기능 개발을 멈추지 않는다. 실제 로그인 없이 개발한다는 요구도 DB 권한·동시성 검사를 미루는 이유로 사용하지 않는다.
 
@@ -126,3 +132,14 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | --- | --- | --- | --- |
 | W20-A | 셀프 칭찬 고정 태그·DB/API | DONE | 셀프 칭찬 태그(5개 코드, 0~1개, 취소 시 삭제, peer 금지)를 새 마이그레이션·RPC·API·계약에 반영했다. r1 재검증: 마이그레이션 47개, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-test 10/10, api:board-test A/B/C 각 14/14, build:check 통과. PR 리뷰 r2 수정: 태그 API 검사가 자기 증가분만 rate_usage에서 차감하고 동시 변경 시 실패하게 했으며, RPC 계약 5인자·칭찬 unit 18개 기록을 맞췄다. r2 재검증(Docker 29.1.3, Node 24.19.0): api:praise-tag-test 2회 연속 통과(9개 시나리오, 정리 성공, rate_usage 포함 전체 snapshot 보존), unit 120/120, lint·typecheck·산출물 통과. 화면 연결은 W20-B. [브리프](../plans/W20-A-praise-tags.md) · [검사 증거](../quality/reports/w20-a-praise-tag-check-2026-10-15.json) |
 | W20-B | 목업 기반 목표 중심 화면 재설계 | DONE | B01~B07을 기존 UI02~UI05에 대응시켰다. 1~100알 포도 그래픽, 셀프 태그·메모 칭찬 시트(좁은 폭 하단 시트), 기록 상세·취소 시트, 연결 코드·판 권한 공유 패널, 기본 포도/정원 토큰을 구현했다. 서버·DB·계약은 바꾸지 않았다. 리뷰 r1 WARNING(일본어 문구)은 r2에서 한국어로 고쳤다. Claude 리뷰 확인(Node 24.19.0, Docker 29.1.3): lint·typecheck·unit 126/126·산출물·build:check 통과, api:praise-test·goal-test·connection-test·praise-tag-test 통과. 브라우저(로컬 A): 판 화면 320/360/393/768/1280px 가로 넘침 0·44px 미만 조작부 0·대비 미달 0, 정원 테마 393px 대비·넘침 통과, 393px 칭찬 시트·공유 패널 배치 확인, 저장 실패 시 입력 보존·같은 요청 키/본문 재전송·그래픽/개수 불변 확인(POST만 가로채 DB 쓰기 없음). TC-UI-MOCKUP-001의 나머지 단계(성공 저장 후 pop 1회·replay 미재생 브라우저 확인, reduced-motion, B02 생성·1/15/100알, 공유 코드 생성·복사·폐기, UI06/UI08/UI10 폭 측정)는 fixture 보존을 위해 미실행이며 W15 제품 수락에서 실행한다. [브리프](../plans/W20-B-mockup-ui.md) · [검사 증거](../quality/reports/w20-b-mockup-ui-check-2026-10-15.json) |
+
+## W21 1차 로컬 마무리와 W22 출시 준비 (2026-10-19)
+
+| ID | 범위 | 상태 | 결과·다음 행동 |
+| --- | --- | --- | --- |
+| W21-A | 고정 도구·검사 격리 보완 | DONE | 선언된 pnpm/Node 선택, 임시 RPC cache 대기, 쿼터와 권한 경합 fixture 분리. 제품 API·RLS·SQL·상한 변경 없음 |
+| W21-B | 로컬 회귀·화면 검증·기록 동기화 | DONE | unit 132·pgTAP 336·RPC 세션 96·API 270·브라우저 45화면 통과. 기존 fixture/쿼터 보존. 전체 제품 수락과 실기기/실제 로그인 통과를 뜻하지 않음 |
+| W21-C | Claude 구현 리뷰·최종 마감 | BLOCKED | 조직 설정의 oauth_not_allowed_for_organization 403. 접근 준비 뒤 Claude 리뷰, 지적 수정, CI/병합을 거쳐 마감. 승인된 브리프를 지시한 작업이 아닌 직접 요청이므로 검증 변경의 로컬 커밋·초안 PR은 기존 규칙으로 진행 |
+| W22-A | 출시·수익화·마케팅 실행 문서 | DONE | 공식 자료·상호 참조·매출 산술 확인. 가격/전환율은 가설, 외부 개설·결제·게시·실제 매출 없음 |
+
+[변경 기록](../changes/2026-10-19-w21-local-closeout-and-launch-plan.md). 2차는 모바일 웹/PWA → Android → iOS이며 실제 로그인과 공개 전 필수 TC는 유예 상태를 유지한다.
