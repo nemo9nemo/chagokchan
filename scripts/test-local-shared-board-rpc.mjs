@@ -365,6 +365,10 @@ try {
   });
 
   await record("revoke_disconnect_block_races_and_reconnect_requires_new_grant", async () => {
+    // The quota case exhausted the earlier board's daily bucket. A fresh board
+    // keeps this race about access revocation without weakening either guard.
+    const shared = await createSharedGoal(owner, "권한 회수 경합 전용", 20);
+    ok(await owner.client.rpc("grant_board_member", { p_board_id: shared.boardId, p_user_id: contributor.id }));
     const concurrentKey = crypto.randomUUID();
     const concurrent = await Promise.all([
       owner.client.rpc("revoke_board_member", { p_board_id: shared.boardId, p_user_id: contributor.id }),

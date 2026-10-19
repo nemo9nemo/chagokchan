@@ -19,5 +19,32 @@ foreach ($chagokCandidate in $chagokCandidates) {
 if (-not $chagokNode) { throw ('Install Node ' + $chagokExpected + ' or set CHAGOKCHAN_NODE_PATH.') }
 $env:PATH = [IO.Path]::GetDirectoryName($chagokNode) + ';' + $env:PATH
 Set-Location -LiteralPath (Join-Path $PSScriptRoot '..')
-& pnpm run $Task
+$chagokPackage = Get-Content -LiteralPath (Join-Path $PSScriptRoot '../package.json') -Raw | ConvertFrom-Json
+$chagokExpectedPnpm = $chagokPackage.engines.pnpm
+$chagokPnpmCommand = Get-Command pnpm -ErrorAction SilentlyContinue
+$chagokPnpm = if ($env:CHAGOKCHAN_PNPM_PATH) { $env:CHAGOKCHAN_PNPM_PATH } else { $chagokPnpmCommand.Source }
+$chagokPnpmMatches = $false
+if ($chagokPnpm -and (Test-Path -LiteralPath $chagokPnpm)) {
+    $chagokActualPnpm = & $chagokPnpm --version
+    $chagokPnpmMatches = $LASTEXITCODE -eq 0 -and "$chagokActualPnpm".Trim() -eq $chagokExpectedPnpm
+}
+if (-not $chagokPnpmMatches) {
+    if ($env:CHAGOKCHAN_PNPM_PATH) { throw ('CHAGOKCHAN_PNPM_PATH must point to pnpm ' + $chagokExpectedPnpm + '.') }
+    $chagokCorepack = Get-Command corepack -ErrorAction SilentlyContinue
+    if (-not $chagokCorepack) { throw ('Install pnpm ' + $chagokExpectedPnpm + ' or Corepack, or set CHAGOKCHAN_PNPM_PATH.') }
+    $chagokCorepackJs = Join-Path (Split-Path -Parent $chagokCorepack.Source) 'node_modules/corepack/dist/corepack.js'
+    if (-not (Test-Path -LiteralPath $chagokCorepackJs)) { throw ('Install pnpm ' + $chagokExpectedPnpm + ' or set CHAGOKCHAN_PNPM_PATH.') }
+    if (-not $env:COREPACK_HOME) { $env:COREPACK_HOME = Join-Path (Get-Location) '.cache/corepack' }
+    $env:COREPACK_ENABLE_AUTO_PIN = '0'
+    $chagokShimDirectory = Join-Path (Get-Location) '.cache/corepack-shims'
+    New-Item -ItemType Directory -Path $chagokShimDirectory -Force | Out-Null
+    & $chagokNode $chagokCorepackJs enable --install-directory $chagokShimDirectory pnpm
+    if ($LASTEXITCODE -ne 0) { throw 'Unable to prepare project-local pnpm shims.' }
+    $env:PATH = [IO.Path]::GetDirectoryName($chagokNode) + ';' + $chagokShimDirectory + ';' + $env:PATH
+    $chagokPnpm = Join-Path $chagokShimDirectory 'pnpm.cmd'
+    $chagokActualPnpm = & $chagokPnpm --version
+    if ($LASTEXITCODE -ne 0 -or "$chagokActualPnpm".Trim() -ne $chagokExpectedPnpm) { throw ('Unable to prepare pinned pnpm ' + $chagokExpectedPnpm + '.') }
+}
+$env:PATH = [IO.Path]::GetDirectoryName($chagokNode) + ';' + (Split-Path -Parent $chagokPnpm) + ';' + $env:PATH
+& $chagokPnpm run $Task
 exit $LASTEXITCODE

@@ -211,4 +211,8 @@ TC-PRAISE-TAG-001은 API 단위·pgTAP·실제 로컬 A 세션을 함께 검증�
 
 ## W10-D 소식·보낸 칭찬 화면 검사 (2026-10-16)
 
-REQ-008·REQ-009 / POL-PRAISE-002 / TC-UI-NEWS-001을 추적한다. 주요 메뉴, 두 목록·더 보기·빈/로딩/오류, 읽음 PATCH 후 재조회, 연결 이동, 취소 확인·POST 후 재조회와 한국어 문구를 구현했다. Node 24.19.0에서 Biome lint·tsc·unit 132/132(신규 문구/이동 함수 6/6)을 통과했다. 산출물 구조 검사는 [검사 증거](reports/w10-d-news-sent-ui-check-2026-10-16.json)에 기록한다. 빌드·API 통합·브라우저는 사용자 지시와 샌드박스 제약으로 미실행이다. Claude가 샌드박스 밖에서 두 목록·변경 성공/실패·연결 종료 뒤 취소와 320/360/393/768/1280px 무넘침·44px를 확인해야 한다. TC-UI-NEWS-001 및 제품 수락 TC-NOTIFY-001은 not_run을 유지한다.
+REQ-008·REQ-009 / POL-PRAISE-002 / TC-UI-NEWS-001을 추적한다. 주요 메뉴, 두 목록·더 보기·빈/로딩/오류, 읽음 PATCH 후 재조회, 연결 이동, 취소 확인·POST 후 재조회와 한국어 문구를 구현했다. Node 24.19.0에서 Biome lint·tsc·unit 132/132(신규 문구/이동 함수 6/6)을 통과했다. 산출물 구조 검사는 [검사 증거](reports/w10-d-news-sent-ui-check-2026-10-16.json)에 기록한다. 빌드·API 통합·브라우저는 사용자 지시와 샌드박스 제약으로 미실행이다. Claude가 샌드박스 밖에서 두 목록·변경 성공/실패·연결 종료 뒤 취소와 320/360/393/768/1280px 무넘침·44px를 확인해야 한다. 위 문장은 Codex 초기 구현 당시 기록이다. 2026-10-16 최종 Claude 리뷰에서 build:check·api:news-test A/B/C 11/11·api:praise-test와 합성 응답 브라우저 smoke가 통과해 TC-UI-NEWS-001은 passed다. 브라우저 PATCH/POST는 가로채 DB 쓰기를 하지 않았다. 제품 수락 TC-NOTIFY-001은 계속 not_run이며 실제 로그인·제품 전체 수락을 대체하지 않는다.
+
+## W21 1차 로컬 마무리 (2026-10-19)
+
+사용자 요청으로 고정 도구 선택·완료 기록 동기화와 로컬 회귀를 다시 확인한다. DB 검사는 전역 fault trigger와 전체 fixture snapshot을 사용하므로 하나씩 실행한다. 임시 검사 RPC의 schema cache 반영 대기와 공유 권한 경합의 전용 합성 판을 추가해 실행 순서에 따른 오검출을 막았다. 제품 RPC·쿼터·권한 정책·적용 SQL은 변경하지 않는다. 실제 명령·환경·성공/실패 시도·미실행 범위는 [W21 증거](reports/w21-local-closeout-check-2026-10-19.json)에 기록한다. 전체 TC-UI-MOCKUP-001·TC-WEB-006·TC-CACHE-001과 실제 로그인·복원·부하는 W15/2차에 남긴다.

@@ -1,7 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "updated_on": "2026-10-08",
+  "updated_on": "2026-10-19",
   "scope": "development_environment_only",
+  "delivery_milestones": {
+    "phase_one": "local_feature_closeout_without_interactive_login",
+    "phase_one_public_access": false,
+    "phase_two": "real_login_release_readiness_and_public_launch",
+    "release_platform_order": ["mobile_web_pwa", "android", "ios"],
+    "source": "docs/launch-and-growth-plan.md"
+  },
   "local_auth": {
     "mode": "local_fixture",
     "interactive_login_required": false,

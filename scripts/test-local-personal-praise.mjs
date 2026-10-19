@@ -133,7 +133,15 @@ try {
     const bunchId = countFor("select id::text from public.bunches where board_id=:'board'::uuid and cycle_no=1;\n", { board: basic.boardId });
     sql("grant create on schema public to chagokchan_rpc;\ncreate function public.w06b2_notification_policy_probe(p_bunch uuid) returns text language plpgsql security definer set search_path=pg_catalog as $$ declare actor uuid; begin actor:=private.require_actor(); begin insert into public.notifications(recipient_user_id,actor_user_id,type,dedupe_key,bunch_id) values(actor,actor,'bunch_completed','bunch-completed:'||p_bunch::text,p_bunch) on conflict(recipient_user_id,dedupe_key) do nothing; raise exception using errcode='P9999',message='probe_rollback'; exception when sqlstate 'P9999' then return 'accepted'; when others then return sqlstate||':'||sqlerrm; end; end $$;\nalter function public.w06b2_notification_policy_probe(uuid) owner to chagokchan_rpc;\nrevoke create on schema public from chagokchan_rpc;\nrevoke all on function public.w06b2_notification_policy_probe(uuid) from public,anon,authenticated,service_role;\ngrant execute on function public.w06b2_notification_policy_probe(uuid) to authenticated;\nnotify pgrst,'reload schema';\n");
     notificationProbeInstalled = true;
-    const probe = await owner.client.rpc("w06b2_notification_policy_probe", { p_bunch: bunchId });
+    // NOTIFY only requests a cache reload. Retry a missing signature, never a
+    // business/permission failure; every successful probe rolls its write back.
+    let probe;
+    const schemaDeadline = Date.now() + 10000;
+    do {
+      probe = await owner.client.rpc("w06b2_notification_policy_probe", { p_bunch: bunchId });
+      if (probe.error?.code !== "PGRST202") break;
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    } while (Date.now() < schemaDeadline);
     assert.equal(probe.error, null, probe.error?.message ?? "Policy probe failed");
     assert.equal(probe.data, "accepted");
     assert.equal(countFor("select count(*) from public.notifications where recipient_user_id=:'actor'::uuid and dedupe_key='bunch-completed:'||:'bunch';\n", { actor: owner.id, bunch: bunchId }), "0");

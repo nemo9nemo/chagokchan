@@ -2,12 +2,12 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 모바일 웹/PWA를 개발한다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **S06 사용자 기능 구현 중 — W11 진행 중**. W06 DB 권한부터 W10 목표 휴지통·복구까지 구현했고, W11-A·B1을 완료했다. W11-B2의 320/640px 재배치·두 테마 글자 대비 브라우저 검증과 W11-C PWA 설치·정적 캐시·오프라인 안내 단위 검증을 마쳤다. 실기기 확대·읽기 도구·터치 `TC-WEB-006`과 A/B 계정 전환·실제 오프라인 `TC-CACHE-001` 검증은 남아 있다. [진행표](docs/development/backlog.md), [W11-C 검사 증거](docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json).
+현재 단계: **1차 로컬 무로그인 마무리 완료(W21)**. 고정 실행 도구 보완과 unit 132·DB 336·RPC 세션 96·API 270·브라우저 45화면·빌드를 검증했다. 2026-10-19 사용자 요청으로 Claude를 사용하지 않고 Codex가 변경 소스와 검사 근거를 직접 검토했다. 실제 로그인·전체 제품 수락·실기기·복원·공개 출시는 2차다. [진행표](docs/development/backlog.md) · [1차 기록](docs/development/phase-one-closeout.md) · [출시 실행안](docs/launch-and-growth-plan.md) · [무료·광고 수익 검토](docs/free-with-ads-plan.md).
 
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 
 - [개발 순서·현재 진행표](docs/development/backlog.md) — 작업 완료마다 상태와 검사 근거를 갱신한다.
-- [Codex 프로젝트 개발 인계](docs/development/codex-project-handoff.md) — W06 재개 순서와 미검증 초안 위치.
+- [Codex 프로젝트 개발 인계](docs/development/codex-project-handoff.md) — 현재 인계와 과거 W06 초안 구분.
 - [로그인 없이 사용하는 로컬 개발](docs/development/local-development.md)
 - [개발 환경 정책](policies/development-policy.json)
 
@@ -22,4 +22,4 @@
 - [개발 작업 목록](docs/development/backlog.md)
 - [검증 계획](docs/quality/verification-plan.md)
 
-개발자는 요구사항 → 정책 → ERD·화면·API 계약 → 검증 시나리오 → 구현 → 검증 → 릴리스 순서로 진행한다. 작업 규칙은 [AGENTS.md](AGENTS.md)를 따른다. 2026-10-08 사용자 요청으로 로컬 Git을 초기화하고 기능 단위로 커밋한다. 메시지에 작업·이유·검증·참조를 포함하며 [커밋 기준](docs/development/git-workflow.md)을 따른다. [GitHub 저장소](https://github.com/nemo9nemo/chagokchan)는 origin/main으로 연결했다. CI 설정은 후속 단계다. [연결 증거](docs/quality/reports/git-remote-connection-2026-10-08.json)를 남겼다.
+개발자는 요구사항 → 정책 → ERD·화면·API 계약 → 검증 시나리오 → 구현 → 검증 → 릴리스 순서로 진행한다. 작업 규칙은 [AGENTS.md](AGENTS.md)를 따른다. 2026-10-08 사용자 요청으로 로컬 Git을 초기화하고 기능 단위로 커밋한다. 메시지에 작업·이유·검증·참조를 포함하며 [커밋 기준](docs/development/git-workflow.md)을 따른다. [GitHub 저장소](https://github.com/nemo9nemo/chagokchan)는 origin/main으로 연결했다. GitHub Actions quality CI와 main PR 보호를 적용했다. 운영 배포는 미실행이다. [연결 증거](docs/quality/reports/git-remote-connection-2026-10-08.json)를 남겼다.
