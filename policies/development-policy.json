@@ -6,14 +6,24 @@
     "phase_one": "local_feature_closeout_without_interactive_login",
     "phase_one_public_access": false,
     "phase_two": "real_login_release_readiness_and_public_launch",
-    "release_platform_order": ["mobile_web_pwa", "android", "ios"],
-    "source": "docs/launch-and-growth-plan.md"
+    "release_platform_order": [
+      "mobile_web_pwa",
+      "android",
+      "ios"
+    ],
+    "source": "docs/launch-and-growth-plan.md",
+    "primary_objective": "public_app_launch",
+    "secondary_objective": "optional_side_income_after_launch"
   },
   "local_auth": {
     "mode": "local_fixture",
     "interactive_login_required": false,
     "default_actor": "A",
-    "allowed_actors": ["A", "B", "C"],
+    "allowed_actors": [
+      "A",
+      "B",
+      "C"
+    ],
     "actor_source": "server_environment_allowlist",
     "use_real_local_auth_sessions": true,
     "use_same_business_rpc_and_rls": true,
@@ -25,22 +35,38 @@
     "required_app_env": "local",
     "required_node_env": "development",
     "required_loopback_binding": true,
-    "allowed_hosts": ["127.0.0.1", "localhost", "::1"],
-    "allowed_supabase_ports": [54321],
+    "allowed_hosts": [
+      "127.0.0.1",
+      "localhost",
+      "::1"
+    ],
+    "allowed_supabase_ports": [
+      54321
+    ],
     "reject_external_database": true,
     "reject_missing_or_unknown_auth_mode": true,
     "reject_fixture_mode_in_release_build": true
   },
   "deployed_auth": {
     "mode": "supabase_session",
-    "allowed_app_envs": ["preview", "staging", "production"],
+    "allowed_app_envs": [
+      "preview",
+      "staging",
+      "production"
+    ],
     "reject_fixture_credentials": true,
     "real_provider_integration_window": "pre_release",
     "real_login_tests_required_before_public_release": true
   },
   "progress": {
     "source": "docs/development/backlog.md",
-    "statuses": ["TODO", "IN_PROGRESS", "DONE", "BLOCKED", "DEFERRED"],
+    "statuses": [
+      "TODO",
+      "IN_PROGRESS",
+      "DONE",
+      "BLOCKED",
+      "DEFERRED"
+    ],
     "update_after_each_completed_work_item": true,
     "show_updated_table_to_user": true,
     "done_requires_artifact_and_relevant_verification": true

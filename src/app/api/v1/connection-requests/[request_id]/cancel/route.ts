@@ -1,13 +1,13 @@
 import "server-only";
 import { cancelConnectionRequestResponse } from "@/server/connection-api.mjs";
-import { withLocalSession } from "@/server/local-api-route";
+import { withAppSession } from "@/server/session-api-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ request_id: string }> };
 
 export async function POST(request: Request, { params }: Context) {
-  return withLocalSession(async (client) => {
+  return withAppSession(async (client) => {
     const { request_id } = await params;
     return cancelConnectionRequestResponse(request_id, request, client, { expectedOrigin: new URL(process.env.APP_BASE_URL ?? "http://localhost").origin });
   });

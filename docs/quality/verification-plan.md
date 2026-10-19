@@ -216,3 +216,5 @@ REQ-008·REQ-009 / POL-PRAISE-002 / TC-UI-NEWS-001을 추적한다. 주요 메�
 ## W21 1차 로컬 마무리 (2026-10-19)
 
 사용자 요청으로 고정 도구 선택·완료 기록 동기화와 로컬 회귀를 다시 확인한다. DB 검사는 전역 fault trigger와 전체 fixture snapshot을 사용하므로 하나씩 실행한다. 임시 검사 RPC의 schema cache 반영 대기와 공유 권한 경합의 전용 합성 판을 추가해 실행 순서에 따른 오검출을 막았다. 제품 RPC·쿼터·권한 정책·적용 SQL은 변경하지 않는다. 실제 명령·환경·성공/실패 시도·미실행 범위는 [W21 증거](reports/w21-local-closeout-check-2026-10-19.json)에 기록한다. 전체 TC-UI-MOCKUP-001·TC-WEB-006·TC-CACHE-001과 실제 로그인·복원·부하는 W15/2차에 남긴다.
+
+W12-A의 쿠키/요청별 어댑터 단위 검사와 로컬 Auth 발급 세션 통합 결과는 [별도 보고서](reports/w12-a-session-check-2026-10-19.json)에 기록한다. TC-AUTH-002의 전체 Google/OTP·동시 갱신·로그아웃 수락 상태를 이 부분 검사로 통과 처리하지 않는다.

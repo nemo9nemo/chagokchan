@@ -1,16 +1,18 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { createCsrfToken, csrfCookieHeader, getCsrfSigningSecret } from "@/server/api-security.mjs";
+import { createCsrfToken, csrfCookieHeader, csrfSessionBinding, getCsrfSigningSecret } from "@/server/api-security.mjs";
+import { validateEnvironment } from "../../../../../../scripts/runtime-environment.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   const requestId = randomUUID();
   try {
-    if (process.env.APP_AUTH_MODE !== "local_fixture") throw new Error("Deployment flow binding is not available.");
+    validateEnvironment(process.env, { command: process.env.NODE_ENV === "development" ? "dev" : "start", bindingHost: process.env.CHAGOKCHAN_BIND_HOST });
     const secret = getCsrfSigningSecret();
-    const csrfToken = createCsrfToken(secret);
+    const binding = process.env.APP_AUTH_MODE === "supabase_session" ? csrfSessionBinding(request) : null;
+    const csrfToken = createCsrfToken(secret, Date.now(), binding);
     const secure = new URL(process.env.APP_BASE_URL ?? "http://localhost").protocol === "https:";
     return Response.json({ csrf_token: csrfToken }, {
       status: 200,

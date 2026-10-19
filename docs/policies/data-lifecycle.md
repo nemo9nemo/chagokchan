@@ -16,6 +16,8 @@ Google·이메일 로그인 수단을 검증할 수 있으면 기존 계정 접�
 
 ## POL-ACCOUNT-002 — 세션과 재인증
 
+W12-A의 서버 세션 어댑터는 요청별 Auth 검증과 DB 현재 세션 확인을 사용한다. 배포 쿠키의 암호화·Host 속성·CSRF binding은 [ADR-0008](../decisions/ADR-0008-deployed-session-boundary.md)을 따른다. 이 기반만으로 실제 로그인·갱신·로그아웃·재인증이 완료된 것은 아니다.
+
 보호 데이터의 읽기·쓰기는 JWT 확인과 함께 app_users.active 및 auth.sessions의 현재 session_id를 검사한다. 현재/전체 로그아웃을 구분하고 로그아웃 이후의 기존 JWT도 접근을 거절한다.
 
 삭제 요청은 기존 사용자 UUID와 일치하는 10분 이내 재인증 grant를 요구한다. grant는 현재 세션·account.delete 작업에 묶이고 삭제 접수 트랜잭션에서 한 번 소비한다. Auth 세션 토큰·인증번호를 앱 테이블로 복제하지 않는다.

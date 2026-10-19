@@ -11,7 +11,7 @@ if (command === "dev" && fs.existsSync(".env.development.local")) process.loadEn
 const env = { ...process.env, NODE_ENV: command === "dev" ? "development" : "production", NEXT_TELEMETRY_DISABLED: "1" };
 if (command === "build-check") {
   for (const key of Object.keys(env)) if (key.startsWith("LOCAL_DEV_")) delete env[key];
-  Object.assign(env, { APP_ENV: "preview", APP_AUTH_MODE: "supabase_session", APP_BASE_URL: "https://build-check.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "build-check-only-csrf-key-not-for-runtime" });
+  Object.assign(env, { APP_ENV: "preview", APP_AUTH_MODE: "supabase_session", APP_BASE_URL: "https://build-check.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "build-check-only-csrf-key-not-for-runtime", AUTH_SESSION_ENCRYPTION_KEY: Buffer.alloc(32, 66).toString("base64url") });
 }
 const bindingHost = "127.0.0.1";
 if (command === "dev") env.CHAGOKCHAN_BIND_HOST = bindingHost;

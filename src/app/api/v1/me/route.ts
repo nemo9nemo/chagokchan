@@ -1,6 +1,8 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { readLocalMe } from "@/server/local-user-session.mjs";
+import { readAppMe } from "@/server/app-session";
+import { SessionAccountError } from "@/server/deployed-session.mjs";
+import { sessionFailureResponse } from "@/server/session-api-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,10 +25,11 @@ function apiError(code: string, message: string, status: number, requestId: stri
 export async function GET() {
   const requestId = randomUUID();
   try {
-    const me = await readLocalMe();
+    const me = await readAppMe();
     if (!me) return apiError("AUTH_REQUIRED", "현재 세션이 필요합니다.", 401, requestId);
     return jsonResponse(me, 200, requestId);
   } catch (error) {
+    if (error instanceof SessionAccountError) return sessionFailureResponse(error, requestId);
     const databaseCode = error && typeof error === "object" && "databaseCode" in error ? error.databaseCode : undefined;
     const databaseMessage = error && typeof error === "object" && "databaseMessage" in error ? error.databaseMessage : undefined;
     if (databaseCode === "PT401" || databaseCode === "PGRST301") {

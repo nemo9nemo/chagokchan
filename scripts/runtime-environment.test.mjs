@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { ConfigurationError, validateEnvironment } from "./runtime-environment.mjs";
 const local = { APP_ENV: "local", APP_AUTH_MODE: "local_fixture", NODE_ENV: "development", APP_BASE_URL: "http://127.0.0.1:3000", SUPABASE_URL: "http://127.0.0.1:54321", LOCAL_DEV_ACTOR: "A" };
-const deployed = { APP_ENV: "staging", APP_AUTH_MODE: "supabase_session", NODE_ENV: "production", APP_BASE_URL: "https://staging.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "test-only-signing-key-with-at-least-32-bytes" };
+const deployed = { APP_ENV: "staging", APP_AUTH_MODE: "supabase_session", NODE_ENV: "production", APP_BASE_URL: "https://staging.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "test-only-signing-key-with-at-least-32-bytes", AUTH_SESSION_ENCRYPTION_KEY: Buffer.alloc(32, 17).toString("base64url") };
 const validateLocal = (env) => validateEnvironment(env, { command: "dev", bindingHost: "127.0.0.1" });
 test("local configuration selects fixture A", () => assert.equal(validateLocal(local).actor, "A"));
 test("local configuration accepts only the fixed B/C fixture names", () => {
@@ -30,6 +30,13 @@ test("deployed mode rejects the local fixture manifest path", () => assert.throw
 test("deployed mode rejects local CSRF signing material", () => assert.throws(() => validateEnvironment({ ...deployed, APP_LOCAL_CSRF_SIGNING_SECRET: "local-only" }, { command: "build" }), ConfigurationError));
 test("deployed mode requires a separate CSRF signing secret", () => assert.throws(() => validateEnvironment({ ...deployed, CSRF_SIGNING_SECRET: "short" }, { command: "build" }), ConfigurationError));
 test("deployed mode rejects local database", () => assert.throws(() => validateEnvironment({ ...deployed, SUPABASE_URL: "https://localhost:54321" }, { command: "build" }), ConfigurationError));
+
+test("deployed build/start rejects missing, short and non-canonical session encryption keys", () => {
+  for (const key of [undefined, "short", Buffer.alloc(31, 17).toString("base64url"), "x".repeat(43)]) {
+    for (const command of ["build", "start"]) assert.throws(() => validateEnvironment({ ...deployed, AUTH_SESSION_ENCRYPTION_KEY: key }, { command }),
+      error => error instanceof ConfigurationError && error.message === "Invalid configuration: AUTH_SESSION_ENCRYPTION_KEY");
+  }
+});
 test("configuration failures never print credential values", () => {
   assert.throws(() => validateLocal({ ...local, SUPABASE_URL: "http://user:private-value@127.0.0.1:54321" }), (error) => error instanceof ConfigurationError && !error.message.includes("private-value"));
 });
