@@ -37,8 +37,8 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
 | W20 | 목업 기반 화면 재설계·칭찬 태그 | DONE | W08~W11 | W20-A 셀프 태그와 W20-B 화면 구현·검증 | **완료 2026-10-16.** W20-A 셀프 칭찬 태그 DB/API(pgTAP 297/297)와 W20-B 목업 기반 화면(B01~B07, 포도 그래픽, 칭찬 시트, 공유 패널)을 구현·리뷰했다. TC-UI-MOCKUP-001 전체 브라우저 수락은 W15. W20 기준을 적용하며 로컬 참고 브랜치 W18/W19와 구분한다. [W20-B 브리프](../plans/W20-B-mockup-ui.md) |
-| W21 | 1차 로컬 무로그인 마무리·상태 동기화·회귀 | BLOCKED | W08~W11, W20 / 실제 로그인 제외 | 로컬 검증 완료 후 Claude 구현 리뷰 | 단위 132/132·DB 336/336·RPC 세션 96/96·API 270개·브라우저 45화면·build:check 통과. Claude Code 조직의 구독 인증 차단 403으로 리뷰 실행 불가. 직접 요청의 검증 커밋·초안 PR까지 준비하며 merge/APPROVED는 보류. [1차 기록](phase-one-closeout.md) · [증거](../quality/reports/w21-local-closeout-check-2026-10-19.json) |
-| W22 | 출시·수익화·마케팅 실행안과 준비 문안 | DONE | 사용자 직접 요청 2026-10-19 | 공식 자료 확인·플랫폼 순서·비용·상품/가격 가설·매출 계산·4주 실행 계획 | 문서 작성 완료. [실행안](../launch-and-growth-plan.md) · [마케팅 준비물](../marketing/launch-kit.md). 서비스 개설·결제·게시·매출 검증은 미실행 |
+| W21 | 1차 로컬 무로그인 마무리·상태 동기화·회귀 | DONE | W08~W11, W20 / 실제 로그인 제외 | 로컬 검증·Codex 직접 소스 검토 | 단위 132/132·DB 336/336·RPC 세션 96/96·API 270개·브라우저 45화면·build:check 통과. 사용자 요청으로 Claude 대기 조건을 해제하고 Codex가 직접 검토. 전체 제품 수락·실제 로그인·공개 배포 완료는 아님. [1차 기록](phase-one-closeout.md) · [검사](../quality/reports/w21-local-closeout-check-2026-10-19.json) · [직접 검토](../quality/reports/w21-codex-review-check-2026-10-19.json) |
+| W22 | 출시·수익화·마케팅 실행안과 준비 문안 | DONE | 사용자 직접 요청 2026-10-19 | 공식 자료·플랫폼 순서·비용·수익 비교·4주 실행 계획 | 문서 완료. 무료+선택형 보상 광고를 우선 검토안으로 추가. [실행안](../launch-and-growth-plan.md) · [무료·광고 비교](../free-with-ads-plan.md) · [마케팅 문안](../marketing/launch-kit.md). 실제 광고·결제·게시·매출 검증은 미실행 |
 | W23 | Android 설치형 앱·스토어·결제 경로 | DEFERRED | 2차 모바일 웹/PWA 공개 검증 뒤 | 포장 방식·실기기 인증 복귀·서명·Data safety·계정 삭제·스토어 테스트/심사 | 플랫폼 순서만 확정. 설치형 코드·개발자 계정 결제·제출 미실행 |
 | W24 | iOS 앱·로그인 대안·스토어 심사 | DEFERRED | 2차 Android 뒤 | iOS 앱 효용·동등 로그인·TestFlight·구매 복원·심사 | 플랫폼 순서만 확정. Sign in with Apple·네이티브·스토어 제출 미구현 |
 
@@ -139,7 +139,8 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | --- | --- | --- | --- |
 | W21-A | 고정 도구·검사 격리 보완 | DONE | 선언된 pnpm/Node 선택, 임시 RPC cache 대기, 쿼터와 권한 경합 fixture 분리. 제품 API·RLS·SQL·상한 변경 없음 |
 | W21-B | 로컬 회귀·화면 검증·기록 동기화 | DONE | unit 132·pgTAP 336·RPC 세션 96·API 270·브라우저 45화면 통과. 기존 fixture/쿼터 보존. 전체 제품 수락과 실기기/실제 로그인 통과를 뜻하지 않음 |
-| W21-C | Claude 구현 리뷰·최종 마감 | BLOCKED | 조직 설정의 oauth_not_allowed_for_organization 403. 접근 준비 뒤 Claude 리뷰, 지적 수정, CI/병합을 거쳐 마감. 승인된 브리프를 지시한 작업이 아닌 직접 요청이므로 검증 변경의 로컬 커밋·초안 PR은 기존 규칙으로 진행 |
+| W21-C | Codex 직접 소스 검토·1차 마감 | DONE | 사용자 2026-10-19 Claude 사용 중단 요청을 반영. f1d46fd의 3개 스크립트·호출 문맥·검사 근거를 직접 검토했고 해결되지 않은 변경 범위 결함을 발견하지 않음. 과거 Claude 403은 이력 보존. [검토 근거](../quality/reports/w21-codex-review-check-2026-10-19.json). PR·CI는 기존 절차 유지 |
 | W22-A | 출시·수익화·마케팅 실행 문서 | DONE | 공식 자료·상호 참조·매출 산술 확인. 가격/전환율은 가설, 외부 개설·결제·게시·실제 매출 없음 |
+| W22-B | 무료 이용·광고 수익 모델 비교 | DONE | 실제 노출/eCPM 산술·플랫폼 차이·선택형 보상·데이터 경계 문서 완료. 광고 SDK·보상 이용권·결제·실제 수익은 미구현·미검증 |
 
-[변경 기록](../changes/2026-10-19-w21-local-closeout-and-launch-plan.md). 2차는 모바일 웹/PWA → Android → iOS이며 실제 로그인과 공개 전 필수 TC는 유예 상태를 유지한다.
+[1차 변경 기록](../changes/2026-10-19-w21-local-closeout-and-launch-plan.md) · [직접 검토·광고 비교 기록](../changes/2026-10-19-codex-review-and-free-ads.md). 2차는 모바일 웹/PWA → Android → iOS이며 실제 로그인과 공개 전 필수 TC는 유예 상태를 유지한다.

@@ -5,7 +5,7 @@
   ],
   "date": "2026-10-19",
   "captured_at": "2026-10-19T09:18:01.345Z",
-  "status": "local_verification_passed_claude_review_blocked",
+  "status": "local_verification_passed_codex_direct_review_complete",
   "source": {
     "base_commit": "86d5be9448353cf0f504eae68e18011ec98de344",
     "branch": "codex/w21-local-closeout-launch-strategy",
@@ -429,7 +429,8 @@
     "model_input_tokens": 0,
     "approval_claimed": false,
     "files_changed_by_reviewer": false,
-    "next": "organization access or an approved Anthropic API setup must be prepared, then rerun Claude review; keep PR draft meanwhile"
+    "next": "Superseded by the explicit user request to proceed without Claude; see ADR-0007 and codex_direct_review.",
+    "historical_attempt": true
   },
   "not_run": [
     "real Google/OTP login and registration",
@@ -441,7 +442,7 @@
     "full OpenAPI validator and Mermaid render"
   ],
   "delivery": {
-    "phase_one": "local_validation_complete_review_blocked",
+    "phase_one": "local_closeout_complete_codex_direct_review",
     "phase_two": "deferred_per_user",
     "platform_order": [
       "mobile_web_pwa",
@@ -458,5 +459,11 @@
     "official_platform_cost_and_policy_pages_opened": true,
     "revenue_arithmetic_checked": true,
     "prices_conversion_rates_and_marketing_targets_are_hypotheses": true
+  },
+  "codex_direct_review": {
+    "status": "completed",
+    "report": "docs/quality/reports/w21-codex-review-check-2026-10-19.json",
+    "independent_cross_review": false,
+    "source_commit": "f1d46fd8a6e5ed6b2346f75db8f04c0929bfea38"
   }
 }

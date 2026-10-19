@@ -1,0 +1,132 @@
+{
+  "work_items": [
+    "W21-C",
+    "W22-B"
+  ],
+  "checked_on": "2026-10-19",
+  "status": "codex_direct_source_review_complete",
+  "source_commit": "f1d46fd8a6e5ed6b2346f75db8f04c0929bfea38",
+  "comparison_base": "86d5be9448353cf0f504eae68e18011ec98de344",
+  "reviewer": "Codex in the current task",
+  "independent_cross_review": false,
+  "authority": "User explicitly requested no Claude on 2026-10-19; ADR-0007 supersedes the prior tool split.",
+  "claude_invoked_after_user_request": false,
+  "reviewed_files": [
+    {
+      "path": "scripts/project.ps1",
+      "sha256": "713110289e245f130280fe8bbc440ddc1cdecd8d5f18b453a7fdf0bc6b0dbb0d"
+    },
+    {
+      "path": "scripts/test-local-personal-praise.mjs",
+      "sha256": "867f20167ff960b4187452f4931e79fbf357fe5d3bb5eb096c765760e52315ef"
+    },
+    {
+      "path": "scripts/test-local-shared-board-rpc.mjs",
+      "sha256": "98effc42281d2f9268d2d91dad7c33b5dfff0134dbc7430ec8f13004fa9b2dc8"
+    }
+  ],
+  "review_scope": [
+    "Pinned Node/pnpm selection, explicit invalid pnpm rejection, project-local Corepack shims and nested PATH, no global setup changes",
+    "Temporary rollback-only policy probe: only PGRST202 signature miss retries; other failures remain failures; deadline and cleanup preserved",
+    "Fresh synthetic shared board isolates quota exhaustion from access revocation race; existing grant/revoke/disconnect/block assertions and cleanup retained",
+    "No product src, SQL, API, RLS, package or lockfile change in this follow-up; phase-one acceptance remains bounded",
+    "Free-with-ads plan: actual impressions, hypothetical eCPM, no praise rewards, no live SDK or ad requests"
+  ],
+  "unresolved_findings_in_changed_scope": [],
+  "limitations": [
+    "Direct source review by the same coding assistant, not an independent review",
+    "Prior report not_run items remain unexecuted; no real provider login or full product acceptance claimed"
+  ],
+  "existing_execution_evidence": {
+    "report": "docs/quality/reports/w21-local-closeout-check-2026-10-19.json",
+    "unit_passed": 132,
+    "pgtap_passed": 336,
+    "rpc_session_passed": 96,
+    "api_unique_passed": 270,
+    "browser_views": 45,
+    "source_ci_run": "https://github.com/nemo9nemo/chagokchan/actions/runs/39229420892",
+    "source_ci_conclusion": "success",
+    "source_ci_head": "f1d46fd8a6e5ed6b2346f75db8f04c0929bfea38",
+    "db_and_browser_reexecuted_for_document_followup": false
+  },
+  "followup_validation": {
+    "status": "passed",
+    "checked_at": "2026-10-19T12:09:25.663Z",
+    "runtime": "v24.19.0",
+    "commands": [
+      {
+        "command": "node scripts/verify-artifacts.mjs",
+        "status": "passed",
+        "json_files": 46,
+        "local_markdown_links": 592,
+        "registered_paths": 327,
+        "basis_sha256": "1963ced7882dcabb5a253d024eef37af3651f4ac8995b6b98a641abf5b8f01d0"
+      },
+      {
+        "command": "node tmp/validate-w21-followup.mjs",
+        "status": "passed",
+        "scope": "reviewed source unchanged, JSON/status references, contiguous progress table, ad arithmetic and sensitivity"
+      },
+      {
+        "command": "git diff --check",
+        "status": "passed"
+      }
+    ],
+    "application_database_browser_tests_reexecuted": false,
+    "official_advertising_sources_checked_on": "2026-10-19"
+  },
+  "advertising": {
+    "status": "plan_only",
+    "sdk_added": false,
+    "account_created": false,
+    "live_ad_request_sent": false,
+    "revenue_measured": false,
+    "assumptions": {
+      "actual_impressions_per_dau_per_day": 2,
+      "days": 30,
+      "ecpm_krw": 1000
+    },
+    "monthly_examples": [
+      {
+        "dau": 100,
+        "impressions": 6000,
+        "revenue_krw": 6000
+      },
+      {
+        "dau": 1000,
+        "impressions": 60000,
+        "revenue_krw": 60000
+      },
+      {
+        "dau": 5000,
+        "impressions": 300000,
+        "revenue_krw": 300000
+      },
+      {
+        "dau": 10000,
+        "impressions": 600000,
+        "revenue_krw": 600000
+      }
+    ],
+    "ecpm_sensitivity_krw": [
+      {
+        "dau": 1000,
+        "ecpm_krw": 500,
+        "revenue_krw": 30000
+      },
+      {
+        "dau": 1000,
+        "ecpm_krw": 1000,
+        "revenue_krw": 60000
+      },
+      {
+        "dau": 1000,
+        "ecpm_krw": 3000,
+        "revenue_krw": 180000
+      }
+    ],
+    "break_even_dau_at_assumed_150000_krw_cost": 2500,
+    "dau_for_1000000_krw_revenue": 16667,
+    "values_are_market_benchmarks": false
+  }
+}

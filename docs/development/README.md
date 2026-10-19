@@ -2,7 +2,7 @@
 
 기준일: 2026-10-19 / 적용: 1차 로컬 마무리와 2차 실제 로그인·출시
 
-W06 DB/RPC·W07 로컬 세션·W08 개인 기능·W09 연결/공유와 집계/취소 보완·W10-A/B/D 소식/휴지통·W11 로컬 테마/접근성/PWA·W20 태그/화면 구현을 완료했다. W09-D·W20-B·W10-D는 최종 Claude 리뷰 APPROVED다. 2026-10-19 사용자 결정에 따라 1차는 로컬 무로그인 마무리(W21), 2차는 실제 로그인과 모바일 웹/PWA → Android → iOS 출시다. 현재 실행 결과는 [1차 기록](phase-one-closeout.md)과 [진행표](backlog.md), 사업 가설은 [출시 실행안](../launch-and-growth-plan.md)을 따른다. 실제 로그인·전체 제품 수락·실기기·복원·부하·배포는 아직 완료하지 않았다.
+W06 DB/RPC·W07 로컬 세션·W08 개인 기능·W09 연결/공유와 집계/취소 보완·W10-A/B/D 소식/휴지통·W11 로컬 테마/접근성/PWA·W20 태그/화면 구현을 완료했다. W09-D·W20-B·W10-D는 최종 Claude 리뷰 APPROVED다. 2026-10-19 사용자 결정에 따라 1차는 로컬 무로그인 마무리(W21), 2차는 실제 로그인과 모바일 웹/PWA → Android → iOS 출시다. 현재부터 Claude 사용 없이 Codex가 직접 진행·검토한다([절차](claude-codex-workflow.md)). W21의 범위를 한정한 로컬 마무리는 완료했다. 현재 실행 결과는 [1차 기록](phase-one-closeout.md)과 [진행표](backlog.md), 사업 가설은 [출시 실행안](../launch-and-growth-plan.md)을 따른다. 실제 로그인·전체 제품 수락·실기기·복원·부하·배포는 아직 완료하지 않았다.
 
 개발 기준 경로는 `C:\Users\love0\nemo9Dev\chagokchan`이다. [진행표](backlog.md)가 작업별 상태의 기준이며, 완료마다 상태·산출물·검사 결과를 갱신해 사용자에게 보여준다. [개발 정책](../../policies/development-policy.json)의 TODO·IN_PROGRESS·DONE·BLOCKED·DEFERRED를 사용한다.
 

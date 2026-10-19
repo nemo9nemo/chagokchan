@@ -1,6 +1,6 @@
 # ADR-0006 — 공유판 집계와 작성자 취소를 위한 최소 권한 역할
 
-- 상태: 채택, SQL 작성 완료·DB 적용 및 검증 대기
+- 상태: 채택, 2026-10-16 로컬 DB 적용·검증 완료, 운영 미적용([검사 증거](../quality/reports/w09-d-shared-count-cancel-check-2026-10-16.json))
 - 결정일: 2026-10-16 / 작업: W09-D
 - 참조: REQ-004·REQ-007·REQ-009·REQ-012, POL-PRAISE-001·POL-PRAISE-002·POL-CYCLE-001, TC-SHARED-COUNT-001·TC-CYCLE-001·TC-CYCLE-002·TC-PRAISE-002
 - 기준: [구현 브리프](../plans/W09-D-shared-count-cancel-fix.md), [세션 확인 역할](ADR-0005-local-auth-session-reader.md)
