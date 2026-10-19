@@ -118,7 +118,9 @@
     "reauth_ttl_seconds": 600,
     "identity_merging_by_app": false,
     "normal_request_service_role": false,
-    "cookie_base_name": "grape_auth"
+    "cookie_base_name": "grape_auth",
+    "cookie_prefix": "__Host-",
+    "cookie_chunking": false
   },
   "connections": {
     "invite_link_random_bytes": 24,
@@ -166,8 +168,8 @@
     "incomplete_registration_cleanup_target_hours": 24
   },
   "profile": {
-    "default_nickname": "새로운 포도",
-    "default_avatar_key": "grape",
+    "default_nickname": "새로운 사용자",
+    "default_avatar_key": "star",
     "avatar_keys": [
       "grape",
       "leaf",

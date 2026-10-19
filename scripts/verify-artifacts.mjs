@@ -128,7 +128,7 @@ if (policy && spec) {
   assertEqual(s.CreatePraise.properties.message.anyOf[0].maxLength, policy.limits.praise_message_codepoints_max, "Message length");
   assertEqual(s.Goal.properties.title.maxLength, policy.limits.title_codepoints_max, "Title length");
   assertEqual(spec.components.parameters.Limit.schema.maximum, policy.limits.page_size_max, "Page limit");
-  assertEqual(spec.components.securitySchemes.cookieSession.name, policy.auth.cookie_base_name, "Cookie base name");
+  assertEqual(spec.components.securitySchemes.cookieSession.name, policy.auth.cookie_prefix + policy.auth.cookie_base_name, "Session cookie name");
   assertEqual(JSON.stringify(s.UpdateMe.properties.avatar_key.enum), JSON.stringify(policy.profile.avatar_keys), "Avatar allowed keys");
   if (!s.TrashGoal.required.includes("revision")) addError("policy_consistency", "Trash restore requires revision in listing");
   for (const key of ["goal_id", "private_description", "personal_count", "members", "next_target_count"]) if (Object.hasOwn(s.ContributorBoard.properties, key)) addError("projection", "ContributorBoard leaks " + key);

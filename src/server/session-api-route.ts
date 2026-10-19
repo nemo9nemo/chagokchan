@@ -5,6 +5,12 @@ import { SessionAccountError } from "@/server/deployed-session.mjs";
 
 type SessionClient = NonNullable<Awaited<ReturnType<typeof getAppSessionClient>>>;
 
+export function authRequiredResponse(requestId = randomUUID()) {
+  return Response.json({ error: { code: "AUTH_REQUIRED", message: "현재 세션이 필요합니다.", request_id: requestId } }, {
+    status: 401, headers: { "Cache-Control": "no-store", Pragma: "no-cache", "X-Request-ID": requestId },
+  });
+}
+
 export function sessionFailureResponse(error: unknown, requestId: string) {
   const signup = error instanceof SessionAccountError && error.accountState === "signup_required";
   const unavailable = error instanceof SessionAccountError;
@@ -20,9 +26,7 @@ export async function withAppSession(handler: (client: SessionClient) => Promise
   const requestId = randomUUID();
   try {
     const client = await getAppSessionClient();
-    if (!client) return Response.json({ error: { code: "AUTH_REQUIRED", message: "현재 세션이 필요합니다.", request_id: requestId } }, {
-      status: 401, headers: { "Cache-Control": "no-store", Pragma: "no-cache", "X-Request-ID": requestId },
-    });
+    if (!client) return authRequiredResponse(requestId);
     return await handler(client);
   } catch (error) {
     return sessionFailureResponse(error, requestId);

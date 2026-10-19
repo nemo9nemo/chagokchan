@@ -141,7 +141,7 @@ export async function validateMutationRequest(request, { expectedOrigin, secret 
 }
 
 export function csrfSessionBinding(request) {
-  const name = `__Host-${policy.auth.cookie_base_name}=`;
+  const name = `${policy.auth.cookie_prefix}${policy.auth.cookie_base_name}=`;
   const values = (request.headers.get("cookie") ?? "").split(";").map((part) => part.trim()).filter((part) => part.startsWith(name));
   const context = values.length === 1 ? values[0].slice(name.length) : "signed-out";
   return createHash("sha256").update(context).digest("base64url");

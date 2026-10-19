@@ -2,7 +2,7 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 모바일 웹/PWA를 개발한다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **1차 로컬 마무리 완료, 2차 실제 인증·출시 준비(W12) 진행**. 출시가 주목표이고 광고·유료 상품은 부차 목표다. W12-A 요청별 서버 세션·쿠키·CSRF 문맥은 구현·검증을 완료했고 로컬은 로그인 화면 없이 계속 사용한다. 실제 Google/OTP·전체 제품 수락·실기기·복원·공개 배포는 미완료다. [진행표](docs/development/backlog.md) · [실제 출시 사례](docs/release-first-launch-review.md) · [W12-A 검사](docs/quality/reports/w12-a-session-check-2026-10-19.json).
+현재 단계: **1차 로컬 마무리 완료, 2차 실제 인증·출시 준비(W12) 진행**. W12-A 요청별 서버 세션과 W12-B 가입 DB/API를 구현·검증했다(unit 159·DB 350). 로컬은 로그인 화면 없이 계속 사용한다. 실제 Google/OTP·가입 UI·전체 제품 수락·실기기·복원·공개 배포는 미완료다. 수익화는 부차 목표다. [진행표](docs/development/backlog.md) · [출시 사례](docs/release-first-launch-review.md) · [가입 검사](docs/quality/reports/w12-b-registration-check-2026-10-19.json).
 
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 

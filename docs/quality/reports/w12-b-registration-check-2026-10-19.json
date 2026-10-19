@@ -1,0 +1,678 @@
+{
+  "work_item": "W12-B",
+  "checked_on": "2026-10-19",
+  "status": "database_local_auth_http_api_unit_build_verified",
+  "base_commit": "b896e148b621153ce0d809dcc332233e60f93837",
+  "requirements": [
+    "REQ-001"
+  ],
+  "policies": [
+    "POL-ACCOUNT-001",
+    "POL-AUDIENCE-001"
+  ],
+  "partial_scenarios": [
+    "TC-AUTH-001 DB/API only",
+    "TC-AUTH-004 DB/API only"
+  ],
+  "unit_tests": {
+    "passed": 159,
+    "new_passed": 11,
+    "failed": 0,
+    "lint_files": 115,
+    "typecheck_passed": true
+  },
+  "database": {
+    "verified_at": "2026-10-19T13:48:14.785Z",
+    "scope": "configured_database_test_suites",
+    "status": "passed",
+    "suites": [
+      {
+        "file": "001_physical_integrity.test.sql",
+        "category": "physical_integrity",
+        "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d",
+        "executed": 51,
+        "passed": 51,
+        "failed": 0,
+        "planned": 51,
+        "status": "passed"
+      },
+      {
+        "file": "002_rpc_boundary.test.sql",
+        "category": "rpc_boundary",
+        "sha256": "356a1ea7a334e4bdb066e8065e7b163c8a8d74f9ac24eabc35d2520c8bdb8fb5",
+        "executed": 21,
+        "passed": 21,
+        "failed": 0,
+        "planned": 21,
+        "status": "passed"
+      },
+      {
+        "file": "003_business_rpc.test.sql",
+        "category": "business_rpc",
+        "sha256": "9a41916a9d3ad769e226c6c410d59138e0139124e942125e8bf456dfd5c62339",
+        "executed": 18,
+        "passed": 18,
+        "failed": 0,
+        "planned": 18,
+        "status": "passed"
+      },
+      {
+        "file": "004_business_rpc_praise.test.sql",
+        "category": "business_rpc",
+        "sha256": "88fe97ff01efce729d4f68d39d8cdbd920c9bb7d6b783420d803022eaa6b7d76",
+        "executed": 26,
+        "passed": 26,
+        "failed": 0,
+        "planned": 26,
+        "status": "passed"
+      },
+      {
+        "file": "005_business_rpc_connections.test.sql",
+        "category": "business_rpc",
+        "sha256": "f3c43a491f49087f298aff44bb5dcfae934484a55f0776ea9a1a5b586beffe21",
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "planned": 20,
+        "status": "passed"
+      },
+      {
+        "file": "006_business_rpc_shared_board.test.sql",
+        "category": "business_rpc",
+        "sha256": "791f75fa809ba013efaa276b81ece53b02f5448fec103fb660eff0352a6a0ef1",
+        "executed": 25,
+        "passed": 25,
+        "failed": 0,
+        "planned": 25,
+        "status": "passed"
+      },
+      {
+        "file": "007_business_rpc_lifecycle.test.sql",
+        "category": "business_rpc",
+        "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f",
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "planned": 20,
+        "status": "passed"
+      },
+      {
+        "file": "008_business_rpc_account_deletion.test.sql",
+        "category": "business_rpc",
+        "sha256": "73ce3a9d2e4a82366351f3409ed5528e4cbaeda3bc4482039d7de9803bb19eff",
+        "executed": 32,
+        "passed": 32,
+        "failed": 0,
+        "planned": 32,
+        "status": "passed"
+      },
+      {
+        "file": "009_business_rpc_goal_list.test.sql",
+        "category": "business_rpc",
+        "sha256": "cd15cd4237f2c92f47ff576648074730543a0b97e92005e6360ba97a891e19de",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "planned": 9,
+        "status": "passed"
+      },
+      {
+        "file": "010_business_rpc_bunch_list.test.sql",
+        "category": "business_rpc",
+        "sha256": "38246527774f356e31c4b26d39d04e6fb20c5f11f212b348630d51b040ee108b",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "planned": 9,
+        "status": "passed"
+      },
+      {
+        "file": "011_business_rpc_personal_praise_result.test.sql",
+        "category": "business_rpc",
+        "sha256": "1198944e20fcaf942595fecf61e0965529bfa8aeef2c6837e8e67b40dbcc86c1",
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "planned": 6,
+        "status": "passed"
+      },
+      {
+        "file": "012_business_rpc_peer_praise_moderation.test.sql",
+        "category": "business_rpc",
+        "sha256": "d58529ff10e7163165150b640a511d9c9eb8aa51e70de7a6d8194c66dc71d021",
+        "executed": 10,
+        "passed": 10,
+        "failed": 0,
+        "planned": 10,
+        "status": "passed"
+      },
+      {
+        "file": "013_business_rpc_shared_board_directory.test.sql",
+        "category": "business_rpc",
+        "sha256": "85343d4e3b6bfb29711e2bb9b0f06c4a0589e66307c9738276e5e05ef6e9596f",
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "planned": 5,
+        "status": "passed"
+      },
+      {
+        "file": "014_business_rpc_goal_delete_retry.test.sql",
+        "category": "business_rpc",
+        "sha256": "2a2530cdb10c1db756e97e2ce5c619db67400e50280297e222ce0e3ae03c171c",
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "planned": 5,
+        "status": "passed"
+      },
+      {
+        "file": "015_business_rpc_praise_tag.test.sql",
+        "category": "business_rpc",
+        "sha256": "8312f5b7bc44ab164fd626af813404fea089871c84c496c4cba576077019df10",
+        "executed": 40,
+        "passed": 40,
+        "failed": 0,
+        "planned": 40,
+        "status": "passed"
+      },
+      {
+        "file": "016_business_rpc_shared_count_and_sender_cancel.test.sql",
+        "category": "business_rpc",
+        "sha256": "8e37546ec5f681fdfc92bbe812e9e46e163328fb0141697da5cb1fe4d7bc19d0",
+        "executed": 39,
+        "passed": 39,
+        "failed": 0,
+        "planned": 39,
+        "status": "passed"
+      },
+      {
+        "file": "017_business_rpc_registration.test.sql",
+        "category": "business_rpc",
+        "sha256": "9327b8a4eb6166cbb536ee9327040d8d49b20e7321f38fa138521c8a5b028a76",
+        "executed": 14,
+        "passed": 14,
+        "failed": 0,
+        "planned": 14,
+        "status": "passed"
+      }
+    ],
+    "executed": 350,
+    "physical_integrity_tests_executed": 51,
+    "rpc_boundary_tests_executed": 21,
+    "business_rpc_tests_executed": 278,
+    "real_login_tests_executed": 0
+  },
+  "local_registration": {
+    "checked_at": "2026-10-19T13:54:10.717Z",
+    "work_item": "W12-B",
+    "status": "passed",
+    "executed": 10,
+    "passed": 10,
+    "cases": [
+      {
+        "name": "auth_before_registration_has_no_product_permission",
+        "status": "passed"
+      },
+      {
+        "name": "explicit_confirmation_and_current_policy_required_for_new_account",
+        "status": "passed"
+      },
+      {
+        "name": "profile_failure_rolls_back_the_entire_registration",
+        "status": "passed"
+      },
+      {
+        "name": "retry_after_rollback_creates_one_account_and_neutral_profile",
+        "status": "passed"
+      },
+      {
+        "name": "concurrent_registration_creates_one_account_with_one_confirmation",
+        "status": "passed"
+      },
+      {
+        "name": "active_retry_preserves_first_confirmation_even_with_older_version",
+        "status": "passed"
+      },
+      {
+        "name": "pending_failed_and_completed_cleanup_markers_prevent_registration",
+        "status": "passed"
+      },
+      {
+        "name": "deleting_account_cannot_be_reactivated_by_registration",
+        "status": "passed"
+      },
+      {
+        "name": "authenticated_clients_still_cannot_insert_product_tables_directly",
+        "status": "passed"
+      },
+      {
+        "name": "revoked_unexpired_session_cannot_read_auth_state_or_retry_registration",
+        "status": "passed"
+      }
+    ],
+    "existing_product_data_and_sessions_preserved": true,
+    "synthetic_users_sessions_and_fault_trigger_removed": true,
+    "auth_sessions_fabricated": false,
+    "service_role_used_for_application_rpcs": false,
+    "service_role_used_only_for_local_probe_admin": true,
+    "real_google_otp_tests_executed": 0,
+    "full_signup_cleanup_worker_races_executed": false,
+    "public_deployment_performed": false
+  },
+  "api_regression": {
+    "passed": 24,
+    "actors": [
+      {
+        "checked_at": "2026-10-19T13:42:14.651Z",
+        "work_item": "W12-B",
+        "actor": "A",
+        "status": "passed",
+        "executed": 8,
+        "passed": 8,
+        "checks": [
+          {
+            "name": "auth_context_is_self_only_and_no_store",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_csrf",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_explicit_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_identity_override",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_cross_origin",
+            "status": "passed"
+          },
+          {
+            "name": "active_retry_returns_original_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "older_version_active_retry_keeps_original_record",
+            "status": "passed"
+          },
+          {
+            "name": "account_projection_is_unchanged_after_retries",
+            "status": "passed"
+          }
+        ],
+        "existing_active_registration_retries_only": true,
+        "real_google_otp_tests_executed": 0,
+        "tokens_returned_or_logged": false
+      },
+      {
+        "checked_at": "2026-10-19T13:42:21.607Z",
+        "work_item": "W12-B",
+        "actor": "B",
+        "status": "passed",
+        "executed": 8,
+        "passed": 8,
+        "checks": [
+          {
+            "name": "auth_context_is_self_only_and_no_store",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_csrf",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_explicit_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_identity_override",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_cross_origin",
+            "status": "passed"
+          },
+          {
+            "name": "active_retry_returns_original_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "older_version_active_retry_keeps_original_record",
+            "status": "passed"
+          },
+          {
+            "name": "account_projection_is_unchanged_after_retries",
+            "status": "passed"
+          }
+        ],
+        "existing_active_registration_retries_only": true,
+        "real_google_otp_tests_executed": 0,
+        "tokens_returned_or_logged": false
+      },
+      {
+        "checked_at": "2026-10-19T13:42:28.448Z",
+        "work_item": "W12-B",
+        "actor": "C",
+        "status": "passed",
+        "executed": 8,
+        "passed": 8,
+        "checks": [
+          {
+            "name": "auth_context_is_self_only_and_no_store",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_csrf",
+            "status": "passed"
+          },
+          {
+            "name": "registration_requires_explicit_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_identity_override",
+            "status": "passed"
+          },
+          {
+            "name": "registration_rejects_cross_origin",
+            "status": "passed"
+          },
+          {
+            "name": "active_retry_returns_original_confirmation",
+            "status": "passed"
+          },
+          {
+            "name": "older_version_active_retry_keeps_original_record",
+            "status": "passed"
+          },
+          {
+            "name": "account_projection_is_unchanged_after_retries",
+            "status": "passed"
+          }
+        ],
+        "existing_active_registration_retries_only": true,
+        "real_google_otp_tests_executed": 0,
+        "tokens_returned_or_logged": false
+      }
+    ]
+  },
+  "migration": {
+    "files": [
+      {
+        "path": "supabase/migrations/20261019000100_registration_bootstrap.sql",
+        "sha256": "3eb2269e9db79c54407b6938415063a79a30d5e01419501ed7af810e6768168f"
+      },
+      {
+        "path": "supabase/migrations/20261019000200_neutral_profile_defaults.sql",
+        "sha256": "fc26919b078c8c03efc2a7db47d0f1c41553c994da90c49cb3a6de10c1061df3"
+      }
+    ],
+    "applied_to": "loopback local only",
+    "ordered_migrations_applied": 50,
+    "previous_migrations_edited": false,
+    "database_reset": false
+  },
+  "not_run": [
+    "real Google/OTP and SMTP",
+    "signup screen/browser flow",
+    "production orphan Auth cleanup worker and full cleanup/bootstrap races",
+    "refresh/logout/reauthentication/deletion UI",
+    "full device/PWA/restore/load acceptance",
+    "staging/production deployment"
+  ],
+  "real_google_otp_tests_executed": 0,
+  "public_deployment_performed": false,
+  "session_adapter_regression": {
+    "checked_at": "2026-10-19T13:46:07.333Z",
+    "work_item": "W12-A",
+    "status": "passed",
+    "executed": 5,
+    "passed": 5,
+    "cases": [
+      {
+        "name": "issued_auth_a_b_stay_isolated_under_concurrent_requests",
+        "status": "passed"
+      },
+      {
+        "name": "business_rpc_uses_each_verified_bearer_and_existing_rls",
+        "status": "passed"
+      },
+      {
+        "name": "encrypted_cookie_does_not_make_a_forged_jwt_trusted",
+        "status": "passed"
+      },
+      {
+        "name": "database_session_max_age_rejects_an_unexpired_auth_token",
+        "status": "passed"
+      },
+      {
+        "name": "current_session_logout_rejects_the_previous_unexpired_cookie",
+        "status": "passed"
+      }
+    ],
+    "existing_product_data_and_sessions_preserved": true,
+    "new_auth_sessions_removed": true,
+    "real_local_auth_sessions_issued": 2,
+    "real_google_otp_tests_executed": 0,
+    "service_role_used": false,
+    "public_environment_deployed": false
+  },
+  "build": {
+    "command": ".\\scripts\\project.ps1 -Task build:check",
+    "status": "passed",
+    "actual_provider_config_used": false
+  },
+  "direct_review": {
+    "reviewer": "Codex current task",
+    "independent_cross_review": false,
+    "scope": [
+      "Auth identity before registration remains separate from ordinary active-account authorization",
+      "Current DB session, same-user deletion lock, atomic registration and immutable confirmation",
+      "Only needed owner INSERT columns and self RLS; no API role direct DML grants",
+      "Exact request/response allowlists, CSRF and no-store",
+      "Canonical policy and contract cookie name/default profile alignment",
+      "Probe-only cleanup with explicit zero remaining Auth users/functions/triggers"
+    ],
+    "findings_resolved": [
+      "Aligned Host-cookie prefix/no chunking across policy/contract/validation/implementation",
+      "Aligned theme-independent profile defaults across policy/new SQL/documentation",
+      "Verified probe cleanup includes zero remaining users and fault trigger/functions"
+    ],
+    "unresolved_in_changed_scope": []
+  },
+  "source_hash_format": "LF_normalized_UTF8",
+  "source_files": [
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "3a5938d6343fdec3c8cf203ad2387236bf664f32b27c65f2f5a3959435ffe7ce"
+    },
+    {
+      "path": "package.json",
+      "sha256": "7de6dfeb6d7badd716685ecdd90d4857aceac7e09fe88811a6acea2139f273f5"
+    },
+    {
+      "path": "policies/app-policy.json",
+      "sha256": "1054d9ed766b7bf29c06890bde261f95777cbe08d1a32f0cc94f01ee338c5b5f"
+    },
+    {
+      "path": "scripts/deployed-session.test.mjs",
+      "sha256": "c75f4bdd13d4dfb090eb13ed8aed74bf653f81731b157905f3aff03b9b15c6da"
+    },
+    {
+      "path": "scripts/project.ps1",
+      "sha256": "c6b70ed411497d460eb9ff9a08ce9fd5e42b6da9f013f7015e7e90f22e8ec622"
+    },
+    {
+      "path": "scripts/verify-artifacts.mjs",
+      "sha256": "05abc6a07beaf9184f8fd02427a80cea182af8ab73fc4ff0246dcc3bc41be461"
+    },
+    {
+      "path": "src/server/api-security.mjs",
+      "sha256": "dc38e133663158daebb5d0ee144ed7924d0d344292cea2863fa03c38c2311170"
+    },
+    {
+      "path": "src/server/app-session.ts",
+      "sha256": "0d24ffa24bf4837808c63c2cb4d2bededc288bda9636394f56bad01b2ba50cf5"
+    },
+    {
+      "path": "src/server/deployed-session.mjs",
+      "sha256": "8b3d56a12ff48de944e8c0fcac2a115acfbe5797f9dda81fdd82b653f4520078"
+    },
+    {
+      "path": "src/server/session-api-route.ts",
+      "sha256": "e8e4dda2e3e96e2b4a82a5ac22f865233283b024e22d5361d0548d107267ce75"
+    },
+    {
+      "path": "src/server/registration-api.mjs",
+      "sha256": "9f054b1f80e3f194a393bc0681c294e2251b14e8d6975144edef687da33dafe3"
+    },
+    {
+      "path": "src/app/api/v1/me/bootstrap/route.ts",
+      "sha256": "2b73c04579a56d3e876de879495c10d27e944b12a34c1c64621a522416579aac"
+    },
+    {
+      "path": "src/app/api/v1/auth/session/route.ts",
+      "sha256": "bde6ff7ac37f0b38018e61a32c6c9e33f4858e2db1162f56651c1b1d9b5559c4"
+    },
+    {
+      "path": "scripts/registration-api.test.mjs",
+      "sha256": "c1087baab1ceaeaef482dab39e55b5313dbce504e78686c68853cc6e69055d09"
+    },
+    {
+      "path": "scripts/test-local-registration.mjs",
+      "sha256": "cd6b66e3aef7ad0a6fa2318051b2a29152f6a89bba848dd359a648e0b7576faa"
+    },
+    {
+      "path": "scripts/test-local-registration-api.mjs",
+      "sha256": "51aef4663e4090b0229aef512d13c6b731b8383d62e94a473f3dd641c6709ea3"
+    },
+    {
+      "path": "supabase/migrations/20261019000100_registration_bootstrap.sql",
+      "sha256": "3eb2269e9db79c54407b6938415063a79a30d5e01419501ed7af810e6768168f"
+    },
+    {
+      "path": "supabase/migrations/20261019000200_neutral_profile_defaults.sql",
+      "sha256": "fc26919b078c8c03efc2a7db47d0f1c41553c994da90c49cb3a6de10c1061df3"
+    },
+    {
+      "path": "supabase/tests/017_business_rpc_registration.test.sql",
+      "sha256": "9327b8a4eb6166cbb536ee9327040d8d49b20e7321f38fa138521c8a5b028a76"
+    }
+  ],
+  "version_control": {
+    "status": "local_verification_complete_pr_ci_pending"
+  },
+  "artifact_validation": {
+    "checked_at": "2026-10-19T13:57:10.509Z",
+    "status": "passed",
+    "runtime": "v24.19.0",
+    "scope": "artifact_structural_consistency_only",
+    "full_openapi_validator_executed": false,
+    "mermaid_render_executed": false,
+    "application_or_database_tests_executed": 0,
+    "planned_test_cases": 78,
+    "checks": [
+      {
+        "id": "json",
+        "description": "JSON parse",
+        "count": 48,
+        "status": "passed"
+      },
+      {
+        "id": "links",
+        "description": "Local Markdown links",
+        "count": 610,
+        "status": "passed"
+      },
+      {
+        "id": "openapi",
+        "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+        "count": 56,
+        "local_references": 713,
+        "status": "passed"
+      },
+      {
+        "id": "traceability",
+        "description": "REQ/NFR/POL/TC/API cross references",
+        "requirements": 17,
+        "policies": 20,
+        "test_cases": 78,
+        "status": "passed"
+      },
+      {
+        "id": "policy_consistency",
+        "description": "Policy/API numeric values, names, restore fields",
+        "status": "passed"
+      },
+      {
+        "id": "projection",
+        "description": "Contributor/sent fields and canceled-body schema constraints",
+        "status": "passed"
+      },
+      {
+        "id": "audience_consistency",
+        "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+        "status": "passed"
+      },
+      {
+        "id": "erd_sources",
+        "description": "Embedded/source consistency, full entities and relationship endpoints",
+        "embedded_blocks": 3,
+        "entities": 21,
+        "relationships": 42,
+        "rendered": false,
+        "status": "passed"
+      },
+      {
+        "id": "registry",
+        "description": "Existing registered artifact paths",
+        "count": 348,
+        "status": "passed"
+      },
+      {
+        "id": "development_consistency",
+        "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+        "work_items": 23,
+        "runtime_guards_executed": false,
+        "status": "passed"
+      }
+    ],
+    "errors": [],
+    "basis": {
+      "inputs": [
+        ".env.example",
+        "AGENTS.md",
+        "contracts/openapi.json",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/contracts/api-contract.md",
+        "docs/data-erd.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/decisions/ADR-0004-local-development-auth.md",
+        "docs/design/user-flows.md",
+        "docs/development/README.md",
+        "docs/development/artifact-register.json",
+        "docs/development/backlog.md",
+        "docs/development/local-development.md",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-full.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/policies/access-and-responses.md",
+        "docs/policies/audience-and-signup.md",
+        "docs/policies/data-lifecycle.md",
+        "docs/policies/product-rules.md",
+        "docs/quality/test-cases.json",
+        "docs/requirements/mvp-requirements.md",
+        "policies/app-policy.json",
+        "policies/development-policy.json",
+        "scripts/verify-artifacts.mjs"
+      ],
+      "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+      "sha256": "de31596d5f06c11b11da86cc968e420cd909887bfacba9f12d3fc2f7646fd28d"
+    }
+  }
+}
