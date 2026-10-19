@@ -8,7 +8,7 @@ OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 
 
 ## 입력·응답
 
-모든 변경 API는 application/json과 X-CSRF-Token을 요구한다. 본문이 없는 명령도 빈 JSON 객체를 보낸다. W07-B의 `validateMutationRequest`는 Origin·Fetch Metadata, signed CSRF cookie/header 일치, JSON object, 정책의 실제 바이트 상한을 확인한다. 새 mutation route는 업무 검증 전에 이 공통 guard를 호출해야 한다. CookieSession은 서버 관리 grape_auth를 기본 이름으로 하며 SDK의 분할 쿠키를 서버에서 조립·갱신한다. 클라이언트는 Auth 토큰을 직접 읽거나 JSON으로 받지 않는다.
+모든 변경 API는 application/json과 X-CSRF-Token을 요구한다. 본문이 없는 명령도 빈 JSON 객체를 보낸다. W07-B의 `validateMutationRequest`는 Origin·Fetch Metadata, signed CSRF cookie/header 일치, JSON object, 정책의 실제 바이트 상한을 확인한다. 새 mutation route는 업무 검증 전에 이 공통 guard를 호출해야 한다. CookieSession은 서버가 암호화한 __Host-grape_auth이며 HttpOnly/Secure/SameSite=Lax·Path=/·Domain 미지정이다. SDK 분할 쿠키는 사용하지 않는다. 클라이언트는 Auth 토큰을 직접 읽거나 JSON으로 받지 않는다.
 
 쿠키 이름은 Supabase SSR의 cookieOptions.name으로 지정하고, 각 요청마다 서버 클라이언트를 만든다. 실제 고정 SDK 버전에서 분할·갱신·HttpOnly와 no-store를 인증 spike로 확인한다. [Supabase SSR 서버 코드](https://github.com/supabase/ssr/blob/main/src/createServerClient.ts)
 

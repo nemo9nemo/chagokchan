@@ -251,7 +251,12 @@
     "full product/device/PWA account-switch/backup restore/load acceptance"
   ],
   "version_control": {
-    "status": "local_verification_complete_pr_ci_pending"
+    "status": "merged_pr_ci_passed",
+    "source_commit": "96a539fcabd57d35e5dbc960af4db5ae485739f4",
+    "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/10",
+    "merge_commit": "b896e148b621153ce0d809dcc332233e60f93837",
+    "ci_run": "https://github.com/nemo9nemo/chagokchan/actions/runs/39260160990",
+    "ci_conclusion": "success"
   },
   "source_files": [
     {

@@ -902,7 +902,7 @@
           "me"
         ],
         "description": "검증된 현재 Auth 세션·adult_confirmed=true·현재 registration_policy_version을 확인하고 app_users·profiles·서버 UTC 확인 기록을 한 번 원자적으로 생성. 신규의 이전 정책 버전은 409 POLICY_VERSION_CHANGED, 확인 누락·false는 400. 기존 active 재시도는 최초 확인 기록을 보존. deleting 및 가입 미완료 정리 표시가 있는 UUID는 재활성화 금지. API 일반 active 검사와 구분.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "database_rpc_server_api_local_auth_verified_provider_signup_ui_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -5496,6 +5496,84 @@
           "request_account_deletion(uuid,uuid,boolean)"
         ]
       }
+    },
+    "/auth/session": {
+      "get": {
+        "operationId": "getAuthSessionContext",
+        "summary": "검증된 본인 인증·가입 상태",
+        "description": "Auth 사용자 확인과 DB 현재 세션 검사 후 본인의 최소 상태만 조회. active는 /, 가입 전은 /signup, 삭제 중 또는 정리 표시는 /account/deletion. 토큰·이메일·프로필·세션 ID는 반환하지 않는다.",
+        "tags": [
+          "auth"
+        ],
+        "x-implementation-status": "server_api_database_rpc_local_auth_verified_provider_flow_pending",
+        "x-requirements": [
+          "REQ-001"
+        ],
+        "x-policy-ids": [
+          "POL-ACCOUNT-001",
+          "POL-ACCOUNT-002",
+          "POL-AUDIENCE-001"
+        ],
+        "x-test-cases": [
+          "TC-AUTH-001",
+          "TC-AUTH-002",
+          "TC-AUTH-004"
+        ],
+        "responses": {
+          "200": {
+            "description": "검증된 본인 Auth 계정의 앱 상태와 고정 목적지",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "no-store"
+                },
+                "description": "인증·사용자 데이터 캐시 금지"
+              },
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5503,8 +5581,8 @@
       "cookieSession": {
         "type": "apiKey",
         "in": "cookie",
-        "name": "grape_auth",
-        "description": "서버 관리 HttpOnly/Secure/SameSite=Lax 쿠키. SDK가 grape_auth.0 등으로 분할할 수 있어 이 명칭은 기본 이름. 브라우저가 자동 전송하며 Swagger에 토큰을 붙여 넣지 않는다."
+        "name": "__Host-grape_auth",
+        "description": "서버가 AES-GCM으로 암호화한 Host 전용 HttpOnly/Secure/SameSite=Lax 쿠키. Path=/, Domain 미지정, 분할 쿠키 미사용. 브라우저가 자동 전송하며 토큰을 JSON이나 Swagger 입력으로 전달하지 않는다."
       }
     },
     "parameters": {

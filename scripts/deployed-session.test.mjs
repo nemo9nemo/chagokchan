@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { expiredSessionCookieHeader, openSession, resolveDeployedSession, sealSession, SESSION_COOKIE_NAME,
-  SessionAccountError, SessionDependencyError, sessionCookieHeader, sessionCookieValue } from "../src/server/deployed-session.mjs";
+  SessionAccountError, SessionDependencyError, sessionCookieHeader, sessionCookieValue, resolveVerifiedAuthSession } from "../src/server/deployed-session.mjs";
 import { createCsrfToken, csrfSessionBinding, validateMutationRequest, verifyCsrfToken } from "../src/server/api-security.mjs";
 
 const now = Date.parse("2026-10-19T12:00:00Z");
@@ -118,6 +118,14 @@ test("registration-required and unavailable accounts stay outside the product AP
   for (const [message, state] of [["signup_required", "signup_required"], ["account_unavailable", "unavailable"]]) {
     await assert.rejects(resolveDeployedSession(cookie(), options(factory({ rpcError: { code: "PT403", message } }))), error => error instanceof SessionAccountError && error.accountState === state);
   }
+});
+
+test("registration Auth identity lookup does not grant an unregistered user access to the ordinary product resolver", async () => {
+  const calls = [];
+  const deps = options(factory({ rpcError: { code: "PT403", message: "signup_required" } }, calls));
+  assert.equal((await resolveVerifiedAuthSession(cookie(), deps)).userId, id);
+  assert.ok(!calls.some(v => v.rpc));
+  await assert.rejects(resolveDeployedSession(cookie(), deps), error => error instanceof SessionAccountError && error.accountState === "signup_required");
 });
 
 test("unexpected DB failures and expanded/cross-user projections fail closed", async () => {

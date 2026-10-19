@@ -6,7 +6,7 @@ import { validateMeProjection } from "./local-user-session.mjs";
 
 // Only the server writes this encrypted, host-only HttpOnly cookie. There is no
 // browser Supabase client, shared authenticated client, or automatic refresh.
-export const SESSION_COOKIE_NAME = `__Host-${policy.auth.cookie_base_name}`;
+export const SESSION_COOKIE_NAME = `${policy.auth.cookie_prefix}${policy.auth.cookie_base_name}`;
 const MAX_COOKIE_LENGTH = 3800;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -108,7 +108,7 @@ function tokenIdentity(token, now) {
   } catch { return null; }
 }
 
-export async function resolveDeployedSession(cookieHeader, { env = process.env, now = Date.now(), clientFactory = createClient } = {}) {
+export async function resolveVerifiedAuthSession(cookieHeader, { env = process.env, now = Date.now(), clientFactory = createClient } = {}) {
   const config = configuration(env);
   // Check the key even on unauthenticated requests so broken release setup is
   // visible as 503 rather than silently resembling an ordinary signed-out user.
@@ -130,6 +130,13 @@ export async function resolveDeployedSession(cookieHeader, { env = process.env, 
     throw new SessionDependencyError();
   }
   if (!userResult.data?.user || userResult.data.user.id !== expectedId || userResult.data.user.is_anonymous !== false) return null;
+  return { client, userId: expectedId };
+}
+
+export async function resolveDeployedSession(cookieHeader, options = {}) {
+  const verified = await resolveVerifiedAuthSession(cookieHeader, options);
+  if (!verified) return null;
+  const { client, userId: expectedId } = verified;
   let accountResult;
   try { accountResult = await client.rpc("get_me"); } catch { throw new SessionDependencyError(); }
   if (accountResult.error) {
