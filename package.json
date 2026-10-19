@@ -14,7 +14,7 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
@@ -45,7 +45,8 @@
     "api:trash-test": "node scripts/test-local-trash-api.mjs",
     "api:security-test": "node --test scripts/api-security.test.mjs",
     "db:session-test": "node scripts/test-local-rpc.mjs",
-    "api:praise-tag-test": "node scripts/test-local-praise-tag-api.mjs"
+    "api:praise-tag-test": "node scripts/test-local-praise-tag-api.mjs",
+    "db:session-adapter-test": "node scripts/test-local-deployed-session.mjs"
   },
   "dependencies": {
     "next": "16.4.0",

@@ -26,8 +26,8 @@
         "tags": [
           "auth"
         ],
-        "description": "로컬 개발에서는 현재 서버 프로세스의 서명 키로 CSRF 이중 제출 토큰을 발급한다. 배포의 로그인 flow/session binding은 W12에서 구현한다.",
-        "x-implementation-status": "local_fixture_csrf_implemented_deployed_flow_binding_pending",
+        "description": "로컬 개발에서는 프로세스 서명 키를 사용한다. 배포에서는 현재 서버 세션 쿠키(로그인 전에는 미인증 문맥)의 해시에 묶인 서명 이중 제출 토큰을 발급한다. 현재 Auth/앱 계정 검증은 각 제품 API가 별도로 수행한다. Google/OTP 개별 로그인 flow binding은 후속 구현이다.",
+        "x-implementation-status": "local_and_deployed_session_cookie_bound_csrf_implemented",
         "x-requirements": [
           "REQ-001",
           "NFR-001"
@@ -997,7 +997,7 @@
           "me"
         ],
         "description": "active 앱 계정의 본인 프로필·설정·최초 성인 확인 시각/버전. 현재 Auth 세션은 유효하나 앱 계정이 없으면 403 REGISTRATION_REQUIRED. 확인 메타데이터는 공개 프로필에 포함하지 않는다.",
-        "x-implementation-status": "database_rpc_implemented_local_fixture_api_implemented_deployed_auth_pending",
+        "x-implementation-status": "database_rpc_and_request_scoped_session_adapter_implemented_provider_flow_pending",
         "x-requirements": [
           "REQ-001"
         ],

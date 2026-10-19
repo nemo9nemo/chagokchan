@@ -67,3 +67,5 @@ DB·Auth·REST·Kong·Studio·DB 메타데이터·테스트 메일 서비스만 
 이번 환경에서는 Docker의 임시 소켓 오류를 먼저 해결해야 했다. 사용자의 실행 승인 후 0바이트 소켓만 있는 실행 폴더를 백업 이름으로 보존하고 Docker Desktop을 재시작했다. 백업 위치는 검사 JSON에 기록했다. 같은 증상에 대한 [Docker 이슈의 보고](https://github.com/docker/desktop-feedback/issues/554)를 참고했으며, 이 머신에서 엔진 정상 응답을 직접 확인했다.
 
 W05에서 ERD의 물리 제약·인덱스·마이그레이션과 합성 A/B/C 초기 데이터를, W06에서 업무 RPC/RLS·동시성을, W07에서 local adapter·API security 기반을 구현·검증했다. 다음 작업은 W08 개인 목표·칭찬 API/UI다. 실제 Google/OTP 연동과 실제 로그인 검사는 오픈 준비 단계에서 수행한다.
+
+배포 세션 어댑터의 로컬 통합 검사는 `db:session-adapter-test`로 실행한다. 새로 발급한 로컬 A/B 세션만 사용하고 기존 제품 데이터·세션 보존을 확인한다. 실제 Google/OTP 검사가 아니다. 배포의 `AUTH_SESSION_ENCRYPTION_KEY`는 서버에만 두는 별도 32바이트 base64url 값이며 로컬 fixture에는 필요하지 않다. [세션 결정](../decisions/ADR-0008-deployed-session-boundary.md)

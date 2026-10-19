@@ -65,3 +65,5 @@ reauth는 현재 세션·UUID·account.delete에 묶인다. 이메일은 검증�
 GET은 사용자 세션과 RLS/제한 projection, 변경은 지정 업무 RPC로 매핑한다. bootstrap·Auth 호출·삭제 작업의 관리 경계는 일반 제품 DML과 분리한다. 원자성·잠금 순서·FK·공개 범위는 ERD·정책·TC에 맞춰 구현한다.
 
 현재 검사는 JSON 형식·로컬 참조·ID 중복·필수 경로 인자·요구/TC 연결·정책 수치와 응답 경계 확인 범위다. 실제 스키마 validator·타입 생성·서버 계약 테스트·DB 검증은 개발 기반이 준비된 뒤 수행한다. 검사 결과는 [산출물 검사 기록](../quality/reports/2026-10-07-baseline.md)에 남긴다.
+
+2026-10-19 W12-A: 기존 제품 route는 요청별 서버 세션 어댑터에 연결한다. 배포에서는 암호화 Host 쿠키 → Auth.getUser → get_me의 현재 DB 세션/계정 검사 후 같은 업무 RPC/RLS를 사용한다. /auth/csrf의 배포 토큰은 현재 세션 쿠키에 binding한다. 실제 Google/OTP 발급·가입·갱신/로그아웃 route는 후속이며 [진행표](../development/backlog.md)에서 구분한다.

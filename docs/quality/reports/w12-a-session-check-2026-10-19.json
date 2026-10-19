@@ -1,0 +1,540 @@
+{
+  "work_item": "W12-A",
+  "checked_on": "2026-10-19",
+  "status": "unit_local_auth_api_build_verified",
+  "base_commit": "46e875896914f202fc38d6e4272819d5a5cd6ade",
+  "requirements": [
+    "REQ-001",
+    "NFR-001"
+  ],
+  "policies": [
+    "POL-ACCOUNT-002",
+    "POL-SEC-001"
+  ],
+  "partial_scenario": "TC-AUTH-002 session boundary only; full scenario remains not_run",
+  "unit_tests": {
+    "new_passed": 16,
+    "total_passed": 148,
+    "failed": 0,
+    "lint_files": 109,
+    "typecheck_passed": true
+  },
+  "local_integration": {
+    "checked_at": "2026-10-19T13:23:01.214Z",
+    "work_item": "W12-A",
+    "status": "passed",
+    "executed": 5,
+    "passed": 5,
+    "cases": [
+      {
+        "name": "issued_auth_a_b_stay_isolated_under_concurrent_requests",
+        "status": "passed"
+      },
+      {
+        "name": "business_rpc_uses_each_verified_bearer_and_existing_rls",
+        "status": "passed"
+      },
+      {
+        "name": "encrypted_cookie_does_not_make_a_forged_jwt_trusted",
+        "status": "passed"
+      },
+      {
+        "name": "database_session_max_age_rejects_an_unexpired_auth_token",
+        "status": "passed"
+      },
+      {
+        "name": "current_session_logout_rejects_the_previous_unexpired_cookie",
+        "status": "passed"
+      }
+    ],
+    "existing_product_data_and_sessions_preserved": true,
+    "new_auth_sessions_removed": true,
+    "real_local_auth_sessions_issued": 2,
+    "real_google_otp_tests_executed": 0,
+    "service_role_used": false,
+    "public_environment_deployed": false
+  },
+  "remaining": [
+    "W12-B",
+    "W12-C",
+    "W12-D",
+    "W13",
+    "W14",
+    "W15",
+    "W17"
+  ],
+  "real_google_otp_tests_executed": 0,
+  "public_deployment_performed": false,
+  "monetization_implemented": false,
+  "runtime": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.0",
+    "database": "local_only"
+  },
+  "api_regression": {
+    "status": "passed",
+    "unique_checks": 261,
+    "invocations": [
+      {
+        "task": "api:me-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-me-test.log",
+        "passed": 15
+      },
+      {
+        "task": "api:goal-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-goal-test.log",
+        "passed": 3
+      },
+      {
+        "task": "api:goal-list-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-goal-list-test.log",
+        "passed": 3
+      },
+      {
+        "task": "api:goal-management-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-goal-management-test.log",
+        "passed": 8
+      },
+      {
+        "task": "api:praise-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-praise-test.log",
+        "passed": 10
+      },
+      {
+        "task": "api:board-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-board-test.log",
+        "passed": 42
+      },
+      {
+        "task": "api:connection-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-connection-test.log",
+        "passed": 36
+      },
+      {
+        "task": "api:news-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-news-test.log",
+        "passed": 33
+      },
+      {
+        "task": "api:trash-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-api-trash-test.log",
+        "passed": 33
+      },
+      {
+        "actor": "B",
+        "task": "api:me-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-B-api-me-test.log",
+        "passed": 15
+      },
+      {
+        "actor": "B",
+        "task": "api:goal-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-B-api-goal-test.log",
+        "passed": 3
+      },
+      {
+        "actor": "B",
+        "task": "api:goal-list-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-B-api-goal-list-test.log",
+        "passed": 3
+      },
+      {
+        "actor": "B",
+        "task": "api:goal-management-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-B-api-goal-management-test.log",
+        "passed": 8
+      },
+      {
+        "actor": "B",
+        "task": "api:praise-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-B-api-praise-test.log",
+        "passed": 10
+      },
+      {
+        "actor": "C",
+        "task": "api:me-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-C-api-me-test.log",
+        "passed": 15
+      },
+      {
+        "actor": "C",
+        "task": "api:goal-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-C-api-goal-test.log",
+        "passed": 3
+      },
+      {
+        "actor": "C",
+        "task": "api:goal-list-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-C-api-goal-list-test.log",
+        "passed": 3
+      },
+      {
+        "actor": "C",
+        "task": "api:goal-management-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-C-api-goal-management-test.log",
+        "passed": 8
+      },
+      {
+        "actor": "C",
+        "task": "api:praise-test",
+        "exit_code": 0,
+        "log": "tmp/w12-a-C-api-praise-test.log",
+        "passed": 10
+      }
+    ],
+    "product_mutations": 0,
+    "scope": "A/B/C local fixture; does not represent Google/OTP acceptance"
+  },
+  "build": {
+    "command": ".\\scripts\\project.ps1 -Task build:check",
+    "status": "passed",
+    "deployed_build_key_is_synthetic_not_runtime_key": true
+  },
+  "direct_review": {
+    "reviewer": "Codex current task",
+    "independent_cross_review": false,
+    "findings_resolved": [
+      "Reject missing/non-canonical encryption keys before deployed build/start",
+      "Reject secret/service_role keys in ordinary client configuration",
+      "Always register test issuers for cleanup before checking returned identity"
+    ],
+    "unresolved_in_changed_scope": [],
+    "http_handler_exports_preserved": 34
+  },
+  "failures_and_resolutions": [
+    {
+      "issue": "Initial TypeScript inference only allowed null for the new CSRF binding parameter",
+      "resolution": "Explicit string|null JSDoc; final typecheck passed"
+    },
+    {
+      "issue": "Artifact register still referenced renamed local-api-route.ts during implementation",
+      "resolution": "Registered session-api-route.ts; final structural validation passed"
+    },
+    {
+      "issue": "Unescalated local DB check failed before issuing a session",
+      "resolution": "Verified loopback Docker/DB using permitted host execution; final local Auth checks 5/5"
+    },
+    {
+      "issue": "API check app exited while the previous development server held the same checkout dev lock",
+      "resolution": "Stopped only the task-owned server; sequential A/B/C checks 261/261"
+    },
+    {
+      "issue": "Turbopack CSS helper exited before connecting; repeated with the old generated cache",
+      "resolution": "Preserved .next inside checked workspace .cache; fresh production-check build passed; exact underlying cache failure not established"
+    }
+  ],
+  "not_run": [
+    "real Google/OTP and SMTP",
+    "registration/bootstrap acceptance",
+    "refresh concurrency and logout endpoints",
+    "reauthentication/account deletion UI",
+    "staging/production deployment",
+    "full product/device/PWA account-switch/backup restore/load acceptance"
+  ],
+  "version_control": {
+    "status": "local_verification_complete_pr_ci_pending"
+  },
+  "source_files": [
+    {
+      "path": "scripts/app.mjs",
+      "sha256": "55bdfd47ec613d468dbf3386359fddc4525afb06a99e8d2485a33a4ede011f8f"
+    },
+    {
+      "path": "scripts/runtime-environment.mjs",
+      "sha256": "07d71896cdcf08e66308e8b730e27b8e0c265f161665829f5c39ca323da42436"
+    },
+    {
+      "path": "scripts/runtime-environment.test.mjs",
+      "sha256": "5e0652b3bcecd0a91b0611f73d7edbef3faa2666aaa07b6ca745410b2cc638c0"
+    },
+    {
+      "path": "src/app/api/v1/auth/csrf/route.ts",
+      "sha256": "8c009b27b70bb4492fb5bf5b7c599dc10e3a110d387588af9030c61c96fc5a67"
+    },
+    {
+      "path": "src/app/api/v1/blocks/[block_id]/route.ts",
+      "sha256": "5041f48f7506dc83ebe88b0b43d2bd080c646efae27d26ac0b9e34239d59e1f1"
+    },
+    {
+      "path": "src/app/api/v1/blocks/route.ts",
+      "sha256": "42af69b4d7d3c2a1a5eef2842dd7d08bcccedd2d9953f9f9d547ac5305fe89c3"
+    },
+    {
+      "path": "src/app/api/v1/boards/[board_id]/bunches/route.ts",
+      "sha256": "0a2d745478a5473833a54a9c2fb4ea0df71f9591ea5b203c935ec45c769426a0"
+    },
+    {
+      "path": "src/app/api/v1/boards/[board_id]/members/[user_id]/route.ts",
+      "sha256": "85b6867395b429dea8d653c3655a9dd240adbfbca2b21c7e5dddb6199b0d70df"
+    },
+    {
+      "path": "src/app/api/v1/boards/[board_id]/members/route.ts",
+      "sha256": "cfe99ec5513d2f4902bf0522d08e69974df974e881edd0c6dc26e302527ba956"
+    },
+    {
+      "path": "src/app/api/v1/boards/[board_id]/praises/route.ts",
+      "sha256": "efd3aaea8dab63467588e77964e6b6fdfbce87cd2ca9f014f266b1f09c59c295"
+    },
+    {
+      "path": "src/app/api/v1/boards/[board_id]/route.ts",
+      "sha256": "600b6b8151a81f5e35a4f133546831d530def9bf178a7b98e5e4e000bb141ecf"
+    },
+    {
+      "path": "src/app/api/v1/connection-invites/[invite_id]/route.ts",
+      "sha256": "573121c5dbfa4de121775acfde851ffdcf2864a68b7d9cdd3a6205425b503930"
+    },
+    {
+      "path": "src/app/api/v1/connection-invites/preview/route.ts",
+      "sha256": "25e3acca380ed5a7bea232a52f60d9373a7ff2b34e4508153c496640d75fb09f"
+    },
+    {
+      "path": "src/app/api/v1/connection-invites/route.ts",
+      "sha256": "40083742ac306e97f4f1251e8495ccbaee379c7b8ce0cba161faab93ef6b3e06"
+    },
+    {
+      "path": "src/app/api/v1/connection-requests/[request_id]/accept/route.ts",
+      "sha256": "1d6e017017bc3df7d07c49e913d27ce3dd2ea05901daeeff98fb9feb0ccc8c81"
+    },
+    {
+      "path": "src/app/api/v1/connection-requests/[request_id]/cancel/route.ts",
+      "sha256": "eee600dca48924874c5912dbb7842c445699c3ab20a15f943f39fbd9aa217e19"
+    },
+    {
+      "path": "src/app/api/v1/connection-requests/[request_id]/reject/route.ts",
+      "sha256": "e574750626c7ec2059f69bb1026eb30e56b92889244857e4406e795189480309"
+    },
+    {
+      "path": "src/app/api/v1/connection-requests/route.ts",
+      "sha256": "493ae47fc8e5d1ab1b67201a366c7aab0aeccdc4418bbb37adcf35f8831624bc"
+    },
+    {
+      "path": "src/app/api/v1/connections/[connection_id]/route.ts",
+      "sha256": "a8f214f36cff740a4879c1ea4cdcee06167a9af89cd8bf12c1a91c61fe7605d1"
+    },
+    {
+      "path": "src/app/api/v1/connections/route.ts",
+      "sha256": "e67ab3cd620031d878a5140fae8c8a6c4c7b6476e8b179a735583ae4ad5647a5"
+    },
+    {
+      "path": "src/app/api/v1/goals/[goal_id]/archive/route.ts",
+      "sha256": "317e47e2f1bb8fef3bccc84e3c5d90347f0b2890a82d5c588b9989fa5530e94c"
+    },
+    {
+      "path": "src/app/api/v1/goals/[goal_id]/complete/route.ts",
+      "sha256": "1603bf1a1f31a8633ec7ea8ff95aed00b811d6436a91d6287e77448b976629d6"
+    },
+    {
+      "path": "src/app/api/v1/goals/[goal_id]/restore/route.ts",
+      "sha256": "bc8144176e43dd92dbdc605ef43b87040f8294b63fd9bb9b5042cf12329dbc23"
+    },
+    {
+      "path": "src/app/api/v1/goals/[goal_id]/resume/route.ts",
+      "sha256": "0562098c8289da2999cebe4a7ccb98617546bf60cf36eb10a0da48b3c5c666fa"
+    },
+    {
+      "path": "src/app/api/v1/goals/[goal_id]/route.ts",
+      "sha256": "be34e4b53957a4af0718bc076a73351e4ea0f86ea1a6b55f96410391bcfeaab3"
+    },
+    {
+      "path": "src/app/api/v1/goals/route.ts",
+      "sha256": "10b90a71ec667579b521a04fac7f5e40594178bc6ecd7eb98dbb512424ab2813"
+    },
+    {
+      "path": "src/app/api/v1/me/route.ts",
+      "sha256": "8ea5fe9f806a782653d1d8fde362be23cb4068474d672a8036a077d213712c58"
+    },
+    {
+      "path": "src/app/api/v1/notifications/[notification_id]/route.ts",
+      "sha256": "c6766e09511a03acefb1af68ddb20e2bd8efa84da233c03d36dc0220ba429e31"
+    },
+    {
+      "path": "src/app/api/v1/notifications/route.ts",
+      "sha256": "80559a794ceb8dfaceb8cd021d6acc963f06c3838fc8c330ba1e10621dcb6c5e"
+    },
+    {
+      "path": "src/app/api/v1/praises/[praise_id]/cancel/route.ts",
+      "sha256": "3b81452c0a065ad6ef7321a324ed899b363507b207325d7630a0dab032b73eaa"
+    },
+    {
+      "path": "src/app/api/v1/praises/[praise_id]/exclude/route.ts",
+      "sha256": "e63c5a98962839715d002f2fec5b4a91640390323d5e56aa44172d844f2ecc2b"
+    },
+    {
+      "path": "src/app/api/v1/praises/[praise_id]/hide/route.ts",
+      "sha256": "1199d8a012378875778fd6ea94734c9fc17bd92e49223e7255cbe3a45824bfc0"
+    },
+    {
+      "path": "src/app/api/v1/praises/[praise_id]/route.ts",
+      "sha256": "45d8906ae74cff60ba6d8ba39ae35e9ae565b24a5203fc9322d350d68e91ac16"
+    },
+    {
+      "path": "src/app/api/v1/praises/[praise_id]/unhide/route.ts",
+      "sha256": "6094c956e5bb11aa4db38217baad8859fac647401cec6a70c820d16833538792"
+    },
+    {
+      "path": "src/app/api/v1/sent-praises/route.ts",
+      "sha256": "8742cd5865492324ce60ae94a9b100e3aeec9a480bfb7c13bdbb8d0569572a14"
+    },
+    {
+      "path": "src/app/api/v1/shared-boards/route.ts",
+      "sha256": "07feb0548590781cbf49eb0144623be4cda6fd31b603b2d63874760b904b9430"
+    },
+    {
+      "path": "src/app/api/v1/trash/goals/route.ts",
+      "sha256": "958f5c6fd22e71020cb0af6eabb82d40b09a1872392be5e4a948469a77bd51ab"
+    },
+    {
+      "path": "src/server/api-security.mjs",
+      "sha256": "d51a5eb806b5ea5d817d948744c1f62326d7b20d052193521bf060e7bc3d8837"
+    },
+    {
+      "path": "src/server/app-session.ts",
+      "sha256": "c19e21a30d4f57e8cbb2b19d1732151bf94f67a092ac71a2952def0270ffa46c"
+    },
+    {
+      "path": "src/server/deployed-session.mjs",
+      "sha256": "1c1603913167421f06c4710eb788ffe45f78626c63a5fc80cab91594cbe5a372"
+    },
+    {
+      "path": "src/server/session-api-route.ts",
+      "sha256": "2f9e441dea5597c876dd4a402f39907f11385f772204cbfe38bfa6dc6eade1e9"
+    },
+    {
+      "path": "scripts/deployed-session.test.mjs",
+      "sha256": "bd2b3fda61a413bb4340d2ec4da4a65fa4e1dce0a7488f63cfb33a9cf02f9b94"
+    },
+    {
+      "path": "scripts/test-local-deployed-session.mjs",
+      "sha256": "94ce6edcc94cc09a0091b3c8ee06cd88b809fea004acc04eb564cb73b0e11f66"
+    }
+  ],
+  "artifact_validation": {
+    "checked_at": "2026-10-19T13:24:04.306Z",
+    "status": "passed",
+    "runtime": "v24.19.0",
+    "scope": "artifact_structural_consistency_only",
+    "full_openapi_validator_executed": false,
+    "mermaid_render_executed": false,
+    "application_or_database_tests_executed": 0,
+    "planned_test_cases": 78,
+    "checks": [
+      {
+        "id": "json",
+        "description": "JSON parse",
+        "count": 47,
+        "status": "passed"
+      },
+      {
+        "id": "links",
+        "description": "Local Markdown links",
+        "count": 607,
+        "status": "passed"
+      },
+      {
+        "id": "openapi",
+        "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+        "count": 55,
+        "local_references": 703,
+        "status": "passed"
+      },
+      {
+        "id": "traceability",
+        "description": "REQ/NFR/POL/TC/API cross references",
+        "requirements": 17,
+        "policies": 20,
+        "test_cases": 78,
+        "status": "passed"
+      },
+      {
+        "id": "policy_consistency",
+        "description": "Policy/API numeric values, names, restore fields",
+        "status": "passed"
+      },
+      {
+        "id": "projection",
+        "description": "Contributor/sent fields and canceled-body schema constraints",
+        "status": "passed"
+      },
+      {
+        "id": "audience_consistency",
+        "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+        "status": "passed"
+      },
+      {
+        "id": "erd_sources",
+        "description": "Embedded/source consistency, full entities and relationship endpoints",
+        "embedded_blocks": 3,
+        "entities": 21,
+        "relationships": 42,
+        "rendered": false,
+        "status": "passed"
+      },
+      {
+        "id": "registry",
+        "description": "Existing registered artifact paths",
+        "count": 336,
+        "status": "passed"
+      },
+      {
+        "id": "development_consistency",
+        "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+        "work_items": 23,
+        "runtime_guards_executed": false,
+        "status": "passed"
+      }
+    ],
+    "errors": [],
+    "basis": {
+      "inputs": [
+        ".env.example",
+        "AGENTS.md",
+        "contracts/openapi.json",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/contracts/api-contract.md",
+        "docs/data-erd.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/decisions/ADR-0004-local-development-auth.md",
+        "docs/design/user-flows.md",
+        "docs/development/README.md",
+        "docs/development/artifact-register.json",
+        "docs/development/backlog.md",
+        "docs/development/local-development.md",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-full.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/policies/access-and-responses.md",
+        "docs/policies/audience-and-signup.md",
+        "docs/policies/data-lifecycle.md",
+        "docs/policies/product-rules.md",
+        "docs/quality/test-cases.json",
+        "docs/requirements/mvp-requirements.md",
+        "policies/app-policy.json",
+        "policies/development-policy.json",
+        "scripts/verify-artifacts.mjs"
+      ],
+      "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+      "sha256": "c14e839da88c6d8b558fa5596b20ab8048075871612ea7f5e0fb201ccbcf4af4"
+    }
+  },
+  "source_hash_format": "LF_normalized_UTF8"
+}

@@ -3,6 +3,13 @@ const policy = JSON.parse(fs.readFileSync(new URL("../policies/development-polic
 export class ConfigurationError extends Error {}
 const fail = (name) => { throw new ConfigurationError(`Invalid configuration: ${name}`); };
 const localHost = (host) => policy.local_guard.allowed_hosts.includes(host.replace(/^\[|\]$/g, ""));
+export function sessionEncryptionKey(env) {
+  const value = env.AUTH_SESSION_ENCRYPTION_KEY;
+  if (typeof value !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(value)) fail("AUTH_SESSION_ENCRYPTION_KEY");
+  const key = Buffer.from(value, "base64url");
+  if (key.length !== 32 || key.toString("base64url") !== value) fail("AUTH_SESSION_ENCRYPTION_KEY");
+  return key;
+}
 function parseAddress(env, name) {
   let url;
   try { url = new URL(env[name]); } catch { fail(name); }
@@ -29,6 +36,7 @@ export function validateEnvironment(env, { command, bindingHost } = {}) {
   if (!policy.deployed_auth.allowed_app_envs.includes(appEnv) || env.NODE_ENV !== "production") fail("deployed execution");
   if (Object.keys(env).some((key) => (key.startsWith("LOCAL_DEV_") || key === "APP_LOCAL_FIXTURE_MANIFEST" || key === "APP_LOCAL_CSRF_SIGNING_SECRET") && env[key])) fail("local fixture settings in deployed environment");
   if (typeof env.CSRF_SIGNING_SECRET !== "string" || Buffer.byteLength(env.CSRF_SIGNING_SECRET, "utf8") < 32) fail("CSRF_SIGNING_SECRET");
+  sessionEncryptionKey(env);
   for (const [name, url] of [["APP_BASE_URL", base], ["SUPABASE_URL", database]]) {
     if (localHost(url.hostname) || url.protocol !== "https:") fail(name);
   }

@@ -1,4 +1,4 @@
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import policy from "../../policies/app-policy.json" with { type: "json" };
 
 export const CSRF_COOKIE_NAME = "chagokchan_csrf";
@@ -35,18 +35,21 @@ export function getCsrfSigningSecret(env = process.env) {
   return asSecret(secret);
 }
 
-export function createCsrfToken(secret, now = Date.now()) {
+/** @param {string | Buffer} secret @param {number} [now] @param {string | null} [binding] */
+export function createCsrfToken(secret, now = Date.now(), binding = null) {
   const issuedAt = Math.floor(now / 1000);
   const payload = Buffer.from(JSON.stringify({
     exp: issuedAt + CSRF_TTL_SECONDS,
     iat: issuedAt,
     nonce: randomBytes(32).toString("base64url"),
     v: 1,
+    ...(binding === null ? {} : { binding }),
   })).toString("base64url");
   return `${payload}.${signatureFor(payload, secret)}`;
 }
 
-export function verifyCsrfToken(token, secret, now = Date.now()) {
+/** @param {string} token @param {string | Buffer} secret @param {number} [now] @param {string | null} [binding] */
+export function verifyCsrfToken(token, secret, now = Date.now(), binding = null) {
   if (typeof token !== "string" || token.length < 16 || token.length > 1024) return false;
   const parts = token.split(".");
   if (parts.length !== 2 || !/^[A-Za-z0-9_-]+$/.test(parts[0]) || !/^[A-Za-z0-9_-]+$/.test(parts[1])) return false;
@@ -56,7 +59,8 @@ export function verifyCsrfToken(token, secret, now = Date.now()) {
   try {
     const payload = JSON.parse(Buffer.from(parts[0], "base64url").toString("utf8"));
     const fields = Object.keys(payload).sort().join("|");
-    if (fields !== "exp|iat|nonce|v" || payload.v !== 1 ||
+    if (fields !== (binding === null ? "exp|iat|nonce|v" : "binding|exp|iat|nonce|v") ||
+        (binding !== null && payload.binding !== binding) || payload.v !== 1 ||
         !Number.isSafeInteger(payload.iat) || !Number.isSafeInteger(payload.exp) ||
         payload.exp - payload.iat !== CSRF_TTL_SECONDS ||
         !/^[A-Za-z0-9_-]{43}$/.test(payload.nonce)) return false;
@@ -118,7 +122,7 @@ async function readBoundedBody(request) {
   return parsed;
 }
 
-export async function validateMutationRequest(request, { expectedOrigin, secret = getCsrfSigningSecret() }) {
+export async function validateMutationRequest(request, { expectedOrigin, secret = getCsrfSigningSecret(), env = process.env }) {
   if (!expectedOrigin || request.headers.get("origin") !== expectedOrigin) {
     reject(403, "ACTION_FORBIDDEN", "요청 출처를 확인할 수 없습니다.");
   }
@@ -129,10 +133,18 @@ export async function validateMutationRequest(request, { expectedOrigin, secret 
 
   const headerToken = request.headers.get("x-csrf-token");
   const cookieToken = csrfCookie(request);
-  if (!headerToken || !cookieToken || !safeEqual(headerToken, cookieToken) || !verifyCsrfToken(headerToken, secret)) {
+  const binding = env.APP_AUTH_MODE === "supabase_session" ? csrfSessionBinding(request) : null;
+  if (!headerToken || !cookieToken || !safeEqual(headerToken, cookieToken) || !verifyCsrfToken(headerToken, secret, Date.now(), binding)) {
     reject(403, "ACTION_FORBIDDEN", "요청 보안 토큰을 확인할 수 없습니다.");
   }
   return readBoundedBody(request);
+}
+
+export function csrfSessionBinding(request) {
+  const name = `__Host-${policy.auth.cookie_base_name}=`;
+  const values = (request.headers.get("cookie") ?? "").split(";").map((part) => part.trim()).filter((part) => part.startsWith(name));
+  const context = values.length === 1 ? values[0].slice(name.length) : "signed-out";
+  return createHash("sha256").update(context).digest("base64url");
 }
 
 export function csrfCookieHeader(token, { secure = false } = {}) {

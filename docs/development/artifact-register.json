@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-19",
-  "current_stage": "S06_phase_one_local_closeout_complete_product_acceptance_pending",
-  "next_stage": "phase_two_w14_w12_w13_w15_w17",
+  "current_stage": "S07_w12_a_session_adapter_verified_real_auth_flows_pending",
+  "next_stage": "w12_auth_flows_registration_refresh_logout_w10_c_w13_w14_w15_w17",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -40,7 +40,7 @@
     {
       "id": "S07",
       "name": "실제 로그인·통합 검증",
-      "status": "not_started"
+      "status": "w12_a_session_adapter_verified_real_provider_acceptance_pending"
     },
     {
       "id": "S08",
@@ -210,6 +210,16 @@
       "claude_review": "historical_blocked_attempt_superseded_by_user_no_claude_request",
       "real_login_tests_executed": 0,
       "codex_review_report": "docs/quality/reports/w21-codex-review-check-2026-10-19.json"
+    },
+    "w12_a": {
+      "status": "unit_local_auth_api_build_passed",
+      "report": "docs/quality/reports/w12-a-session-check-2026-10-19.json",
+      "unit_tests_passed": 148,
+      "new_unit_tests": 16,
+      "local_issued_session_scenarios_passed": 5,
+      "unique_api_boundary_checks_passed": 261,
+      "build_completed": true,
+      "real_provider_login_tests_executed": 0
     }
   },
   "artifacts": [
@@ -486,7 +496,7 @@
         "src/server/connection-api.mjs",
         "src/server/board-api.mjs",
         "src/server/news-api.mjs",
-        "src/server/local-api-route.ts",
+        "src/server/session-api-route.ts",
         "src/app/api/v1/connections/",
         "src/app/api/v1/connection-invites/",
         "src/app/api/v1/connection-requests/",
@@ -727,6 +737,22 @@
         "docs/quality/reports/w21-codex-review-check-2026-10-19.json",
         "docs/changes/2026-10-19-codex-review-and-free-ads.md"
       ]
+    },
+    {
+      "id": "ART-027",
+      "title": "배포 요청별 서버 세션 어댑터·출시 우선 사례 검토",
+      "status": "session_adapter_unit_local_auth_api_build_verified_launch_review_documented",
+      "paths": [
+        "src/server/deployed-session.mjs",
+        "src/server/app-session.ts",
+        "src/server/session-api-route.ts",
+        "scripts/deployed-session.test.mjs",
+        "scripts/test-local-deployed-session.mjs",
+        "docs/decisions/ADR-0008-deployed-session-boundary.md",
+        "docs/release-first-launch-review.md",
+        "docs/quality/reports/w12-a-session-check-2026-10-19.json",
+        "docs/changes/2026-10-19-w12-a-session-adapter.md"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -843,14 +869,16 @@
   "delivery_milestones": {
     "source": "docs/launch-and-growth-plan.md",
     "phase_one": "DONE_local_only_codex_direct_review",
-    "phase_two": "DEFERRED",
+    "phase_two": "IN_PROGRESS",
     "release_platform_order": [
       "mobile_web_pwa",
       "android",
       "ios"
     ],
     "phase_one_public_access": false,
-    "monetization": "free_with_ads_priority_proposal_not_implemented",
-    "workflow": "codex_only_per_user_2026-10-19"
+    "monetization": "secondary_after_launch_not_a_release_gate",
+    "workflow": "codex_only_per_user_2026-10-19",
+    "primary_objective": "public_app_launch",
+    "operator_input_status": "all_undecided_per_user_2026-10-19"
   }
 }
