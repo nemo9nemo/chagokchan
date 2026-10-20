@@ -10,7 +10,7 @@ Next.js 앱의 시작 화면, 환경 검사, 빌드와 로컬 실행을 구현�
 | --- | --- |
 | Node.js | 24.19.0. `.node-version`, `.nvmrc`, engines와 실행 스크립트로 확인 |
 | pnpm | 11.19.0. packageManager와 잠금 파일로 고정 |
-| Next.js / React | 16.4.0 / 19.3.0. App Router |
+| Next.js / React | 16.4.2 / 19.3.0. App Router; 2026-10-20 보안 권고 대응 패치 |
 | TypeScript | 5.9.3. strict, 별도 타입 검사와 빌드 검사 |
 | Tailwind CSS | 4.3.3. 기본 화면 스타일 |
 | Biome | 2.5.15. 경고를 실패 처리하는 린트 |

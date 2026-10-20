@@ -1769,6 +1769,27 @@
       "expected": "미완성 글자가 칩이 되거나 폼이 제출되지 않으며, 안내가 읽히고 장애 후 입력과 중복 방지가 유지된다.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-SEC-HEADERS-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-SEC-001",
+        "POL-OPS-001"
+      ],
+      "level": "security_unit_and_isolated_production_http",
+      "title": "요청별 nonce CSP·운영 보안 헤더·문서 캐시 경계",
+      "steps": [
+        "요청별 256비트 nonce와 운영/개발 CSP 차이·정적 문서 정책을 단위 검사",
+        "격리된 production build-check 서버에서 위조 nonce/CSP 헤더를 보내고 Next.js script nonce 일치·요청별 변경·no-store 확인",
+        "무인증 제품 API 401·HSTS·no-referrer·프레임/기기 권한·서비스 워커/오프라인 정적 정책 확인"
+      ],
+      "expected": "운영 스크립트의 인라인/eval/외부 연결과 프레임을 제한하고 호출자 nonce를 신뢰하지 않는다. 비인증 API는 401/no-store이며 공개 정적 파일만 캐시한다. 실제 HTTPS 브라우저 집행·로그인/CAPTCHA·PWA 수락은 별도 검사다.",
+      "status": "passed",
+      "evidence": "reports/security-completion-audit-2026-10-20.json"
     }
   ],
   "updated_on": "2026-10-20"

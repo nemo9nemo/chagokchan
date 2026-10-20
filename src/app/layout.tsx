@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "차곡찬 · Chagokchan",
   description: "작은 수고를 알아보고, 나에게 칭찬을 쌓는 공간.",

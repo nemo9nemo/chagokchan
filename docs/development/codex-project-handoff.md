@@ -1,5 +1,9 @@
 # 차곡찬 프로젝트 개발 인계
 
+W15-A 원격 근거: [PR #15](https://github.com/nemo9nemo/chagokchan/pull/15), 기능 소스 `43920a2`, [필수 quality 통과](https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892). 최종 PR 검사·병합 상태는 GitHub 기록을 따른다.
+
+2026-10-20 W15-A 보안·완료 여부 점검: 공개 출시 미완료를 확인했다. Next.js 16.4.0의 공식 보안 권고를 확인해 16.4.2로 교체하고, 누락된 요청별 nonce CSP·no-referrer·운영 HSTS·기기 권한 헤더 및 CI 의존성/HTTP 검사를 추가했다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 헤더 7·build 통과. Git 비밀 패턴 검사와 실제 DB 권한 카탈로그도 점검했다. TC-WEB-001/002·분산 제한/CAPTCHA·실제 로그인/로그아웃/탈퇴·운영/실기기/복원/부하 수락은 미완료다. W15는 부분 진행이며 다음은 W14 입력과 병행한 W12-C다. [보고서](../quality/reports/security-completion-audit-2026-10-20.md). 과거의 단위 검사 159·DB 350 수치와 현재 175·390을 구분한다.
+
 W25 원격 완료 증거: [PR #13](https://github.com/nemo9nemo/chagokchan/pull/13) 병합(기능 커밋 2757d45, 기능 병합 fd57bed), PR 및 [main CI](https://github.com/nemo9nemo/chagokchan/actions/runs/39397395230) 통과. W25-A~D의 로컬 구현·검사 완료와 W15 수락 대기를 구분한다. REQ-003의 실행 문구·TC 연결과 이 완료 기록은 후속 문서 커밋에 동기화한다.
 
 2026-10-20 W25 구현: 사용자 직접 #태그·공백 칩 확정·여러 태그 작성/수정/삭제를 연결했다. 새 SQL 2개만 적용해 총 52개이며 기존 데이터·태그·요청 해시를 보존했다. unit 170·DB 390·태그 API 17·실제 로컬 Auth RPC 7(동시 요청·다른 사용자·세션 폐기)·브라우저 11항목 통과. 최종 check·UI 보완 뒤 build까지 통과했다. PR 필수 CI·병합의 실제 상태는 GitHub 기록을 따른다. 실제 OS IME·VoiceOver/TalkBack·브라우저 장애 재시도는 W15 TC-PRAISE-TAG-003 미실행이다. [검사](../quality/reports/w25-custom-tags-check-2026-10-20.json). W20/W25의 과거 단일 태그 기획과 현재 배열 실행본을 구분한다.
@@ -59,7 +63,7 @@ W25 원격 완료 증거: [PR #13](https://github.com/nemo9nemo/chagokchan/pull/
 
 ## 현재 런타임과 DB
 
-Node `24.19.0`, pnpm `11.19.0`, Next `16.4.0`, React `19.3.0`, TypeScript `5.9.3`, Biome `2.5.15`, Supabase CLI `2.120.0`, SDK `2.117.3`를 고정했다. PATH 기본 Node는 `22.14.0`이라 그대로 쓰면 환경 검사가 실패한다. 저장소의 `scripts/project.ps1 -Task ...`가 고정 Node를 선택한다. [환경 실행 방법](runtime-setup.md)을 따른다.
+Node `24.19.0`, pnpm `11.19.0`, Next `16.4.2`(2026-10-20 보안 패치), React `19.3.0`, TypeScript `5.9.3`, Biome `2.5.15`, Supabase CLI `2.120.0`, SDK `2.117.3`를 고정했다. PATH 기본 Node는 `22.14.0`이라 그대로 쓰면 환경 검사가 실패한다. 저장소의 `scripts/project.ps1 -Task ...`가 고정 Node를 선택한다. [환경 실행 방법](runtime-setup.md)을 따른다.
 
 Docker 엔진 `29.1.3`, 실제 로컬 PostgreSQL `17.11`이다. 프로젝트 서비스 7개를 사용한다. DB 컨테이너는 `supabase_db_chagokchan`, API 게이트웨이는 `supabase_kong_chagokchan`이다. API 54321·DB 54322·Studio 54323·메일함 54324는 127.0.0.1에 바인딩한다. 프로젝트의 loopback 프록시를 포함한 `db:start` 실행 경로를 유지한다.
 

@@ -1,0 +1,460 @@
+{
+  "verified_at": "2026-10-20T12:31:42.763Z",
+  "work_items": [
+    "W15-A"
+  ],
+  "status": "local_security_review_and_hardening_passed_public_release_incomplete",
+  "release_ready": false,
+  "source_base_commit": "b254dadc49c21f3950e2bfb6d92b13f8bab96f37",
+  "source_hash_format": "sorted_relative_paths_newline_then_LF_normalized_UTF8_text_newline",
+  "source_files": [
+    ".github/workflows/ci.yml",
+    ".node-version",
+    ".nvmrc",
+    "biome.json",
+    "contracts/openapi.json",
+    "next.config.mjs",
+    "package.json",
+    "pnpm-lock.yaml",
+    "policies/app-policy.json",
+    "policies/development-policy.json",
+    "scripts/api-security.test.mjs",
+    "scripts/app.mjs",
+    "scripts/board-api.test.mjs",
+    "scripts/check-commit-message.mjs",
+    "scripts/connection-api.test.mjs",
+    "scripts/database-task.mjs",
+    "scripts/deployed-session.test.mjs",
+    "scripts/docker-loopback-proxy.mjs",
+    "scripts/docker-loopback-proxy.test.mjs",
+    "scripts/goal-api.test.mjs",
+    "scripts/grape-layout.test.mjs",
+    "scripts/idempotent-request.test.mjs",
+    "scripts/local-database-tools.mjs",
+    "scripts/local-db.mjs",
+    "scripts/local-fixture-manifest.mjs",
+    "scripts/local-fixture-manifest.test.mjs",
+    "scripts/local-user-session.test.mjs",
+    "scripts/news-api.test.mjs",
+    "scripts/news-labels.test.mjs",
+    "scripts/praise-api.test.mjs",
+    "scripts/praise-tags.test.mjs",
+    "scripts/project.ps1",
+    "scripts/registration-api.test.mjs",
+    "scripts/runtime-environment.mjs",
+    "scripts/runtime-environment.test.mjs",
+    "scripts/security-headers.test.mjs",
+    "scripts/seed-local-fixtures.mjs",
+    "scripts/service-worker.test.mjs",
+    "scripts/test-local-account-deletion.mjs",
+    "scripts/test-local-board-api.mjs",
+    "scripts/test-local-connection-api.mjs",
+    "scripts/test-local-connection-rpc.mjs",
+    "scripts/test-local-deployed-session.mjs",
+    "scripts/test-local-goal-api.mjs",
+    "scripts/test-local-goal-lifecycle-rpc.mjs",
+    "scripts/test-local-goal-list-api.mjs",
+    "scripts/test-local-goal-list-rpc.mjs",
+    "scripts/test-local-goal-management-api.mjs",
+    "scripts/test-local-goal-rpc.mjs",
+    "scripts/test-local-lifecycle-rpc.mjs",
+    "scripts/test-local-me-api.mjs",
+    "scripts/test-local-news-api.mjs",
+    "scripts/test-local-personal-praise-api.mjs",
+    "scripts/test-local-personal-praise-result-rpc.mjs",
+    "scripts/test-local-personal-praise.mjs",
+    "scripts/test-local-praise-tag-api.mjs",
+    "scripts/test-local-registration-api.mjs",
+    "scripts/test-local-registration.mjs",
+    "scripts/test-local-rpc.mjs",
+    "scripts/test-local-shared-board-rpc.mjs",
+    "scripts/test-local-trash-api.mjs",
+    "scripts/test-security-headers-http.mjs",
+    "scripts/verify-artifacts.mjs",
+    "src/app/api/v1/auth/csrf/route.ts",
+    "src/app/api/v1/auth/session/route.ts",
+    "src/app/api/v1/blocks/[block_id]/route.ts",
+    "src/app/api/v1/blocks/route.ts",
+    "src/app/api/v1/boards/[board_id]/bunches/route.ts",
+    "src/app/api/v1/boards/[board_id]/members/[user_id]/route.ts",
+    "src/app/api/v1/boards/[board_id]/members/route.ts",
+    "src/app/api/v1/boards/[board_id]/praises/route.ts",
+    "src/app/api/v1/boards/[board_id]/route.ts",
+    "src/app/api/v1/connection-invites/[invite_id]/route.ts",
+    "src/app/api/v1/connection-invites/preview/route.ts",
+    "src/app/api/v1/connection-invites/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/accept/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/cancel/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/reject/route.ts",
+    "src/app/api/v1/connection-requests/route.ts",
+    "src/app/api/v1/connections/[connection_id]/route.ts",
+    "src/app/api/v1/connections/route.ts",
+    "src/app/api/v1/goals/[goal_id]/archive/route.ts",
+    "src/app/api/v1/goals/[goal_id]/complete/route.ts",
+    "src/app/api/v1/goals/[goal_id]/restore/route.ts",
+    "src/app/api/v1/goals/[goal_id]/resume/route.ts",
+    "src/app/api/v1/goals/[goal_id]/route.ts",
+    "src/app/api/v1/goals/route.ts",
+    "src/app/api/v1/me/bootstrap/route.ts",
+    "src/app/api/v1/me/route.ts",
+    "src/app/api/v1/notifications/[notification_id]/route.ts",
+    "src/app/api/v1/notifications/route.ts",
+    "src/app/api/v1/praises/[praise_id]/cancel/route.ts",
+    "src/app/api/v1/praises/[praise_id]/exclude/route.ts",
+    "src/app/api/v1/praises/[praise_id]/hide/route.ts",
+    "src/app/api/v1/praises/[praise_id]/route.ts",
+    "src/app/api/v1/praises/[praise_id]/unhide/route.ts",
+    "src/app/api/v1/sent-praises/route.ts",
+    "src/app/api/v1/shared-boards/route.ts",
+    "src/app/api/v1/trash/goals/route.ts",
+    "src/app/client-app.tsx",
+    "src/app/globals.css",
+    "src/app/grape-cluster.tsx",
+    "src/app/grape-layout.mjs",
+    "src/app/layout.tsx",
+    "src/app/manifest.ts",
+    "src/app/news-labels.mjs",
+    "src/app/news-panel.tsx",
+    "src/app/page.tsx",
+    "src/app/praise-sheet.tsx",
+    "src/app/pwa-icons/180/route.tsx",
+    "src/app/pwa-icons/192/route.tsx",
+    "src/app/pwa-icons/512/route.tsx",
+    "src/app/pwa-icons/render-icon.tsx",
+    "src/app/share-panel.tsx",
+    "src/app/tag-input.tsx",
+    "src/client/idempotent-request.mjs",
+    "src/proxy.ts",
+    "src/server/api-security.mjs",
+    "src/server/app-session.ts",
+    "src/server/board-api.mjs",
+    "src/server/connection-api.mjs",
+    "src/server/deployed-session.mjs",
+    "src/server/goal-api.mjs",
+    "src/server/local-user-session.mjs",
+    "src/server/news-api.mjs",
+    "src/server/praise-api.mjs",
+    "src/server/registration-api.mjs",
+    "src/server/security-headers.mjs",
+    "src/server/session-api-route.ts",
+    "src/shared/praise-tags.mjs",
+    "supabase/migrations/20261008013000_product_schema.sql",
+    "supabase/migrations/20261008020500_session_rpc_boundary.sql",
+    "supabase/migrations/20261008020600_grant_auth_schema_usage.sql",
+    "supabase/migrations/20261008020700_isolate_auth_session_reader.sql",
+    "supabase/migrations/20261008020800_revoke_auth_columns_from_guard.sql",
+    "supabase/migrations/20261008020900_revoke_auth_schema_from_guard.sql",
+    "supabase/migrations/20261008021000_goal_rpc.sql",
+    "supabase/migrations/20261008021100_narrow_goal_rpc_privileges.sql",
+    "supabase/migrations/20261008021200_goal_receipt_lookup_columns.sql",
+    "supabase/migrations/20261008021300_receipt_retry_lock_privilege.sql",
+    "supabase/migrations/20261008021400_personal_praise_cycle_rpcs.sql",
+    "supabase/migrations/20261008021500_qualify_praise_cycle_number.sql",
+    "supabase/migrations/20261008021600_verified_actor_completion_notice.sql",
+    "supabase/migrations/20261008021700_notification_conflict_select_policy.sql",
+    "supabase/migrations/20261008021800_connection_invite_request_rpcs.sql",
+    "supabase/migrations/20261008021900_connection_secret_validation_fix.sql",
+    "supabase/migrations/20261008022000_connection_notification_conflict_select.sql",
+    "supabase/migrations/20261008022100_acceptance_notification_target.sql",
+    "supabase/migrations/20261008022200_shared_board_access_and_peer_praise.sql",
+    "supabase/migrations/20261008022300_shared_board_rpc_row_lock_rls.sql",
+    "supabase/migrations/20261008022400_shared_praise_write_policies.sql",
+    "supabase/migrations/20261008022500_shared_praise_cycle_column_fix.sql",
+    "supabase/migrations/20261008022600_peer_praise_receipt_shape.sql",
+    "supabase/migrations/20261008022700_shared_praise_owner_state_projection.sql",
+    "supabase/migrations/20261008022800_relationship_cursor_line_wrap_fix.sql",
+    "supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql",
+    "supabase/migrations/20261008023000_connection_list_cursor_boundary_fix.sql",
+    "supabase/migrations/20261008023100_news_goal_trash_and_purge_rpcs.sql",
+    "supabase/migrations/20261008023200_sent_praise_read_after_disconnect.sql",
+    "supabase/migrations/20261008023300_worker_jwt_reader_boundary.sql",
+    "supabase/migrations/20261008023400_goal_purge_lock_privileges.sql",
+    "supabase/migrations/20261008023500_account_deletion_request_boundary.sql",
+    "supabase/migrations/20261008023600_account_deletion_erasure_worker.sql",
+    "supabase/migrations/20261008023700_account_deletion_retry_privilege_fix.sql",
+    "supabase/migrations/20261008023800_account_profile_erasure_privilege.sql",
+    "supabase/migrations/20261008023900_account_deletion_guard_helper.sql",
+    "supabase/migrations/20261008024000_account_deletion_state_read_privilege.sql",
+    "supabase/migrations/20261008024100_account_deletion_timezone_check_privilege.sql",
+    "supabase/migrations/20261008024200_account_deletion_request_timestamp_privilege.sql",
+    "supabase/migrations/20261008024300_goal_list_rpc.sql",
+    "supabase/migrations/20261008024400_goal_list_cursor_base64_wrap_fix.sql",
+    "supabase/migrations/20261008024500_bunch_list_rpc.sql",
+    "supabase/migrations/20261008024600_personal_praise_result_rpc.sql",
+    "supabase/migrations/20261008024700_peer_praise_moderation_rpcs.sql",
+    "supabase/migrations/20261008024800_list_my_shared_boards_rpc.sql",
+    "supabase/migrations/20261008024900_goal_delete_retry_is_idempotent.sql",
+    "supabase/migrations/20261008025000_praise_tag.sql",
+    "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
+    "supabase/migrations/20261019000100_registration_bootstrap.sql",
+    "supabase/migrations/20261019000200_neutral_profile_defaults.sql",
+    "supabase/migrations/20261020000100_custom_praise_tags.sql",
+    "supabase/migrations/20261020000200_praise_tag_list_compatibility.sql",
+    "supabase/tests/001_physical_integrity.test.sql",
+    "supabase/tests/002_rpc_boundary.test.sql",
+    "supabase/tests/003_business_rpc.test.sql",
+    "supabase/tests/004_business_rpc_praise.test.sql",
+    "supabase/tests/005_business_rpc_connections.test.sql",
+    "supabase/tests/006_business_rpc_shared_board.test.sql",
+    "supabase/tests/007_business_rpc_lifecycle.test.sql",
+    "supabase/tests/008_business_rpc_account_deletion.test.sql",
+    "supabase/tests/009_business_rpc_goal_list.test.sql",
+    "supabase/tests/010_business_rpc_bunch_list.test.sql",
+    "supabase/tests/011_business_rpc_personal_praise_result.test.sql",
+    "supabase/tests/012_business_rpc_peer_praise_moderation.test.sql",
+    "supabase/tests/013_business_rpc_shared_board_directory.test.sql",
+    "supabase/tests/014_business_rpc_goal_delete_retry.test.sql",
+    "supabase/tests/015_business_rpc_praise_tag.test.sql",
+    "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql",
+    "supabase/tests/017_business_rpc_registration.test.sql",
+    "supabase/tests/018_business_rpc_custom_tags.test.sql",
+    "tsconfig.json"
+  ],
+  "source_sha256": "3241e86a35d16de96570741b779598a82faa220307e87da92850440a7cd8e934",
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.2",
+    "os": "win32",
+    "local_database_only": true,
+    "migrations": 52,
+    "new_migrations": 0
+  },
+  "findings": [
+    {
+      "id": "SEC-20261020-01",
+      "priority": "P1_release_blocker",
+      "status": "fixed",
+      "title": "Installed Next.js version covered by upstream critical advisories",
+      "previous": "16.4.0",
+      "fixed": "16.4.2",
+      "exploit_reproduced": false,
+      "application_reachability": "advisory-specific; no use_cache; fixed internal image generation inputs; no public deployment inspected",
+      "sources": [
+        "https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw",
+        "https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr",
+        "https://github.com/vercel/next.js/releases/tag/v16.4.2"
+      ]
+    },
+    {
+      "id": "SEC-20261020-02",
+      "priority": "P1_release_blocker",
+      "status": "fixed_local_http_verified_browser_acceptance_pending",
+      "title": "Designed CSP absent from actual responses",
+      "changes": "per-request 256-bit nonce; caller headers replaced; dynamic no-store documents; production no inline scripts/eval; framing/base/object restrictions; no-referrer; HSTS; permissions policy",
+      "exceptions": [
+        "numeric React style attributes",
+        "fixed public offline stylesheet",
+        "development-only eval/style/HMR"
+      ],
+      "source": "https://nextjs.org/docs/app/guides/content-security-policy"
+    }
+  ],
+  "checks": {
+    "project_check": {
+      "command": ".\\scripts\\project.ps1 -Task check",
+      "status": "passed",
+      "lint_files": 122,
+      "typecheck": "passed",
+      "unit_passed": 175,
+      "unit_failed": 0,
+      "artifact_static_check": "passed"
+    },
+    "database": {
+      "command": ".\\scripts\\project.ps1 -Task db:test",
+      "status": "passed",
+      "executed": 390,
+      "physical": 51,
+      "rpc_boundary": 21,
+      "business": 318,
+      "rollback_suites": 18
+    },
+    "live_catalog": {
+      "tables": 18,
+      "migrations": 52,
+      "unsafe_definer_paths": 0,
+      "anonymous_definer_execute": 0,
+      "scoped_bypassrls_definers": 13,
+      "tables_without_forced_rls": 0,
+      "direct_api_table_privileges": 0,
+      "direct_api_column_privileges": 0,
+      "unexpected_bypassrls_definers": 0,
+      "superuser_or_login_definer_owners": 0,
+      "api_membership_in_scoped_owner_roles": 0
+    },
+    "local_session": {
+      "command": ".\\scripts\\project.ps1 -Task db:session-adapter-test",
+      "status": "passed",
+      "passed": 5,
+      "preserved": true,
+      "synthetic_sessions_removed": true,
+      "cases": [
+        {
+          "name": "issued_auth_a_b_stay_isolated_under_concurrent_requests",
+          "status": "passed"
+        },
+        {
+          "name": "business_rpc_uses_each_verified_bearer_and_existing_rls",
+          "status": "passed"
+        },
+        {
+          "name": "encrypted_cookie_does_not_make_a_forged_jwt_trusted",
+          "status": "passed"
+        },
+        {
+          "name": "database_session_max_age_rejects_an_unexpired_auth_token",
+          "status": "passed"
+        },
+        {
+          "name": "current_session_logout_rejects_the_previous_unexpired_cookie",
+          "status": "passed"
+        }
+      ]
+    },
+    "tags_http": {
+      "command": ".\\scripts\\project.ps1 -Task api:praise-tag-test",
+      "status": "passed",
+      "passed": 17,
+      "existing_data_preserved": true,
+      "synthetic_data_cleaned": true
+    },
+    "build": {
+      "command": ".\\scripts\\project.ps1 -Task build:check",
+      "status": "passed",
+      "environment": "synthetic preview configuration; no real Auth or deployed database"
+    },
+    "production_http": {
+      "command": "pinned Node scripts/test-security-headers-http.mjs",
+      "verified_at": "2026-10-20T12:31:36.321Z",
+      "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+      "next": "16.4.2",
+      "passed": 7,
+      "checks": [
+        {
+          "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+          "status": "passed"
+        },
+        {
+          "name": "all generated Next.js script tags carry the response nonce",
+          "status": "passed"
+        },
+        {
+          "name": "HTML nonce changes for every request and documents cannot be cached",
+          "status": "passed"
+        },
+        {
+          "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+          "status": "passed"
+        },
+        {
+          "name": "production rejects missing authentication and keeps API errors out of caches",
+          "status": "passed"
+        },
+        {
+          "name": "service worker is revalidated with a script-free same-origin fetch policy",
+          "status": "passed"
+        },
+        {
+          "name": "only the public offline page is immutable and contains no executable scripts",
+          "status": "passed"
+        }
+      ]
+    },
+    "dependencies": {
+      "command": "pinned pnpm audit --json",
+      "registry": "https://registry.npmjs.org",
+      "before": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "dependencies": 31,
+        "devDependencies": 63,
+        "optionalDependencies": 110,
+        "totalDependencies": 165
+      },
+      "after": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "dependencies": 31,
+        "devDependencies": 63,
+        "optionalDependencies": 110,
+        "totalDependencies": 165
+      },
+      "limitations": "Both registry responses returned zero vulnerabilities despite separately verified current upstream advisories for the previous version. Official advisories were reviewed independently."
+    },
+    "repository_patterns": {
+      "scanned_at": "2026-10-20T12:31:42.483Z",
+      "scope": "tracked_worktree_and_all_local_reachable_git_blobs_pattern_scan_not_exhaustive_secret_detection",
+      "tracked_files": 371,
+      "historical_blobs": 1039,
+      "worktree_findings": [],
+      "historical_findings": [],
+      "historical_private_paths": [],
+      "limitation": "Pattern scan does not prove the absence of all secrets or inspect remote-only/deleted unreachable objects."
+    },
+    "public_bundle": {
+      "files": 11,
+      "known_local_secret_values_checked": 3,
+      "private_value_matches": 0,
+      "browser_supabase_or_secret_key_markers": 0,
+      "scope": "built_public_assets_against_known_local_fixture_credentials_and_environment_values_and_sdk_markers_not_all_possible_secrets",
+      "deployed_credentials_available": false
+    }
+  },
+  "codex_direct_review": {
+    "reviewer": "Codex",
+    "external_reviewer_used": false,
+    "claude_used": false,
+    "reviewed": [
+      "request-scoped session/cookie/token/active-account boundaries",
+      "API Origin/CSRF/body size/response allowlists",
+      "DB RLS/grants/fixed definer paths/scoped owner roles and worker boundary",
+      "PWA static-only caching and private data no-store",
+      "browser/server separation and raw log or HTML insertion patterns",
+      "release task completion and evidence consistency",
+      "new CSP/Next.js patch and CI changes"
+    ],
+    "result": "identified corrections implemented; release blockers remain",
+    "note": "This is a direct review, not an independent cross-review or public penetration test."
+  },
+  "pending_release_security": [
+    {
+      "work": "W12-C/W12-D/W13",
+      "status": "incomplete",
+      "scope": "real Google/OTP/PKCE/signup UI/refresh races/current and global logout/reauth/deletion/invite return and actual account permission acceptance"
+    },
+    {
+      "work": "W12-C/W14/W15",
+      "status": "incomplete",
+      "scope": "shared API/OTP limiter, CAPTCHA and fail-closed writes during limiter failure; TC-RATE-001 not_run"
+    },
+    {
+      "work": "W14/W15",
+      "status": "incomplete",
+      "scope": "operator inputs, isolated environments/keys/MFA, policies, deletion ledger/orphan cleanup race, backups/restore/monitoring/load and real HTTPS/CDN verification"
+    },
+    {
+      "work": "W15",
+      "status": "not_run",
+      "scope": "browser CSP enforcement/hydration, real device IME/accessibility, A-to-B PWA cache/offline and stored XSS/provider flows; TC-WEB-001/002, TC-CACHE-001 and TC-PRAISE-TAG-003 remain not_run"
+    }
+  ],
+  "real_google_otp_tests_executed": 0,
+  "public_environment_deployed": false,
+  "paid_services_created": false,
+  "remote_verification": {
+    "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/15",
+    "source_commit": "43920a2c88f8c10736ff13a1274963e80bf12fc5",
+    "source_ci_url": "https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892",
+    "source_ci_conclusion": "success"
+  }
+}
