@@ -1,3 +1,4 @@
+import { legacyTagNames, normalizePraiseTags } from "../shared/praise-tags.mjs";
 import { randomUUID } from "node:crypto";
 import { ApiRequestError, getCsrfSigningSecret, validateMutationRequest } from "./api-security.mjs";
 import { projectBoardView } from "./board-api.mjs";
@@ -29,27 +30,29 @@ function validOptionalPraiseFields(value) {
   return (!Object.hasOwn(value, "message") || value.message === null ||
       (typeof value.message === "string" && [...value.message].length <= 1000)) &&
     (!Object.hasOwn(value, "occurred_on") || value.occurred_on === null || validDate(value.occurred_on)) &&
-    (!Object.hasOwn(value, "tag") || validTag(value.tag));
+    (!Object.hasOwn(value, "tag") || validTag(value.tag)) &&
+    (!Object.hasOwn(value, "tags") || normalizePraiseTags(value.tags) !== null) &&
+    !(Object.hasOwn(value, "tag") && Object.hasOwn(value, "tags"));
 }
 
 export function validateCreatePraiseInput(value, idempotencyKey, boardId) {
   if (typeof boardId !== "string" || !UUID.test(boardId) ||
-      !exactObject(value, ["message", "occurred_on", "tag"]) || !validOptionalPraiseFields(value) ||
+      !exactObject(value, ["message", "occurred_on", "tag", "tags"]) || !validOptionalPraiseFields(value) ||
       typeof idempotencyKey !== "string" || !UUID.test(idempotencyKey)) invalidInput();
   return {
     p_request_key: idempotencyKey,
     p_board_id: boardId,
     p_message: value.message ?? null,
     p_occurred_on: value.occurred_on ?? null,
-    p_tag: value.tag ?? null,
+    ...(Object.hasOwn(value, "tags") ? { p_tags: normalizePraiseTags(value.tags) } : { p_tag: value.tag ?? null }),
   };
 }
 
 export function validateEditSelfPraiseInput(value, praiseId) {
   if (typeof praiseId !== "string" || !UUID.test(praiseId) ||
-      !exactObject(value, ["message", "occurred_on", "tag"]) || Object.keys(value).length < 1 ||
+      !exactObject(value, ["message", "occurred_on", "tag", "tags"]) || Object.keys(value).length < 1 ||
       !validOptionalPraiseFields(value)) invalidInput();
-  return { p_praise_id: praiseId, p_patch: value };
+  return { p_praise_id: praiseId, p_patch: Object.hasOwn(value, "tags") ? { ...value, tags: normalizePraiseTags(value.tags) } : value };
 }
 
 export function validateCancelPraiseInput(value, praiseId) {
@@ -88,7 +91,7 @@ function isTimestampOrNull(value) {
 }
 
 function projectOwnerPraise(value) {
-  const fields = ["viewer_role", "id", "bunch_id", "source", "actor", "actor_label", "message", "occurred_on", "tag", "recorded_at", "cancelled_at", "hidden_at", "excluded_at", "author_erased_at"];
+  const fields = ["viewer_role", "id", "bunch_id", "source", "actor", "actor_label", "message", "occurred_on", "tag", "tags", "recorded_at", "cancelled_at", "hidden_at", "excluded_at", "author_erased_at"];
   const actorFields = ["user_id", "nickname", "avatar_key"];
   if (!exactObject(value, fields) || Object.keys(value).length !== fields.length || value.viewer_role !== "owner" ||
       !UUID.test(value.id) || !UUID.test(value.bunch_id) || !["self", "peer"].includes(value.source) ||
@@ -98,11 +101,14 @@ function projectOwnerPraise(value) {
       typeof value.actor_label !== "string" || [...value.actor_label].length > 80 ||
       !(value.message === null || (typeof value.message === "string" && [...value.message].length <= 1000)) ||
       !(value.occurred_on === null || validDate(value.occurred_on)) || !isTimestamp(value.recorded_at) ||
-      !validTag(value.tag) || (value.source === "peer" && value.tag !== null) ||
+      !validTag(value.tag) || normalizePraiseTags(value.tags) === null ||
+      JSON.stringify(normalizePraiseTags(value.tags)) !== JSON.stringify(value.tags) ||
+      value.tag !== (value.tags.length === 1 ? Object.keys(legacyTagNames).find((code) => legacyTagNames[code] === value.tags[0]) ?? null : null) ||
+      (value.source === "peer" && value.tags.length !== 0) || (value.source === "peer" && value.tag !== null) ||
       !isTimestampOrNull(value.cancelled_at) || !isTimestampOrNull(value.hidden_at) ||
       !isTimestampOrNull(value.excluded_at) || !isTimestampOrNull(value.author_erased_at) ||
-      (value.cancelled_at !== null && (value.message !== null || value.occurred_on !== null || value.tag !== null)) ||
-      (value.author_erased_at !== null && (value.actor !== null || value.message !== null || value.occurred_on !== null))) {
+      (value.cancelled_at !== null && (value.message !== null || value.occurred_on !== null || value.tag !== null || value.tags.length !== 0)) ||
+      (value.author_erased_at !== null && (value.actor !== null || value.message !== null || value.occurred_on !== null || value.tags.length !== 0))) {
     throw new Error("Praise response did not match its owner allowlist.");
   }
   return Object.fromEntries(fields.map((field) => [field, value[field]]));
@@ -175,7 +181,7 @@ export async function createPraiseResponse(boardId, request, client, { expectedO
     let rpc;
     let input;
     if (board.viewer_role === "owner" && board.kind === "personal") {
-      rpc = "create_personal_praise";
+      rpc = Object.hasOwn(body, "tags") ? "create_personal_praise_with_tags" : "create_personal_praise";
       input = validateCreatePraiseInput(body, requestKey, boardId);
     } else if (board.viewer_role === "contributor" && board.kind === "shared") {
       if (!exactObject(body, ["message", "tag"]) || (Object.hasOwn(body, "tag") && body.tag !== null) ||
@@ -248,7 +254,7 @@ export async function listBoardPraisesResponse(boardId, url, client) {
   if (typeof boardId !== "string" || !UUID.test(boardId)) return jsonResponse({ error: { code: "INVALID_INPUT", message: "판 ID 형식이 올바르지 않습니다.", request_id: requestId } }, 400, requestId);
   try {
     const input = validateBoardPraisesQuery(url);
-    const { data, error } = await client.rpc("list_board_praises", { p_board_id: boardId, ...input });
+    const { data, error } = await client.rpc("list_board_praises_with_tags", { p_board_id: boardId, ...input });
     rpcError(error);
     return jsonResponse(projectPraisePage(data), 200, requestId);
   } catch (error) { return errorResponse(error, requestId); }

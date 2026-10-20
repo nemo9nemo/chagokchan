@@ -126,6 +126,9 @@ if (policy && spec) {
   assertEqual(s.TargetCount.maximum, policy.limits.target_count_max, "Target maximum");
   assertEqual(s.TargetCount.default, policy.limits.default_target_count, "Target default");
   assertEqual(s.CreatePraise.properties.message.anyOf[0].maxLength, policy.limits.praise_message_codepoints_max, "Message length");
+  assertEqual(s.PraiseTags.maxItems, policy.praise.tags_per_praise_max, "Praise tag count");
+  assertEqual(s.PraiseTags.items.maxLength, policy.praise.tag_codepoints_max, "Praise tag length");
+  if (!s.PraiseOwner.required.includes("tags")) addError("policy_consistency", "Owner praise requires tag array");
   assertEqual(s.Goal.properties.title.maxLength, policy.limits.title_codepoints_max, "Title length");
   assertEqual(spec.components.parameters.Limit.schema.maximum, policy.limits.page_size_max, "Page limit");
   assertEqual(spec.components.securitySchemes.cookieSession.name, policy.auth.cookie_prefix + policy.auth.cookie_base_name, "Session cookie name");
@@ -133,7 +136,7 @@ if (policy && spec) {
   if (!s.TrashGoal.required.includes("revision")) addError("policy_consistency", "Trash restore requires revision in listing");
   for (const key of ["goal_id", "private_description", "personal_count", "members", "next_target_count"]) if (Object.hasOwn(s.ContributorBoard.properties, key)) addError("projection", "ContributorBoard leaks " + key);
   for (const name of ["PraiseContributor", "SentPraise"]) {
-    for (const key of ["hidden_at", "excluded_at", "recipient_id", "recipient_user_id", "goal_id", "current_count"]) if (Object.hasOwn(s[name].properties, key)) addError("projection", name + " leaks " + key);
+    for (const key of ["hidden_at", "excluded_at", "recipient_id", "recipient_user_id", "goal_id", "current_count", "tag", "tags"]) if (Object.hasOwn(s[name].properties, key)) addError("projection", name + " leaks " + key);
   }
   for (const name of ["PraiseOwner", "PraiseContributor", "SentPraise"]) if (!s[name].allOf?.length) addError("projection", name + " lacks canceled-body clearing constraint");
   const versionLine = read(".env.example").split("\n").find((line) => line.startsWith("APP_POLICY_VERSION="));

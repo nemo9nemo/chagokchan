@@ -225,3 +225,14 @@ dd { margin: 0; }
   .just-now { display: none; }
   .saved-still { display: inline-flex; }
 }
+
+/* W25: free-form tags wrap above the new-tag input. */
+.tag-editor { min-width: 0; display: grid; gap: 8px; }
+.tag-editor .selected-tags { list-style: none; padding: 0; margin: 0; min-height: 0; }
+.tag-chip { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 999px; max-width: 100%; padding-left: 12px; }
+.tag-chip span, .record-tag { overflow-wrap: anywhere; min-width: 0; }
+.tag-chip button { border: 0; background: transparent; min-width: 46px; min-height: 46px; flex-shrink: 0; }
+.tag-editor .tag-new-input { min-height: 48px; resize: vertical; width: 100%; min-width: 0; }
+.tag-editor p { margin: 0; }
+.record-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.record-tag { white-space: normal; margin-right: 6px; }

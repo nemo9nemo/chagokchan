@@ -1,0 +1,157 @@
+{
+  "verified_at": "2026-10-20T08:53:41.139Z",
+  "work_items": [
+    "W25-B",
+    "W25-C",
+    "W25-D"
+  ],
+  "scope": "local_custom_tags_implementation_verification_not_release_acceptance",
+  "source_base_commit": "2fa3a99ae2fa2f2f5f8ffe90ee301fc9f3d0b6c8",
+  "source_files": [
+    ".node-version",
+    "contracts/openapi.json",
+    "package.json",
+    "policies/app-policy.json",
+    "scripts/praise-api.test.mjs",
+    "scripts/praise-tags.test.mjs",
+    "scripts/test-local-personal-praise-result-rpc.mjs",
+    "scripts/test-local-praise-tag-api.mjs",
+    "scripts/verify-artifacts.mjs",
+    "src/app/client-app.tsx",
+    "src/app/globals.css",
+    "src/app/praise-sheet.tsx",
+    "src/app/tag-input.tsx",
+    "src/server/praise-api.mjs",
+    "src/shared/praise-tags.mjs",
+    "supabase/migrations/20261020000100_custom_praise_tags.sql",
+    "supabase/migrations/20261020000200_praise_tag_list_compatibility.sql",
+    "supabase/tests/006_business_rpc_shared_board.test.sql",
+    "supabase/tests/018_business_rpc_custom_tags.test.sql"
+  ],
+  "source_sha256": "3031d1ec37bce446539e1431e468322e800e6f97b3464f1156c0feeeb717d554",
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "database_target": "loopback_local_only",
+    "unicode": "17.0"
+  },
+  "migration": {
+    "status": "passed",
+    "migration_count": 52,
+    "previous_data_hash_preserved": true,
+    "tag_backfill_verified": true,
+    "applied_migrations_edited": false,
+    "initial_custom_tags_migration_count": 51,
+    "list_compatibility_snapshot_including_arrays_preserved": true
+  },
+  "checks": {
+    "project_check": "passed",
+    "unit_passed": 170,
+    "database_passed": 390,
+    "new_tag_database_passed": 40,
+    "tag_api_passed": 17,
+    "tag_api_checks": [
+      "real_local_A_session",
+      "synthetic_goal_created",
+      "tag_create_and_owner_list",
+      "same_tag_replay_without_double_count",
+      "different_tag_idempotency_conflict",
+      "tag_change_and_patch_replay",
+      "explicit_null_removes_tag",
+      "tag_does_not_change_count_completion_or_notices",
+      "custom_tags_create_and_owner_list",
+      "custom_tags_same_key_replay",
+      "custom_tags_different_order_conflict",
+      "custom_tags_patch_preserves_count",
+      "custom_tags_legacy_patch_conflict",
+      "custom_tags_invalid_requests",
+      "custom_tags_empty_array_removes",
+      "custom_tags_restored_for_cancel",
+      "cancel_clears_tag"
+    ],
+    "rpc_passed": 7,
+    "rpc_checks": [
+      "personal_praise_result_returns_its_exact_bunch",
+      "same_idempotency_key_replays_same_id_and_cycle_without_extra_count",
+      "result_lookup_is_scoped_to_the_created_personal_row",
+      "concurrent_array_requests_commit_one_praise_and_one_notice",
+      "different_array_keys_respect_cycle_boundaries_under_concurrency",
+      "array_rpc_rejects_a_different_current_actor",
+      "array_rpc_rejects_a_revoked_real_local_auth_session"
+    ],
+    "production_check_build": "passed",
+    "browser": {
+      "status": "passed_for_listed_local_checks",
+      "passed": 11,
+      "checks": [
+        "space_commits_chip_and_keeps_focus",
+        "paste_tabs_and_fullwidth_spaces",
+        "duplicate_preserves_one_chip",
+        "invalid_draft_and_save_block_preserve_text",
+        "sixth_tag_preserves_excess_input",
+        "chip_remove",
+        "enter_commits_without_form_submit",
+        "final_token_first_save_without_space",
+        "saved_list_and_detail_arrays",
+        "edit_remove_and_final_token_save_count_unchanged",
+        "mobile_wrap_above_input_and_44px_controls"
+      ],
+      "requested_viewport": {
+        "width": 320,
+        "height": 840
+      },
+      "observed_inner_width": 321,
+      "horizontal_overflow": false,
+      "delete_button_min_observed_css_pixels": 45.98,
+      "local_only_screenshot": "tmp/w25-tags-desktop.jpg",
+      "screenshot_scope": "desktop_preview_during_browser_checks_mobile_measurements_recorded_separately",
+      "screenshot_committed": false,
+      "synthetic_praise_saved_then_edited": true,
+      "fixture_and_quota_snapshot_preserved": true
+    },
+    "lint_files": 118,
+    "typecheck": "passed"
+  },
+  "codex_direct_review": {
+    "scope": "request_scoped_auth_csrf_projection_normalization_atomic_core_legacy_hashes_cancel_ime_guard_ui_state_and_retry",
+    "result": "no_unresolved_defect_found_in_reviewed_change",
+    "independent_cross_review": false,
+    "resolved_issue": "Preserve the old list RPC exact fields; add a separate array list RPC in a new migration. Test both cursor results and restricted entry."
+  },
+  "preservation": {
+    "existing_app_fixture_preserved": true,
+    "synthetic_probe_accounts_removed": true,
+    "existing_auth_session_count_preserved": true,
+    "applied_migrations_modified": false,
+    "database_reset": false
+  },
+  "remaining_manual_acceptance": {
+    "test_case": "TC-PRAISE-TAG-003",
+    "status": "not_run",
+    "work_item": "W15",
+    "items": [
+      "real_OS_IME_composition_and_mobile_keyboard",
+      "VoiceOver_TalkBack_actual_announcement_and_touch",
+      "browser_network_failure_and_same_key_retry_with_custom_tags"
+    ]
+  },
+  "real_provider_login_verified": false,
+  "public_deployed": false,
+  "version_control": {
+    "snapshot": "feature_commit_PR_quality_passed_final_evidence_commit_and_merge_pending",
+    "feature_commit": "2757d4587a2cd54952368da89142340f458aa1da",
+    "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/13",
+    "feature_commit_quality_run": "https://github.com/nemo9nemo/chagokchan/actions/runs/39396883677",
+    "feature_commit_quality": "passed",
+    "follow_live_github_for_final_result": true
+  },
+  "commands": [
+    "scripts/project.ps1 -Task check",
+    "scripts/project.ps1 -Task build:check",
+    "scripts/project.ps1 -Task db:test",
+    "scripts/project.ps1 -Task api:praise-tag-test",
+    "scripts/project.ps1 -Task db:praise-result-test"
+  ],
+  "full_openapi_validator_executed": false,
+  "mermaid_render_executed": false
+}

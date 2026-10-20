@@ -60,6 +60,12 @@ reauth는 현재 세션·UUID·account.delete에 묶인다. 이메일은 검증�
 
 성공·오류에는 X-Request-ID와 no-store를 적용한다. error.code·message·request_id만 기본 노출하며 제한에는 retry_after_seconds를 추가한다. 계약의 오류 목록은 공통 가능한 형식이며 모든 경로에서 모든 오류를 실제 발생시킨다는 뜻은 아니다.
 
+## 사용자 정의 칭찬 태그 (W25)
+
+새 요청은 `tags: string[]`를 사용한다. 셀프 생성은 `create_personal_praise_with_tags` RPC, 배열 없는 이전 요청은 기존 `create_personal_praise` RPC로 보내 이전 멱등 해시를 보존한다. 입력한 `#`는 표시·입력 구문이며 전송값에는 포함하지 않는다. 입력은 NFC·ASCII 대소문자 중복 제거 후 순서를 유지하고 서버/DB가 개수·이름을 검증한다. owner 조회는 항상 tags 배열과 이전 호환 tag를 반환하고 contributor·보낸함에는 개인 태그를 추가하지 않는다. 수정은 tags 생략 유지·빈 배열 삭제·null 거절이며, 이전 tag와 동시 전송하거나 구형 수정으로 새 태그를 잃게 하는 요청을 거절한다. 새 RPC도 실제 현재 세션·활성 계정·개인판 소유권·원자적 집계를 그대로 요구한다.
+
+조회도 이전 `list_board_praises`와 새 `list_board_praises_with_tags`를 분리한다. 이전 RPC는 tags 키를 추가하지 않아 구버전 서버의 엄격한 응답 검증을 유지하고, 새 서버만 배열 RPC를 호출한다. 두 RPC 모두 현재 세션·판 권한·역할별 응답 제한을 확인한다. 처음 출시하거나 업그레이드할 때는 두 태그 마이그레이션을 트래픽 유입 전에 모두 적용한다. 초기 추가 SQL과 후속 호환 SQL 사이의 중간 상태를 앱에 제공하지 않는다.
+
 ## DB 구현 전에 대응할 것
 
 GET은 사용자 세션과 RLS/제한 projection, 변경은 지정 업무 RPC로 매핑한다. bootstrap·Auth 호출·삭제 작업의 관리 경계는 일반 제품 DML과 분리한다. 원자성·잠금 순서·FK·공개 범위는 ERD·정책·TC에 맞춰 구현한다.
