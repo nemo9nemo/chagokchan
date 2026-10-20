@@ -134,7 +134,7 @@ W14는 서비스 개설을 준비할 때, W16은 사용자가 정한 시점에 �
 | W25-A | 입력·화면·제약·저장·이행 기획 | DONE | [기획](../plans/W25-custom-praise-tags.md)과 관련 요구·정책 설명·화면·검증 계획을 연결했다. 문서 정적 검사 근거는 [변경 기록](../changes/2026-10-20-custom-tag-plan.md)에 기록한다. 실행 정책·기능 완료를 뜻하지 않음 |
 | W25-B | 실행 정책·배열 DB/API·기존 요청 호환 | DONE | 새 SQL만 적용(총 52개), 기존 데이터·태그 변환 보존. DB 390(신규 40)·태그 HTTP 17·RPC 7 통과. 이전 해시·동시 요청·세션 폐기·개수·권한 유지 |
 | W25-C | 작성·수정 태그 입력기·기록 표시 | DONE | 공백/Enter 칩 확정·삭제·중복/오류/상한·마지막 토큰 저장·목록/상세·수정을 브라우저로 확인. 320px 요청(실측 321px) 가로 넘침 0·삭제 영역 45.98px 이상. 실제 OS IME·읽기 도구·장애 복구 수락은 W15 TC-PRAISE-TAG-003 |
-| W25-D | 통합 회귀·Codex 검토·PR/CI | DONE | TC-PRAISE-TAG-002 로컬 검사·직접 소스 리뷰·최종 check/build 완료. 조회 호환 결함을 새 SQL로 해결했다. PR 필수 CI·병합 상태는 GitHub 기록을 따르며 수락 TC-PRAISE-TAG-003은 W15 |
+| W25-D | 통합 회귀·Codex 검토·PR/CI | DONE | TC-PRAISE-TAG-002 로컬 검사·직접 소스 리뷰·최종 check/build 완료. 조회 호환 결함을 새 SQL로 해결했다. [PR #13](https://github.com/nemo9nemo/chagokchan/pull/13) 병합, 기능 main fd57bed·PR/main quality 통과. 수락 TC-PRAISE-TAG-003은 W15 |
 
 ## W20 목업 기반 화면 재설계·칭찬 태그
 

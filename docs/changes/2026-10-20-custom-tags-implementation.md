@@ -1,5 +1,7 @@
 # 사용자 정의 다중 태그 구현
 
+원격 결과: 기능 커밋 2757d45, [PR #13](https://github.com/nemo9nemo/chagokchan/pull/13) 병합 fd57bed, PR 및 [main quality](https://github.com/nemo9nemo/chagokchan/actions/runs/39397395230) 통과. 최종 대조에서 요구사항 문서의 미커밋 변경을 확인해 후속 문서 PR에서 동기화한다. 구현 코드는 바꾸지 않는다.
+
 W25-B/C/D / REQ-003·REQ-007 / POL-PRAISE-001·POL-PRAISE-002 / TC-PRAISE-TAG-002·003
 
 `#꾸준 `처럼 공백을 입력하면 위쪽 테두리 칩 영역에 태그를 추가한다. 여러 태그 붙여넣기·Enter 확정·삭제·중복/상한·오류 원문 보존·공백 없는 마지막 토큰의 첫 저장을 구현했다. 작성·수정과 목록·상세를 같은 배열에 연결했다. [기획](../plans/W25-custom-praise-tags.md) · [검사 증거](../quality/reports/w25-custom-tags-check-2026-10-20.json)
