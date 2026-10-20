@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-19",
+  "updated_on": "2026-10-20",
   "current_stage": "S07_w12_a_b_verified_provider_setup_and_auth_flows_pending",
-  "next_stage": "w14_operator_provider_inputs_then_w12_c_w12_d_w13_w15_w17",
+  "next_stage": "w25_custom_tags_implementation_then_w14_operator_provider_inputs_w12_c_w12_d_w13_w15_w17",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "local_features_verified_w21_closed_product_acceptance_pending"
+      "status": "local_features_verified_w21_closed_w25_custom_tags_planned_implementation_pending"
     },
     {
       "id": "S07",
@@ -237,6 +237,13 @@
       "session_adapter_regression_passed": 5,
       "ordered_migrations_applied": 50,
       "real_provider_login_tests_executed": 0
+    },
+    "w25": {
+      "planning_status": "documented_static_checks_passed",
+      "work_item": "W25-A",
+      "evidence": "docs/changes/2026-10-20-custom-tag-plan.md",
+      "implementation_started": false,
+      "functional_checks_executed": false
     }
   },
   "artifacts": [
@@ -788,6 +795,15 @@
         "scripts/test-local-registration-api.mjs",
         "docs/quality/reports/w12-b-registration-check-2026-10-19.json",
         "docs/changes/2026-10-19-w12-b-registration.md"
+      ]
+    },
+    {
+      "id": "ART-029",
+      "title": "직접 입력하는 여러 칭찬 태그 기획",
+      "status": "planning_documented_static_checks_passed_implementation_not_started",
+      "paths": [
+        "docs/plans/W25-custom-praise-tags.md",
+        "docs/changes/2026-10-20-custom-tag-plan.md"
       ]
     }
   ],

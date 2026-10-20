@@ -204,6 +204,10 @@ Claude 리뷰 재검증(2026-10-16): 로컬 DB 초기화 후 마이그레이션 
 Next 화면 프로세스는 그대로 두고 로컬 Supabase API 게이트웨이만 중지하자 연결 GET 요청에 401/503 오류가 발생했고 경고 문구와 다시 불러오기 버튼이 표시됐다. 게이트웨이를 다시 시작하고 그 버튼을 누른 뒤 연결·초대·요청 2종·차단의 GET 다섯 개가 모두 200으로 복구되고 경고가 사라졌다. 서버 로그에 POST/PUT/DELETE는 없고 fixture 변경도 없다. 전체 `scripts/project.ps1 -Task check`는 Biome 90 files·typecheck·unit 109/109·artifact JSON 36·링크 473·traceability 71을 통과했고 `scripts/project.ps1 -Task build:check`는 36 route entry로 성공했다. 실제 기기 스크린리더, 대비 측정, 작은 화면 suite는 수행하지 않았다. [W11-B1 증거](reports/w11-b1-accessibility-recovery-check-2026-10-08.json)
 
 
+## W25 직접 입력 태그 검증 계획 (실행 대기)
+
+[W25 기획](../plans/W25-custom-praise-tags.md)의 계획 시나리오 TC-PRAISE-TAG-002는 `#` 시작·공백 확정·한글 IME·붙여넣기·마지막 토큰 저장·중복·상한·삭제·실패/재시도·기존 데이터 전환·API/RPC 호환·권한·접근성을 대상으로 한다. W25-A는 문서 기획과 정적 검사만 수행한다. 시나리오 정식 TC 등록·구현·DB/API/브라우저 실행은 W25-B~D에서 진행하며 아직 통과로 기록하지 않는다. 기존 TC-PRAISE-TAG-001의 고정 목록 0~1개 검사는 당시 실행본의 이력으로 유지한다.
+
 ## W20-A 셀프 칭찬 태그
 
 TC-PRAISE-TAG-001은 API 단위·pgTAP·실제 로컬 A 세션을 함께 검증하며 통과했다. Codex 샌드박스에서는 pnpm 고정 버전 불일치와 EPERM으로 DB·API·빌드를 실행하지 못했다. Claude 리뷰 재검증(Docker 29.1.3, Node 24.19.0): 마이그레이션 47개 적용, pgTAP 297/297(015 태그 40/40), db:praise·praise-result·deletion 통과, api:praise-tag-test 9개 시나리오 통과(정리·fixture 보존), api:praise-test 10/10, api:board-test A/B/C 각 14/14, unit 120/120, lint·typecheck·산출물·build:check 통과. 실제 Google/OTP 로그인 검증은 포함하지 않는다. [W20-A 검사 증거](reports/w20-a-praise-tag-check-2026-10-15.json)
