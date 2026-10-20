@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { cancelPraiseResponse, createPraiseResponse, editSelfPraiseResponse, listBoardPraisesResponse, peerPraiseStateResponse, validateBoardPraisesQuery, validateCancelPraiseInput, validateCreatePraiseInput, validateEditSelfPraiseInput, validatePeerPraiseStateInput } from "../src/server/praise-api.mjs";
 import { createCsrfToken } from "../src/server/api-security.mjs";
+import { legacyTagNames } from "../src/shared/praise-tags.mjs";
 
 const boardId = "11111111-1111-4111-8111-111111111111";
 const bunchId = "22222222-2222-4222-8222-222222222222";
@@ -95,6 +96,10 @@ test("shared praise rejects occurred_on and owners cannot write to their shared 
   } };
   const invalid = await createPraiseResponse(boardId, mutationRequest("/praises", { occurred_on: "2026-10-08" }, { "Idempotency-Key": praiseId }), contributor, { expectedOrigin: "https://chagokchan.test", secret });
   assert.equal(invalid.status, 400);
+  for (const body of [{ tags: [] }, { tags: ["용기"] }, { tag: null, tags: [] }]) {
+    const result = await createPraiseResponse(boardId, mutationRequest("/praises", body, { "Idempotency-Key": praiseId }), contributor, { expectedOrigin: "https://chagokchan.test", secret });
+    assert.equal(result.status, 400);
+  }
   assert.equal(writes, 0);
   const owner = { rpc: async () => ({ data: {
     viewer_role: "owner", id: boardId, goal_id: actorId, kind: "shared", revision: 1, next_target_count: 20,
@@ -182,12 +187,12 @@ test("board praise owner projection keeps only owner fields", async () => {
   const row = {
     viewer_role: "owner", id: praiseId, bunch_id: bunchId, source: "self",
     actor: { user_id: actorId, nickname: "나", avatar_key: "grape" }, actor_label: "나",
-    message: "기록", occurred_on: "2026-10-08", tag: "consistency", recorded_at: now,
+    message: "기록", occurred_on: "2026-10-08", tag: "consistency", tags: ["꾸준함"], recorded_at: now,
     cancelled_at: null, hidden_at: null, excluded_at: null, author_erased_at: null,
   };
   const response = await listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), {
     rpc: async (name, input) => {
-      assert.equal(name, "list_board_praises");
+      assert.equal(name, "list_board_praises_with_tags");
       assert.deepEqual(input, { p_board_id: boardId, p_bunch_id: null, p_cursor: null, p_limit: 20, p_include_hidden: false });
       return { data: { items: [row], next_cursor: null }, error: null };
     },
@@ -290,14 +295,14 @@ test("self praise tag patches reach only edit_self_praise and map database valid
 test("owner tag projection rejects missing, unknown, peer, and cancelled tags", async () => {
   const base = {
     viewer_role: "owner", id: praiseId, bunch_id: bunchId, source: "self", actor: null, actor_label: "나",
-    message: null, occurred_on: null, tag: null, recorded_at: now,
+    message: null, occurred_on: null, tag: null, tags: [], recorded_at: now,
     cancelled_at: null, hidden_at: null, excluded_at: null, author_erased_at: null,
   };
   const project = (row) => listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), {
     rpc: async () => ({ data: { items: [row], next_cursor: null }, error: null }),
   });
   for (const tag of [null, "consistency", "courage", "care", "growth", "rest"]) {
-    const result = await project({ ...base, tag });
+    const result = await project({ ...base, tag, tags: tag === null ? [] : [legacyTagNames[tag]] });
     assert.equal(result.status, 200);
     assert.equal((await result.json()).items[0].tag, tag);
   }
@@ -309,4 +314,36 @@ test("owner tag projection rejects missing, unknown, peer, and cancelled tags", 
   assert.equal((await project({ ...base, cancelled_at: now })).status, 200);
   const leaked = await project({ viewer_role: "contributor", id: praiseId, bunch_id: bunchId, source: "peer", message: null, recorded_at: now, cancelled_at: null, tag: null });
   assert.equal(leaked.status, 503);
+});
+
+test("custom tags normalize for create and patch and reject mixed legacy fields", () => {
+  const names = ["꾸준", "Work", "work", "e\u0301"];
+  assert.deepEqual(validateCreatePraiseInput({ tags: names }, praiseId, boardId).p_tags, ["꾸준", "Work", "é"]);
+  assert.deepEqual(validateEditSelfPraiseInput({ tags: names }, praiseId).p_patch, { tags: ["꾸준", "Work", "é"] });
+  for (const tags of [null, "용기", [null], [["용기"]], ["#용기"], ["a b"], ["a".repeat(21)], ["a", "b", "c", "d", "e", "f"]]) {
+    assert.throws(() => validateCreatePraiseInput({ tags }, praiseId, boardId), { status: 400 });
+    assert.throws(() => validateEditSelfPraiseInput({ tags }, praiseId), { status: 400 });
+  }
+  assert.throws(() => validateCreatePraiseInput({ tag: null, tags: [] }, praiseId, boardId), { status: 400 });
+  assert.throws(() => validateEditSelfPraiseInput({ tag: "care", tags: [] }, praiseId), { status: 400 });
+});
+
+test("new array create calls the array RPC without a legacy tag or client identity", async () => {
+  const result = await createPraiseResponse(boardId, mutationRequest("/praises", { tags: ["꾸준", "용기"] }, { "Idempotency-Key": praiseId }), {
+    rpc: async (name, input) => {
+      if (name === "get_board") return { data: { viewer_role: "owner", id: boardId, goal_id: actorId, kind: "personal", revision: 1, next_target_count: 20, shared_title: null, shared_description: null, current_bunch: null }, error: null };
+      assert.equal(name, "create_personal_praise_with_tags");
+      assert.deepEqual(input, { p_request_key: praiseId, p_board_id: boardId, p_message: null, p_occurred_on: null, p_tags: ["꾸준", "용기"] });
+      return { data: { id: praiseId, bunch_id: bunchId, replayed: false }, error: null };
+    },
+  }, { expectedOrigin: "https://chagokchan.test", secret });
+  assert.equal(result.status, 201); assert.match(result.headers.get("cache-control"), /no-store/);
+});
+
+test("owner array projection is required, canonical and never leaked to peer responses", async () => {
+  const base = { viewer_role: "owner", id: praiseId, bunch_id: bunchId, source: "self", actor: null, actor_label: "나", message: null, occurred_on: null, tag: null, tags: ["꾸준", "용기"], recorded_at: now, cancelled_at: null, hidden_at: null, excluded_at: null, author_erased_at: null };
+  const project = (row) => listBoardPraisesResponse(boardId, new URL("https://chagokchan.test/api"), { rpc: async () => ({ data: { items: [row], next_cursor: null }, error: null }) });
+  assert.deepEqual((await (await project(base)).json()).items[0].tags, ["꾸준", "용기"]);
+  const { tags: _tags, ...missing } = base;
+  for (const row of [missing, { ...base, tags: null }, { ...base, tags: ["x", "X"] }, { ...base, tags: ["e\u0301"] }, { ...base, source: "peer" }, { ...base, cancelled_at: now }, { ...base, author_erased_at: now }, { ...base, tag: "care" }]) assert.equal((await project(row)).status, 503);
 });

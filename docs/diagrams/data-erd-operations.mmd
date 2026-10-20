@@ -16,7 +16,8 @@ erDiagram
     }
     PRAISES {
         uuid id PK
-        text tag "nullable, self only, fixed catalog"
+        text tag "nullable, legacy compatibility projection"
+        text_array tags "self only, normalized ordered names, max 5"
     }
     REQUEST_RECEIPTS {
         uuid id PK

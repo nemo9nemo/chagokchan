@@ -1644,8 +1644,19 @@
     },
     {
       "id": "TC-UI-MOCKUP-001",
-      "requirement_ids": ["REQ-002", "REQ-003", "REQ-004", "REQ-011", "NFR-002"],
-      "policy_ids": ["POL-GOAL-001", "POL-PRAISE-001", "POL-PRAISE-002", "POL-SEC-001"],
+      "requirement_ids": [
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-011",
+        "NFR-002"
+      ],
+      "policy_ids": [
+        "POL-GOAL-001",
+        "POL-PRAISE-001",
+        "POL-PRAISE-002",
+        "POL-SEC-001"
+      ],
       "level": "local_ui_browser_acceptance",
       "title": "W20-B 판 목업·저장 상태·접근성·공유 패널",
       "steps": [
@@ -1665,8 +1676,17 @@
     },
     {
       "id": "TC-SHARED-COUNT-001",
-      "requirement_ids": ["REQ-004", "REQ-007", "REQ-009", "REQ-012"],
-      "policy_ids": ["POL-CYCLE-001", "POL-PRAISE-001", "POL-PRAISE-002"],
+      "requirement_ids": [
+        "REQ-004",
+        "REQ-007",
+        "REQ-009",
+        "REQ-012"
+      ],
+      "policy_ids": [
+        "POL-CYCLE-001",
+        "POL-PRAISE-001",
+        "POL-PRAISE-002"
+      ],
       "level": "database_business_rpc",
       "title": "복수 기여자 공유판 집계와 권한 종료 후 작성자 취소",
       "steps": [
@@ -1707,7 +1727,49 @@
       "expected": "서버 재조회 결과로만 읽음·취소 상태를 갱신한다. 연결 소식만 연결 관리 이동, can_cancel만 확인 후 취소, 관계 종료 뒤 본인 기록 취소 가능. 실패는 재시도 가능하고 기존 목록을 보존한다. 한국어·최소 응답 표시·비영속·5개 폭 무넘침·44px를 충족한다. 제품 수락 TC-NOTIFY-001을 대신하지 않는다.",
       "status": "passed",
       "evidence": "reports/w10-d-news-sent-ui-check-2026-10-16.json"
+    },
+    {
+      "id": "TC-PRAISE-TAG-002",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-PRAISE-002"
+      ],
+      "level": "integration",
+      "title": "사용자 정의 다중 태그 입력·보존·재시도",
+      "steps": [
+        "#꾸준 공백·Enter·여러 토큰 붙여넣기·마지막 토큰 저장·중복·5개/20자 경계를 검사",
+        "작성·수정·삭제·취소·목록/상세의 배열 일치와 320px 줄바꿈·삭제 영역을 검사",
+        "기존 고정 태그 변환·기존 요청 해시·동시 요청·구형 수정 충돌·peer/무권한/폐기된 실제 로컬 Auth 세션·직접 DML 거절을 검사"
+      ],
+      "expected": "입력한 여러 태그가 순서대로 보존되고 동시 재시도는 한 건이다. 기존 데이터·권한·집계 경계를 유지한다. 실제 OS IME·읽기 도구·네트워크 장애 브라우저 수락은 TC-PRAISE-TAG-003으로 별도 추적한다.",
+      "status": "passed",
+      "evidence": "reports/w25-custom-tags-check-2026-10-20.json"
+    },
+    {
+      "id": "TC-PRAISE-TAG-003",
+      "requirement_ids": [
+        "REQ-003",
+        "REQ-007"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-PRAISE-002"
+      ],
+      "level": "acceptance",
+      "title": "실기기 한글 조합·읽기 도구·태그 저장 장애 복구",
+      "steps": [
+        "실제 OS IME와 모바일 키보드로 조합 중 공백/Enter·조합 종료 직후 입력을 확인",
+        "VoiceOver/TalkBack으로 추가·삭제·오류 상태 안내와 실제 터치 영역을 확인",
+        "브라우저 네트워크 장애·응답 유실 후 사용자 태그·메모·날짜 보존과 같은 키/본문 재시도를 확인"
+      ],
+      "expected": "미완성 글자가 칩이 되거나 폼이 제출되지 않으며, 안내가 읽히고 장애 후 입력과 중복 방지가 유지된다.",
+      "status": "not_run",
+      "evidence": null
     }
   ],
-  "updated_on": "2026-10-16"
+  "updated_on": "2026-10-20"
 }

@@ -90,7 +90,8 @@ erDiagram
     }
     PRAISES {
         uuid id PK
-        text tag "nullable, self only, fixed catalog"
+        text tag "nullable, legacy compatibility projection"
+        text_array tags "self only, normalized ordered names, max 5"
         uuid board_id FK
         uuid bunch_id FK
         uuid actor_user_id FK "nullable after erasure"
@@ -145,7 +146,7 @@ boards.next_target_count와 next_rule_code는 새 회차에 쓸 설정이다. bu
 
 현재 회차와 완성 상태는 다른 개념이다. 예를 들어 1회차 완성 → 2회차에 칭찬 → 1회차의 칭찬 취소가 일어나면 1회차는 불완전한 지난 회차가 되고 현재 포인터는 2회차를 유지한다. progress_state='incomplete'인 행이 여러 개일 수 있지만 새 칭찬 입력 대상은 현재 포인터의 회차 하나다.
 
-tag는 셀프 칭찬 전용 nullable text이며 정책의 5개 코드만 허용한다. peer 행과 취소된 행은 반드시 null이고, 취소 시 본문·실천일과 한 UPDATE에서 지운다. 태그는 집계·회차·소식 및 권한과 무관하다.
+tags는 셀프 칭찬 전용 text[]이며 NFC 이름을 입력 순서대로 0~5개 보존한다(이름 1~20 코드포인트). tag는 이전 5개 코드의 단일 값 호환 투영이다. 기존 값은 한글 이름 배열로 옮기고 peer·취소 행은 빈 배열이다. 취소 시 본문·실천일·두 태그 필드를 한 UPDATE에서 지운다. 태그는 집계·회차·소식·권한과 무관하다.
 
 ### 칭찬 상태와 집계
 
@@ -177,7 +178,8 @@ erDiagram
     }
     PRAISES {
         uuid id PK
-        text tag "nullable, self only, fixed catalog"
+        text tag "nullable, legacy compatibility projection"
+        text_array tags "self only, normalized ordered names, max 5"
     }
     CONNECTIONS {
         uuid id PK
@@ -314,7 +316,8 @@ erDiagram
     }
     PRAISES {
         uuid id PK
-        text tag "nullable, self only, fixed catalog"
+        text tag "nullable, legacy compatibility projection"
+        text_array tags "self only, normalized ordered names, max 5"
     }
     REQUEST_RECEIPTS {
         uuid id PK

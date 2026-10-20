@@ -12,6 +12,7 @@ import { validateFixtureManifest } from "./local-fixture-manifest.mjs";
 const checks = [];
 const goalKey = crypto.randomUUID();
 const praiseKey = crypto.randomUUID();
+const tagsKey = crypto.randomUUID();
 let app;
 let appError;
 let actorId;
@@ -158,6 +159,7 @@ try {
     const row = (await page.json()).items.find((item) => item.id === praise.id);
     assert.equal(row?.viewer_role, "owner");
     assert.equal(row.tag, "consistency");
+    assert.deepEqual(row.tags, ["꾸준함"]);
   });
   await record("same_tag_replay_without_double_count", async () => {
     const retry = await mutate(`/boards/${boardId}/praises`, "POST", { tag: "consistency" }, praiseKey);
@@ -196,6 +198,46 @@ try {
     assert.equal(cycle.valid_count, 1);
     assert.equal(cycle.progress_state, "complete");
     assert.equal(sql("select count(*) from public.notifications where recipient_user_id=:'actor'::uuid and bunch_id=:'bunch'::uuid and type='bunch_completed';\n", { actor: actorId, bunch: praise.bunch_id }).trim(), "1");
+  });
+  let arrayPraise;
+  await record("custom_tags_create_and_owner_list", async () => {
+    const created = await mutate(`/boards/${boardId}/praises`, "POST", { tags: ["꾸준", "Work", "work", "é"] }, tagsKey, ["praise_write_minute", "praise_write_day"]);
+    assert.equal(created.status, 201); arrayPraise = await created.json();
+    const page = await response(`/boards/${boardId}/praises`);
+    assert.equal(page.status, 200);
+    const row = (await page.json()).items.find((item) => item.id === arrayPraise.id);
+    assert.deepEqual(row.tags, ["꾸준", "Work", "é"]); assert.equal(row.tag, null);
+  });
+  await record("custom_tags_same_key_replay", async () => {
+    const retry = await mutate(`/boards/${boardId}/praises`, "POST", { tags: ["꾸준", "Work", "é"] }, tagsKey);
+    assert.equal(retry.status, 201); assert.deepEqual(await retry.json(), { ...arrayPraise, replayed: true });
+  });
+  await record("custom_tags_different_order_conflict", async () => {
+    const result = await mutate(`/boards/${boardId}/praises`, "POST", { tags: ["Work", "꾸준", "é"] }, tagsKey);
+    assert.equal(result.status, 409); assert.equal((await result.json()).error.code, "IDEMPOTENCY_CONFLICT");
+  });
+  await record("custom_tags_patch_preserves_count", async () => {
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tags: ["꾸준", "용기"] }, null, ["praise_state_change_minute"]);
+    assert.equal(edited.status, 200); assert.deepEqual((await currentRow()).tags, ["꾸준", "용기"]);
+    assert.equal(sql("select valid_count from public.bunches where id=:'bunch'::uuid;", { bunch: praise.bunch_id }).trim(), "1");
+  });
+  await record("custom_tags_legacy_patch_conflict", async () => {
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tag: null });
+    assert.equal(edited.status, 409); assert.deepEqual((await currentRow()).tags, ["꾸준", "용기"]);
+  });
+  await record("custom_tags_invalid_requests", async () => {
+    for (const tags of [null, ["#용기"], ["a b"], ["a".repeat(21)], ["a", "b", "c", "d", "e", "f"]]) {
+      const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tags }); assert.equal(edited.status, 400);
+    }
+    const mixed = await mutate(`/praises/${praise.id}`, "PATCH", { tag: null, tags: [] }); assert.equal(mixed.status, 400);
+  });
+  await record("custom_tags_empty_array_removes", async () => {
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tags: [] }, null, ["praise_state_change_minute"]);
+    assert.equal(edited.status, 200); assert.deepEqual((await currentRow()).tags, []);
+  });
+  await record("custom_tags_restored_for_cancel", async () => {
+    const edited = await mutate(`/praises/${praise.id}`, "PATCH", { tags: ["꾸준", "용기"] }, null, ["praise_state_change_minute"]);
+    assert.equal(edited.status, 200); assert.deepEqual((await currentRow()).tags, ["꾸준", "용기"]);
   });
   await record("cancel_clears_tag", async () => {
     const cancelled = await mutate(`/praises/${praise.id}/cancel`, "POST", {}, null, ["praise_state_change_minute"]);
@@ -253,7 +295,7 @@ try {
         delete from public.shared_board_profiles where board_id in (select id from public.boards where goal_id in (select id from w20_tag_goals));
         delete from public.boards where goal_id in (select id from w20_tag_goals);
         delete from public.goals where id in (select id from w20_tag_goals) and owner_user_id=:'actor'::uuid;
-        delete from public.request_receipts where actor_user_id=:'actor'::uuid and request_key in (:'goal_key'::uuid,:'praise_key'::uuid);
+        delete from public.request_receipts where actor_user_id=:'actor'::uuid and request_key in (:'goal_key'::uuid,:'praise_key'::uuid,:'tags_key'::uuid);
         delete from public.rate_usage r using w20_tag_rate_deltas d
           where r.actor_user_id=:'actor'::uuid and r.id=d.id and r.scope_key=d.scope_key
           and r.window_start=d.window_start and r.used_count=d.used_count
@@ -262,7 +304,7 @@ try {
           from w20_tag_rate_deltas d, w20_tag_rate_baseline b
           where r.actor_user_id=:'actor'::uuid and r.id=d.id and r.id=b.id
           and r.scope_key=d.scope_key and r.window_start=d.window_start;
-        commit;\n`, { actor: actorId, goal_key: goalKey, praise_key: praiseKey, rates: beforeRates,
+        commit;\n`, { actor: actorId, goal_key: goalKey, praise_key: praiseKey, tags_key: tagsKey, rates: beforeRates,
         last_rates: lastRates, deltas: JSON.stringify([...rateDeltas.values()]) });
       fixturePreserved = snapshot() === beforeSnapshot;
       cleanupPassed = fixturePreserved;
@@ -273,7 +315,7 @@ try {
   }
 }
 
-const passed = !failure && cleanupPassed && fixturePreserved && checks.length === 9;
+const passed = !failure && cleanupPassed && fixturePreserved && checks.length === 17;
 process.stdout.write(JSON.stringify({
   status: passed ? "passed" : "failed", actor: "A", checks, failure,
   cleanup_passed: cleanupPassed, existing_product_fixture_snapshot_preserved: fixturePreserved,

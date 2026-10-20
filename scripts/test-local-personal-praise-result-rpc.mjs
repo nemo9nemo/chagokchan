@@ -122,6 +122,41 @@ try {
     assert.equal(invalid.error?.code, "PT404");
     assert.equal(invalid.error?.message, "board_not_found");
   });
+
+  await record("concurrent_array_requests_commit_one_praise_and_one_notice", async () => {
+    const request = { p_request_key: crypto.randomUUID(), p_board_id: boardId, p_message: null, p_occurred_on: null, p_tags: ["꾸준", "용기"] };
+    const results = (await Promise.all(Array.from({ length: 8 }, () => actor.client.rpc("create_personal_praise_with_tags", request)))).map(rpcData);
+    assert.equal(new Set(results.map((r) => r.id)).size, 1);
+    assert.equal(new Set(results.map((r) => r.bunch_id)).size, 1);
+    assert.equal(results.filter((r) => !r.replayed).length, 1);
+    assert.equal(sql("select valid_count from public.bunches where id=:'bunch'::uuid;", { bunch: results[0].bunch_id }).trim(), "1");
+    assert.equal(sql("select count(*) from public.notifications where bunch_id=:'bunch'::uuid and type='bunch_completed';", { bunch: results[0].bunch_id }).trim(), "1");
+  });
+
+  await record("different_array_keys_respect_cycle_boundaries_under_concurrency", async () => {
+    const results = (await Promise.all([["배려"], ["성장", "오늘"]].map((tags) => actor.client.rpc("create_personal_praise_with_tags", {
+      p_request_key: crypto.randomUUID(), p_board_id: boardId, p_tags: tags,
+    })))).map(rpcData);
+    assert.equal(new Set(results.map((r) => r.id)).size, 2);
+    assert.equal(new Set(results.map((r) => r.bunch_id)).size, 2);
+    assert.equal(sql("select count(*) from public.praises where board_id=:'board'::uuid;", { board: boardId }).trim(), "5");
+    assert.equal(sql("select count(*) from public.bunches where board_id=:'board'::uuid and valid_count>target_count;", { board: boardId }).trim(), "0");
+  });
+
+  await record("array_rpc_rejects_a_different_current_actor", async () => {
+    const outsider = await createProbe(admin);
+    const result = await outsider.client.rpc("create_personal_praise_with_tags", { p_request_key: crypto.randomUUID(), p_board_id: boardId, p_tags: ["용기"] });
+    assert.equal(result.data, null); assert.equal(result.error?.code, "PT404");
+  });
+
+  await record("array_rpc_rejects_a_revoked_real_local_auth_session", async () => {
+    const session = (await actor.client.auth.getSession()).data.session;
+    assert.ok(session);
+    assert.equal((await admin.auth.admin.signOut(session.access_token, "local")).error, null);
+    clients.splice(clients.indexOf(actor.client), 1);
+    const result = await actor.client.rpc("create_personal_praise_with_tags", { p_request_key: crypto.randomUUID(), p_board_id: boardId, p_tags: ["용기"] });
+    assert.equal(result.data, null); assert.equal(result.error?.code, "PT401");
+  });
 } catch (error) {
   failed = true;
   failureDetail = String(error?.message ?? error).replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi, "[uuid]").slice(0, 240);
@@ -146,10 +181,10 @@ try {
   }
 }
 
-const passed = !failed && !cleanupFailed && cases.length === 3;
+const passed = !failed && !cleanupFailed && cases.length === 7;
 const report = {
   verified_at: new Date().toISOString(),
-  scope: "w08_c_personal_praise_result_cycle_idempotency_and_row_scope",
+  scope: "w08_c_and_w25_personal_praise_result_array_concurrency_and_current_auth_scope",
   status: passed ? "passed" : "failed",
   executed: cases.length,
   passed: cases.filter((entry) => entry.status === "passed").length,

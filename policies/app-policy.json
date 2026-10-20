@@ -1,7 +1,7 @@
 {
   "policy_version": "0.2.0",
   "effective_for": "mvp_development_baseline",
-  "updated_on": "2026-10-15",
+  "updated_on": "2026-10-20",
   "audience": {
     "mode": "adult_personal_beta",
     "initial_market": "KR",
@@ -73,7 +73,7 @@
     "tags_enabled_for": [
       "self"
     ],
-    "tags_per_praise_max": 1,
+    "tags_per_praise_max": 5,
     "tag_catalog": [
       {
         "code": "consistency",
@@ -95,7 +95,12 @@
         "code": "rest",
         "label": "쉼"
       }
-    ]
+    ],
+    "tag_input_mode": "user_defined",
+    "tag_codepoints_max": 20,
+    "tag_name_normalization": "NFC",
+    "tag_duplicate_key": "NFC_ASCII_lowercase",
+    "tag_catalog_usage": "legacy_compatibility_only"
   },
   "time": {
     "storage_timezone": "UTC",

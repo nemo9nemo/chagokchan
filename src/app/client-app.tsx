@@ -5,7 +5,8 @@ import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idemp
 import GrapeCluster from "./grape-cluster";
 import NewsPanel, { type NewsNotification, type NewsTab, type SentPraise } from "./news-panel";
 import { canOpenConnections } from "./news-labels.mjs";
-import PraiseSheet, { praiseTags, type PraiseTag } from "./praise-sheet";
+import PraiseSheet from "./praise-sheet";
+import TagInput, { type TagInputHandle } from "./tag-input";
 import SharePanel from "./share-panel";
 
 type GoalStatus = "active" | "completed" | "archived";
@@ -15,7 +16,7 @@ type TrashGoal = { id: string; title: string; deleted_at: string; purge_after: s
 type Board = { viewer_role: "owner"; id: string; goal_id: string; kind: "personal" | "shared"; revision: number; next_target_count: number; shared_title: string | null; shared_description: string | null; current_bunch: Bunch | null };
 type ContributorBoard = { viewer_role: "contributor"; id: string; kind: "shared"; shared_title: string; shared_description: string | null; owner: { user_id: string; nickname: string | null; avatar_key: string | null }; goal_state: GoalStatus; current_bunch: Bunch | null; can_praise: boolean };
 type GoalDetail = { goal: GoalSummary; boards: Board[] };
-type Praise = { viewer_role: "owner" | "contributor"; id: string; bunch_id: string; source: "self" | "peer"; actor: { user_id: string; nickname: string | null; avatar_key: string | null } | null; actor_label: string; message: string | null; occurred_on: string | null; tag: PraiseTag | null; recorded_at: string; cancelled_at: string | null; hidden_at: string | null; excluded_at: string | null; author_erased_at: string | null };
+type Praise = { viewer_role: "owner" | "contributor"; id: string; bunch_id: string; source: "self" | "peer"; actor: { user_id: string; nickname: string | null; avatar_key: string | null } | null; actor_label: string; message: string | null; occurred_on: string | null; tags?: string[]; recorded_at: string; cancelled_at: string | null; hidden_at: string | null; excluded_at: string | null; author_erased_at: string | null };
 type Page<T> = { items: T[]; next_cursor: string | null };
 type IdempotentAttempt = { key: string; body: Record<string, unknown> };
 type Profile = { user_id: string; nickname: string | null; avatar_key: string | null };
@@ -321,7 +322,7 @@ export default function ChagokchanApp() {
   const [profileError, setProfileError] = useState("");
   const [showPraise, setShowPraise] = useState(false);
   const [showShare, setShowShare] = useState(false);
-  const [praiseTag, setPraiseTag] = useState<PraiseTag | null>(null);
+  const [praiseTags, setPraiseTags] = useState<string[]>([]);
   const [praiseTimestamp, setPraiseTimestamp] = useState("");
   const [savedPraise, setSavedPraise] = useState<{ id: string; boardId: string; bunchId: string } | null>(null);
   const lastAnimatedId = useRef("");
@@ -370,7 +371,8 @@ export default function ChagokchanApp() {
   const [praiseAttempt, setPraiseAttempt] = useState<IdempotentAttempt | null>(null);
   const [praiseSending, setPraiseSending] = useState(false);
   const [praiseFormError, setPraiseFormError] = useState("");
-  const [editingPraise, setEditingPraise] = useState<{ id: string; message: string; occurredOn: string; tag: PraiseTag | null } | null>(null);
+  const [editingPraise, setEditingPraise] = useState<{ id: string; message: string; occurredOn: string; tags: string[] } | null>(null);
+  const editTagInput = useRef<TagInputHandle>(null);
   const [savingSettings, setSavingSettings] = useState(false);
   const [savingPraiseEdit, setSavingPraiseEdit] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -992,14 +994,14 @@ export default function ChagokchanApp() {
     }
   }
 
-  async function submitPraise(event: FormEvent<HTMLFormElement>) {
+  async function submitPraise(event: FormEvent<HTMLFormElement>, tags: string[]) {
     event.preventDefault();
     if (praiseSending || selectedBoard?.kind !== "personal" || selectedGoal?.status !== "active") return;
     setPraiseFormError("");
     const payload: Record<string, unknown> = praiseAttempt?.body ?? {
       message: praiseMessage.trim() || null,
       occurred_on: praiseDate || null,
-      tag: praiseTag,
+      tags,
     };
     const attempt = createIdempotentRequest(payload, praiseAttempt, newRequestKey);
     setPraiseAttempt(attempt);
@@ -1009,7 +1011,7 @@ export default function ChagokchanApp() {
       setPraiseAttempt(null);
       setPraiseMessage("");
       setPraiseDate(localToday());
-      setPraiseTag(null); setShowPraise(false);
+      setPraiseTags([]); setShowPraise(false);
       await loadGoals();
       const refreshed = await openGoal(selectedGoal.id, selectedBoard.id, result.bunch_id);
       if (refreshed?.bunch?.progress_state === "complete") {
@@ -1144,14 +1146,16 @@ export default function ChagokchanApp() {
 
   async function savePraiseEdit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!editingPraise) return;
+    if (!editingPraise || savingPraiseEdit) return;
+    const tags = editTagInput.current?.commit();
+    if (!tags) return;
     const form = new FormData(event.currentTarget);
     setSavingPraiseEdit(true);
     try {
       await mutate(`/api/v1/praises/${editingPraise.id}`, "PATCH", {
         message: String(form.get("message") ?? "") || null,
         occurred_on: String(form.get("occurredOn") ?? "") || null,
-        tag: editingPraise.tag,
+        tags,
       });
       setEditingPraise(null);
       setNotice("기록을 수정했어요.");
@@ -1348,12 +1352,12 @@ export default function ChagokchanApp() {
                 {selectedBunch && selectedBunch.id !== selectedBoard?.current_bunch?.id && <p className="locked-note">지난 회차는 읽기 전용이에요. 현재 회차를 선택해 기록해 주세요.</p>}
                 <p className="privacy-note">{selectedBoard?.kind === "shared" ? "받은 칭찬은 개인 기록과 따로 쌓여요." : "개인 기록은 나에게만 보여요. 공유판과 개수를 합치지 않아요."}</p>
               </section>
-              {showPraise && canAddPraise && <div className="composer-panel">{profileError && <div className="inline-alert" role="alert">{profileError}<button type="button" onClick={() => void loadProfile()}>다시 불러오기</button></div>}{nickname !== null ? <PraiseSheet title={detail.goal.title} ordinal={selectedBunch?.progress_state === "complete" ? 1 : (selectedBunch?.valid_count ?? 0) + 1} nickname={nickname} timestamp={praiseTimestamp} message={praiseMessage} date={praiseDate} tag={praiseTag} sending={praiseSending} retry={Boolean(praiseAttempt)} error={praiseFormError} onMessage={setPraiseMessage} onDate={setPraiseDate} onTag={setPraiseTag} onSubmit={submitPraise} onClose={() => setShowPraise(false)} /> : <p role="status">작성자 정보를 확인하고 있어요.</p>}</div>}
+              {showPraise && canAddPraise && <div className="composer-panel">{profileError && <div className="inline-alert" role="alert">{profileError}<button type="button" onClick={() => void loadProfile()}>다시 불러오기</button></div>}{nickname !== null ? <PraiseSheet title={detail.goal.title} ordinal={selectedBunch?.progress_state === "complete" ? 1 : (selectedBunch?.valid_count ?? 0) + 1} nickname={nickname} timestamp={praiseTimestamp} message={praiseMessage} date={praiseDate} tags={praiseTags} sending={praiseSending} retry={Boolean(praiseAttempt)} error={praiseFormError} onMessage={setPraiseMessage} onDate={setPraiseDate} onTags={setPraiseTags} onSubmit={submitPraise} onClose={() => setShowPraise(false)} /> : <p role="status">작성자 정보를 확인하고 있어요.</p>}</div>}
               <section className="recent-records" aria-labelledby="recent-records-heading" aria-busy={loadingPraises}>
                 <div className="records-heading"><h2 id="recent-records-heading">최근 기록</h2><span>{selectedBunch?.valid_count ?? 0}개</span></div>
                 {loadingPraises && <p role="status">기록을 불러오고 있어요.</p>}
                 {!loadingPraises && praises.length === 0 && <p className="empty-records">{selectedBoard?.kind === "shared" ? "아직 받은 칭찬이 없어요." : "첫 칭찬을 남겨 보세요."}</p>}
-                <ol className="praise-list">{praises.map((praise) => <li key={praise.id} className="praise-entry"><button className="record-open" type="button" onClick={() => { setEditingPraise(null); setRecordDetail(praise); }}><span className="entry-meta"><span>{praise.source === "self" ? "나" : praise.actor_label}</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></span><span className="entry-message">{praise.cancelled_at ? "취소한 기록" : praise.message || "칭찬 1건"}</span>{praise.tag && <span className="badge">{praiseTags.find((tag) => tag.code === praise.tag)?.label}</span>}{praise.excluded_at && <span>회차에서 제외됨</span>}{praise.hidden_at && <span>나에게만 숨김</span>}{savedInView && savedPraise?.id === praise.id && <><span className="badge just-now">방금</span><span className="badge saved-still">저장됨</span></>}</button></li>)}</ol>
+                <ol className="praise-list">{praises.map((praise) => <li key={praise.id} className="praise-entry"><button className="record-open" type="button" onClick={() => { setEditingPraise(null); setRecordDetail(praise); }}><span className="entry-meta"><span>{praise.source === "self" ? "나" : praise.actor_label}</span><time dateTime={praise.recorded_at}>{shortDate(praise.recorded_at)}</time></span><span className="entry-message">{praise.cancelled_at ? "취소한 기록" : praise.message || "칭찬 1건"}</span>{(praise.tags ?? []).map((tag) => <span key={tag} className="badge record-tag">#{tag}</span>)}{praise.excluded_at && <span>회차에서 제외됨</span>}{praise.hidden_at && <span>나에게만 숨김</span>}{savedInView && savedPraise?.id === praise.id && <><span className="badge just-now">방금</span><span className="badge saved-still">저장됨</span></>}</button></li>)}</ol>
                 {praiseCursor && <button className="button button-secondary button-wide" type="button" onClick={() => void loadPraises(selectedBoardId, selectedBunchId, praiseCursor, true)}>기록 더 보기</button>}
               </section>
             </div>
@@ -1378,11 +1382,11 @@ export default function ChagokchanApp() {
         <div className="settings-title"><div><p>{detail?.goal.title}</p><h2 id="record-detail-heading">{recordDetail.cancelled_at ? "취소한 기록" : `${recordOrdinal(recordDetail)}번째 알`}</h2></div><button className="icon-button" type="button" onClick={() => setRecordDetail(null)} aria-label="기록 상세 닫기"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></svg></button></div>
         {detailError && <p className="form-error" role="alert">{detailError}</p>}
         <p className="detail-message">{recordDetail.cancelled_at ? "취소한 기록 · 메모·실천일·태그가 삭제됐어요." : recordDetail.message || "칭찬 1건"}</p>
-        {recordDetail.tag && <span className="badge">{praiseTags.find((tag) => tag.code === recordDetail.tag)?.label}</span>}
+        <div className="record-tags">{(recordDetail.tags ?? []).map((tag) => <span key={tag} className="badge record-tag">#{tag}</span>)}</div>
         <dl className="record-definitions"><div><dt>작성자</dt><dd>{recordDetail.actor?.nickname ?? recordDetail.actor_label}</dd></div><div><dt>날짜·시간</dt><dd><time dateTime={recordDetail.recorded_at}>{recordTime(recordDetail.recorded_at)}</time></dd></div>{recordDetail.occurred_on && <div><dt>실천한 날</dt><dd>{shortDate(recordDetail.occurred_on)}</dd></div>}</dl>
-        {recordDetail.source === "self" && !recordDetail.cancelled_at && !recordDetail.author_erased_at && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => setEditingPraise({ id: recordDetail.id, message: recordDetail.message ?? "", occurredOn: recordDetail.occurred_on ?? "", tag: recordDetail.tag })}>수정</button><button className="text-button" type="button" onClick={() => setCancelTarget(recordDetail)}>기록 취소</button></div>}
+        {recordDetail.source === "self" && !recordDetail.cancelled_at && !recordDetail.author_erased_at && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => setEditingPraise({ id: recordDetail.id, message: recordDetail.message ?? "", occurredOn: recordDetail.occurred_on ?? "", tags: recordDetail.tags ?? [] })}>수정</button><button className="text-button" type="button" onClick={() => setCancelTarget(recordDetail)}>기록 취소</button></div>}
         {recordDetail.source === "peer" && !recordDetail.cancelled_at && <div className="form-actions"><button className="button button-secondary" type="button" onClick={() => { void moderatePeerPraise(recordDetail, recordDetail.hidden_at ? "unhide" : "hide"); setRecordDetail(null); }}>{recordDetail.hidden_at ? "다시 표시" : "나에게만 숨기기"}</button>{!recordDetail.excluded_at && <button className="button button-secondary" type="button" onClick={() => { void moderatePeerPraise(recordDetail, "exclude"); setRecordDetail(null); }}>회차에서 제외</button>}</div>}
-        {editingPraise && <form className="stack-form" onSubmit={savePraiseEdit}><fieldset disabled={savingPraiseEdit}><label htmlFor="edit-praise-message">메모</label><textarea id="edit-praise-message" name="message" maxLength={1000} rows={3} defaultValue={editingPraise.message} /><label htmlFor="edit-praise-date">실천한 날</label><input id="edit-praise-date" name="occurredOn" type="date" defaultValue={editingPraise.occurredOn} /><p>태그 <span className="optional-mark">선택</span></p><div className="tag-chips">{praiseTags.map((tag) => <button key={tag.code} type="button" aria-pressed={editingPraise.tag === tag.code} onClick={() => setEditingPraise({ ...editingPraise, tag: editingPraise.tag === tag.code ? null : tag.code as PraiseTag })}>{tag.label}</button>)}</div></fieldset><div className="form-actions"><button className="button button-secondary" type="button" disabled={savingPraiseEdit} onClick={() => setEditingPraise(null)}>취소</button><button className="button button-primary" type="submit" disabled={savingPraiseEdit}>{savingPraiseEdit ? "저장 중…" : "변경 저장"}</button></div></form>}
+        {editingPraise && <form className="stack-form" onSubmit={savePraiseEdit}><fieldset disabled={savingPraiseEdit}><label htmlFor="edit-praise-message">메모</label><textarea id="edit-praise-message" name="message" maxLength={1000} rows={3} defaultValue={editingPraise.message} /><label htmlFor="edit-praise-date">실천한 날</label><input id="edit-praise-date" name="occurredOn" type="date" defaultValue={editingPraise.occurredOn} /><TagInput key={editingPraise.id} ref={editTagInput} tags={editingPraise.tags} onChange={(tags) => setEditingPraise({ ...editingPraise, tags })} /></fieldset><div className="form-actions"><button className="button button-secondary" type="button" disabled={savingPraiseEdit} onClick={() => setEditingPraise(null)}>취소</button><button className="button button-primary" type="submit" disabled={savingPraiseEdit}>{savingPraiseEdit ? "저장 중…" : "변경 저장"}</button></div></form>}
       </dialog>}
       {cancelTarget && <dialog ref={cancelDialog} className="modal-panel cancel-sheet" aria-labelledby="cancel-record-heading" aria-busy={cancellingPraise} onCancel={(event) => { event.preventDefault(); if (!cancellingPraise) setCancelTarget(null); }}><div className="sheet-handle" aria-hidden="true" /><h2 id="cancel-record-heading">이 기록을 취소할까요?</h2><p>회차 개수에서 빠지고 메모와 실천일·태그는 제거됩니다. 취소한 기록은 되돌릴 수 없어요.</p>{detailError && <p className="form-error" role="alert">{detailError}</p>}<div className="form-actions"><button className="button button-secondary" type="button" disabled={cancellingPraise} onClick={() => setCancelTarget(null)}>취소</button><button className="button button-primary" type="button" disabled={cancellingPraise} onClick={() => void cancelPraise(cancelTarget)}>{cancellingPraise ? "처리 중…" : "확인"}</button></div></dialog>}
     </main>

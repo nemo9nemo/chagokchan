@@ -60,7 +60,8 @@ erDiagram
     }
     PRAISES {
         uuid id PK
-        text tag "nullable, self only, fixed catalog"
+        text tag "nullable, legacy compatibility projection"
+        text_array tags "self only, normalized ordered names, max 5"
         uuid board_id FK
         uuid bunch_id FK
         uuid actor_user_id FK "nullable after erasure"

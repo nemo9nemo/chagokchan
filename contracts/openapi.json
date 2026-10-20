@@ -2631,7 +2631,8 @@
           "TC-ACCESS-002",
           "TC-ACCESS-003",
           "TC-API-006",
-          "TC-PRAISE-TAG-001"
+          "TC-PRAISE-TAG-001",
+          "TC-PRAISE-TAG-002"
         ],
         "parameters": [
           {
@@ -2762,7 +2763,8 @@
           "TC-TIME-001",
           "TC-ACCESS-001",
           "TC-API-006",
-          "TC-PRAISE-TAG-001"
+          "TC-PRAISE-TAG-001",
+          "TC-PRAISE-TAG-002"
         ],
         "parameters": [
           {
@@ -3199,7 +3201,8 @@
           "TC-PRAISE-002",
           "TC-TIME-001",
           "TC-API-006",
-          "TC-PRAISE-TAG-001"
+          "TC-PRAISE-TAG-001",
+          "TC-PRAISE-TAG-002"
         ],
         "parameters": [
           {
@@ -6248,10 +6251,20 @@
                 "type": "null"
               }
             ],
-            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
+            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null.",
+            "deprecated": true
+          },
+          "tags": {
+            "$ref": "#/components/schemas/PraiseTags"
           }
         },
-        "description": "occurred_on은 personal 판의 주인만 허용. 빈 본문은 NULL 정규화. tag는 셀프 전용이며 생략/null은 태그 없음, peer는 non-null tag를 거절한다."
+        "description": "개인판 owner는 사용자 정의 tags 또는 이전 tag를 사용한다(동시 전송 금지). tags 생략은 빈 배열. peer는 tags 필드를 허용하지 않으며 기존 tag:null만 호환한다.",
+        "not": {
+          "required": [
+            "tag",
+            "tags"
+          ]
+        }
       },
       "EditSelfPraise": {
         "type": "object",
@@ -6288,11 +6301,21 @@
                 "type": "null"
               }
             ],
-            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
+            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null.",
+            "deprecated": true
+          },
+          "tags": {
+            "$ref": "#/components/schemas/PraiseTags"
           }
         },
         "minProperties": 1,
-        "description": "본인 self 기록만, 미취소·목표 미삭제. peer 문구 편집 미제공. tag 키 생략은 유지, null은 삭제, 문자열은 고정 목록에서 1개만 허용한다."
+        "description": "본인 미취소 self 기록 수정. tags 생략은 유지, []는 모두 삭제, null은 거절. 이전 tag 수정은 사용자 정의/다중 태그를 덮어쓸 수 없으며 충돌한다.",
+        "not": {
+          "required": [
+            "tag",
+            "tags"
+          ]
+        }
       },
       "PraiseOwner": {
         "type": "object",
@@ -6408,7 +6431,11 @@
                 "type": "null"
               }
             ],
-            "description": "셀프 전용. null은 태그 없음. peer와 취소된 칭찬은 null."
+            "description": "이전 응답 호환. 정확히 한 개의 기존 이름인 경우에만 코드 투영, 그 밖에는 null.",
+            "deprecated": true
+          },
+          "tags": {
+            "$ref": "#/components/schemas/PraiseTags"
           }
         },
         "required": [
@@ -6425,7 +6452,8 @@
           "hidden_at",
           "excluded_at",
           "author_erased_at",
-          "tag"
+          "tag",
+          "tags"
         ],
         "allOf": [
           {
@@ -6449,6 +6477,10 @@
                 },
                 "tag": {
                   "type": "null"
+                },
+                "tags": {
+                  "type": "array",
+                  "maxItems": 0
                 }
               }
             }
@@ -6474,6 +6506,10 @@
                 },
                 "occurred_on": {
                   "type": "null"
+                },
+                "tags": {
+                  "type": "array",
+                  "maxItems": 0
                 }
               }
             }
@@ -6493,6 +6529,10 @@
               "properties": {
                 "tag": {
                   "type": "null"
+                },
+                "tags": {
+                  "type": "array",
+                  "maxItems": 0
                 }
               }
             }
@@ -7856,7 +7896,23 @@
           "growth",
           "rest"
         ],
-        "description": "셀프 칭찬 전용 고정 태그. 꾸준함·용기·배려·성장·쉼 중 0~1개."
+        "description": "이전 클라이언트 호환용 고정 코드. 새 클라이언트는 tags 배열 사용."
+      },
+      "PraiseTags": {
+        "type": "array",
+        "maxItems": 5,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[\\p{L}\\p{M}\\p{N}_-]+$",
+          "allOf": [
+            {
+              "pattern": "[\\p{L}\\p{N}]"
+            }
+          ]
+        },
+        "description": "셀프 칭찬 전용 사용자 태그. # 없이 전송, NFC·영문 ASCII 대소문자 중복 제거, 입력 순서 유지. 비어 있으면 태그 없음."
       }
     },
     "responses": {

@@ -100,7 +100,9 @@ select ok((select prosrc ilike '%peer_praise_board_day:%' and prosrc ilike '%pra
   from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='create_peer_praise'),
   'peer praise enforces both global and sender/board UTC day quotas');
 select ok((select prosrc ilike '%last_at%' and prosrc ilike '%last_id%' and prosrc ilike '%encode_relationship_cursor(last_at%'
-  from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='list_board_praises') and
+  from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='list_board_praises_with_tags') and
+  (select prosrc ilike '%list_board_praises_with_tags%' from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proname='list_board_praises') and
   (select prosrc ilike '%last_at%' and prosrc ilike '%last_id%' and prosrc ilike '%encode_relationship_cursor(last_at%'
   from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='list_board_members'),
   'shared lists resume after their final returned item');
