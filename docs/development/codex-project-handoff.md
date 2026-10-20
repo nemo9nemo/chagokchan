@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+W25 원격 완료 증거: [PR #13](https://github.com/nemo9nemo/chagokchan/pull/13) 병합(기능 커밋 2757d45, 기능 병합 fd57bed), PR 및 [main CI](https://github.com/nemo9nemo/chagokchan/actions/runs/39397395230) 통과. W25-A~D의 로컬 구현·검사 완료와 W15 수락 대기를 구분한다. REQ-003의 실행 문구·TC 연결과 이 완료 기록은 후속 문서 커밋에 동기화한다.
+
 2026-10-20 W25 구현: 사용자 직접 #태그·공백 칩 확정·여러 태그 작성/수정/삭제를 연결했다. 새 SQL 2개만 적용해 총 52개이며 기존 데이터·태그·요청 해시를 보존했다. unit 170·DB 390·태그 API 17·실제 로컬 Auth RPC 7(동시 요청·다른 사용자·세션 폐기)·브라우저 11항목 통과. 최종 check·UI 보완 뒤 build까지 통과했다. PR 필수 CI·병합의 실제 상태는 GitHub 기록을 따른다. 실제 OS IME·VoiceOver/TalkBack·브라우저 장애 재시도는 W15 TC-PRAISE-TAG-003 미실행이다. [검사](../quality/reports/w25-custom-tags-check-2026-10-20.json). W20/W25의 과거 단일 태그 기획과 현재 배열 실행본을 구분한다.
 
 현재 인계(2026-10-19): W12-A는 PR #10 병합(main b896e14) 완료. W12-B의 명시적 성인 확인·원자적 가입·Auth 상태 RPC/API도 구현·검증했다. 새 SQL 2개만 로컬 적용해 총 50개이며 기존 SQL 파일·데이터는 보존했다. unit 159·DB 350·로컬 가입 10·가입 HTTP 24·세션 회귀 5·빌드 통과. 실제 Google/OTP·가입 UI·갱신/로그아웃·재인증/탈퇴·운영 정리·전체 수락·배포는 미완료다. 다음은 W14 운영/제공자 입력을 확인하며 W12-C를 진행한다. 운영 형태·지원·도메인·월 상한·개발자 계정은 모두 미정. 출시가 주목표, 수익화는 부차 목표이며 Codex가 직접 리뷰·PR·필수 CI·병합까지 진행한다. [진행표](backlog.md) · [W12-B](../quality/reports/w12-b-registration-check-2026-10-19.json). W06 미적용 초안과 현재 적용본을 구분한다.
