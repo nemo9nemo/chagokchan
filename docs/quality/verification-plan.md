@@ -1,6 +1,8 @@
 # 검증 계획과 증거 기준
 
-버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W20-A·W20-B 구현·리뷰 완료(TC-UI-MOCKUP-001 전체 수락은 W15) / 갱신일: 2026-10-16
+버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W15-A 보안 보완 로컬 검사 완료·전체 출시 수락 미완료 / 갱신일: 2026-10-20
+
+현재 집계는 TC 81개 중 범위를 한정해 passed 42개, not_run 39개다. W15-A의 새 TC-SEC-HEADERS-001은 nonce CSP·production HTTP 헤더 검사이며 TC-WEB-001/002 전체 수락을 대체하지 않는다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 7·build를 통과했다. [보안 점검](reports/security-completion-audit-2026-10-20.md)과 [증거](reports/security-completion-audit-2026-10-20.json)를 따른다. 아래 W06~W20의 과거 실행 수치는 당시 기록으로 보존한다.
 
 W20-B는 [화면 브리프](../plans/W20-B-mockup-ui.md)의 REQ-002·003·004·011/NFR-002 및 TC-UI-003·TC-UX-001·TC-WEB-003·004·005, 신규 TC-UI-MOCKUP-001을 추적한다. W10-D의 TC-UI-NEWS-001 추가 후 총 계획 시나리오는 78개다. 아래 W06~W11-C 실행 집계는 당시 범위의 기록이다. 기존 W11 통과 기록은 당시 소스의 근거로 보존하고 재설계 수락 완료로 재사용하지 않는다.
 

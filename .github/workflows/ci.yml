@@ -38,8 +38,14 @@ jobs:
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check published dependency advisories
+        run: pnpm audit --audit-level=high
+
       - name: Run project checks
         run: pnpm check
 
       - name: Build production-check output
         run: pnpm build:check
+
+      - name: Verify production HTTP security headers
+        run: node scripts/test-security-headers-http.mjs
