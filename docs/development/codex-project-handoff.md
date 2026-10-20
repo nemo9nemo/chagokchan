@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+W15-A 원격 근거: [PR #15](https://github.com/nemo9nemo/chagokchan/pull/15), 기능 소스 `43920a2`, [필수 quality 통과](https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892). 최종 PR 검사·병합 상태는 GitHub 기록을 따른다.
+
 2026-10-20 W15-A 보안·완료 여부 점검: 공개 출시 미완료를 확인했다. Next.js 16.4.0의 공식 보안 권고를 확인해 16.4.2로 교체하고, 누락된 요청별 nonce CSP·no-referrer·운영 HSTS·기기 권한 헤더 및 CI 의존성/HTTP 검사를 추가했다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 헤더 7·build 통과. Git 비밀 패턴 검사와 실제 DB 권한 카탈로그도 점검했다. TC-WEB-001/002·분산 제한/CAPTCHA·실제 로그인/로그아웃/탈퇴·운영/실기기/복원/부하 수락은 미완료다. W15는 부분 진행이며 다음은 W14 입력과 병행한 W12-C다. [보고서](../quality/reports/security-completion-audit-2026-10-20.md). 과거의 단위 검사 159·DB 350 수치와 현재 175·390을 구분한다.
 
 W25 원격 완료 증거: [PR #13](https://github.com/nemo9nemo/chagokchan/pull/13) 병합(기능 커밋 2757d45, 기능 병합 fd57bed), PR 및 [main CI](https://github.com/nemo9nemo/chagokchan/actions/runs/39397395230) 통과. W25-A~D의 로컬 구현·검사 완료와 W15 수락 대기를 구분한다. REQ-003의 실행 문구·TC 연결과 이 완료 기록은 후속 문서 커밋에 동기화한다.

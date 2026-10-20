@@ -41,3 +41,5 @@ CI에 공개 의존성 감사와 실제 production 빌드의 HTTP 보안 헤더 
 DB 업무 제한은 구현됐지만, 여러 서버에 걸친 API/OTP 제한·CAPTCHA·제한 저장소 장애 시 중요 쓰기 차단은 통합되지 않았다. TC-RATE-001은 미실행이며 공개 전 필수다. 독립 삭제 원장·정리 작업 경합·백업 복원·운영 비밀 분리/MFA·모니터링·로그 비식별화·실제 HTTPS/CDN 헤더와 캐시도 배포 환경에서 검증해야 한다. TC-WEB-001/002·TC-CACHE-001 등 전체 수락을 이번 부분 검사로 통과 처리하지 않았다.
 
 이번 Codex 직접 검토에서 확인한 수정 항목은 해결했으나, 이 미구현·미검증 조건 때문에 **현재 공개 출시 판정은 보류**다.
+
+원격 검증: [PR #15](https://github.com/nemo9nemo/chagokchan/pull/15)의 기능 소스 `43920a2c88f8c10736ff13a1274963e80bf12fc5`와 [quality CI](https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892)는 통과했다. PR의 최종 검사·병합 상태는 연결된 GitHub 기록을 따른다.

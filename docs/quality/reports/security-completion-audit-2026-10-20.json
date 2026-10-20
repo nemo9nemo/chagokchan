@@ -450,5 +450,11 @@
   ],
   "real_google_otp_tests_executed": 0,
   "public_environment_deployed": false,
-  "paid_services_created": false
+  "paid_services_created": false,
+  "remote_verification": {
+    "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/15",
+    "source_commit": "43920a2c88f8c10736ff13a1274963e80bf12fc5",
+    "source_ci_url": "https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892",
+    "source_ci_conclusion": "success"
+  }
 }
