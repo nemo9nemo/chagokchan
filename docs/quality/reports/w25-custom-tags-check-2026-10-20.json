@@ -103,7 +103,8 @@
       "observed_inner_width": 321,
       "horizontal_overflow": false,
       "delete_button_min_observed_css_pixels": 45.98,
-      "local_only_screenshot": "tmp/w25-tags-mobile.jpg",
+      "local_only_screenshot": "tmp/w25-tags-desktop.jpg",
+      "screenshot_scope": "desktop_preview_during_browser_checks_mobile_measurements_recorded_separately",
       "screenshot_committed": false,
       "synthetic_praise_saved_then_edited": true,
       "fixture_and_quota_snapshot_preserved": true
@@ -137,7 +138,11 @@
   "real_provider_login_verified": false,
   "public_deployed": false,
   "version_control": {
-    "snapshot": "local_source_verification_before_commit_PR_CI_merge",
+    "snapshot": "feature_commit_PR_quality_passed_final_evidence_commit_and_merge_pending",
+    "feature_commit": "2757d4587a2cd54952368da89142340f458aa1da",
+    "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/13",
+    "feature_commit_quality_run": "https://github.com/nemo9nemo/chagokchan/actions/runs/39396883677",
+    "feature_commit_quality": "passed",
     "follow_live_github_for_final_result": true
   },
   "commands": [
