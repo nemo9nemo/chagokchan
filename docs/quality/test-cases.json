@@ -1813,6 +1813,27 @@
       "expected": "목록 카드 데이터는 요청 하나로 읽고 현재 판은 필요한 상세 이후 표시한다. 과거 회차 장애는 현재 판을 지우지 않는다. 세션·권한 검사와 no-store는 유지한다. 실운영 부하/실기기 성능 수락을 대체하지 않는다.",
       "status": "passed",
       "evidence": "reports/w26-board-loading-check-2026-10-26.json"
+    },
+    {
+      "id": "TC-AUTH-LOGOUT-001",
+      "requirement_ids": [
+        "REQ-001",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-SEC-001"
+      ],
+      "level": "server_api_unit_and_local_issued_auth",
+      "title": "현재/전체 로그아웃 서버 폐기·쿠키·실패 경계",
+      "steps": [
+        "CSRF/Origin/입력·쿠키 속성·로컬 가상 모드 거절·장애 시 쿠키 보존을 검사",
+        "새 합성 Auth 사용자 두 명의 여러 발급 세션으로 current와 all 범위·다른 사용자 보존·폐기 JWT 재사용 거절 검사",
+        "새 검사 사용자/세션만 정리하고 기존 제품 데이터·Auth 사용자/세션을 비교"
+      ],
+      "expected": "현재 세션은 해당 기기만, 전체는 현재 사용자의 모든 세션만 폐기한다. 유효 현재 세션 없이 다른 기기를 폐기하지 않는다. 만료 토큰/불확실한 폐기를 성공으로 표시하지 않는다. 실제 제공자·갱신/UI·HTTPS 브라우저 수락은 별도다.",
+      "status": "passed",
+      "evidence": "reports/w12-c1-logout-check-2026-10-26.json"
     }
   ],
   "updated_on": "2026-10-26"
