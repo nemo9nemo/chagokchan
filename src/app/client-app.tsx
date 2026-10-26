@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idempotent-request.mjs";
+import { openBoardView } from "@/client/board-loading.mjs";
 import GrapeCluster from "./grape-cluster";
 import NewsPanel, { type NewsNotification, type NewsTab, type SentPraise } from "./news-panel";
 import { canOpenConnections } from "./news-labels.mjs";
@@ -617,14 +618,11 @@ export default function ChagokchanApp() {
     try {
       const query = new URLSearchParams({ limit: "20" });
       if (cursor) query.set("cursor", cursor);
-      const page = await apiJson<Page<GoalSummary>>(`/api/v1/goals?${query.toString()}`);
-      setGoals((previous) => append ? [...previous, ...page.items] : page.items);
+      const page = await apiJson<Page<GoalDetail>>(`/api/v1/goal-overviews?${query.toString()}`);
+      const summaries = page.items.map((item) => item.goal);
+      setGoals((previous) => append ? [...previous, ...summaries] : summaries);
       setGoalCursor(page.next_cursor);
-      void Promise.allSettled(page.items.map((goal) => getGoalDetail(goal.id)))
-        .then((results) => {
-          const details = results.flatMap((result) => result.status === "fulfilled" ? [result.value] : []);
-          setGoalDetails((previous) => ({ ...previous, ...Object.fromEntries(details.map((item) => [item.goal.id, item])) }));
-        });
+      setGoalDetails((previous) => ({ ...previous, ...Object.fromEntries(page.items.map((item) => [item.goal.id, item])) }));
       if (!append && page.items.length === 0) {
         selectedGoalIdRef.current = null;
         setSelectedGoalId(null);
@@ -668,6 +666,10 @@ export default function ChagokchanApp() {
 
   const openGoal = useCallback(async (goalId: string, preferredBoardId?: string, preferredBunchId?: string) => {
     const requestSeq = ++goalRequestSeq.current;
+    praiseRequestSeq.current += 1;
+    setPraises([]);
+    setPraiseCursor(null);
+    setLoadingPraises(true);
     selectedGoalIdRef.current = goalId;
     setSelectedGoalId(goalId);
     setLoadingDetail(true);
@@ -676,40 +678,37 @@ export default function ChagokchanApp() {
     setShowCreate(false);
     setShowSettings(false);
     try {
-      const nextDetail = await getGoalDetail(goalId);
-      const bunchPages = await Promise.all(nextDetail.boards.map(async (board) => {
-        const query = new URLSearchParams({ limit: "50" });
-        const page = await apiJson<Page<Bunch>>(`/api/v1/boards/${board.id}/bunches?${query.toString()}`);
-        while (board.id === preferredBoardId && preferredBunchId && page.next_cursor && !page.items.some((bunch) => bunch.id === preferredBunchId)) {
-          query.set("cursor", page.next_cursor);
-          const older = await apiJson<Page<Bunch>>(`/api/v1/boards/${board.id}/bunches?${query}`);
-          page.items.push(...older.items); page.next_cursor = older.next_cursor;
-        }
-        return [board.id, page] as const;
-      }));
-      if (requestSeq !== goalRequestSeq.current) return;
-      const nextBunches = Object.fromEntries(bunchPages.map(([boardId, page]) => [boardId, page.items]));
-      const nextCursors = Object.fromEntries(bunchPages.map(([boardId, page]) => [boardId, page.next_cursor]));
-      const personal = nextDetail.boards.find((board) => board.kind === "personal");
-      const nextBoard = nextDetail.boards.find((board) => board.id === preferredBoardId) ?? personal ?? nextDetail.boards[0];
-      const boardBunches = nextBunches[nextBoard.id] ?? [];
-      const nextBunchId = (preferredBunchId && boardBunches.some((bunch: Bunch) => bunch.id === preferredBunchId) ? preferredBunchId : null)
-        ?? nextBoard.current_bunch?.id
-        ?? boardBunches[0]?.id
-        ?? "";
-      setDetail(nextDetail);
-      setGoalDetails((previous) => ({ ...previous, [goalId]: nextDetail }));
-      setBunchesByBoard((previous) => ({ ...previous, ...nextBunches }));
-      setBunchCursors((previous) => ({ ...previous, ...nextCursors }));
-      setSelectedBoardId(nextBoard.id);
-      setSelectedBunchId(nextBunchId);
-      setEditingPraise(null);
-      const page = await loadPraises(nextBoard.id, nextBunchId);
-      return { bunch: boardBunches.find((bunch: Bunch) => bunch.id === nextBunchId) as Bunch | undefined, page };
+      return await openBoardView({
+        goalId, preferredBoardId, preferredBunchId,
+        getDetail: getGoalDetail,
+        getHistory: (boardId: string, cursor: string | null = null) => {
+          const query = new URLSearchParams({ limit: "50" });
+          if (cursor) query.set("cursor", cursor);
+          return apiJson<Page<Bunch>>(`/api/v1/boards/${boardId}/bunches?${query}`);
+        },
+        getPraises: loadPraises,
+        isCurrent: () => requestSeq === goalRequestSeq.current,
+        onReady: (nextDetail: GoalDetail, nextBoard: Board, nextBunch: Bunch | null) => {
+          setDetail(nextDetail);
+          setGoalDetails((previous) => ({ ...previous, [goalId]: nextDetail }));
+          setBunchesByBoard((previous) => ({ ...previous, ...Object.fromEntries(nextDetail.boards.map(board => [board.id, board.current_bunch ? [board.current_bunch] : []])) }));
+          setBunchCursors((previous) => ({ ...previous, ...Object.fromEntries(nextDetail.boards.map(board => [board.id, null])) }));
+          setSelectedBoardId(nextBoard.id);
+          setSelectedBunchId(nextBunch?.id ?? "");
+          setEditingPraise(null);
+          setLoadingDetail(false);
+        },
+        onHistory: (boardId: string, page: Page<Bunch>) => {
+          setBunchesByBoard(previous => ({ ...previous, [boardId]: page.items }));
+          setBunchCursors(previous => ({ ...previous, [boardId]: page.next_cursor }));
+        },
+        onHistoryError: (error: unknown) => setDetailError(`지난 회차를 불러오지 못했어요. ${errorMessage(error)}`),
+      });
     } catch (error) {
       if (requestSeq !== goalRequestSeq.current) return;
       setDetail(null);
       setDetailError(errorMessage(error));
+      setLoadingPraises(false);
     } finally {
       if (requestSeq === goalRequestSeq.current) setLoadingDetail(false);
     }

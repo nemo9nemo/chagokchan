@@ -1,5 +1,7 @@
 # 검증 계획과 증거 기준
 
+2026-10-26 W26-A: 현재 TC 82개 중 범위를 한정한 passed 43개·not_run 39개. 새 TC-PERF-BOARD-001은 로컬 성능/API/DB/상태 전이 범위이며 브라우저·운영 부하 수락을 포함하지 않는다. unit 188·DB 406·로컬 발급 세션 6·build와 production 보안 HTTP 7을 통과했다. [증거](reports/w26-board-loading-check-2026-10-26.json). 아래 W15-A의 81개 집계는 당시 기록이다.
+
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W15-A 보안 보완 로컬 검사 완료·전체 출시 수락 미완료 / 갱신일: 2026-10-20
 
 현재 집계는 TC 81개 중 범위를 한정해 passed 42개, not_run 39개다. W15-A의 새 TC-SEC-HEADERS-001은 nonce CSP·production HTTP 헤더 검사이며 TC-WEB-001/002 전체 수락을 대체하지 않는다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 7·build를 통과했다. [보안 점검](reports/security-completion-audit-2026-10-20.md)과 [증거](reports/security-completion-audit-2026-10-20.json)를 따른다. 아래 W06~W20의 과거 실행 수치는 당시 기록으로 보존한다.

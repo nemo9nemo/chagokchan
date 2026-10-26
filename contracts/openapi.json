@@ -5577,6 +5577,106 @@
           }
         }
       }
+    },
+    "/goal-overviews": {
+      "get": {
+        "operationId": "listGoalOverviews",
+        "summary": "내 판 목록과 현재 진행 정보 일괄 조회",
+        "tags": [
+          "goals"
+        ],
+        "description": "기존 소유자 목표 목록과 동일한 필터/커서를 사용한다. 현재 사용자·계정·세션 및 각 목표 권한을 검사해 개인/공유판과 현재 회차를 한 응답에 제공한다. 기존 /goals 계약은 유지한다.",
+        "x-implementation-status": "server_api_local_verified_real_provider_acceptance_pending",
+        "x-requirements": [
+          "REQ-002",
+          "NFR-001",
+          "NFR-003"
+        ],
+        "x-policy-ids": [
+          "POL-GOAL-001",
+          "POL-ACCESS-001"
+        ],
+        "x-test-cases": [
+          "TC-PERF-BOARD-001"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "active",
+                "completed",
+                "archived"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공: 소유자 판 개요의 제한된 페이지",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "no-store"
+                },
+                "description": "인증·사용자 데이터 캐시 금지"
+              },
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoalOverviewsPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-database-rpcs": [
+          "list_goal_overviews(text,integer,text)"
+        ]
+      }
     }
   },
   "components": {
@@ -7913,6 +8013,34 @@
           ]
         },
         "description": "셀프 칭찬 전용 사용자 태그. # 없이 전송, NFC·영문 ASCII 대소문자 중복 제거, 입력 순서 유지. 비어 있으면 태그 없음."
+      },
+      "GoalOverviewsPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GoalDetail"
+            },
+            "maxItems": 50
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ]
       }
     },
     "responses": {

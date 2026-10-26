@@ -14,7 +14,7 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs scripts/board-loading.test.mjs scripts/dev-warmup.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
@@ -48,7 +48,9 @@
     "api:praise-tag-test": "node scripts/test-local-praise-tag-api.mjs",
     "db:session-adapter-test": "node scripts/test-local-deployed-session.mjs",
     "db:registration-test": "node scripts/test-local-registration.mjs",
-    "api:registration-test": "node scripts/test-local-registration-api.mjs"
+    "api:registration-test": "node scripts/test-local-registration-api.mjs",
+    "db:goal-overview-test": "node scripts/test-local-goal-overviews.mjs",
+    "perf:board-test": "node scripts/measure-board-loading.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",

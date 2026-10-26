@@ -1,0 +1,556 @@
+{
+  "verified_at": "2026-10-26T09:10:06.923Z",
+  "work_items": [
+    "W26-A"
+  ],
+  "status": "local_performance_improvement_verified_browser_acceptance_pending",
+  "source_base_commit": "a11df1f53cf288452b759cc4dde5c78d824899be",
+  "source_files": [
+    ".github/workflows/ci.yml",
+    ".node-version",
+    "contracts/openapi.json",
+    "next.config.mjs",
+    "package.json",
+    "pnpm-lock.yaml",
+    "policies/app-policy.json",
+    "policies/development-policy.json",
+    "scripts/api-security.test.mjs",
+    "scripts/app.mjs",
+    "scripts/board-api.test.mjs",
+    "scripts/board-loading.test.mjs",
+    "scripts/check-commit-message.mjs",
+    "scripts/connection-api.test.mjs",
+    "scripts/database-task.mjs",
+    "scripts/deployed-session.test.mjs",
+    "scripts/dev-warmup.mjs",
+    "scripts/dev-warmup.test.mjs",
+    "scripts/docker-loopback-proxy.mjs",
+    "scripts/docker-loopback-proxy.test.mjs",
+    "scripts/goal-api.test.mjs",
+    "scripts/grape-layout.test.mjs",
+    "scripts/idempotent-request.test.mjs",
+    "scripts/local-database-tools.mjs",
+    "scripts/local-db.mjs",
+    "scripts/local-fixture-manifest.mjs",
+    "scripts/local-fixture-manifest.test.mjs",
+    "scripts/local-user-session.test.mjs",
+    "scripts/measure-board-loading.mjs",
+    "scripts/news-api.test.mjs",
+    "scripts/news-labels.test.mjs",
+    "scripts/praise-api.test.mjs",
+    "scripts/praise-tags.test.mjs",
+    "scripts/project.ps1",
+    "scripts/registration-api.test.mjs",
+    "scripts/runtime-environment.mjs",
+    "scripts/runtime-environment.test.mjs",
+    "scripts/security-headers.test.mjs",
+    "scripts/seed-local-fixtures.mjs",
+    "scripts/service-worker.test.mjs",
+    "scripts/test-local-account-deletion.mjs",
+    "scripts/test-local-board-api.mjs",
+    "scripts/test-local-connection-api.mjs",
+    "scripts/test-local-connection-rpc.mjs",
+    "scripts/test-local-deployed-session.mjs",
+    "scripts/test-local-goal-api.mjs",
+    "scripts/test-local-goal-lifecycle-rpc.mjs",
+    "scripts/test-local-goal-list-api.mjs",
+    "scripts/test-local-goal-list-rpc.mjs",
+    "scripts/test-local-goal-management-api.mjs",
+    "scripts/test-local-goal-overviews.mjs",
+    "scripts/test-local-goal-rpc.mjs",
+    "scripts/test-local-lifecycle-rpc.mjs",
+    "scripts/test-local-me-api.mjs",
+    "scripts/test-local-news-api.mjs",
+    "scripts/test-local-personal-praise-api.mjs",
+    "scripts/test-local-personal-praise-result-rpc.mjs",
+    "scripts/test-local-personal-praise.mjs",
+    "scripts/test-local-praise-tag-api.mjs",
+    "scripts/test-local-registration-api.mjs",
+    "scripts/test-local-registration.mjs",
+    "scripts/test-local-rpc.mjs",
+    "scripts/test-local-shared-board-rpc.mjs",
+    "scripts/test-local-trash-api.mjs",
+    "scripts/test-security-headers-http.mjs",
+    "scripts/verify-artifacts.mjs",
+    "src/app/api/v1/auth/csrf/route.ts",
+    "src/app/api/v1/auth/session/route.ts",
+    "src/app/api/v1/blocks/[block_id]/route.ts",
+    "src/app/api/v1/blocks/route.ts",
+    "src/app/api/v1/boards/[board_id]/bunches/route.ts",
+    "src/app/api/v1/boards/[board_id]/members/[user_id]/route.ts",
+    "src/app/api/v1/boards/[board_id]/members/route.ts",
+    "src/app/api/v1/boards/[board_id]/praises/route.ts",
+    "src/app/api/v1/boards/[board_id]/route.ts",
+    "src/app/api/v1/connection-invites/[invite_id]/route.ts",
+    "src/app/api/v1/connection-invites/preview/route.ts",
+    "src/app/api/v1/connection-invites/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/accept/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/cancel/route.ts",
+    "src/app/api/v1/connection-requests/[request_id]/reject/route.ts",
+    "src/app/api/v1/connection-requests/route.ts",
+    "src/app/api/v1/connections/[connection_id]/route.ts",
+    "src/app/api/v1/connections/route.ts",
+    "src/app/api/v1/goal-overviews/route.ts",
+    "src/app/api/v1/goals/[goal_id]/archive/route.ts",
+    "src/app/api/v1/goals/[goal_id]/complete/route.ts",
+    "src/app/api/v1/goals/[goal_id]/restore/route.ts",
+    "src/app/api/v1/goals/[goal_id]/resume/route.ts",
+    "src/app/api/v1/goals/[goal_id]/route.ts",
+    "src/app/api/v1/goals/route.ts",
+    "src/app/api/v1/me/bootstrap/route.ts",
+    "src/app/api/v1/me/route.ts",
+    "src/app/api/v1/notifications/[notification_id]/route.ts",
+    "src/app/api/v1/notifications/route.ts",
+    "src/app/api/v1/praises/[praise_id]/cancel/route.ts",
+    "src/app/api/v1/praises/[praise_id]/exclude/route.ts",
+    "src/app/api/v1/praises/[praise_id]/hide/route.ts",
+    "src/app/api/v1/praises/[praise_id]/route.ts",
+    "src/app/api/v1/praises/[praise_id]/unhide/route.ts",
+    "src/app/api/v1/sent-praises/route.ts",
+    "src/app/api/v1/shared-boards/route.ts",
+    "src/app/api/v1/trash/goals/route.ts",
+    "src/app/client-app.tsx",
+    "src/app/globals.css",
+    "src/app/grape-cluster.tsx",
+    "src/app/grape-layout.mjs",
+    "src/app/layout.tsx",
+    "src/app/manifest.ts",
+    "src/app/news-labels.mjs",
+    "src/app/news-panel.tsx",
+    "src/app/page.tsx",
+    "src/app/praise-sheet.tsx",
+    "src/app/pwa-icons/180/route.tsx",
+    "src/app/pwa-icons/192/route.tsx",
+    "src/app/pwa-icons/512/route.tsx",
+    "src/app/pwa-icons/render-icon.tsx",
+    "src/app/share-panel.tsx",
+    "src/app/tag-input.tsx",
+    "src/client/board-loading.mjs",
+    "src/client/idempotent-request.mjs",
+    "src/proxy.ts",
+    "src/server/api-security.mjs",
+    "src/server/app-session.ts",
+    "src/server/board-api.mjs",
+    "src/server/connection-api.mjs",
+    "src/server/deployed-session.mjs",
+    "src/server/goal-api.mjs",
+    "src/server/local-user-session.mjs",
+    "src/server/news-api.mjs",
+    "src/server/praise-api.mjs",
+    "src/server/registration-api.mjs",
+    "src/server/security-headers.mjs",
+    "src/server/session-api-route.ts",
+    "src/shared/praise-tags.mjs",
+    "supabase/migrations/20261008013000_product_schema.sql",
+    "supabase/migrations/20261008020500_session_rpc_boundary.sql",
+    "supabase/migrations/20261008020600_grant_auth_schema_usage.sql",
+    "supabase/migrations/20261008020700_isolate_auth_session_reader.sql",
+    "supabase/migrations/20261008020800_revoke_auth_columns_from_guard.sql",
+    "supabase/migrations/20261008020900_revoke_auth_schema_from_guard.sql",
+    "supabase/migrations/20261008021000_goal_rpc.sql",
+    "supabase/migrations/20261008021100_narrow_goal_rpc_privileges.sql",
+    "supabase/migrations/20261008021200_goal_receipt_lookup_columns.sql",
+    "supabase/migrations/20261008021300_receipt_retry_lock_privilege.sql",
+    "supabase/migrations/20261008021400_personal_praise_cycle_rpcs.sql",
+    "supabase/migrations/20261008021500_qualify_praise_cycle_number.sql",
+    "supabase/migrations/20261008021600_verified_actor_completion_notice.sql",
+    "supabase/migrations/20261008021700_notification_conflict_select_policy.sql",
+    "supabase/migrations/20261008021800_connection_invite_request_rpcs.sql",
+    "supabase/migrations/20261008021900_connection_secret_validation_fix.sql",
+    "supabase/migrations/20261008022000_connection_notification_conflict_select.sql",
+    "supabase/migrations/20261008022100_acceptance_notification_target.sql",
+    "supabase/migrations/20261008022200_shared_board_access_and_peer_praise.sql",
+    "supabase/migrations/20261008022300_shared_board_rpc_row_lock_rls.sql",
+    "supabase/migrations/20261008022400_shared_praise_write_policies.sql",
+    "supabase/migrations/20261008022500_shared_praise_cycle_column_fix.sql",
+    "supabase/migrations/20261008022600_peer_praise_receipt_shape.sql",
+    "supabase/migrations/20261008022700_shared_praise_owner_state_projection.sql",
+    "supabase/migrations/20261008022800_relationship_cursor_line_wrap_fix.sql",
+    "supabase/migrations/20261008022900_shared_list_cursor_boundary_fix.sql",
+    "supabase/migrations/20261008023000_connection_list_cursor_boundary_fix.sql",
+    "supabase/migrations/20261008023100_news_goal_trash_and_purge_rpcs.sql",
+    "supabase/migrations/20261008023200_sent_praise_read_after_disconnect.sql",
+    "supabase/migrations/20261008023300_worker_jwt_reader_boundary.sql",
+    "supabase/migrations/20261008023400_goal_purge_lock_privileges.sql",
+    "supabase/migrations/20261008023500_account_deletion_request_boundary.sql",
+    "supabase/migrations/20261008023600_account_deletion_erasure_worker.sql",
+    "supabase/migrations/20261008023700_account_deletion_retry_privilege_fix.sql",
+    "supabase/migrations/20261008023800_account_profile_erasure_privilege.sql",
+    "supabase/migrations/20261008023900_account_deletion_guard_helper.sql",
+    "supabase/migrations/20261008024000_account_deletion_state_read_privilege.sql",
+    "supabase/migrations/20261008024100_account_deletion_timezone_check_privilege.sql",
+    "supabase/migrations/20261008024200_account_deletion_request_timestamp_privilege.sql",
+    "supabase/migrations/20261008024300_goal_list_rpc.sql",
+    "supabase/migrations/20261008024400_goal_list_cursor_base64_wrap_fix.sql",
+    "supabase/migrations/20261008024500_bunch_list_rpc.sql",
+    "supabase/migrations/20261008024600_personal_praise_result_rpc.sql",
+    "supabase/migrations/20261008024700_peer_praise_moderation_rpcs.sql",
+    "supabase/migrations/20261008024800_list_my_shared_boards_rpc.sql",
+    "supabase/migrations/20261008024900_goal_delete_retry_is_idempotent.sql",
+    "supabase/migrations/20261008025000_praise_tag.sql",
+    "supabase/migrations/20261008025100_shared_count_and_sender_cancel.sql",
+    "supabase/migrations/20261019000100_registration_bootstrap.sql",
+    "supabase/migrations/20261019000200_neutral_profile_defaults.sql",
+    "supabase/migrations/20261020000100_custom_praise_tags.sql",
+    "supabase/migrations/20261020000200_praise_tag_list_compatibility.sql",
+    "supabase/migrations/20261026000100_owner_goal_overviews.sql",
+    "supabase/tests/001_physical_integrity.test.sql",
+    "supabase/tests/002_rpc_boundary.test.sql",
+    "supabase/tests/003_business_rpc.test.sql",
+    "supabase/tests/004_business_rpc_praise.test.sql",
+    "supabase/tests/005_business_rpc_connections.test.sql",
+    "supabase/tests/006_business_rpc_shared_board.test.sql",
+    "supabase/tests/007_business_rpc_lifecycle.test.sql",
+    "supabase/tests/008_business_rpc_account_deletion.test.sql",
+    "supabase/tests/009_business_rpc_goal_list.test.sql",
+    "supabase/tests/010_business_rpc_bunch_list.test.sql",
+    "supabase/tests/011_business_rpc_personal_praise_result.test.sql",
+    "supabase/tests/012_business_rpc_peer_praise_moderation.test.sql",
+    "supabase/tests/013_business_rpc_shared_board_directory.test.sql",
+    "supabase/tests/014_business_rpc_goal_delete_retry.test.sql",
+    "supabase/tests/015_business_rpc_praise_tag.test.sql",
+    "supabase/tests/016_business_rpc_shared_count_and_sender_cancel.test.sql",
+    "supabase/tests/017_business_rpc_registration.test.sql",
+    "supabase/tests/018_business_rpc_custom_tags.test.sql",
+    "supabase/tests/019_business_rpc_goal_overviews.test.sql"
+  ],
+  "source_sha256": "2838c2dcddec3cb468eaf39a2489b57fd330a7cd2f1fce2387bb3c047180bfa4",
+  "source_hash_format": "sorted_relative_paths_newline_then_LF_normalized_UTF8_text_newline",
+  "environment": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0",
+    "next": "16.4.2",
+    "local_development": true,
+    "migrations": 53,
+    "new_migrations": 1,
+    "applied_migrations_edited": false
+  },
+  "findings": [
+    {
+      "cause": "first-use development compilation",
+      "observed_ms": 10800,
+      "compilation_ms": 10700,
+      "application_ms": 97,
+      "source": "pre-change developer request log; not a repeated production experiment"
+    },
+    {
+      "cause": "HTTP request per card and Promise.all barrier",
+      "change": "one bounded owner overview request with existing role/field/cursor checks"
+    },
+    {
+      "cause": "waiting for all histories before current-board rendering",
+      "change": "fresh detail then current board/praise first; asynchronous histories with stale-request guard"
+    }
+  ],
+  "measurements": {
+    "measured_at": "2026-10-26T04:43:18.687Z",
+    "scope": "local_read_only_API_and_client_orchestration_comparison_not_browser_paint_or_production_load",
+    "samples": [
+      {
+        "round": 1,
+        "legacy_cards": {
+          "ms": 295.1,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 106.3,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 257,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 101.3,
+          "requests": 1
+        },
+        "records_ready_ms": 102.2
+      },
+      {
+        "round": 2,
+        "legacy_cards": {
+          "ms": 202.7,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 89.4,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 231.6,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 107,
+          "requests": 1
+        },
+        "records_ready_ms": 107.5
+      },
+      {
+        "round": 3,
+        "legacy_cards": {
+          "ms": 162.7,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 73.3,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 220.4,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 95.9,
+          "requests": 1
+        },
+        "records_ready_ms": 96.2
+      },
+      {
+        "round": 4,
+        "legacy_cards": {
+          "ms": 198.5,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 89.5,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 164.4,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 90.3,
+          "requests": 1
+        },
+        "records_ready_ms": 90.8
+      },
+      {
+        "round": 5,
+        "legacy_cards": {
+          "ms": 160.2,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 95.1,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 177,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 104.1,
+          "requests": 1
+        },
+        "records_ready_ms": 104.5
+      },
+      {
+        "round": 6,
+        "legacy_cards": {
+          "ms": 180.2,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 77.4,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 158,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 86.2,
+          "requests": 1
+        },
+        "records_ready_ms": 86.6
+      },
+      {
+        "round": 7,
+        "legacy_cards": {
+          "ms": 167.2,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 75.3,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 172.9,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 87.2,
+          "requests": 1
+        },
+        "records_ready_ms": 87.6
+      },
+      {
+        "round": 8,
+        "legacy_cards": {
+          "ms": 154.9,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 74.9,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 158.6,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 109.9,
+          "requests": 1
+        },
+        "records_ready_ms": 110.1
+      },
+      {
+        "round": 9,
+        "legacy_cards": {
+          "ms": 152.1,
+          "requests": 2
+        },
+        "overview_cards": {
+          "ms": 77.1,
+          "requests": 1
+        },
+        "legacy_open": {
+          "ms": 177.9,
+          "requests": 3
+        },
+        "current_board_ready": {
+          "ms": 100.2,
+          "requests": 1
+        },
+        "records_ready_ms": 100.6
+      }
+    ],
+    "warm_samples": 8,
+    "existing_goals": 1,
+    "median_ms": {
+      "legacy_cards": 165,
+      "overview_cards": 77.3,
+      "legacy_open": 175,
+      "current_board_ready": 98.1,
+      "records_ready": 98.4
+    },
+    "checks": [
+      "same_owner_card_projection",
+      "same_cursor",
+      "all_requests_200_no_store",
+      "no_product_writes",
+      "current_board_ready_before_histories"
+    ]
+  },
+  "checks": {
+    "unit": {
+      "command": "project.ps1 -Task check",
+      "passed": 188,
+      "failed": 0
+    },
+    "database": {
+      "command": "project.ps1 -Task db:test",
+      "passed": 406,
+      "new_overview_checks": 16,
+      "physical": 51,
+      "rpc_boundary": 21,
+      "business": 334
+    },
+    "issued_auth": {
+      "command": "project.ps1 -Task db:goal-overview-test",
+      "checked_at": "2026-10-26T09:04:33.481Z",
+      "status": "passed",
+      "cases": [
+        {
+          "name": "A_issued_session_exact_owner_projection",
+          "status": "passed"
+        },
+        {
+          "name": "B_issued_session_exact_owner_projection",
+          "status": "passed"
+        },
+        {
+          "name": "C_issued_session_exact_owner_projection",
+          "status": "passed"
+        },
+        {
+          "name": "direct_table_reads_stay_denied",
+          "status": "passed"
+        },
+        {
+          "name": "revoked_issued_session_replay_denied",
+          "status": "passed"
+        },
+        {
+          "name": "all_product_rows_and_preexisting_sessions_preserved",
+          "status": "passed"
+        }
+      ],
+      "executed": 6,
+      "existing_product_data_and_sessions_preserved": true,
+      "real_local_auth_sessions_issued": 3,
+      "real_google_otp_tests_executed": 0,
+      "service_role_used": false
+    },
+    "build": {
+      "command": "project.ps1 -Task build:check",
+      "status": "passed"
+    },
+    "production_headers": {
+      "command": "pinned Node scripts/test-security-headers-http.mjs",
+      "verified_at": "2026-10-26T09:08:49.311Z",
+      "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+      "next": "16.4.2",
+      "passed": 7,
+      "checks": [
+        {
+          "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+          "status": "passed"
+        },
+        {
+          "name": "all generated Next.js script tags carry the response nonce",
+          "status": "passed"
+        },
+        {
+          "name": "HTML nonce changes for every request and documents cannot be cached",
+          "status": "passed"
+        },
+        {
+          "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+          "status": "passed"
+        },
+        {
+          "name": "production rejects missing authentication and keeps API errors out of caches",
+          "status": "passed"
+        },
+        {
+          "name": "service worker is revalidated with a script-free same-origin fetch policy",
+          "status": "passed"
+        },
+        {
+          "name": "only the public offline page is immutable and contains no executable scripts",
+          "status": "passed"
+        }
+      ]
+    },
+    "warmup": {
+      "requests": 8,
+      "completed": true,
+      "scope": "loopback local GET requests only; no business data cache or authorization bypass"
+    }
+  },
+  "codex_review": {
+    "external_reviewer": false,
+    "claude_used": false,
+    "result": "Existing session/owner/RLS/field/cursor checks preserved. New migration only. Current rendering no longer awaits histories; deep links and stale responses covered. Raw response bodies are withheld on probe failures."
+  },
+  "not_run": [
+    "actual browser rendering/paint and past-cycle UI checks: computer-use app approval timed out",
+    "production-sized load and maximum owner goal volume",
+    "real device IME/accessibility/offline/cache/provider acceptance"
+  ],
+  "real_google_otp_tests_executed": 0,
+  "public_environment_deployed": false
+}

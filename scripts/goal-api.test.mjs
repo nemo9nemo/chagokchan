@@ -6,6 +6,7 @@ import {
   getGoalResponse,
   listBunchesResponse,
   listGoalsResponse,
+  listGoalOverviewsResponse,
   listTrashGoalsResponse,
   projectGoalDetail,
   transitionGoalResponse,
@@ -25,6 +26,32 @@ const secret = Buffer.alloc(32, 11);
 const goalId = "11111111-1111-4111-8111-111111111111";
 const boardId = "22222222-2222-4222-8222-222222222222";
 const requestKey = "33333333-3333-4333-8333-333333333333";
+
+test("overview list batches exact owner details in one RPC with no-store", async () => {
+  const calls = [];
+  const expected = { items: [detail()], next_cursor: null };
+  const response = await listGoalOverviewsResponse(new URL(`${origin}/api/v1/goal-overviews?limit=20`), {
+    rpc: async (...args) => { calls.push(args); return { data: expected }; },
+  });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), expected);
+  assert.deepEqual(calls, [["list_goal_overviews", { p_cursor: null, p_limit: 20, p_status: null }]]);
+  assert.match(response.headers.get("cache-control"), /no-store/);
+});
+test("overview list rejects expanded private fields and oversized returned pages", async () => {
+  const item = detail();
+  for (const page of [{ items: [{ ...item, email: "private@example.invalid" }], next_cursor: null }, { items: [item,item], next_cursor: null }]) {
+    const response = await listGoalOverviewsResponse(new URL(`${origin}/api/v1/goal-overviews?limit=1`), { rpc: async () => ({ data: page }) });
+    assert.equal(response.status, 503);
+    assert.equal(JSON.stringify(await response.json()).includes("private@example.invalid"), false);
+  }
+});
+test("overview list validates page size before calling RPC and maps revoked-session failure", async () => {
+  const invalid = await listGoalOverviewsResponse(new URL(`${origin}/api/v1/goal-overviews?limit=51`), { rpc: () => { throw new Error("must not call"); } });
+  assert.equal(invalid.status, 400);
+  const revoked = await listGoalOverviewsResponse(new URL(`${origin}/api/v1/goal-overviews`), { rpc: async () => ({ error: { code: "PT401" } }) });
+  assert.equal(revoked.status, 401);
+});
 const detail = () => ({
   goal: {
     id: goalId,

@@ -321,6 +321,21 @@ export async function listGoalsResponse(url, client) {
   }
 }
 
+export async function listGoalOverviewsResponse(url, client) {
+  const requestId = randomUUID();
+  try {
+    const input = validateGoalsQuery(url);
+    const { data, error } = await client.rpc("list_goal_overviews", input);
+    rpcError(error);
+    if (!exactObject(data, ["items", "next_cursor"]) || Object.keys(data).length !== 2 ||
+        !Array.isArray(data.items) || data.items.length > input.p_limit ||
+        !(data.next_cursor === null || (typeof data.next_cursor === "string" && /^[A-Za-z0-9_-]{1,512}$/.test(data.next_cursor)))) {
+      throw new Error("Goal overview page did not match its allowlist.");
+    }
+    return jsonResponse({ items: data.items.map(projectGoalDetail), next_cursor: data.next_cursor }, 200, requestId);
+  } catch (error) { return errorResponse(error, requestId); }
+}
+
 export async function listTrashGoalsResponse(url, client) {
   const requestId = randomUUID();
   try {

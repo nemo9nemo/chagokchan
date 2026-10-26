@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-10-26 W26-A 로컬 성능 개선: 소유자 일괄 개요 RPC/API·카드 HTTP N+1 제거·현재 회차 우선 표시·과거 회차 비동기/경합 처리·개발 GET 워밍업을 추가했다. 기존 SQL은 보존하고 새 SQL 1개만 적용(총 53). unit 188·DB 406·실제 Auth A/B/C 통합 6·build·production 보안 HTTP 7 통과. 기존 판 1개·준비된 로컬 경로 8회 중앙값은 카드 165→77.3ms, 현재 판 준비 175→98.1ms이며 실제 브라우저 페인트/운영 부하 수치가 아니다. computer-use 앱 제어 승인 시간 초과로 브라우저 확인은 미실행. [증거](../quality/reports/w26-board-loading-check-2026-10-26.json). 다음은 외부 제공자 설정과 독립적인 W12-C 로그아웃 서버 경계부터 진행한다. 개발 무로그인은 유지한다.
+
 W15-A 원격 근거: [PR #15](https://github.com/nemo9nemo/chagokchan/pull/15), 기능 소스 `43920a2`, [필수 quality 통과](https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892). 최종 PR 검사·병합 상태는 GitHub 기록을 따른다.
 
 2026-10-20 W15-A 보안·완료 여부 점검: 공개 출시 미완료를 확인했다. Next.js 16.4.0의 공식 보안 권고를 확인해 16.4.2로 교체하고, 누락된 요청별 nonce CSP·no-referrer·운영 HSTS·기기 권한 헤더 및 CI 의존성/HTTP 검사를 추가했다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 헤더 7·build 통과. Git 비밀 패턴 검사와 실제 DB 권한 카탈로그도 점검했다. TC-WEB-001/002·분산 제한/CAPTCHA·실제 로그인/로그아웃/탈퇴·운영/실기기/복원/부하 수락은 미완료다. W15는 부분 진행이며 다음은 W14 입력과 병행한 W12-C다. [보고서](../quality/reports/security-completion-audit-2026-10-20.md). 과거의 단위 검사 159·DB 350 수치와 현재 175·390을 구분한다.
