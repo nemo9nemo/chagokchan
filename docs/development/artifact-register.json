@@ -247,7 +247,14 @@
       "status": "local_feature_verified_manual_acceptance_pending",
       "manual_acceptance_pending": [
         "TC-PRAISE-TAG-003"
-      ]
+      ],
+      "w25_e": {
+        "status": "source_check_build_verified_visual_acceptance_pending",
+        "report": "docs/quality/reports/w25-e-praise-spacing-check-2026-10-26.json",
+        "css_delete_target_px": 44,
+        "common_field_gap_px": 12,
+        "actual_browser_measurement_executed": false
+      }
     },
     "test_cases_not_run": 39,
     "latest_full_database_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",

@@ -26,7 +26,7 @@ const TagInput = forwardRef<TagInputHandle, { tags: string[]; onChange: (tags: s
     return apply(field.current?.value ?? draft, true);
   } }));
   return <div className="tag-editor">
-    <label htmlFor={id}>태그 선택 <span className="optional-mark">선택 사항</span></label>
+    <label htmlFor={id} className="field-label"><span>태그 선택</span> <span className="optional-mark">선택 사항</span></label>
     <ul className="tag-chips selected-tags" aria-label="추가한 태그">{tags.map((tag) => <li key={tag} className="tag-chip"><span>#{tag}</span><button type="button" aria-label={`${tag} 태그 삭제`} onClick={() => { onChange(tags.filter((item) => item !== tag)); setNotice(`${tag} 태그를 삭제했어요.`); setError(""); }}>×</button></li>)}</ul>
     <textarea ref={field} id={id} rows={1} value={draft} className="tag-new-input" placeholder="#태그 입력 후 공백" aria-describedby={`${id}-hint ${id}-status`} aria-invalid={Boolean(error)}
       onCompositionStart={() => { composing.current = true; }}
