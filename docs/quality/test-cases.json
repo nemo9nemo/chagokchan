@@ -1790,7 +1790,30 @@
       "expected": "운영 스크립트의 인라인/eval/외부 연결과 프레임을 제한하고 호출자 nonce를 신뢰하지 않는다. 비인증 API는 401/no-store이며 공개 정적 파일만 캐시한다. 실제 HTTPS 브라우저 집행·로그인/CAPTCHA·PWA 수락은 별도 검사다.",
       "status": "passed",
       "evidence": "reports/security-completion-audit-2026-10-20.json"
+    },
+    {
+      "id": "TC-PERF-BOARD-001",
+      "requirement_ids": [
+        "REQ-002",
+        "NFR-001",
+        "NFR-003"
+      ],
+      "policy_ids": [
+        "POL-ACCESS-001",
+        "POL-API-001",
+        "POL-SEC-001"
+      ],
+      "level": "local_api_db_client_loading_performance",
+      "title": "소유자 판 개요 일괄 조회·현재 판 우선 표시·개발 워밍업",
+      "steps": [
+        "기존 목록과 일괄 개요의 소유자/삭제/필터/페이지 순서/필드·폐기 세션 차단 일치 확인",
+        "지연·실패한 과거 회차가 현재 판과 기록 조회를 막지 않고 과거 회차 딥링크·늦은 이전 응답을 올바로 처리하는지 확인",
+        "로컬 개발 워밍업의 loopback GET-only 경계 및 같은 기존 판의 개선 전후 API 시간과 요청 수 측정"
+      ],
+      "expected": "목록 카드 데이터는 요청 하나로 읽고 현재 판은 필요한 상세 이후 표시한다. 과거 회차 장애는 현재 판을 지우지 않는다. 세션·권한 검사와 no-store는 유지한다. 실운영 부하/실기기 성능 수락을 대체하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w26-board-loading-check-2026-10-26.json"
     }
   ],
-  "updated_on": "2026-10-20"
+  "updated_on": "2026-10-26"
 }

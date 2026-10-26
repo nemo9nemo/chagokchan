@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-20",
+  "updated_on": "2026-10-26",
   "current_stage": "S07_w12_a_b_w25_and_w15_a_local_verified_release_acceptance_pending",
   "next_stage": "w14_operator_provider_inputs_then_w12_c_w12_d_w13_w15_w17",
   "implementation_started": true,
@@ -85,20 +85,20 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 81,
-    "application_tests_executed": 175,
+    "planned_test_cases": 82,
+    "application_tests_executed": 188,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
-    "database_tests_executed": 390,
+    "database_tests_executed": 406,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "local_api_tests_executed": 270,
     "real_login_tests_executed": 0,
     "foundation_report": "docs/quality/reports/foundation-check-2026-10-08.json",
     "database_test_scope": "physical_integrity_w06_a_session_reference_w06_b_goal_praise_cycle_w06_c_relationship_shared_board_w06_d1_news_goal_trash_goal_delete_retry_w06_d2_account_deletion_w08_b1_goal_list_w08_b2_goal_lifecycle_bunch_history_w08_c_personal_praise_result_w09_b_peer_praise_moderation_w09_c_shared_board_directory_registration_auth_context",
-    "business_rpc_tests_executed": 318,
+    "business_rpc_tests_executed": 334,
     "physical_database_report": "docs/quality/reports/physical-database-check-2026-10-08.json",
     "w06_a_report": "docs/quality/reports/w06-a-session-boundary-check-2026-10-08.json",
     "local_goal_rpc_tests_executed": 12,
@@ -116,7 +116,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 42,
+    "technical_cases_passed": 43,
     "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
     "w11_b2_mobile_report": "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
     "w11_b2_viewport_screen_views_verified": 30,
@@ -224,7 +224,7 @@
       "source_commit": "96a539fcabd57d35e5dbc960af4db5ae485739f4",
       "merge_commit": "b896e148b621153ce0d809dcc332233e60f93837"
     },
-    "ordered_migrations_applied": 52,
+    "ordered_migrations_applied": 53,
     "w12_b": {
       "status": "database_local_auth_http_api_unit_build_passed",
       "report": "docs/quality/reports/w12-b-registration-check-2026-10-19.json",
@@ -268,6 +268,21 @@
       "source_commit": "43920a2c88f8c10736ff13a1274963e80bf12fc5",
       "source_ci_url": "https://github.com/nemo9nemo/chagokchan/actions/runs/39423060892",
       "source_ci_conclusion": "success"
+    },
+    "w26": {
+      "status": "local_performance_improvement_verified_browser_acceptance_pending",
+      "report": "docs/quality/reports/w26-board-loading-check-2026-10-26.json",
+      "unit_passed": 188,
+      "db_passed": 406,
+      "issued_session_cases_passed": 6,
+      "measurements": {
+        "legacy_cards": 165,
+        "overview_cards": 77.3,
+        "legacy_open": 175,
+        "current_board_ready": 98.1,
+        "records_ready": 98.4
+      },
+      "browser_verified": false
     }
   },
   "artifacts": [
@@ -858,6 +873,25 @@
         "docs/quality/reports/security-completion-audit-2026-10-20.md",
         "docs/quality/reports/security-completion-audit-2026-10-20.json",
         "docs/changes/2026-10-20-security-completion-audit.md"
+      ]
+    },
+    {
+      "id": "ART-032",
+      "title": "판 로딩 성능·소유자 일괄 조회·현재 회차 우선 표시",
+      "status": "local_performance_improvement_verified_browser_acceptance_pending",
+      "paths": [
+        "docs/plans/W26-board-loading-performance.md",
+        "docs/quality/reports/w26-board-loading-check-2026-10-26.json",
+        "docs/changes/2026-10-26-board-loading-performance.md",
+        "src/client/board-loading.mjs",
+        "src/app/api/v1/goal-overviews/route.ts",
+        "scripts/dev-warmup.mjs",
+        "scripts/measure-board-loading.mjs",
+        "scripts/test-local-goal-overviews.mjs",
+        "scripts/board-loading.test.mjs",
+        "scripts/dev-warmup.test.mjs",
+        "supabase/migrations/20261026000100_owner_goal_overviews.sql",
+        "supabase/tests/019_business_rpc_goal_overviews.test.sql"
       ]
     }
   ],
