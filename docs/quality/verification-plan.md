@@ -1,5 +1,7 @@
 # 검증 계획과 증거 기준
 
+2026-10-26 W12-C1: 현재 TC 83개 중 범위를 한정한 passed 44개·not_run 39개. TC-AUTH-LOGOUT-001은 서버 API·로컬 발급 Auth·격리 HTTP 범위다. unit 199·로그아웃 통합 6·production HTTP 10·build를 통과했으며 실제 제공자·갱신/UI·HTTPS 브라우저 수락을 뜻하지 않는다. [증거](reports/w12-c1-logout-check-2026-10-26.json). DB 전체 406은 앞선 W26 실행 근거이며 로그아웃에는 SQL 변경이 없다.
+
 2026-10-26 W26-A: 현재 TC 82개 중 범위를 한정한 passed 43개·not_run 39개. 새 TC-PERF-BOARD-001은 로컬 성능/API/DB/상태 전이 범위이며 브라우저·운영 부하 수락을 포함하지 않는다. unit 188·DB 406·로컬 발급 세션 6·build와 production 보안 HTTP 7을 통과했다. [증거](reports/w26-board-loading-check-2026-10-26.json). 아래 W15-A의 81개 집계는 당시 기록이다.
 
 버전: 0.2.0 / 상태: 계획·기술 TC 일부 실행, W15-A 보안 보완 로컬 검사 완료·전체 출시 수락 미완료 / 갱신일: 2026-10-20

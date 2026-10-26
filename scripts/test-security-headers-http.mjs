@@ -23,7 +23,8 @@ const child = spawn(process.execPath, [fileURLToPath(new URL("../node_modules/ne
 let childError = false;
 child.on("error", () => { childError = true; });
 const checks = [];
-function check(name, run) { run(); checks.push({ name, status: "passed" }); }
+let phase = "server_start";
+function check(name, run) { phase = name; run(); checks.push({ name, status: "passed" }); }
 const request = (path, init) => fetch(base + path, { ...init, redirect: "error", signal: AbortSignal.timeout(10000) });
 try {
   let ready = false;
@@ -79,10 +80,36 @@ try {
     assert.match(offline.headers.get("content-security-policy"), /script-src 'none'/);
   });
   assert.equal(/<script\b/i.test(await offline.text()), false);
+  const csrfResponse = await request("/api/v1/auth/csrf");
+  const csrf = (await csrfResponse.json()).csrf_token;
+  const csrfCookie = csrfResponse.headers.getSetCookie()[0].split(";", 1)[0];
+  const logoutInit = { method: "POST", headers: { origin: env.APP_BASE_URL, "content-type": "application/json", "x-csrf-token": csrf, cookie: csrfCookie }, body: "{}" };
+  const logout = await request("/api/v1/auth/logout", logoutInit);
+  check("signed-out current logout clears separate secure Auth/CSRF cookies with no-store", () => {
+    assert.equal(logout.status, 200);
+    assert.equal(logout.headers.getSetCookie().length, 2);
+    for (const value of logout.headers.getSetCookie()) assert.match(value, /Max-Age=0; Secure; HttpOnly; SameSite=Lax/);
+    assert.match(logout.headers.get("cache-control"), /no-store/);
+  });
+  const logoutAll = await request("/api/v1/auth/logout", { ...logoutInit, body: '{"scope":"all"}' });
+  check("all-session logout requires a verified current identity", () => {
+    assert.equal(logoutAll.status, 401);
+    assert.equal(logoutAll.headers.getSetCookie().length, 0);
+  });
+  const logoutGet = await request("/api/v1/auth/logout");
+  const logoutBadCsrf = await request("/api/v1/auth/logout", { ...logoutInit, headers: { origin: env.APP_BASE_URL, "content-type": "application/json" } });
+  check("logout rejects GET and missing CSRF without removing cookies", () => {
+    assert.equal(logoutGet.status, 405);
+    assert.equal(logoutBadCsrf.status, 403);
+    assert.equal(logoutBadCsrf.headers.getSetCookie().length, 0);
+  });
   const report = { verified_at: new Date().toISOString(), scope: "isolated_production_http_headers_not_browser_or_real_auth_acceptance", next: JSON.parse(fs.readFileSync(new URL("../node_modules/next/package.json", import.meta.url))).version, passed: checks.length, checks };
   fs.mkdirSync(new URL("../tmp", import.meta.url), { recursive: true });
   fs.writeFileSync(new URL("../tmp/security-headers-http.json", import.meta.url), JSON.stringify(report, null, 2) + "\n");
   process.stdout.write(JSON.stringify(report) + "\n");
+} catch {
+  process.stderr.write(`Production HTTP check failed at ${phase}; raw headers and bodies withheld.\n`);
+  process.exitCode = 1;
 } finally {
   if (child.exitCode === null && !childError) {
     const ended = once(child, "exit");

@@ -1,7 +1,7 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-10-26",
-  "current_stage": "S07_w12_a_b_w25_and_w15_a_local_verified_release_acceptance_pending",
+  "current_stage": "S07_w12_logout_server_and_w26_local_verified_real_auth_refresh_release_pending",
   "next_stage": "w14_operator_provider_inputs_then_w12_c_w12_d_w13_w15_w17",
   "implementation_started": true,
   "git_repository_connected": true,
@@ -40,7 +40,7 @@
     {
       "id": "S07",
       "name": "실제 로그인·통합 검증",
-      "status": "session_and_registration_backend_verified_real_provider_acceptance_pending"
+      "status": "session_registration_logout_server_verified_real_provider_refresh_ui_acceptance_pending"
     },
     {
       "id": "S08",
@@ -85,8 +85,8 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 82,
-    "application_tests_executed": 188,
+    "planned_test_cases": 83,
+    "application_tests_executed": 199,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
@@ -116,7 +116,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 43,
+    "technical_cases_passed": 44,
     "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
     "w11_b2_mobile_report": "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
     "w11_b2_viewport_screen_views_verified": 30,
@@ -282,7 +282,21 @@
         "current_board_ready": 98.1,
         "records_ready": 98.4
       },
-      "browser_verified": false
+      "browser_verified": false,
+      "pull_request": "https://github.com/nemo9nemo/chagokchan/pull/16",
+      "source_commit": "bc9f1290eb2a2068423ecc126b4ea302337cdd35",
+      "merge_commit": "47dd62174c7e13dbeaab179ac03ba198498971b6",
+      "main_ci_url": "https://github.com/nemo9nemo/chagokchan/actions/runs/40298227279",
+      "main_ci_conclusion": "success"
+    },
+    "w12_c1": {
+      "status": "logout_server_boundary_local_issued_auth_verified_ui_refresh_provider_acceptance_pending",
+      "report": "docs/quality/reports/w12-c1-logout-check-2026-10-26.json",
+      "unit_passed": 199,
+      "logout_unit_cases": 11,
+      "local_issued_session_cases": 6,
+      "production_http_checks": 10,
+      "real_google_otp_tests_executed": 0
     }
   },
   "artifacts": [
@@ -892,6 +906,20 @@
         "scripts/dev-warmup.test.mjs",
         "supabase/migrations/20261026000100_owner_goal_overviews.sql",
         "supabase/tests/019_business_rpc_goal_overviews.test.sql"
+      ]
+    },
+    {
+      "id": "ART-033",
+      "title": "현재/전체 활성 세션 로그아웃 서버 API",
+      "status": "logout_server_boundary_local_issued_auth_verified_ui_refresh_provider_acceptance_pending",
+      "paths": [
+        "docs/plans/W12-C1-logout-api.md",
+        "src/server/logout-api.mjs",
+        "src/app/api/v1/auth/logout/route.ts",
+        "scripts/logout-api.test.mjs",
+        "scripts/test-local-logout.mjs",
+        "docs/quality/reports/w12-c1-logout-check-2026-10-26.json",
+        "docs/changes/2026-10-26-logout-api.md"
       ]
     }
   ],

@@ -510,8 +510,8 @@
         "tags": [
           "auth"
         ],
-        "description": "CSRF 검증 후 지정 scope 폐기·쿠키 제거. 현재 세션이 이미 끝난 경우에도 쿠키를 지우고 결과를 안전하게 처리.",
-        "x-implementation-status": "not_implemented",
+        "description": "Origin/CSRF/JSON/scope 확인 후 검증된 사용자 JWT로 current→local 또는 all→global Auth 세션을 폐기하고 성공 시 Auth/CSRF 쿠키를 각각 지운다. all은 현재 DB 세션이 필요하다. current의 쿠키 부재는 브라우저 정리만 성공한다. 암호화 쿠키가 있으나 접근 토큰 만료 등으로 Auth 검증이 안 되면 401이며, 폐기 결과를 확인하지 못하면 503으로 쿠키를 보존한다. 개발 가상 세션은 409로 거절한다. 갱신/로그아웃 UI·실제 제공자 수락은 후속 작업이다.",
+        "x-implementation-status": "server_api_implemented_local_issued_auth_verified_provider_ui_refresh_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -525,7 +525,8 @@
           "TC-AUTH-002",
           "TC-AUTH-003",
           "TC-UX-002",
-          "TC-AUDIENCE-001"
+          "TC-AUDIENCE-001",
+          "TC-AUTH-LOGOUT-001"
         ],
         "parameters": [
           {
@@ -557,6 +558,12 @@
                 "schema": {
                   "type": "string",
                   "format": "uuid"
+                }
+              },
+              "Set-Cookie": {
+                "description": "Auth와 CSRF 쿠키를 각각 Secure/HttpOnly/SameSite=Lax/Max-Age=0으로 제거하는 별도 Set-Cookie 헤더. Auth Path=/, CSRF Path=/api/v1.",
+                "schema": {
+                  "type": "string"
                 }
               }
             },
@@ -595,7 +602,10 @@
           "503": {
             "$ref": "#/components/responses/Error503"
           }
-        }
+        },
+        "x-database-rpcs": [
+          "get_auth_context()"
+        ]
       }
     },
     "/auth/reauth/start": {
