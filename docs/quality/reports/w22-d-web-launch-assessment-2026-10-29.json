@@ -1,0 +1,117 @@
+{
+  "checked_on": "2026-10-29",
+  "work_item": "W22-D",
+  "status": "conditional_web_only_assessment_documented_local_read_only_checks_passed",
+  "source_base_commit": "393f93bd9722a704f99a9efda070857c5efc21a1",
+  "report": "docs/web-only-launch-review.md",
+  "platform_decision_changed": false,
+  "runtime_or_business_code_changed": false,
+  "source_sha256": {
+    "package.json": "7e5e5124d0274c73e1dd174c6fb32d4f4501d40368aa607ed0a1bfa1f339b960",
+    "next.config.mjs": "fa569e0ca8e3ea75cefd968b68e72e0a0230aa2fd704e5398f0ce600356e7540",
+    ".env.example": "80ac54225b5a83cb935eec945ff1ede009c95b73439012101d02dfb6972d0949",
+    "scripts/app.mjs": "f2e04535a3e739637504b7dd62b61a6377fc4d38c08094863121cf5a3b9841fc",
+    "scripts/runtime-environment.mjs": "07d71896cdcf08e66308e8b730e27b8e0c265f161665829f5c39ca323da42436",
+    "src/server/deployed-session.mjs": "8b3d56a12ff48de944e8c0fcac2a115acfbe5797f9dda81fdd82b653f4520078",
+    "src/server/app-session.ts": "0d24ffa24bf4837808c63c2cb4d2bededc288bda9636394f56bad01b2ba50cf5",
+    "src/server/security-headers.mjs": "0b83be8fa4f94656ffc2952f4551e1ce38e60bc752c6acb3c8807a611de57b65",
+    "src/app/layout.tsx": "e2e5c6822e3fd07ab5900069dead3e39321a23df167a212fcd07fc5c1c6ee5d6",
+    "src/app/page.tsx": "9b5fecadea1f2683c5ddce29222abc8a27ef600e595d7f69be95c50c2e5ce8f0",
+    "src/app/client-app.tsx": "ee19277174417901c6ab35ba1329e974a4aef25a61ae1909fccf05a69d13b12e",
+    "src/app/manifest.ts": "8410166ccbb0e0fbe086867384b5a48459f49df62dca1b8d8128da80a0ce77a7",
+    "src/proxy.ts": "204c4944233e1331515cd84862f81698216db2051af2bc1ab90804d1d57f852d",
+    "public/sw.js": "6cfc471f983125a327c48ebbfb915f6904da1099924cb77b5806d0af623b017d",
+    "supabase/config.toml": "1d3092e411b92384944d30c06b0f85b0344462921e345fe5757edc57c8e3f5a2",
+    ".github/workflows/ci.yml": "477a38d489268748d9de69b244e6e4da1cd7a706d63cc75a7ea4927dc30e0d58",
+    "policies/development-policy.json": "41d1503a24820e3c391e36e0db728251f55209ff0a4b4d0239660d8a0d215f9d"
+  },
+  "local_http": [
+    {
+      "path": "/",
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/v1/me",
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/v1/goal-overviews?limit=1",
+      "status": 200,
+      "cache_control": "no-store"
+    }
+  ],
+  "local_database": {
+    "method": "docker exec supabase_db_chagokchan psql; BEGIN READ ONLY; catalog and aggregate metadata SELECT; ROLLBACK",
+    "server_version": "17.11",
+    "database_size_bytes": 23385779,
+    "applied_migrations": 53,
+    "public_tables": 18,
+    "public_tables_rls_enabled": 18,
+    "public_tables_rls_forced": 18,
+    "authenticated_direct_dml_tables": 0,
+    "anon_direct_dml_tables": 0,
+    "direct_dml_scope": "has_table_privilege for INSERT,UPDATE,DELETE,TRUNCATE on public base tables; not a complete column/RPC security audit",
+    "pg_cron_installed": false,
+    "docker_services_running": 7,
+    "published_host_ports_loopback_only": true,
+    "business_records_read": false,
+    "database_changed": false,
+    "database_size_is_not_a_capacity_forecast": true
+  },
+  "selected_tests": {
+    "node": "24.19.0",
+    "command": "node --test scripts/runtime-environment.test.mjs scripts/deployed-session.test.mjs scripts/service-worker.test.mjs",
+    "passed": 46,
+    "failed": 0,
+    "new_tests_added": 0,
+    "full_unit_and_db_suites_rerun": false
+  },
+  "code_observations": {
+    "frontend_and_api": "Next.js with Node server API",
+    "business_database_access": "server-side supabase-js Auth and Data API/RPC with verified user JWT; HTTP local, HTTPS deployed",
+    "local_fixture_public_deployment": "runtime guard rejects",
+    "production_start_hostname": "127.0.0.1; container/PaaS host/PORT/reverse-proxy readiness needs validation",
+    "vercel_json_present": false,
+    "dockerfile_present": false,
+    "workflow_files": [
+      ".github/workflows/ci.yml"
+    ],
+    "production_scheduler_configuration_found_in_repository": false,
+    "service_worker": "production registration; static allowlist; user/auth/invite responses not cached",
+    "real_login_refresh_signup_deletion_ui": "incomplete per source and backlog"
+  },
+  "research": {
+    "checked_on": "2026-10-29",
+    "sources": [
+      "https://nextjs.org/docs/app/guides/static-exports",
+      "https://nextjs.org/docs/app/guides/self-hosting",
+      "https://vercel.com/pricing",
+      "https://vercel.com/docs/plans/hobby",
+      "https://vercel.com/docs/regions",
+      "https://supabase.com/pricing",
+      "https://supabase.com/docs/guides/platform/regions",
+      "https://supabase.com/docs/guides/platform/backups",
+      "https://supabase.com/docs/guides/auth/auth-smtp",
+      "https://supabase.com/docs/guides/database/connecting-to-postgres",
+      "https://supabase.com/docs/guides/deployment/going-into-prod",
+      "https://blog.tally.so/product-hunt-launch/",
+      "https://blog.tally.so/how-we-grew-tally-to-4m-arr-fully-bootstrapped/",
+      "https://linear.app/now/building-at-the-early-stage",
+      "https://plausible.io/blog/open-source-saas"
+    ],
+    "case_studies_are_not_market_statistics": true,
+    "managed_base_usd_per_month": 45,
+    "with_second_micro_db_same_pro_org_base_usd_per_month": 55,
+    "cost_scope": "One Vercel Pro developer and Supabase Pro Micro assumptions; domain, SMTP, Redis/scheduler, ledger, monitoring, additional usage/seats, tax and FX excluded; not a quote or spending authorization"
+  },
+  "not_run": [
+    "Real Google/OTP delivery, provider login and refresh",
+    "Browser E2E and full device/accessibility acceptance",
+    "External cloud account/project inventory and production database inspection",
+    "Staging migrations, security/load/backup restore acceptance",
+    "Provisioning, payment, DNS/auth configuration changes and public deployment"
+  ],
+  "release_acceptance_completed": false
+}
