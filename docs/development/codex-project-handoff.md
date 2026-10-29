@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-10-29 W22-D: 사용자의 조건부 웹 전용 출시 질문을 검토했다. Next.js 웹/API·Supabase 구조 재사용, 실제 인증·운영 DB·배포/삭제 스케줄·백업/복원·공개 페이지 준비를 정리하고 Tally/Linear/Plausible의 당사자 회고와 공식 운영/가격 자료를 확인했다. 로컬 HTTP 3·읽기 전용 DB 카탈로그(17.11·53 migrations·18/18 RLS forced·테이블 직접 DML 0)·선별 unit 46·문서 정적 검사 통과. [검토](../web-only-launch-review.md) · [증거](../quality/reports/w22-d-web-launch-assessment-2026-10-29.json). 문서 검토 완료이며 웹 전용 전환 결정·기능·정책·기존 플랫폼 순서·공개 수락 상태는 변경하지 않았다. 개발의 다음 작업은 여전히 W12-C/D·W14·W13/W15·W17이다.
+
 2026-10-26 W25-E: 사용자 화면 주석 4건의 칩 삭제 여백·태그/입력칸 공통 12px 간격·메모/자동 정보의 배지 정렬을 보완했다. 작성·수정의 공통 TagInput을 사용하고 CSS 삭제 영역은 44×44px을 유지한다. lint/typecheck·unit 199·산출물·build와 Codex 소스 검토를 통과했다. 브라우저 주소 접근 정책 차단으로 실제 렌더링·조작 영역 실측은 미실행이다. W15의 TC-PRAISE-TAG-003·TC-UX-001 수락 상태는 유지한다. [증거](../quality/reports/w25-e-praise-spacing-check-2026-10-26.json). 다음 개발은 기존 W12-C2·W14·W15 기준을 따른다.
 
 2026-10-26 W12-C1: 활성 Auth 세션의 current/all 로그아웃 서버 API를 구현했다. 사용자 JWT/Auth·DB 현재 문맥·CSRF/scope·쿠키 제거·실패 보존을 확인했다. unit 199(신규 11)·새 로컬 Auth 사용자 2명/발급 세션 4개의 통합 6·production HTTP 10·build 통과. 기존 제품 행·Auth 사용자/세션 보존과 검사 데이터 정리도 통과했다. [증거](../quality/reports/w12-c1-logout-check-2026-10-26.json). 실제 로그인/가입·갱신 경합·로그아웃 UI·재인증/탈퇴·운영/분산 제한·최종 수락은 미완료다. 다음 W12-C2는 Google/OTP·PKCE/공유 제한·갱신 경합과 UI를 연결하되 외부 개설/과금은 미정 입력을 임의 확정하지 않는다.
