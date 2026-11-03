@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-10-29",
-  "current_stage": "S07_w12_logout_server_and_w26_local_verified_real_auth_refresh_release_pending",
-  "next_stage": "w14_operator_provider_inputs_then_w12_c_w12_d_w13_w15_w17",
+  "updated_on": "2026-11-03",
+  "current_stage": "S07_real_auth_pending_w27_webapp_transition_research_documented",
+  "next_stage": "w27_b_deployment_compatibility_parallel_w12_c_d_w14_then_w27_c_w13_w15_w17",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": false,
@@ -45,7 +45,7 @@
     {
       "id": "S08",
       "name": "출시",
-      "status": "not_started"
+      "status": "webapp_release_scope_and_infrastructure_research_documented_deployment_not_started"
     }
   ],
   "unresolved_inputs": [
@@ -64,13 +64,13 @@
   ],
   "environment": {
     "default_node": "22.14.0",
-    "bundled_node": "24.19.0",
+    "bundled_node": "24.22.1",
     "pnpm": "11.19.0",
     "docker_cli": "29.1.3",
     "docker_engine": "29.1.3",
     "supabase_cli": "2.120.0",
     "local_database": "w10_b_goal_delete_retry_and_trash_api_regression_verified",
-    "selected_node": "24.19.0",
+    "selected_node": null,
     "next": "16.4.2",
     "react": "19.3.0",
     "typescript": "5.9.3",
@@ -78,7 +78,13 @@
     "postgresql_configured_major": 17,
     "postgresql_actual_version": "17.11",
     "wsl": "3.0.1",
-    "supabase_sdk": "2.117.3"
+    "supabase_sdk": "2.117.3",
+    "latest_runtime_observation": {
+      "observed_on": "2026-11-03",
+      "required_node": "24.19.0",
+      "status": "project_check_blocked_required_node_unavailable",
+      "artifact_checker_node": "24.22.1"
+    }
   },
   "verification": {
     "artifact_check_status": "passed",
@@ -928,6 +934,17 @@
         "docs/quality/reports/w12-c1-logout-check-2026-10-26.json",
         "docs/changes/2026-10-26-logout-api.md"
       ]
+    },
+    {
+      "id": "ART-034",
+      "title": "웹앱 출시 전환·서버와 DB 시장조사",
+      "status": "scope_and_research_documented_runtime_and_release_pending",
+      "paths": [
+        "docs/decisions/ADR-0010-webapp-release.md",
+        "docs/webapp-infrastructure-research-2026-11-03.md",
+        "docs/changes/2026-11-03-webapp-release-transition.md",
+        "docs/quality/reports/w27-a-webapp-transition-check-2026-11-03.json"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1046,14 +1063,12 @@
     "phase_one": "DONE_local_only_codex_direct_review",
     "phase_two": "IN_PROGRESS",
     "release_platform_order": [
-      "mobile_web_pwa",
-      "android",
-      "ios"
+      "responsive_web_app"
     ],
     "phase_one_public_access": false,
     "monetization": "secondary_after_launch_not_a_release_gate",
     "workflow": "codex_only_per_user_2026-10-19",
-    "primary_objective": "public_app_launch",
+    "primary_objective": "public_web_app_launch",
     "operator_input_status": "all_undecided_per_user_2026-10-19",
     "web_only_assessment": {
       "work_item": "W22-D",
@@ -1062,6 +1077,18 @@
       "evidence": "docs/quality/reports/w22-d-web-launch-assessment-2026-10-29.json",
       "platform_decision_changed": false,
       "runtime_or_database_changed": false
+    },
+    "pwa_installation": "optional",
+    "store_apps": "out_of_scope_until_user_request",
+    "decision_record": "docs/decisions/ADR-0010-webapp-release.md",
+    "webapp_transition": {
+      "work_item": "W27-A",
+      "decided_on": "2026-11-03",
+      "status": "scope_and_research_documented_runtime_and_release_pending",
+      "document": "docs/webapp-infrastructure-research-2026-11-03.md",
+      "evidence": "docs/quality/reports/w27-a-webapp-transition-check-2026-11-03.json",
+      "provider_selection": "not_selected_vercel_supabase_recommended_for_validation",
+      "public_release_ready": false
     }
   }
 }

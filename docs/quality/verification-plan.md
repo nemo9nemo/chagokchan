@@ -1,5 +1,7 @@
 # 검증 계획과 증거 기준
 
+2026-11-03 W27-A: 반응형 웹앱 공개·PWA 선택 설치로 검증 범위를 정리했다. PC Chrome/Edge/Safari와 iOS Safari·Android Chrome에서 설치 없는 진입·Google/OTP 복귀·한글 입력/키보드·권한 회수·로그아웃/계정 전환·오프라인 캐시를 확인한다. 공급자 빌드/런타임과 독립 원장을 적용한 복원은 W27-B·W14/W15에서 검증한다. W23/W24 스토어 테스트/심사/결제는 현행 출시 게이트에서 제외한다. 기존 TC 상태(83개·범위 한정 passed 44·not_run 39)를 바꾸지 않으며 이번 문서 검사는 제품 수락 통과가 아니다. [조사](../webapp-infrastructure-research-2026-11-03.md) · [증거](reports/w27-a-webapp-transition-check-2026-11-03.json)
+
 2026-10-26 W12-C1: 현재 TC 83개 중 범위를 한정한 passed 44개·not_run 39개. TC-AUTH-LOGOUT-001은 서버 API·로컬 발급 Auth·격리 HTTP 범위다. unit 199·로그아웃 통합 6·production HTTP 10·build를 통과했으며 실제 제공자·갱신/UI·HTTPS 브라우저 수락을 뜻하지 않는다. [증거](reports/w12-c1-logout-check-2026-10-26.json). DB 전체 406은 앞선 W26 실행 근거이며 로그아웃에는 SQL 변경이 없다.
 
 2026-10-26 W26-A: 현재 TC 82개 중 범위를 한정한 passed 43개·not_run 39개. 새 TC-PERF-BOARD-001은 로컬 성능/API/DB/상태 전이 범위이며 브라우저·운영 부하 수락을 포함하지 않는다. unit 188·DB 406·로컬 발급 세션 6·build와 production 보안 HTTP 7을 통과했다. [증거](reports/w26-board-loading-check-2026-10-26.json). 아래 W15-A의 81개 집계는 당시 기록이다.
