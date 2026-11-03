@@ -4,7 +4,7 @@
 
 사용자는 개발 중 로그인 화면 없이 앱을 이용하고, 실제 오픈을 준비하는 시점부터 로그인 테스트와 실사용을 진행한다. [개발 환경 정책](../../policies/development-policy.json)과 [ADR-0004](../decisions/ADR-0004-local-development-auth.md)가 이 결정의 기준이다. 출시용 [계정·권한 정책](../auth-and-permissions.md)과 제품 정책 버전은 유지한다.
 
-2026-10-19에는 이를 1차 로컬 마무리 / 2차 실제 로그인·출시로 구분했다. 1차 결과를 공개 익명 앱으로 배포하지 않으며 2차 순서는 모바일 웹/PWA → Android → iOS다. [실행안](../launch-and-growth-plan.md)과 W21~W24를 따른다.
+2026-11-03 결정에 따라 1차 로컬 마무리 / 2차 실제 로그인·반응형 웹앱 공개로 진행한다. 1차 결과를 공개 익명 앱으로 배포하지 않으며 PWA 설치는 선택이다. W23/W24 스토어는 재요청 전까지 범위 밖이다. [실행안](../launch-and-growth-plan.md) · [ADR-0010](../decisions/ADR-0010-webapp-release.md)
 
 ## 사용자 경험과 서버 경계
 

@@ -1,18 +1,19 @@
 {
   "schema_version": "1.0.0",
-  "updated_on": "2026-10-19",
+  "updated_on": "2026-11-03",
   "scope": "development_environment_only",
   "delivery_milestones": {
     "phase_one": "local_feature_closeout_without_interactive_login",
     "phase_one_public_access": false,
     "phase_two": "real_login_release_readiness_and_public_launch",
     "release_platform_order": [
-      "mobile_web_pwa",
-      "android",
-      "ios"
+      "responsive_web_app"
     ],
     "source": "docs/launch-and-growth-plan.md",
-    "primary_objective": "public_app_launch",
+    "primary_objective": "public_web_app_launch",
+    "pwa_installation": "optional",
+    "store_apps": "out_of_scope_until_user_request",
+    "decision_record": "docs/decisions/ADR-0010-webapp-release.md",
     "secondary_objective": "optional_side_income_after_launch"
   },
   "local_auth": {

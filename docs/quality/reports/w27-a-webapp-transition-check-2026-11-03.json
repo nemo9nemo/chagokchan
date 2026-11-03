@@ -1,0 +1,229 @@
+{
+  "work_item": "W27-A",
+  "checked_on": "2026-11-03",
+  "base_source": "aad1ef59e683ad5c0a75582f0ececcb0e2ab2e94",
+  "status": "passed_documentation_and_research_scope_only",
+  "scope": "webapp_release_decision_documentation_and_official_infrastructure_research",
+  "runtime": "v24.22.1",
+  "runtime_or_sql_changed": false,
+  "commands": [
+    {
+      "command": "scripts/project.ps1 -Task check",
+      "exit_code": 1,
+      "result": "blocked_before_lint_typecheck_unit_artifacts",
+      "reason": "required Node 24.19.0 unavailable; default 22.14.0 and bundled 24.22.1 observed"
+    },
+    {
+      "command": "bundled Node 24.22.1 scripts/verify-artifacts.mjs",
+      "result": "passed",
+      "details": "artifact_check below"
+    },
+    {
+      "command": "bundled Node 24.22.1 tmp/verify-webapp-transition.mjs",
+      "result": "passed",
+      "checks": [
+        {
+          "id": "delivery_policy_and_registry_match",
+          "status": "passed"
+        },
+        {
+          "id": "local_auth_and_runtime_guard_policy_unchanged",
+          "status": "passed"
+        },
+        {
+          "id": "signup_policy_api_erd_and_acceptance_statuses_unchanged",
+          "status": "passed"
+        },
+        {
+          "id": "backlog_scope_and_pending_implementation",
+          "status": "passed"
+        },
+        {
+          "id": "cost_arithmetic",
+          "status": "passed"
+        },
+        {
+          "id": "only_documentation_and_development_metadata_changed",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "artifact_check": {
+    "checked_at": "2026-11-03T11:18:03.101Z",
+    "status": "passed",
+    "runtime": "v24.22.1",
+    "scope": "artifact_structural_consistency_only",
+    "full_openapi_validator_executed": false,
+    "mermaid_render_executed": false,
+    "application_or_database_tests_executed": 0,
+    "planned_test_cases": 83,
+    "checks": [
+      {
+        "id": "json",
+        "description": "JSON parse",
+        "count": 55,
+        "status": "passed"
+      },
+      {
+        "id": "links",
+        "description": "Local Markdown links",
+        "count": 716,
+        "status": "passed"
+      },
+      {
+        "id": "openapi",
+        "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+        "count": 57,
+        "local_references": 729,
+        "status": "passed"
+      },
+      {
+        "id": "traceability",
+        "description": "REQ/NFR/POL/TC/API cross references",
+        "requirements": 17,
+        "policies": 20,
+        "test_cases": 83,
+        "status": "passed"
+      },
+      {
+        "id": "policy_consistency",
+        "description": "Policy/API numeric values, names, restore fields",
+        "status": "passed"
+      },
+      {
+        "id": "projection",
+        "description": "Contributor/sent fields and canceled-body schema constraints",
+        "status": "passed"
+      },
+      {
+        "id": "audience_consistency",
+        "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+        "status": "passed"
+      },
+      {
+        "id": "erd_sources",
+        "description": "Embedded/source consistency, full entities and relationship endpoints",
+        "embedded_blocks": 3,
+        "entities": 21,
+        "relationships": 42,
+        "rendered": false,
+        "status": "passed"
+      },
+      {
+        "id": "registry",
+        "description": "Existing registered artifact paths",
+        "count": 389,
+        "status": "passed"
+      },
+      {
+        "id": "development_consistency",
+        "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+        "work_items": 25,
+        "runtime_guards_executed": false,
+        "status": "passed"
+      }
+    ],
+    "errors": [],
+    "basis": {
+      "inputs": [
+        ".env.example",
+        "AGENTS.md",
+        "contracts/openapi.json",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/contracts/api-contract.md",
+        "docs/data-erd.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/decisions/ADR-0004-local-development-auth.md",
+        "docs/design/user-flows.md",
+        "docs/development/README.md",
+        "docs/development/artifact-register.json",
+        "docs/development/backlog.md",
+        "docs/development/local-development.md",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-full.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/policies/access-and-responses.md",
+        "docs/policies/audience-and-signup.md",
+        "docs/policies/data-lifecycle.md",
+        "docs/policies/product-rules.md",
+        "docs/quality/test-cases.json",
+        "docs/requirements/mvp-requirements.md",
+        "policies/app-policy.json",
+        "policies/development-policy.json",
+        "scripts/verify-artifacts.mjs"
+      ],
+      "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+      "sha256": "94676ce48c28ccd9745ca8222bfa4493278d825793766d34a6f63962fbc30c16"
+    }
+  },
+  "previous_verification": {
+    "unit": 199,
+    "database": 406,
+    "actual_provider_login": 0,
+    "test_cases": 83,
+    "scoped_passed": 44,
+    "not_run": 39,
+    "rerun_in_this_work": false
+  },
+  "not_run": [
+    "pinned_environment_full_check",
+    "local_production_build",
+    "DB_API_integration",
+    "actual_Google_OTP",
+    "browser_device_acceptance",
+    "cloud_build_or_benchmark",
+    "backup_restore",
+    "public_deployment"
+  ],
+  "codex_direct_review": {
+    "result": "no_unresolved_issue_in_documentation_scope",
+    "independent_cross_review": false,
+    "reviewed": [
+      "release_scope_consistency",
+      "official_sources_and_cost_arithmetic",
+      "historical_vs_current_status",
+      "no_acceptance_completion_inflation",
+      "no_runtime_sql_or_secret_changes"
+    ]
+  },
+  "cloud_services_provisioned": false,
+  "public_release_ready": false,
+  "pending": [
+    "W27-B_local_runtime_repair_and_deployment_compatibility",
+    "W12-C_D_real_auth_and_account_deletion",
+    "W14_operator_budget_provider_inputs_and_environment_setup",
+    "W27-C_public_pages_and_search_cache_boundary",
+    "W13_W15_actual_acceptance",
+    "W17_beta_and_release"
+  ],
+  "changed_document_hashes": {
+    "AGENTS.md": "d4b231ebac05f6315de1e1f791b60f519d1df383da46443411fd4b4f3fc9711e",
+    "README.md": "49d6b8944086bc3f2ed7417efe23c36f22b7019629597e5feaea408f417210b1",
+    "docs/README.md": "de65e8624548d8ac7170e0987a96759a8e6ed485c27ad17bbde5179144b7bacf",
+    "docs/changes/2026-11-03-webapp-release-transition.md": "1d866c8f19cc5bd547f36ac0b46228bdceb4ff3d9e35345d13b253e11bce65a6",
+    "docs/decisions/ADR-0010-webapp-release.md": "a5dc8f88395a9f246a34e570b3303e47b435ce1820b1bd606bc3c36973326a18",
+    "docs/deployment-and-git.md": "1d985ff42eb568fd7c7aff499a5d93bdd525717eecddcdd9f0ff84447d54e01e",
+    "docs/design/user-flows.md": "856a2aa8ec8fd188dbd509bf92338e5204048443888ca97ce119b5ae19ca3a97",
+    "docs/development/README.md": "c3aac282ac11317281c97fd560fec248df6ad71f7b3eaba838847b6340e0eb9a",
+    "docs/development/artifact-register.json": "a1f1177740cdab1c43e47ba51092b184ba105ecdb85ffe00efd8142a6ec162a8",
+    "docs/development/backlog.md": "3499c082df277e64089534d8541373f0c66d755dc9b4058c5ec9c4131a9b94c2",
+    "docs/development/codex-project-handoff.md": "13efa9daad0af5149f53310a3e1a4a562e15b50448036bf9d1daf1859261d131",
+    "docs/development/local-development.md": "ce5f779a639b3344808fada34e915693c2b94a65474d1d74de43a077d8cf0b0b",
+    "docs/free-with-ads-plan.md": "3b1fbae8dca26062667790d332412c2ccf7ebe8353d12d08acf732f574f758ef",
+    "docs/launch-and-growth-plan.md": "21d97b712ea8fea0bc58a09aa1f2687c1aa1a701d763e5705a8a2a97f07a06f7",
+    "docs/marketing/launch-kit.md": "d346c74fb13cc2e7b2e2d5e9f9f89e1a779657d8cc2874d3067d6ba4b39ee3dc",
+    "docs/quality/verification-plan.md": "b481250c8d40ca26e9f98656e748bec5bc895c21ad4a5f898d11b1af973a56b7",
+    "docs/release-first-launch-review.md": "9b5b5303e680bb01043dfb840218aba1e6e46c5a9fbe374cc8315b5445fcfa7d",
+    "docs/requirements/mvp-requirements.md": "e278a62b029f7889bf409d1f98f503ea019a8ca243102424e457f9a04c76e58e",
+    "docs/technical-architecture.md": "29caa56175d7645222c13c7e5046f5d67fac89cdd6432c4646753b13cc1f833d",
+    "docs/web-only-launch-review.md": "af7dd2caee460f2f6be4d0b9b21f501b4f368a94d9a5a7c7855c1dfa3a6c31c7",
+    "docs/webapp-infrastructure-research-2026-11-03.md": "741251f5f7056156baa2601c1917b06cd83d6b974c3b5c37510573ecf4af2a41",
+    "policies/development-policy.json": "70887752d0551a0c95cc88750f328d92cc9605541bbaf0f0d316d535bb80fd47"
+  }
+}

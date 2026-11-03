@@ -1,6 +1,8 @@
 # 개발 스택과 기술 아키텍처
 
-결정일: 2026-10-07 / 상태: 개발 기준 결정, 앱 실행·환경 검사 기반 구현. 업무 기능·서비스 개설 전
+현재 출시 대상은 반응형 웹앱·PWA 선택 설치다. 기존 Next.js/API·Supabase를 재사용하며 Vercel을 우선 검증하되 공급자/요금제는 실제 개설 전에 정한다. [ADR-0010](decisions/ADR-0010-webapp-release.md) · [서버·DB 재조사](webapp-infrastructure-research-2026-11-03.md). 아래 후보 라이브러리는 실제 설치 목록인 [package.json](../package.json)과 구분한다.
+
+결정일: 2026-10-07 / 갱신일: 2026-11-03 / 핵심 로컬 기능·인증 서버 기반 일부 구현, 실제 인증/운영 수락 미완료
 
 적용 제품: [기획 v0.2](product-plan-v0.2.md). 목표마다 개인 포도송이와 공유 포도송이를 분리하고, 연결된 지인이 허용된 공유판에 칭찬을 준다. 이 문서의 선택을 첫 개발의 기준으로 사용한다.
 
@@ -8,23 +10,23 @@
 
 | 영역 | 결정 |
 | --- | --- |
-| 첫 출시 | 모바일 웹/PWA. 휴대폰·태블릿·PC에서 같은 서비스 이용 |
+| 첫 출시 | 설치 없이 이용하는 반응형 웹앱·선택 PWA. 휴대폰·태블릿·PC에서 같은 서비스 이용 |
 | 웹 프레임워크 | Next.js 16 안정 계열, App Router, React, TypeScript strict |
 | 런타임·패키지 관리 | Node.js 24 LTS, pnpm, 잠금 파일로 버전 고정 |
 | UI | Tailwind CSS, 접근 가능한 기본 컴포넌트, SVG 포도송이 |
-| 입력·클라이언트 상태 | Zod로 서버 입력 검증, TanStack Query로 서버 상태 조회·갱신 |
+| 입력·클라이언트 상태 | 현재 자체 검증/조회 헬퍼. Zod·TanStack Query는 미설치 후보 |
 | API | Next.js Route Handlers 기반의 동일 출처 API, /api/v1로 시작 |
 | 인증 | Supabase Auth: Google 로그인 + 이메일 OTP |
 | 개발 중 사용자 | 서버가 로컬 가상 Auth 세션 준비. 로그인 화면 생략, 실제 제공자 연동은 출시 준비 때 |
 | 데이터베이스 | Supabase PostgreSQL, SQL 마이그레이션, RLS, 원자적인 기록 RPC |
-| 인증 SDK | 서버에서만 supabase-js와 @supabase/ssr 사용 |
+| 인증 SDK | 서버에서만 supabase-js 사용. @supabase/ssr은 미설치 |
 | 요청 제한 | Upstash Redis와 ratelimit, 중요 쓰기에는 DB 제한도 적용 |
 | 인증 메일 | Resend를 Supabase의 Custom SMTP로 연결 |
 | 봇 방어 | 이메일 인증 흐름에 Cloudflare Turnstile, Supabase Auth 검증 사용 |
-| 배포 | Vercel Pro + Supabase Pro, 서울 리전 기준 |
+| 배포 | Vercel + Supabase 서울 우선 검증안. 공급자/예산/개설 미정 |
 | 린트·타입 | Biome 2.5.15, TypeScript strict·Next.js 빌드 |
 | 테스트 | 현재 Node 내장 환경 단위 검사. 업무 구현 때 Vitest·Playwright·Supabase CLI/pgTAP 추가 |
-| 형상관리 | 추후 GitHub 비공개 저장소 + GitHub Actions 연결 |
+| 형상관리 | 지정 공개 GitHub 저장소 + Actions quality·main PR 보호 연결 완료 |
 
 2026-10-07 공식 Next.js 문서에는 16.4.0이 표시되며 Node.js 24는 LTS로 안내된다. 실제 설치 시점에 이 계열의 보안 수정 여부와 호환성을 다시 확인하고 정확한 버전을 잠금 파일에 기록한다. 운영 배포에서 자동으로 latest를 설치하지 않는다. [Next.js 문서](https://nextjs.org/docs/app/guides/data-security), [Node.js 릴리스](https://nodejs.org/en/about/previous-releases)
 
@@ -34,7 +36,7 @@
 
 목표·판·회차·칭찬·참여 권한에는 관계와 트랜잭션이 필요하므로 PostgreSQL을 사용한다. Supabase에서 인증과 데이터베이스를 운영하고, 데이터 접근은 서버와 DB에서 함께 제한한다. 테마와 그룹 확장은 기존 목표·칭찬 ID를 유지한다.
 
-네이티브 앱이 필요한 시점에는 React Native/Expo를 후보로 검토하며 같은 사용자 ID, DB, 칭찬 규칙을 사용한다. 모바일 앱의 화면 코드와 인증 토큰 보관은 별도로 구현한다. PWA가 네이티브 위젯·플랫폼 연동을 모두 제공한다고 가정하지 않는다.
+사용자가 설치형 앱을 다시 요청하는 시점에는 React Native/Expo를 후보로 재검토하며 같은 사용자 ID, DB, 칭찬 규칙을 사용한다. 모바일 앱의 화면 코드와 인증 토큰 보관은 별도로 구현한다. PWA가 네이티브 위젯·플랫폼 연동을 모두 제공한다고 가정하지 않는다.
 
 ## 요청 처리 구조
 

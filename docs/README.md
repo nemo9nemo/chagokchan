@@ -1,6 +1,6 @@
 # 차곡찬 (Chagokchan) — 문서 안내
 
-최종 정리: 2026-10-19 / 현재 단계: 1차 로컬 마무리 완료, W12 실제 인증·출시 준비 진행. 수익화는 부차 목표. [진행표](development/backlog.md) · [출시 사례와 실행안](release-first-launch-review.md)
+최종 정리: 2026-11-03 / 핵심 로컬 기능 완료, W12 실제 인증·W14/W27 웹앱 운영 준비 진행. [진행표](development/backlog.md) · [서버·DB 시장조사](webapp-infrastructure-research-2026-11-03.md)
 
 **목표별 개인 칭찬판에는 셀프 칭찬을, 공유 칭찬판에는 허용된 지인의 칭찬을 따로 모은다.** 지인 연결과 목표별 공유 권한은 분리하며 기능 확장 때도 기존 목표·칭찬 기록을 유지한다. 포도는 교체 가능한 테마이며 서비스 브랜드는 칭찬·성취·응원을 중심으로 정한다.
 
@@ -10,7 +10,7 @@
 | --- | --- |
 | 첫 사용자 | 성인 개인 중심, 한국 가입은 만 19세 이상 자기 확인 |
 | 브랜드·테마 | 차곡찬 확정. 영문 Chagokchan·개발 slug chagokchan. 표현 테마와 브랜드는 독립 |
-| 출시 순서 | 모바일 웹/PWA → Android → iOS. 1차는 로컬 사용, 실제 로그인·공개는 2차 |
+| 출시 대상 | 반응형 웹앱·PWA 설치 선택. 스토어는 재요청 전까지 범위 밖. 실제 로그인·공개는 2차 |
 | 개발 스택 | Next.js·TypeScript·Supabase PostgreSQL/Auth·Vercel |
 | 로그인 | Google + 이메일 6자리 인증번호, 서버 관리 세션 |
 | 개발 중 사용 | 로그인 화면 없이 로컬 가상 사용자. 실제 Google/OTP 연동·테스트·실사용은 오픈 준비 시점 |
@@ -19,7 +19,7 @@
 | 판 권한 | 주인·칭찬 권한자. 연결만으로 목표를 공개하지 않음 |
 | 공유 범위 | 공유용 제목·개수와 지인이 직접 보낸 칭찬. 개인 원본·다른 지인의 본문은 비공개 |
 | 보안 | 서버·DB 권한 검사, RLS, 원자적 RPC, 초대·세션·중복·웹 공격 검증 |
-| 배포 | Vercel Pro + Supabase Pro 서울 기준, 별도 스테이징 |
+| 배포 | Vercel + Supabase 서울·별도 스테이징 우선 검증. 공급자/예산/개설 미정, [비교](webapp-infrastructure-research-2026-11-03.md) |
 | 형상관리 | 사용자 지정 공개 nemo9nemo/chagokchan·main/PR·Actions quality·브랜치 보호 설정 완료 |
 | 외부 도구 | 기획·가상 예시 사용. 로컬 Supabase·GitHub 연결 완료, 클라우드 Supabase·Vercel 미개설 |
 
