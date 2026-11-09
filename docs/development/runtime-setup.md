@@ -1,5 +1,7 @@
 # 앱 기반 실행과 로컬 DB 준비
 
+2026-11-09 실행 기준: `.node-version`의 Node 24.22.1과 pnpm 11.19.0을 사용한다. Next.js 16.4.5로 갱신했고 로컬/CI는 정확 버전, 배포 build/start는 >=24.22.1 <25를 허용한다. production 빌드는 동일하게 webpack을 사용한다. 배포 Node 서비스는 APP_BIND_HOST/PORT를 설정할 수 있으며 fixture 개발은 loopback만 허용한다. [W27-B](../plans/W27-B-release-runtime-security.md). 아래 이전 버전·초기 화면 설명은 당시 기록이다.
+
 기준일: 2026-10-08 / 작업: W04 완료 / 실제 결과: [앱 기반 검사](../quality/reports/foundation-check-2026-10-08.json)
 
 Next.js 앱의 시작 화면, 환경 검사, 빌드와 로컬 실행을 구현했다. Supabase CLI로 로컬 DB를 기동하고 PostgreSQL 17.11 연결·Auth/API 응답·공개 포트의 127.0.0.1 바인딩을 확인했다. 목표·칭찬·가상 사용자 세션·업무 API는 후속 작업이다. 진행 기준은 [진행표](backlog.md)다.

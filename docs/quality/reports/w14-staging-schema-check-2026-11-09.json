@@ -1,0 +1,257 @@
+{
+  "work_item": "W14",
+  "checked_on": "2026-11-09",
+  "scope": "free_isolated_staging_schema_and_catalog_only",
+  "status": "schema_applied_catalog_checked_real_auth_restore_acceptance_pending",
+  "provider": "Supabase Free",
+  "region": "ap-northeast-2",
+  "postgresql": "17.11",
+  "existing_projects_changed": false,
+  "local_fixture_data_copied": false,
+  "app_accounts": 0,
+  "product_tables": 18,
+  "rls_enabled_and_forced": 18,
+  "anon_authenticated_direct_dml_grants": 0,
+  "anonymous_security_definer_execute": 0,
+  "api_roles_can_assume_privileged_roles": 0,
+  "login_or_superuser_definer_owners": 0,
+  "definers_without_fixed_search_path": 0,
+  "migrations": [
+    {
+      "version": "20261103114317",
+      "name": "20261008013000_product_schema"
+    },
+    {
+      "version": "20261103114440",
+      "name": "20261008020500_session_rpc_boundary"
+    },
+    {
+      "version": "20261103114446",
+      "name": "20261008020600_grant_auth_schema_usage"
+    },
+    {
+      "version": "20261109065237",
+      "name": "20261008020700_isolate_auth_session_reader"
+    },
+    {
+      "version": "20261109065316",
+      "name": "20261008020800_revoke_auth_columns_from_guard"
+    },
+    {
+      "version": "20261109065319",
+      "name": "20261008020900_revoke_auth_schema_from_guard"
+    },
+    {
+      "version": "20261109065322",
+      "name": "20261008021000_goal_rpc"
+    },
+    {
+      "version": "20261109065324",
+      "name": "20261008021100_narrow_goal_rpc_privileges"
+    },
+    {
+      "version": "20261109065327",
+      "name": "20261008021200_goal_receipt_lookup_columns"
+    },
+    {
+      "version": "20261109065329",
+      "name": "20261008021300_receipt_retry_lock_privilege"
+    },
+    {
+      "version": "20261109065427",
+      "name": "20261008021400_personal_praise_cycle_rpcs"
+    },
+    {
+      "version": "20261109065429",
+      "name": "20261008021500_qualify_praise_cycle_number"
+    },
+    {
+      "version": "20261109065432",
+      "name": "20261008021600_verified_actor_completion_notice"
+    },
+    {
+      "version": "20261109065434",
+      "name": "20261008021700_notification_conflict_select_policy"
+    },
+    {
+      "version": "20261109065437",
+      "name": "20261008021800_connection_invite_request_rpcs"
+    },
+    {
+      "version": "20261109065440",
+      "name": "20261008021900_connection_secret_validation_fix"
+    },
+    {
+      "version": "20261109065443",
+      "name": "20261008022000_connection_notification_conflict_select"
+    },
+    {
+      "version": "20261109065446",
+      "name": "20261008022100_acceptance_notification_target"
+    },
+    {
+      "version": "20261109065449",
+      "name": "20261008022200_shared_board_access_and_peer_praise"
+    },
+    {
+      "version": "20261109065702",
+      "name": "20261008022300_shared_board_rpc_row_lock_rls"
+    },
+    {
+      "version": "20261109065705",
+      "name": "20261008022400_shared_praise_write_policies"
+    },
+    {
+      "version": "20261109065708",
+      "name": "20261008022500_shared_praise_cycle_column_fix"
+    },
+    {
+      "version": "20261109065711",
+      "name": "20261008022600_peer_praise_receipt_shape"
+    },
+    {
+      "version": "20261109065713",
+      "name": "20261008022700_shared_praise_owner_state_projection"
+    },
+    {
+      "version": "20261109065717",
+      "name": "20261008022800_relationship_cursor_line_wrap_fix"
+    },
+    {
+      "version": "20261109065720",
+      "name": "20261008022900_shared_list_cursor_boundary_fix"
+    },
+    {
+      "version": "20261109065722",
+      "name": "20261008023000_connection_list_cursor_boundary_fix"
+    },
+    {
+      "version": "20261109065725",
+      "name": "20261008023100_news_goal_trash_and_purge_rpcs"
+    },
+    {
+      "version": "20261109065728",
+      "name": "20261008023200_sent_praise_read_after_disconnect"
+    },
+    {
+      "version": "20261109065730",
+      "name": "20261008023300_worker_jwt_reader_boundary"
+    },
+    {
+      "version": "20261109065732",
+      "name": "20261008023400_goal_purge_lock_privileges"
+    },
+    {
+      "version": "20261109065804",
+      "name": "20261008023500_account_deletion_request_boundary"
+    },
+    {
+      "version": "20261109065806",
+      "name": "20261008023600_account_deletion_erasure_worker"
+    },
+    {
+      "version": "20261109065809",
+      "name": "20261008023700_account_deletion_retry_privilege_fix"
+    },
+    {
+      "version": "20261109065811",
+      "name": "20261008023800_account_profile_erasure_privilege"
+    },
+    {
+      "version": "20261109065813",
+      "name": "20261008023900_account_deletion_guard_helper"
+    },
+    {
+      "version": "20261109065816",
+      "name": "20261008024000_account_deletion_state_read_privilege"
+    },
+    {
+      "version": "20261109065818",
+      "name": "20261008024100_account_deletion_timezone_check_privilege"
+    },
+    {
+      "version": "20261109065820",
+      "name": "20261008024200_account_deletion_request_timestamp_privilege"
+    },
+    {
+      "version": "20261109065822",
+      "name": "20261008024300_goal_list_rpc"
+    },
+    {
+      "version": "20261109065824",
+      "name": "20261008024400_goal_list_cursor_base64_wrap_fix"
+    },
+    {
+      "version": "20261109065827",
+      "name": "20261008024500_bunch_list_rpc"
+    },
+    {
+      "version": "20261109065829",
+      "name": "20261008024600_personal_praise_result_rpc"
+    },
+    {
+      "version": "20261109065919",
+      "name": "20261008024700_peer_praise_moderation_rpcs"
+    },
+    {
+      "version": "20261109065921",
+      "name": "20261008024800_list_my_shared_boards_rpc"
+    },
+    {
+      "version": "20261109065923",
+      "name": "20261008024900_goal_delete_retry_is_idempotent"
+    },
+    {
+      "version": "20261109065926",
+      "name": "20261008025000_praise_tag"
+    },
+    {
+      "version": "20261109065929",
+      "name": "20261008025100_shared_count_and_sender_cancel"
+    },
+    {
+      "version": "20261109065931",
+      "name": "20261019000100_registration_bootstrap"
+    },
+    {
+      "version": "20261109065933",
+      "name": "20261019000200_neutral_profile_defaults"
+    },
+    {
+      "version": "20261109065936",
+      "name": "20261020000100_custom_praise_tags"
+    },
+    {
+      "version": "20261109065939",
+      "name": "20261020000200_praise_tag_list_compatibility"
+    },
+    {
+      "version": "20261109065941",
+      "name": "20261026000100_owner_goal_overviews"
+    }
+  ],
+  "advisors": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 1,
+      "review": "audit_events has no API read policy; deny is intentional",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 50,
+      "review": "Business RPC entry points intentionally allow authenticated execution. Catalog confirms NOLOGIN/non-superuser owners, fixed search_path, no anonymous execute or direct DML. Per-user cloud acceptance remains pending; notices are not marked fixed.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    }
+  ],
+  "not_run": [
+    "actual_Google_login",
+    "cloud_multi_user_authorization_acceptance",
+    "backup_restore_and_deletion_ledger",
+    "production_provisioning",
+    "public_release"
+  ],
+  "public_release_ready": false
+}

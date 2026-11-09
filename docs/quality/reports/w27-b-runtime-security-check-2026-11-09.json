@@ -1,0 +1,228 @@
+{
+  "work_item": "W27-B",
+  "checked_on": "2026-11-09",
+  "base_source": "9baced63379d6fe0410349d5e85d1dffd71f32ad",
+  "status": "passed_local_runtime_build_http_scope",
+  "node": "24.22.1",
+  "next": "16.4.5",
+  "scope": "runtime_environment_unit_build_and_isolated_http",
+  "real_provider_acceptance": false,
+  "public_release_ready": false,
+  "commands": [
+    {
+      "command": "scripts/project.ps1 -Task check",
+      "exit_code": 0,
+      "lint": "passed",
+      "typecheck": "passed",
+      "unit": {
+        "passed": 206,
+        "failed": 0
+      }
+    },
+    {
+      "command": "scripts/project.ps1 -Task build:check",
+      "exit_code": 0,
+      "bundler": "webpack"
+    },
+    {
+      "command": "node scripts/test-security-headers-http.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "pnpm audit --audit-level=high",
+      "exit_code": 0,
+      "result": "No known vulnerabilities found"
+    },
+    {
+      "command": "node scripts/verify-artifacts.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "http": {
+    "verified_at": "2026-11-09T07:08:20.216Z",
+    "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+    "next": "16.4.5",
+    "passed": 10,
+    "checks": [
+      {
+        "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+        "status": "passed"
+      },
+      {
+        "name": "all generated Next.js script tags carry the response nonce",
+        "status": "passed"
+      },
+      {
+        "name": "HTML nonce changes for every request and documents cannot be cached",
+        "status": "passed"
+      },
+      {
+        "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+        "status": "passed"
+      },
+      {
+        "name": "production rejects missing authentication and keeps API errors out of caches",
+        "status": "passed"
+      },
+      {
+        "name": "service worker is revalidated with a script-free same-origin fetch policy",
+        "status": "passed"
+      },
+      {
+        "name": "only the public offline page is immutable and contains no executable scripts",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out current logout clears separate secure Auth/CSRF cookies with no-store",
+        "status": "passed"
+      },
+      {
+        "name": "all-session logout requires a verified current identity",
+        "status": "passed"
+      },
+      {
+        "name": "logout rejects GET and missing CSRF without removing cookies",
+        "status": "passed"
+      }
+    ]
+  },
+  "artifacts": {
+    "checked_at": "2026-11-09T07:08:20.222Z",
+    "status": "passed",
+    "runtime": "v24.22.1",
+    "scope": "artifact_structural_consistency_only",
+    "full_openapi_validator_executed": false,
+    "mermaid_render_executed": false,
+    "application_or_database_tests_executed": 0,
+    "planned_test_cases": 84,
+    "checks": [
+      {
+        "id": "json",
+        "description": "JSON parse",
+        "count": 56,
+        "status": "passed"
+      },
+      {
+        "id": "links",
+        "description": "Local Markdown links",
+        "count": 721,
+        "status": "passed"
+      },
+      {
+        "id": "openapi",
+        "description": "Local refs, operation IDs, path parameters, mutation CSRF/JSON",
+        "count": 57,
+        "local_references": 729,
+        "status": "passed"
+      },
+      {
+        "id": "traceability",
+        "description": "REQ/NFR/POL/TC/API cross references",
+        "requirements": 17,
+        "policies": 20,
+        "test_cases": 84,
+        "status": "passed"
+      },
+      {
+        "id": "policy_consistency",
+        "description": "Policy/API numeric values, names, restore fields",
+        "status": "passed"
+      },
+      {
+        "id": "projection",
+        "description": "Contributor/sent fields and canceled-body schema constraints",
+        "status": "passed"
+      },
+      {
+        "id": "audience_consistency",
+        "description": "Adult scope decision, signup input/state, self-only confirmation fields",
+        "status": "passed"
+      },
+      {
+        "id": "erd_sources",
+        "description": "Embedded/source consistency, full entities and relationship endpoints",
+        "embedded_blocks": 3,
+        "entities": 21,
+        "relationships": 42,
+        "rendered": false,
+        "status": "passed"
+      },
+      {
+        "id": "registry",
+        "description": "Existing registered artifact paths",
+        "count": 394,
+        "status": "passed"
+      },
+      {
+        "id": "development_consistency",
+        "description": "Development policy, local environment template, progress IDs/statuses, login schedule and transfer evidence",
+        "work_items": 25,
+        "runtime_guards_executed": false,
+        "status": "passed"
+      }
+    ],
+    "errors": [],
+    "basis": {
+      "inputs": [
+        ".env.example",
+        "AGENTS.md",
+        "contracts/openapi.json",
+        "docs/changes/2026-10-07-adult-audience.md",
+        "docs/contracts/api-contract.md",
+        "docs/data-erd.md",
+        "docs/decisions/ADR-0002-adult-personal-audience.md",
+        "docs/decisions/ADR-0004-local-development-auth.md",
+        "docs/design/user-flows.md",
+        "docs/development/README.md",
+        "docs/development/artifact-register.json",
+        "docs/development/backlog.md",
+        "docs/development/local-development.md",
+        "docs/diagrams/data-erd-connections.mmd",
+        "docs/diagrams/data-erd-core.mmd",
+        "docs/diagrams/data-erd-full.mmd",
+        "docs/diagrams/data-erd-operations.mmd",
+        "docs/policies/access-and-responses.md",
+        "docs/policies/audience-and-signup.md",
+        "docs/policies/data-lifecycle.md",
+        "docs/policies/product-rules.md",
+        "docs/quality/test-cases.json",
+        "docs/requirements/mvp-requirements.md",
+        "policies/app-policy.json",
+        "policies/development-policy.json",
+        "scripts/verify-artifacts.mjs"
+      ],
+      "format": "sorted_relative_paths_and_LF_normalized_UTF8_text",
+      "sha256": "9195e5887523cb18f76795763198d3866055cab35c946cdd5ff9a40553a1844a"
+    }
+  },
+  "codex_direct_review": {
+    "status": "passed_runtime_scope_no_unresolved_issue",
+    "independent_cross_review": false,
+    "reviewed": [
+      "security_version_floor_and_pinned_local_runtime",
+      "fixture_mode_external_binding_rejected",
+      "deployment_host_and_port_validation",
+      "policy_static_import_preserves_guard_semantics",
+      "same_production_webpack_build_and_CSP_no_store_HTTP",
+      "no_secrets_or_applied_SQL_changes"
+    ]
+  },
+  "sources": [
+    "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases",
+    "https://github.com/vercel/next.js/releases/tag/v16.4.5"
+  ],
+  "earlier_failures": [
+    "Turbopack CSS child exits before connection on Windows inside and outside sandbox",
+    "webpack fs/URL policy loading failed before static JSON import fix"
+  ],
+  "not_run": [
+    "actual_provider_login",
+    "cloud_deployment_or_browser_acceptance",
+    "database_RPC_regression_for_runtime_only_change",
+    "account_deletion_restore_and_load_acceptance"
+  ]
+}
