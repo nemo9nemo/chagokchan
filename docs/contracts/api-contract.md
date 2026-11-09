@@ -1,6 +1,6 @@
 # API 계약과 구현 규칙
 
-버전: 0.2.0 / 상태: 목표·판·관계·개인/공유 칭찬 API의 로컬 fixture 세션 구현·검증, 연결/공유 UI와 배포 세션 adapter는 후속 / 기준: [OpenAPI](../../contracts/openapi.json)
+버전: 0.2.0 / 갱신: 2026-11-09 / 상태: 제품 API·배포 세션 어댑터·Google BFF의 로컬 Auth 검증, 실제 Google/HTTPS·재인증/탈퇴 BFF와 운영 공개 수락 후속 / 기준: [OpenAPI](../../contracts/openapi.json)
 
 OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A/B1/B2에서 목표·판 API, W08-C에서 개인 칭찬 API를 연결했다. W09-A는 연결 수명주기 API를, W09-B는 역할별 판 상세·멤버 목록, owner grant/revoke, contributor 공유 peer 생성과 recipient hide/unhide/exclude API를 기존 RPC에 연결했다. 각 mutation은 Origin·CSRF·JSON guard와 응답 allowlist를 적용한다. 개인과 공유 생성은 멱등 키를 요구하며 회차 ID를 결과에 반환한다. 공유 peer 생성은 실천일 입력을 받지 않는다. 숨김은 수량을 바꾸지 않고 제외는 회차 집계를 원자적으로 다시 계산한다. 목표·회차·칭찬·멤버 목록은 기본 20·최대 50개이며 cursor는 해당 목표·판에 적용한다. 배포 Auth flow/session binding은 W12다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
@@ -30,7 +30,7 @@ OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 
 
 ## 인증 흐름
 
-GET /auth/csrf는 no-store 응답과 HttpOnly/SameSite 쿠키로 서명 토큰을 준비한다. 개발 모드는 서버 프로세스 전용 키를 사용한다. 현재 배포 route는 로그인 flow/session과 토큰을 결합하지 않으므로 배포에서는 503으로 닫혀 있고, session-bound 동작은 W12에서 구현한다. Google start는 서버 PKCE URL을 반환하고 GET callback은 서버 흐름 쿠키·PKCE를 검증한 뒤 허용된 앱 경로로 303 복귀한다. next는 /goals·/connect·계정 설정 같은 등록된 내부 경로만 허용한다. /signup·삭제 진행 안내는 서버가 계정 상태로 선택하고 클라이언트 next만으로 가입 확인을 건너뛰지 않는다.
+GET /auth/csrf는 no-store 응답과 HttpOnly/SameSite 쿠키로 서명 토큰을 준비한다. 개발 모드는 서버 프로세스 전용 키를 사용한다. W12-A/C2a에서 배포의 암호화 세션 쿠키에 묶인 CSRF를 구현했다. 실제 Google/HTTPS 수락은 별도다. Google start는 서버 PKCE URL을 반환하고 GET callback은 서버 흐름 쿠키·PKCE를 검증한 뒤 허용된 앱 경로로 303 복귀한다. 로그인 next는 /·/connect만 허용한다. /signup·삭제 진행 안내는 서버가 계정 상태로 선택하고 클라이언트 next만으로 가입 확인을 건너뛰지 않는다.
 
 이메일 start는 CAPTCHA·제한 후 계정 존재 여부와 무관한 같은 안내를 반환한다. 서버는 flow_id·이메일·next·만료를 묶어 검증하며 verify로 UUID를 확인한다. 응답의 account_state는 signup_required/active/deleting이며 새 사용자는 /signup, 기존 사용자는 허용된 원래 목적지로 안내한다. Auth 결과에 access/refresh token을 반환하지 않는다.
 

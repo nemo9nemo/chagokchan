@@ -1878,6 +1878,30 @@
       "expected": "서버 검증과 현재 DB 세션을 통과한 사용자만 제품에 접근하며 토큰/초대가 캐시·로그·외부 URL에 노출되지 않는다.",
       "status": "not_run",
       "evidence": null
+    },
+    {
+      "id": "TC-REAUTH-PROOF-001",
+      "requirement_ids": [
+        "REQ-001",
+        "REQ-010",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-DELETE-002",
+        "POL-SEC-001"
+      ],
+      "level": "server_signer_database_local_auth_boundary",
+      "title": "서버 서명으로 제한한 세션별 탈퇴 grant 발급",
+      "steps": [
+        "키 없음/비활성·서명/필드/목적/시각 변조를 거절한다.",
+        "현재 UUID/세션 외 발급·소비와 직접 DML·키 접근/수정을 거절한다.",
+        "동시 재시도 한 grant·소비/폐기 후 재발급 거절·삭제 접수 후 제품 접근 차단을 확인한다.",
+        "기존 데이터/사용자/세션/키 설정 보존과 검사 데이터 정리를 확인한다."
+      ],
+      "expected": "실제 로컬 Auth와 DB에서 서버 증명·RLS·최소 권한·10분/1회 경계를 적용한다. Google 제공자/웹 재인증·운영 파기 수락은 별도다.",
+      "status": "passed",
+      "evidence": "reports/w12-d1-reauth-proof-check-2026-11-09.json"
     }
   ],
   "updated_on": "2026-11-09"
