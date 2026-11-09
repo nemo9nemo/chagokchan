@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-09 W12-C2a: Google 시작/PKCE 쿠키/콜백·성인 가입 UI·같은 사용자/세션 갱신·현재/전체 로그아웃 메뉴·초대 복귀·탭 간 계정 경계를 구현했다. 전체 unit 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭을 확인했다. Google 교환은 대체했으므로 실제 Google 통과는 0이다. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json). W12-C2 전체는 진행 중이다. 다음은 W12-C2b의 Google 지원 이메일/클라이언트·Supabase 제공자·Vercel 팀 접근/HTTPS 수락과 독립적인 W12-D·W27-C다. Google Cloud 차곡찬 프로젝트와 브랜드 이름을 준비했으며 지원 주소는 입력 대기다. Vercel 팀 접근은 공급자 승인 대기다. Docker 소켓 장애는 DB 파일을 보존해 복구했으며 로컬 Supabase가 loopback에서 실행된다. 아래 이전 미완료 목록은 각 기록 시점의 상태다.
+
 2026-11-09 재개: W27-B의 Node 24.22.1 보안 하한·Next 16.4.5·webpack/정책 JSON 번들·배포 host/PORT를 구현·검증했다. unit 206·build·격리 보안 HTTP 10·audit 근거는 [보고서](../quality/reports/w27-b-runtime-security-check-2026-11-09.json). 사용자 후속 결정은 개인 운영·무료 우선·도메인 없음·계정 보유·초기 Google 로그인만이다. 스테이징 DB 53개 SQL을 새 환경에 적용했으며 RLS 18/18·직접 DML 권한 0·위험 함수 소유자/고정 search_path 누락 0을 확인했다. 실제 로그인·탈퇴 UI/분산 제한·원장/복원·제품 수락·공개 배포는 남아 있다. 다음은 W12-C2다. 아래 미정 입력·24시간 일정은 당시 기록이다.
 
 2026-11-03 W27-A: 사용자가 웹앱 출시 전환을 확정했다. PC·모바일 브라우저의 반응형 웹앱·PWA 선택 설치로 변경하고 W23/W24 스토어 순서를 사용자 재요청 전까지 해제했다. 서버/DB·메일·제한·백업/원장을 공식 자료로 재조사했으며 Vercel + Supabase를 우선 검증 후보로 권고했다. 운영/지원/도메인/월 상한/공급자·서비스 개설·과금·배포는 미정/미실행이다. 다음은 W27-B 배포 Node/실행 호환성과 W12-C/D, W14·W27-C, W13/W15→W17이다. 문서 완료와 실제 인증/기능/공개 수락을 구분한다. [ADR-0010](../decisions/ADR-0010-webapp-release.md) · [조사](../webapp-infrastructure-research-2026-11-03.md) · [증거](../quality/reports/w27-a-webapp-transition-check-2026-11-03.json). 아래 10-29 W22-D의 조건부 결론과 예전 스토어 순서는 당시 기록이다.

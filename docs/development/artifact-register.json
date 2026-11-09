@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-11-09",
-  "current_stage": "S07_runtime_security_and_staging_schema_prepared_real_google_ui_release_pending",
-  "next_stage": "w12_c2_google_pkce_signup_refresh_then_w12_d_deletion_w13_w15_w17",
+  "current_stage": "S07_google_bff_signup_refresh_ui_local_auth_verified_real_google_release_pending",
+  "next_stage": "w12_c2b_real_google_https_w12_d_deletion_w14_ledger_w27_c_public_pages_then_acceptance_release",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": true,
@@ -40,7 +40,7 @@
     {
       "id": "S07",
       "name": "실제 로그인·통합 검증",
-      "status": "session_registration_logout_server_verified_real_provider_refresh_ui_acceptance_pending"
+      "status": "google_bff_ui_local_auth_refresh_logout_verified_real_google_and_browser_acceptance_pending"
     },
     {
       "id": "S08",
@@ -52,7 +52,7 @@
     {
       "id": "OPS-INPUT-01",
       "subject": "운영 주체·지원 연락처·도메인·월 예산",
-      "status": "not_selected",
+      "status": "personal_free_first_platform_domain_confirmed_support_email_pending",
       "required_before": "service_provisioning_and_release"
     },
     {
@@ -91,8 +91,8 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 84,
-    "application_tests_executed": 206,
+    "planned_test_cases": 85,
+    "application_tests_executed": 231,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
@@ -262,7 +262,7 @@
         "actual_browser_measurement_executed": false
       }
     },
-    "test_cases_not_run": 39,
+    "test_cases_not_run": 40,
     "latest_full_database_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "counter_scope_note": "unit/DB and TC counts reflect the latest complete suites and current case register; other historical per-feature counters retain the source report's scope and are not all rerun in this audit",
     "w15_a": {
@@ -312,7 +312,17 @@
       "real_google_otp_tests_executed": 0
     },
     "w27_b_report": "docs/quality/reports/w27-b-runtime-security-check-2026-11-09.json",
-    "staging_schema_report": "docs/quality/reports/w14-staging-schema-check-2026-11-09.json"
+    "staging_schema_report": "docs/quality/reports/w14-staging-schema-check-2026-11-09.json",
+    "w12_c2": {
+      "status": "passed_server_local_auth_http_and_login_render_scope",
+      "report": "docs/quality/reports/w12-c2-google-web-auth-check-2026-11-09.json",
+      "unit_tests_passed": 231,
+      "local_web_auth_cases_passed": 8,
+      "local_logout_regression_cases_passed": 6,
+      "isolated_http_cases_passed": 13,
+      "real_google_cases_passed": 0,
+      "login_render_viewports_checked": 2
+    }
   },
   "artifacts": [
     {
@@ -967,6 +977,28 @@
       "paths": [
         "docs/quality/reports/w14-staging-schema-check-2026-11-09.json"
       ]
+    },
+    {
+      "id": "ART-037",
+      "title": "Google 웹 BFF·가입·갱신 UI와 실제 로컬 Auth 경계",
+      "status": "passed_server_local_auth_http_and_login_render_scope",
+      "paths": [
+        "docs/plans/W12-C2-google-web-login.md",
+        "docs/quality/reports/w12-c2-google-web-auth-check-2026-11-09.json",
+        "docs/changes/2026-11-09-google-web-auth.md",
+        "src/server/web-auth-api.mjs",
+        "src/server/auth-flow-cookie.mjs",
+        "src/client/auth-session.ts",
+        "src/client/auth-broadcast.ts",
+        "src/app/auth-gate.tsx",
+        "src/app/auth-screen.tsx",
+        "src/app/session-boundary.tsx",
+        "scripts/web-auth-api.test.mjs",
+        "scripts/auth-session-client.test.mjs",
+        "scripts/test-local-web-auth.mjs",
+        "docs/quality/screenshots/w12-c2-login-desktop-2026-11-09.png",
+        "docs/quality/screenshots/w12-c2-login-mobile-2026-11-09.png"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1114,5 +1146,17 @@
     },
     "initial_login_scope": "google_only_per_user_2026-11-03_email_otp_deferred",
     "public_release_ready": false
+  },
+  "launch_operating_decisions": {
+    "source": "user_explicit_2026-11-03_resumed_2026-11-09",
+    "operator": "individual",
+    "cost_preference": "zero_operating_cost_first_no_paid_upgrade_or_domain_purchase",
+    "domain": "platform_default",
+    "support_email": "pending_user_input",
+    "supabase_org_free_project_creation": "authorized",
+    "initial_auth_providers": [
+      "google"
+    ],
+    "email_otp": "deferred_until_sender_setup"
   }
 }

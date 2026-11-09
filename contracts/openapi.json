@@ -116,7 +116,7 @@
           "auth"
         ],
         "description": "Google PKCE 로그인 시작",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "server_and_local_auth_verified_real_google_https_browser_acceptance_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -132,7 +132,8 @@
           "TC-AUTH-003",
           "TC-UX-002",
           "TC-AUDIENCE-001",
-          "TC-AUTH-004"
+          "TC-AUTH-004",
+          "TC-AUTH-WEB-001"
         ],
         "parameters": [
           {
@@ -214,7 +215,7 @@
           "auth"
         ],
         "description": "PKCE·서버 인증 흐름 쿠키 검증. 재인증 모드/원래 세션·UUID는 서버 흐름에 묶는다. 다른 UUID는 현재 세션을 바꾸지 않고 거절. 성공 후 허용된 경로로 303. 일반 로그인에서 app_users와 정리 표시가 없으면 /signup으로 303, 기존 active는 원래 허용 경로, deleting 또는 진행 중 미완료 가입 정리는 /account/deletion. Auth 성공만으로 자동 bootstrap하지 않는다.",
-        "x-implementation-status": "not_implemented",
+        "x-implementation-status": "server_and_local_auth_verified_real_google_https_browser_acceptance_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -230,7 +231,8 @@
           "TC-AUTH-003",
           "TC-UX-002",
           "TC-AUDIENCE-001",
-          "TC-AUTH-004"
+          "TC-AUTH-004",
+          "TC-AUTH-WEB-001"
         ],
         "parameters": [
           {
@@ -314,7 +316,7 @@
         "tags": [
           "auth"
         ],
-        "description": "존재 여부와 무관한 동일 안내. 서버 흐름은 이메일·next·만료에 묶는다. CAPTCHA와 요청 제한을 적용한다.",
+        "description": "존재 여부와 무관한 동일 안내. 서버 흐름은 이메일·next·만료에 묶는다. CAPTCHA와 요청 제한을 적용한다. 초기 Google 전용 베타에서는 제공하지 않으며 발신 설정 뒤 구현한다.",
         "x-implementation-status": "not_implemented",
         "x-requirements": [
           "REQ-001"
@@ -412,7 +414,7 @@
         "tags": [
           "auth"
         ],
-        "description": "현재 로그인 전 흐름의 이메일·flow_id·OTP만 검증, 계정 UUID 확인·서버 쿠키 설정. app_users와 정리 표시가 없으면 signup_required·/signup으로 안내하고 자동 bootstrap은 하지 않는다. active는 기존 목적지, deleting 또는 진행 중 미완료 가입 정리는 정리 안내. 토큰은 JSON 비노출.",
+        "description": "현재 로그인 전 흐름의 이메일·flow_id·OTP만 검증, 계정 UUID 확인·서버 쿠키 설정. app_users와 정리 표시가 없으면 signup_required·/signup으로 안내하고 자동 bootstrap은 하지 않는다. active는 기존 목적지, deleting 또는 진행 중 미완료 가입 정리는 정리 안내. 토큰은 JSON 비노출. 초기 Google 전용 베타에서는 제공하지 않으며 발신 설정 뒤 구현한다.",
         "x-implementation-status": "not_implemented",
         "x-requirements": [
           "REQ-001"
@@ -511,7 +513,7 @@
           "auth"
         ],
         "description": "Origin/CSRF/JSON/scope 확인 후 검증된 사용자 JWT로 current→local 또는 all→global Auth 세션을 폐기하고 성공 시 Auth/CSRF 쿠키를 각각 지운다. all은 현재 DB 세션이 필요하다. current의 쿠키 부재는 브라우저 정리만 성공한다. 암호화 쿠키가 있으나 접근 토큰 만료 등으로 Auth 검증이 안 되면 401이며, 폐기 결과를 확인하지 못하면 503으로 쿠키를 보존한다. 개발 가상 세션은 409로 거절한다. 갱신/로그아웃 UI·실제 제공자 수락은 후속 작업이다.",
-        "x-implementation-status": "server_api_implemented_local_issued_auth_verified_provider_ui_refresh_pending",
+        "x-implementation-status": "server_and_local_auth_verified_real_google_https_browser_acceptance_pending",
         "x-requirements": [
           "REQ-001"
         ],
@@ -526,7 +528,8 @@
           "TC-AUTH-003",
           "TC-UX-002",
           "TC-AUDIENCE-001",
-          "TC-AUTH-LOGOUT-001"
+          "TC-AUTH-LOGOUT-001",
+          "TC-AUTH-WEB-001"
         ],
         "parameters": [
           {
@@ -5687,6 +5690,157 @@
           "list_goal_overviews(text,integer,text)"
         ]
       }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "refreshAuthSession",
+        "summary": "같은 사용자·세션의 토큰 갱신",
+        "tags": [
+          "auth"
+        ],
+        "x-implementation-status": "server_and_local_auth_verified_real_google_https_browser_acceptance_pending",
+        "x-requirements": [
+          "REQ-001",
+          "NFR-001"
+        ],
+        "x-policy-ids": [
+          "POL-ACCOUNT-002",
+          "POL-SEC-001"
+        ],
+        "x-test-cases": [
+          "TC-AUTH-WEB-001"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "현재 세션 검증 후 제한된 결과. 토큰은 JSON에 반환하지 않는다.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        }
+      }
+    },
+    "/auth/pending-invite": {
+      "post": {
+        "operationId": "readPendingInvite",
+        "summary": "로그인 동안 보존한 초대 확인",
+        "tags": [
+          "auth"
+        ],
+        "x-implementation-status": "server_and_local_auth_verified_real_google_https_browser_acceptance_pending",
+        "x-requirements": [
+          "REQ-001",
+          "NFR-001"
+        ],
+        "x-policy-ids": [
+          "POL-ACCOUNT-002",
+          "POL-SEC-001"
+        ],
+        "x-test-cases": [
+          "TC-AUTH-WEB-001"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "현재 세션 검증 후 제한된 결과. 토큰은 JSON에 반환하지 않는다.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "invite_token"
+                  ],
+                  "properties": {
+                    "invite_token": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^[A-Za-z0-9_-]{32}$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5766,8 +5920,8 @@
         "type": "string",
         "maxLength": 512,
         "pattern": "^/(?!/)",
-        "default": "/goals",
-        "description": "같은 앱의 허용 경로만. 서버 allowlist와 URL 파서로 역슬래시·외부 출처도 거절. 최초 가입 /signup·삭제 진행 /account/deletion은 서버의 앱 계정 상태로 선택한다."
+        "default": "/",
+        "description": "서버 허용 경로 / 또는 /connect만 허용한다. 계정 상태에 따라 /signup 또는 /account/deletion으로 이동한다. 외부 주소·query·fragment·역슬래시는 거절한다."
       },
       "MinimalProfile": {
         "type": "object",
@@ -7238,7 +7392,17 @@
         "additionalProperties": false,
         "properties": {
           "next": {
-            "$ref": "#/components/schemas/NextPath"
+            "type": "string",
+            "enum": [
+              "/",
+              "/connect"
+            ],
+            "default": "/"
+          },
+          "invite_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{32}$",
+            "description": "초대 fragment에서 읽고 주소에서 제거한 비밀. 로그·URL·브라우저 저장소에 저장하지 않는다."
           }
         }
       },

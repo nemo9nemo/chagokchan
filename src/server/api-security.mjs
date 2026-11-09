@@ -76,12 +76,8 @@ function reject(status, code, message) {
 }
 
 function csrfCookie(request) {
-  for (const item of (request.headers.get("cookie") ?? "").split(";")) {
-    const separator = item.indexOf("=");
-    if (separator < 0 || item.slice(0, separator).trim() !== CSRF_COOKIE_NAME) continue;
-    return item.slice(separator + 1).trim();
-  }
-  return null;
+  const values = (request.headers.get("cookie") ?? "").split(";").map(part => part.trim()).filter(part => part.startsWith(`${CSRF_COOKIE_NAME}=`));
+  return values.length === 1 ? values[0].slice(CSRF_COOKIE_NAME.length + 1) : null;
 }
 
 async function readBoundedBody(request) {

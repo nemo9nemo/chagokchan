@@ -46,7 +46,7 @@ try{
   const live=async probe=>assert.equal((await probe.client.rpc("get_auth_context")).error,null);
   const ended=async probe=>assert.equal((await probe.client.rpc("get_auth_context")).error?.code,"PT401");
   await record("cross_origin_cannot_revoke_an_issued_session",async()=>{assert.equal((await invoke(a1,"current","https://foreign.example.invalid")).status,403);await live(a1);await live(a2);});
-  await record("current_revokes_only_current_issued_session",async()=>{const response=await invoke(a1,"current");assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true});assert.equal(response.headers.getSetCookie().length,2);assert.match(response.headers.get("cache-control"),/no-store/);await ended(a1);await live(a2);await live(b1);});
+  await record("current_revokes_only_current_issued_session",async()=>{const response=await invoke(a1,"current");assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true});assert.equal(response.headers.getSetCookie().length,4);assert.match(response.headers.get("cache-control"),/no-store/);await ended(a1);await live(a2);await live(b1);});
   await record("revoked_cookie_cannot_log_out_other_devices",async()=>{assert.equal((await invoke(a1,"all")).status,401);await live(a2);await live(b1);});
   const a3=await signIn(identities[0]);
   await record("all_revokes_own_multiple_sessions_and_preserves_other_user",async()=>{assert.equal((await invoke(a2,"all")).status,200);await ended(a2);await ended(a3);await live(b1);});

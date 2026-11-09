@@ -21,7 +21,7 @@ export class SessionAccountError extends Error {
   }
 }
 
-function configuration(env) {
+export function sessionConfiguration(env) {
   const config = validateEnvironment(env, { command: "start" });
   if (config.authMode !== "supabase_session" || !isPublishableKey(env.SUPABASE_PUBLISHABLE_KEY)) throw new SessionDependencyError();
   return config;
@@ -45,12 +45,25 @@ function validTokens(value) {
 }
 
 export function sealSession(tokens, env = process.env, now = Date.now()) {
-  const config = configuration(env);
-  const key = sessionEncryptionKey(env);
   if (!validTokens(tokens)) throw new SessionDependencyError();
   const issued = Math.floor(now / 1000);
   const value = { v: 1, issued_at: issued, expires_at: issued + policy.auth.session_max_age_seconds,
     access_token: tokens.access_token, refresh_token: tokens.refresh_token };
+  return encryptSession(value, env);
+}
+
+// A refresh must not turn the absolute session lifetime into a sliding window.
+export function sealRotatedSession(tokens, previous, env = process.env, now = Date.now()) {
+  const seconds = Math.floor(now / 1000);
+  if (!validTokens(tokens) || !previous || !Number.isSafeInteger(previous.issued_at) ||
+      previous.issued_at > seconds + 60 || previous.expires_at <= seconds ||
+      previous.expires_at - previous.issued_at !== policy.auth.session_max_age_seconds) throw new SessionDependencyError();
+  return encryptSession({ ...previous, access_token: tokens.access_token, refresh_token: tokens.refresh_token }, env);
+}
+
+function encryptSession(value, env) {
+  const config = sessionConfiguration(env);
+  const key = sessionEncryptionKey(env);
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", key, iv);
   cipher.setAAD(Buffer.from(`${SESSION_COOKIE_NAME}|${config.baseUrl}`));
@@ -61,7 +74,7 @@ export function sealSession(tokens, env = process.env, now = Date.now()) {
 }
 
 export function openSession(value, env = process.env, now = Date.now()) {
-  const config = configuration(env);
+  const config = sessionConfiguration(env);
   const key = sessionEncryptionKey(env);
   if (typeof value !== "string" || value.length > MAX_COOKIE_LENGTH || !/^[A-Za-z0-9_-]{40,}$/.test(value)) return null;
   try {
@@ -88,9 +101,10 @@ export function sessionCookieValue(header) {
   return values[0].slice(SESSION_COOKIE_NAME.length + 1);
 }
 
-export function sessionCookieHeader(value) {
+export function sessionCookieHeader(value, maxAge = policy.auth.session_max_age_seconds) {
   if (typeof value !== "string" || !/^[A-Za-z0-9_-]{40,3800}$/.test(value)) throw new SessionDependencyError();
-  return `${SESSION_COOKIE_NAME}=${value}; Path=/; Max-Age=${policy.auth.session_max_age_seconds}; Secure; HttpOnly; SameSite=Lax`;
+  if (!Number.isSafeInteger(maxAge) || maxAge < 1 || maxAge > policy.auth.session_max_age_seconds) throw new SessionDependencyError();
+  return `${SESSION_COOKIE_NAME}=${value}; Path=/; Max-Age=${maxAge}; Secure; HttpOnly; SameSite=Lax`;
 }
 
 export function expiredSessionCookieHeader() {
@@ -108,8 +122,17 @@ function tokenIdentity(token, now) {
   } catch { return null; }
 }
 
+// Shape only, including expired JWTs during refresh. Never an authorization result.
+export function sessionTokenClaims(token) {
+  try {
+    const claims = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString("utf8"));
+    if (!UUID.test(claims.sub) || !UUID.test(claims.session_id) || claims.role !== "authenticated" || !Number.isSafeInteger(claims.exp)) return null;
+    return { userId: claims.sub, sessionId: claims.session_id, expiresAt: claims.exp };
+  } catch { return null; }
+}
+
 export async function resolveVerifiedAuthSession(cookieHeader, { env = process.env, now = Date.now(), clientFactory = createClient } = {}) {
-  const config = configuration(env);
+  const config = sessionConfiguration(env);
   // Check the key even on unauthenticated requests so broken release setup is
   // visible as 503 rather than silently resembling an ordinary signed-out user.
   const session = openSession(sessionCookieValue(cookieHeader), env, now);

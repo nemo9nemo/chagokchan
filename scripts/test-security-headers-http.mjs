@@ -87,7 +87,7 @@ try {
   const logout = await request("/api/v1/auth/logout", logoutInit);
   check("signed-out current logout clears separate secure Auth/CSRF cookies with no-store", () => {
     assert.equal(logout.status, 200);
-    assert.equal(logout.headers.getSetCookie().length, 2);
+    assert.equal(logout.headers.getSetCookie().length, 4);
     for (const value of logout.headers.getSetCookie()) assert.match(value, /Max-Age=0; Secure; HttpOnly; SameSite=Lax/);
     assert.match(logout.headers.get("cache-control"), /no-store/);
   });
@@ -102,6 +102,32 @@ try {
     assert.equal(logoutGet.status, 405);
     assert.equal(logoutBadCsrf.status, 403);
     assert.equal(logoutBadCsrf.headers.getSetCookie().length, 0);
+  });
+  check("signed-out HTML renders Google login without product records and is noindex", () => {
+    assert.ok(html.includes("Google로 계속하기"));
+    assert.match(html, /name="robots" content="noindex, nofollow"/);
+  });
+  const google = await request("/api/v1/auth/google/start", logoutInit);
+  const googleData = await google.json();
+  check("Google start is a CSRF POST with a fixed PKCE callback and HttpOnly flow cookie", () => {
+    assert.equal(google.status, 200);
+    const url = new URL(googleData.authorization_url);
+    assert.equal(url.origin, env.SUPABASE_URL);
+    assert.equal(url.searchParams.get("redirect_to"), `${env.APP_BASE_URL}/api/v1/auth/callback`);
+    assert.equal(url.searchParams.get("code_challenge_method"), "s256");
+    assert.match(google.headers.getSetCookie()[0], /__Host-chagokchan_oauth=.*; Path=\/; Max-Age=600; Secure; HttpOnly; SameSite=Lax/);
+    assert.match(google.headers.get("cache-control"), /private, no-store/);
+  });
+  const callback = await fetch(base + "/api/v1/auth/callback?error=access_denied", { redirect: "manual", signal: AbortSignal.timeout(10000) });
+  const refresh = await request("/api/v1/auth/refresh", logoutInit);
+  const connect = await request("/connect");
+  check("OAuth cancellation, signed-out refresh and invite entry fail closed without caching", () => {
+    assert.equal(callback.status, 303);
+    assert.equal(callback.headers.get("location"), `${env.APP_BASE_URL}/?auth_error=retry`);
+    assert.equal(refresh.status, 401);
+    assert.equal(refresh.headers.getSetCookie().length, 0);
+    assert.equal(connect.status, 200);
+    for (const response of [callback, refresh, connect]) assert.match(response.headers.get("cache-control"), /no-store/);
   });
   const report = { verified_at: new Date().toISOString(), scope: "isolated_production_http_headers_not_browser_or_real_auth_acceptance", next: JSON.parse(fs.readFileSync(new URL("../node_modules/next/package.json", import.meta.url))).version, passed: checks.length, checks };
   fs.mkdirSync(new URL("../tmp", import.meta.url), { recursive: true });
