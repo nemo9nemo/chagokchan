@@ -1,0 +1,373 @@
+{
+  "work_item": "W12-D1",
+  "checked_at": "2026-11-09T08:48:30.023Z",
+  "base_source": "ddffdf6a5a9d3637a5491f550b4c512d51c55ace",
+  "status": "passed_signer_database_and_local_auth_boundary",
+  "source_files": [
+    {
+      "path": "src/server/reauth-proof.mjs",
+      "sha256": "c6b29fa6f95fcf7ac23875a9b82188baa6260a7fc249ed1e30aa9357db775339"
+    },
+    {
+      "path": "scripts/reauth-proof.test.mjs",
+      "sha256": "5afe8c61007696426ef076bcdfb4fd33c76ad9e20e4430fa0ce3026479c89158"
+    },
+    {
+      "path": "scripts/test-local-reauth-proof.mjs",
+      "sha256": "a649e33f4d8142565e041f00a5e2dadac9a3a38a747900a393bd98d3c34a435a"
+    },
+    {
+      "path": "supabase/migrations/20261109000100_reauth_proof_issuer.sql",
+      "sha256": "f8f7fef0516b58ca386f3bd50983eef18ff20e0432300ac1186a8cbe200384c5"
+    },
+    {
+      "path": "supabase/migrations/20261109000200_reauth_session_helper_grant.sql",
+      "sha256": "d9a1a7bec836cff9733b03cb2ec6813fd0e58e8a7c1b51f730706bc2bfd3f261"
+    },
+    {
+      "path": "supabase/tests/020_reauth_proof_boundary.test.sql",
+      "sha256": "4dc033907334d26756d016e3819b0debecb2d695c0e5590b1dc24299f3cf77b0"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4c3c4d2c61c931032ca44a954d06e6f446068fe6b98a36aa24592270fa92c9fe"
+    }
+  ],
+  "node": "24.22.1",
+  "real_google_acceptance": false,
+  "public_release_ready": false,
+  "unit": {
+    "passed": 235,
+    "failed": 0,
+    "new_proof_cases": 4
+  },
+  "database": {
+    "verified_at": "2026-11-09T08:40:54.256Z",
+    "scope": "configured_database_test_suites",
+    "status": "passed",
+    "suites": [
+      {
+        "file": "001_physical_integrity.test.sql",
+        "category": "physical_integrity",
+        "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d",
+        "executed": 51,
+        "passed": 51,
+        "failed": 0,
+        "planned": 51,
+        "status": "passed"
+      },
+      {
+        "file": "002_rpc_boundary.test.sql",
+        "category": "rpc_boundary",
+        "sha256": "356a1ea7a334e4bdb066e8065e7b163c8a8d74f9ac24eabc35d2520c8bdb8fb5",
+        "executed": 21,
+        "passed": 21,
+        "failed": 0,
+        "planned": 21,
+        "status": "passed"
+      },
+      {
+        "file": "003_business_rpc.test.sql",
+        "category": "business_rpc",
+        "sha256": "9a41916a9d3ad769e226c6c410d59138e0139124e942125e8bf456dfd5c62339",
+        "executed": 18,
+        "passed": 18,
+        "failed": 0,
+        "planned": 18,
+        "status": "passed"
+      },
+      {
+        "file": "004_business_rpc_praise.test.sql",
+        "category": "business_rpc",
+        "sha256": "88fe97ff01efce729d4f68d39d8cdbd920c9bb7d6b783420d803022eaa6b7d76",
+        "executed": 26,
+        "passed": 26,
+        "failed": 0,
+        "planned": 26,
+        "status": "passed"
+      },
+      {
+        "file": "005_business_rpc_connections.test.sql",
+        "category": "business_rpc",
+        "sha256": "f3c43a491f49087f298aff44bb5dcfae934484a55f0776ea9a1a5b586beffe21",
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "planned": 20,
+        "status": "passed"
+      },
+      {
+        "file": "006_business_rpc_shared_board.test.sql",
+        "category": "business_rpc",
+        "sha256": "10a713d235c9e69b6c3eb30fc2dbae69d7ab17d4f8180832220605ea87958f00",
+        "executed": 25,
+        "passed": 25,
+        "failed": 0,
+        "planned": 25,
+        "status": "passed"
+      },
+      {
+        "file": "007_business_rpc_lifecycle.test.sql",
+        "category": "business_rpc",
+        "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f",
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "planned": 20,
+        "status": "passed"
+      },
+      {
+        "file": "008_business_rpc_account_deletion.test.sql",
+        "category": "business_rpc",
+        "sha256": "73ce3a9d2e4a82366351f3409ed5528e4cbaeda3bc4482039d7de9803bb19eff",
+        "executed": 32,
+        "passed": 32,
+        "failed": 0,
+        "planned": 32,
+        "status": "passed"
+      },
+      {
+        "file": "009_business_rpc_goal_list.test.sql",
+        "category": "business_rpc",
+        "sha256": "cd15cd4237f2c92f47ff576648074730543a0b97e92005e6360ba97a891e19de",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "planned": 9,
+        "status": "passed"
+      },
+      {
+        "file": "010_business_rpc_bunch_list.test.sql",
+        "category": "business_rpc",
+        "sha256": "38246527774f356e31c4b26d39d04e6fb20c5f11f212b348630d51b040ee108b",
+        "executed": 9,
+        "passed": 9,
+        "failed": 0,
+        "planned": 9,
+        "status": "passed"
+      },
+      {
+        "file": "011_business_rpc_personal_praise_result.test.sql",
+        "category": "business_rpc",
+        "sha256": "1198944e20fcaf942595fecf61e0965529bfa8aeef2c6837e8e67b40dbcc86c1",
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "planned": 6,
+        "status": "passed"
+      },
+      {
+        "file": "012_business_rpc_peer_praise_moderation.test.sql",
+        "category": "business_rpc",
+        "sha256": "d58529ff10e7163165150b640a511d9c9eb8aa51e70de7a6d8194c66dc71d021",
+        "executed": 10,
+        "passed": 10,
+        "failed": 0,
+        "planned": 10,
+        "status": "passed"
+      },
+      {
+        "file": "013_business_rpc_shared_board_directory.test.sql",
+        "category": "business_rpc",
+        "sha256": "85343d4e3b6bfb29711e2bb9b0f06c4a0589e66307c9738276e5e05ef6e9596f",
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "planned": 5,
+        "status": "passed"
+      },
+      {
+        "file": "014_business_rpc_goal_delete_retry.test.sql",
+        "category": "business_rpc",
+        "sha256": "2a2530cdb10c1db756e97e2ce5c619db67400e50280297e222ce0e3ae03c171c",
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "planned": 5,
+        "status": "passed"
+      },
+      {
+        "file": "015_business_rpc_praise_tag.test.sql",
+        "category": "business_rpc",
+        "sha256": "8312f5b7bc44ab164fd626af813404fea089871c84c496c4cba576077019df10",
+        "executed": 40,
+        "passed": 40,
+        "failed": 0,
+        "planned": 40,
+        "status": "passed"
+      },
+      {
+        "file": "016_business_rpc_shared_count_and_sender_cancel.test.sql",
+        "category": "business_rpc",
+        "sha256": "8e37546ec5f681fdfc92bbe812e9e46e163328fb0141697da5cb1fe4d7bc19d0",
+        "executed": 39,
+        "passed": 39,
+        "failed": 0,
+        "planned": 39,
+        "status": "passed"
+      },
+      {
+        "file": "017_business_rpc_registration.test.sql",
+        "category": "business_rpc",
+        "sha256": "9327b8a4eb6166cbb536ee9327040d8d49b20e7321f38fa138521c8a5b028a76",
+        "executed": 14,
+        "passed": 14,
+        "failed": 0,
+        "planned": 14,
+        "status": "passed"
+      },
+      {
+        "file": "018_business_rpc_custom_tags.test.sql",
+        "category": "business_rpc",
+        "sha256": "f37936190697d070928845ceec10cbc8a97f7229742bcaf88a54c08a472f8e67",
+        "executed": 40,
+        "passed": 40,
+        "failed": 0,
+        "planned": 40,
+        "status": "passed"
+      },
+      {
+        "file": "019_business_rpc_goal_overviews.test.sql",
+        "category": "business_rpc",
+        "sha256": "7071375a4a5ec7de10a0f636907f7b2dbdb67d46d7da2639a1ea3eaad9d0f02e",
+        "executed": 16,
+        "passed": 16,
+        "failed": 0,
+        "planned": 16,
+        "status": "passed"
+      },
+      {
+        "file": "020_reauth_proof_boundary.test.sql",
+        "category": "other",
+        "sha256": "4dc033907334d26756d016e3819b0debecb2d695c0e5590b1dc24299f3cf77b0",
+        "executed": 13,
+        "passed": 13,
+        "failed": 0,
+        "planned": 13,
+        "status": "passed"
+      }
+    ],
+    "executed": 419,
+    "physical_integrity_tests_executed": 51,
+    "rpc_boundary_tests_executed": 21,
+    "business_rpc_tests_executed": 334,
+    "real_login_tests_executed": 0
+  },
+  "local_auth": {
+    "checked_at": "2026-11-09T08:39:02.545Z",
+    "status": "passed",
+    "failed_phase": null,
+    "failed_rpc_code": null,
+    "executed": 12,
+    "cases": [
+      {
+        "name": "unconfigured_verifier_fails_closed",
+        "status": "passed"
+      },
+      {
+        "name": "ordinary_authenticated_user_cannot_insert_a_grant_directly",
+        "status": "passed"
+      },
+      {
+        "name": "bad_signature_and_noncanonical_payload_cannot_issue_grants",
+        "status": "passed"
+      },
+      {
+        "name": "even_a_signed_proof_must_match_current_uuid_and_session",
+        "status": "passed"
+      },
+      {
+        "name": "expired_future_and_different_origin_proofs_are_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "signed_wrong_scope_provider_and_expanded_claims_are_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "disabled_key_cannot_issue_a_grant",
+        "status": "passed"
+      },
+      {
+        "name": "concurrent_signed_retries_return_one_session_bound_ten_minute_grant",
+        "status": "passed"
+      },
+      {
+        "name": "another_session_cannot_consume_the_grant_and_revoked_jwt_cannot_reissue_it",
+        "status": "passed"
+      },
+      {
+        "name": "a_consumed_grant_is_not_reissued",
+        "status": "passed"
+      },
+      {
+        "name": "fresh_grant_consumes_atomically_and_revokes_product_access_without_other_user_changes",
+        "status": "passed"
+      },
+      {
+        "name": "existing_product_auth_and_key_configuration_preserved",
+        "status": "passed"
+      }
+    ],
+    "synthetic_local_users": 2,
+    "real_local_sessions_issued": 3,
+    "signed_google_result": "synthetic_server_attestation_only",
+    "real_google_tests_executed": 0,
+    "existing_product_auth_and_key_configuration_preserved": true,
+    "actual_keys_or_credentials_logged": false,
+    "privileged_client_used_only_for_setup_cleanup": true,
+    "application_requests_use_user_jwt": true
+  },
+  "local_migrations": 55,
+  "staging_migrations": 53,
+  "applied_prior_migrations_modified": false,
+  "configuration": {
+    "production_key_configured": false,
+    "staging_key_configured": false,
+    "temporary_test_keys_removed": true,
+    "actual_key_material_in_git_or_report": false
+  },
+  "failure_and_resolution": {
+    "initial_error": "42501 on the isolated current_session_id helper",
+    "resolution": "new 55th migration grants only helper execution as its actual owner; role memberships are removed afterwards",
+    "applied_sql_rewritten": false
+  },
+  "codex_review": {
+    "kind": "direct_source_review_not_independent",
+    "checked": [
+      "HKDF purpose/origin separation; HMAC payload fields/expiry; no browser proof/key exposure",
+      "fixed length signature byte comparison; strict canonical encoding",
+      "same active UUID/session and ten-minute one-time consumption",
+      "dedicated NOLOGIN/NOBYPASSRLS owner; private key read only; no API role membership",
+      "no ordinary direct DML; no Auth table grants or unrelated product grants",
+      "concurrent replay returns one grant; consumed/revoked/mismatched proofs denied",
+      "no real keys in migrations; local generated test keys and users removed"
+    ]
+  },
+  "pending": [
+    "real Google PKCE reauthentication and current/new UUID verification",
+    "BFF same-account new-session issuance and previous-session revocation",
+    "account deletion API/UI and acceptance receipt",
+    "deployment verifier-key provisioning",
+    "independent ledger/worker/restore and real HTTPS/public release"
+  ],
+  "commands": [
+    {
+      "command": "scripts/project.ps1 -Task check",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/project.ps1 -Task build:check",
+      "exit_code": 0,
+      "bundler": "webpack"
+    },
+    {
+      "command": "scripts/project.ps1 -Task db:test",
+      "exit_code": 0
+    },
+    {
+      "command": "node scripts/test-local-reauth-proof.mjs",
+      "exit_code": 0
+    }
+  ]
+}

@@ -190,5 +190,7 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W12-C2a | Google 웹 BFF·성인 가입·갱신·로그아웃 UI 기반 | DONE | 단위 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭 확인. 기존 데이터 보존. Google 교환은 대체했으며 실제 Google 0. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json) |
 | W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | Google Cloud 차곡찬 프로젝트/이름 준비. 공개 지원 이메일·OAuth 클라이언트/제공자 설정·Vercel 팀 접근 승인 뒤 실제 콜백·가입·초대·만료/로그아웃·다중 탭을 검증한다. |
 | W12-C1 | 활성 Auth 세션 현재/전체 로그아웃 API | DONE | unit 199(신규 11)·새 로컬 Auth 사용자 2명/발급 세션 4개의 통합 6·production HTTP 10·build 통과. current/all 범위·다른 사용자 보존·폐기 JWT 재사용 거절·기존 데이터/사용자/세션 보존 확인. 갱신/만료 경합·로그아웃 UI·실제 제공자/HTTPS 브라우저 수락은 미완료다. [증거](../quality/reports/w12-c1-logout-check-2026-10-26.json) |
-| W12-D | 재인증·계정 탈퇴 동선 | TODO | W10-C·독립 원장·실제 재인증에 연계 |
+| W12-D | 재인증·계정 탈퇴 동선 | IN_PROGRESS | D1의 서버 서명/DB 발급 경계 완료. Google 재인증 BFF·탈퇴 API/UI와 W14 독립 원장/운영 파기·실제 제공자 수락은 후속 |
+| W12-D1 | 서명한 재인증 증명의 최소 권한 grant 발급 | DONE | 새 SQL 2개(로컬 총 55)·서명 단위 4 포함 전체 235·DB 419(새 경계 13)·실제 로컬 Auth 기반 12 통과. 기존 데이터/키 설정 보존. 실제 Google 0. [증거](../quality/reports/w12-d1-reauth-proof-check-2026-11-09.json) |
+| W12-D2 | Google 재인증·탈퇴 BFF/사용자 화면 | IN_PROGRESS | 같은 UUID의 새 세션에 grant를 묶고 이전 세션 폐기·현재 계정 유지 실패 처리·명시적 삭제 확인/멱등 키/접수 안내를 연결한다. 구현·수락 대기 |
 | W22-C | 실제 출시 사례·출시 우선 실행안 | DONE | Daily·ABGT250·Linear의 당사자 회고와 최신 Play/TestFlight 문서 확인. 광고·유료 상품은 출시 후 비교 |

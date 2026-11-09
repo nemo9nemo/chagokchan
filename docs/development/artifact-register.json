@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-11-09",
-  "current_stage": "S07_google_bff_signup_refresh_ui_local_auth_verified_real_google_release_pending",
-  "next_stage": "w12_c2b_real_google_https_w12_d_deletion_w14_ledger_w27_c_public_pages_then_acceptance_release",
+  "current_stage": "S07_google_bff_and_reauth_proof_local_verified_real_provider_deletion_web_release_pending",
+  "next_stage": "w12_d2_reauth_deletion_bff_ui_parallel_w12_c2b_google_setup_w14_operations_w27_c_pages",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": true,
@@ -69,7 +69,7 @@
     "docker_cli": "29.1.3",
     "docker_engine": "29.1.3",
     "supabase_cli": "2.120.0",
-    "local_database": "w10_b_goal_delete_retry_and_trash_api_regression_verified",
+    "local_database": "55_migrations_reauth_signer_grant_local_auth_boundary_verified",
     "selected_node": "24.22.1",
     "next": "16.4.5",
     "react": "19.3.0",
@@ -91,13 +91,13 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 85,
-    "application_tests_executed": 231,
+    "planned_test_cases": 86,
+    "application_tests_executed": 235,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
-    "database_tests_executed": 406,
+    "database_tests_executed": 419,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "local_api_tests_executed": 270,
@@ -322,6 +322,16 @@
       "isolated_http_cases_passed": 13,
       "real_google_cases_passed": 0,
       "login_render_viewports_checked": 2
+    },
+    "w12_d1": {
+      "status": "passed_signer_database_and_local_auth_boundary",
+      "report": "docs/quality/reports/w12-d1-reauth-proof-check-2026-11-09.json",
+      "unit_tests_passed": 235,
+      "database_tests_passed": 419,
+      "local_auth_cases_passed": 12,
+      "real_google_cases_passed": 0,
+      "local_migrations": 55,
+      "staging_migrations": 53
     }
   },
   "artifacts": [
@@ -998,6 +1008,23 @@
         "scripts/test-local-web-auth.mjs",
         "docs/quality/screenshots/w12-c2-login-desktop-2026-11-09.png",
         "docs/quality/screenshots/w12-c2-login-mobile-2026-11-09.png"
+      ]
+    },
+    {
+      "id": "ART-038",
+      "title": "서명한 재인증 증명의 제한된 DB grant 발급",
+      "status": "passed_signer_database_and_local_auth_boundary",
+      "paths": [
+        "docs/quality/reports/w12-d1-reauth-proof-check-2026-11-09.json",
+        "docs/decisions/ADR-0011-server-reauth-proof.md",
+        "docs/plans/W12-D-google-deletion.md",
+        "docs/changes/2026-11-09-reauth-proof-issuer.md",
+        "src/server/reauth-proof.mjs",
+        "scripts/reauth-proof.test.mjs",
+        "scripts/test-local-reauth-proof.mjs",
+        "supabase/migrations/20261109000100_reauth_proof_issuer.sql",
+        "supabase/migrations/20261109000200_reauth_session_helper_grant.sql",
+        "supabase/tests/020_reauth_proof_boundary.test.sql"
       ]
     }
   ],
