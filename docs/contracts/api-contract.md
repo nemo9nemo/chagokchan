@@ -1,6 +1,6 @@
 # API 계약과 구현 규칙
 
-버전: 0.2.0 / 갱신: 2026-11-09 / 상태: 제품 API·배포 세션 어댑터·Google BFF의 로컬 Auth 검증, 실제 Google/HTTPS·재인증/탈퇴 BFF와 운영 공개 수락 후속 / 기준: [OpenAPI](../../contracts/openapi.json)
+버전: 0.2.0 / 갱신: 2026-11-09 / 상태: 제품 API·배포 세션·Google/재인증/탈퇴 BFF의 로컬 Auth 검증, 실제 Google/HTTPS·브라우저·운영 공개 수락 후속 / 기준: [OpenAPI](../../contracts/openapi.json)
 
 OpenAPI 3.1.0 JSON으로 요청·응답·경로·오류를 정의했다. 서버 주소는 동일 출처 /api/v1이다. W07-A에서 GET /me, W07-B에서 개발용 GET /auth/csrf와 mutation 검증 기반, W08-A/B1/B2에서 목표·판 API, W08-C에서 개인 칭찬 API를 연결했다. W09-A는 연결 수명주기 API를, W09-B는 역할별 판 상세·멤버 목록, owner grant/revoke, contributor 공유 peer 생성과 recipient hide/unhide/exclude API를 기존 RPC에 연결했다. 각 mutation은 Origin·CSRF·JSON guard와 응답 allowlist를 적용한다. 개인과 공유 생성은 멱등 키를 요구하며 회차 ID를 결과에 반환한다. 공유 peer 생성은 실천일 입력을 받지 않는다. 숨김은 수량을 바꾸지 않고 제외는 회차 집계를 원자적으로 다시 계산한다. 목표·회차·칭찬·멤버 목록은 기본 20·최대 50개이며 cursor는 해당 목표·판에 적용한다. 배포 Auth flow/session binding은 W12다. operation의 x-requirements·x-policy-ids·x-test-cases로 요구·정책·검증을 추적한다. [OpenAPI 공식 사양](https://spec.openapis.org/oas/v3.1.0.html)
 
@@ -73,3 +73,6 @@ GET은 사용자 세션과 RLS/제한 projection, 변경은 지정 업무 RPC로
 현재 검사는 JSON 형식·로컬 참조·ID 중복·필수 경로 인자·요구/TC 연결·정책 수치와 응답 경계 확인 범위다. 실제 스키마 validator·타입 생성·서버 계약 테스트·DB 검증은 개발 기반이 준비된 뒤 수행한다. 검사 결과는 [산출물 검사 기록](../quality/reports/2026-10-07-baseline.md)에 남긴다.
 
 2026-10-19 W12-A: 기존 제품 route는 요청별 서버 세션 어댑터에 연결한다. 배포에서는 암호화 Host 쿠키 → Auth.getUser → get_me의 현재 DB 세션/계정 검사 후 같은 업무 RPC/RLS를 사용한다. /auth/csrf의 배포 토큰은 현재 세션 쿠키에 binding한다. 실제 Google/OTP 발급·가입·갱신/로그아웃 route는 후속이며 [진행표](../development/backlog.md)에서 구분한다.
+# Google 재인증·탈퇴 웹 구현 후속 (2026-11-09)
+
+초기 베타의 재인증은 Google·account.delete만 허용한다. 별도 `/auth/reauth/callback`에서 기존 사용자/세션과 새 PKCE 결과의 동일 UUID·새 세션을 확인하고 기존 세션을 폐기한다. GET 흐름 조회와 POST 탈퇴 접수는 암호화한 결과 쿠키의 UUID·세션도 검사한다. 탈퇴 접수 202의 status는 같은 멱등 요청을 재조회할 때 pending/running/completed/failed 중 현재 상태이며, access_revoked=true는 제품 접근 차단을 뜻한다. 접수 안내 쿠키만으로 실제 파기 완료를 주장하지 않는다. 일반 로그인 next는 /·/connect·/account/deletion만 허용한다. 실제 제공자·운영 파기 수락은 별도다.

@@ -1,6 +1,6 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { ApiRequestError, CSRF_COOKIE_NAME, csrfSessionBinding, getCsrfSigningSecret, validateMutationRequest } from "./api-security.mjs";
-import { FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, allowedNextPath, openLoginFlow, openPendingInvite, sealLoginFlow, sealPendingInvite, temporaryCookieHeader, validInviteToken } from "./auth-flow-cookie.mjs";
+import { FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, REAUTH_COOKIE_NAME, DELETION_RECEIPT_COOKIE_NAME, allowedNextPath, openLoginFlow, openPendingInvite, sealLoginFlow, sealPendingInvite, temporaryCookieHeader, validInviteToken } from "./auth-flow-cookie.mjs";
 import { SESSION_COOKIE_NAME, openSession, resolveVerifiedAuthSession, sealRotatedSession, sealSession, sessionConfiguration, sessionCookieHeader, sessionCookieValue, sessionTokenClaims } from "./deployed-session.mjs";
 import { authContextResponse } from "./registration-api.mjs";
 
@@ -47,7 +47,7 @@ export async function googleStartResponse(request, { env = process.env, now = Da
   } catch (error) { return failure(error); }
 }
 
-async function tokenExchange(grant, body, env, fetcher) {
+export async function tokenExchange(grant, body, env, fetcher) {
   const { supabaseUrl } = sessionConfiguration(env);
   let result;
   try {
@@ -100,6 +100,7 @@ export async function googleCallbackResponse(request, { env = process.env, now =
     const claims = sessionTokenClaims(tokens.access_token);
     const cookies = [sessionCookieHeader(sealed), expiredCsrfCookie(), clearFlow, temporaryCookieHeader(INVITE_COOKIE_NAME, "", 0)];
     if (flow.invite_token) cookies[3] = temporaryCookieHeader(INVITE_COOKIE_NAME, sealPendingInvite(flow.invite_token, claims, env, now));
+    for (const name of [REAUTH_COOKIE_NAME, DELETION_RECEIPT_COOKIE_NAME]) cookies.push(temporaryCookieHeader(name, "", 0));
     const next = context.account_state === "active" ? flow.next : context.next;
     return callbackRedirect(next, config, cookies);
   } catch (error) {

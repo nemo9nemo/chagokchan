@@ -1,8 +1,8 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-11-09",
-  "current_stage": "S07_google_bff_and_reauth_proof_local_verified_real_provider_deletion_web_release_pending",
-  "next_stage": "w12_d2_reauth_deletion_bff_ui_parallel_w12_c2b_google_setup_w14_operations_w27_c_pages",
+  "current_stage": "S07_deletion_bff_implemented_real_google_browser_operations_release_pending",
+  "next_stage": "w12_d2_browser_acceptance_w12_c2b_google_setup_w14_operations_w27_c_pages",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": true,
@@ -91,8 +91,8 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 86,
-    "application_tests_executed": 235,
+    "planned_test_cases": 87,
+    "application_tests_executed": 249,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
@@ -1026,6 +1026,32 @@
         "supabase/migrations/20261109000200_reauth_session_helper_grant.sql",
         "supabase/tests/020_reauth_proof_boundary.test.sql"
       ]
+    },
+    {
+      "id": "ART-039",
+      "title": "Google 재인증·탈퇴 웹 BFF와 확인 화면",
+      "status": "passed_bff_local_auth_build_http_browser_acceptance_pending",
+      "paths": [
+        "docs/quality/reports/w12-d2-deletion-web-check-2026-11-09.json",
+        "docs/changes/2026-11-09-google-reauth-deletion-web.md",
+        "docs/plans/W12-D-google-deletion.md",
+        "src/server/account-deletion-api.mjs",
+        "src/server/auth-flow-cookie.mjs",
+        "src/server/web-auth-api.mjs",
+        "src/server/logout-api.mjs",
+        "src/app/account-deletion-screen.tsx",
+        "src/app/auth-gate.tsx",
+        "src/app/auth-screen.tsx",
+        "src/app/api/v1/auth/reauth/start/route.ts",
+        "src/app/api/v1/auth/reauth/callback/route.ts",
+        "src/app/api/v1/auth/reauth/[flow_id]/route.ts",
+        "src/app/api/v1/account/deletion-requests/route.ts",
+        "scripts/account-deletion-api.test.mjs",
+        "scripts/test-local-account-deletion-api.mjs",
+        "scripts/test-security-headers-http.mjs",
+        "contracts/openapi.json",
+        "package.json"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1179,11 +1205,12 @@
     "operator": "individual",
     "cost_preference": "zero_operating_cost_first_no_paid_upgrade_or_domain_purchase",
     "domain": "platform_default",
-    "support_email": "pending_user_input",
+    "support_email": "pending_user_created_common_mailbox_for_multiple_apps",
     "supabase_org_free_project_creation": "authorized",
     "initial_auth_providers": [
       "google"
     ],
-    "email_otp": "deferred_until_sender_setup"
+    "email_otp": "deferred_until_sender_setup",
+    "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access"
   }
 }

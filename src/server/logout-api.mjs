@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { ApiRequestError, CSRF_COOKIE_NAME, getCsrfSigningSecret, validateMutationRequest } from "./api-security.mjs";
 import { SESSION_COOKIE_NAME, expiredSessionCookieHeader, openSession, resolveVerifiedAuthSession, sessionCookieValue, sessionTokenClaims } from "./deployed-session.mjs";
-import { FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, temporaryCookieHeader } from "./auth-flow-cookie.mjs";
+import { FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, REAUTH_COOKIE_NAME, DELETION_RECEIPT_COOKIE_NAME, temporaryCookieHeader } from "./auth-flow-cookie.mjs";
 import { AuthTokenRejectedError, refreshedSession } from "./web-auth-api.mjs";
 
 function json(body, status, requestId, clear = false) {
@@ -11,6 +11,8 @@ function json(body, status, requestId, clear = false) {
     headers.append("Set-Cookie", `${CSRF_COOKIE_NAME}=; Path=/api/v1; Max-Age=0; Secure; HttpOnly; SameSite=Lax`);
     headers.append("Set-Cookie", temporaryCookieHeader(FLOW_COOKIE_NAME, "", 0));
     headers.append("Set-Cookie", temporaryCookieHeader(INVITE_COOKIE_NAME, "", 0));
+    headers.append("Set-Cookie", temporaryCookieHeader(REAUTH_COOKIE_NAME, "", 0));
+    headers.append("Set-Cookie", temporaryCookieHeader(DELETION_RECEIPT_COOKIE_NAME, "", 0));
   }
   return Response.json(body, { status, headers });
 }
