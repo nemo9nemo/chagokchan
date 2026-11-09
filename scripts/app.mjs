@@ -4,17 +4,17 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { validateEnvironment } from "./runtime-environment.mjs";
 import { warmDevelopmentRoutes } from "./dev-warmup.mjs";
+import { serverBinding, validateNodeVersion } from "./app-runtime.mjs";
 const command = process.argv[2];
 if (!["dev", "build", "build-check", "start"].includes(command)) throw new Error("Use dev, build, build-check or start.");
-const expected = fs.readFileSync(new URL("../.node-version", import.meta.url), "utf8").trim();
-if (process.versions.node !== expected) throw new Error(`Node ${expected} is required. Use scripts/project.ps1 or your Node version manager.`);
+validateNodeVersion(process.versions.node, { deployed: command === "build" || command === "start" });
 if (command === "dev" && fs.existsSync(".env.development.local")) process.loadEnvFile(".env.development.local");
 const env = { ...process.env, NODE_ENV: command === "dev" ? "development" : "production", NEXT_TELEMETRY_DISABLED: "1" };
 if (command === "build-check") {
   for (const key of Object.keys(env)) if (key.startsWith("LOCAL_DEV_")) delete env[key];
   Object.assign(env, { APP_ENV: "preview", APP_AUTH_MODE: "supabase_session", APP_BASE_URL: "https://build-check.example.invalid", SUPABASE_URL: "https://database.example.invalid", CSRF_SIGNING_SECRET: "build-check-only-csrf-key-not-for-runtime", AUTH_SESSION_ENCRYPTION_KEY: Buffer.alloc(32, 66).toString("base64url") });
 }
-const bindingHost = "127.0.0.1";
+const bindingHost = command === "dev" ? "127.0.0.1" : env.APP_BIND_HOST ?? "127.0.0.1";
 if (command === "dev") env.CHAGOKCHAN_BIND_HOST = bindingHost;
 const config = validateEnvironment(env, { command: command === "dev" ? "dev" : "build", bindingHost });
 if (command === "dev") {
@@ -22,8 +22,10 @@ if (command === "dev") {
   env.APP_LOCAL_CSRF_SIGNING_SECRET = randomBytes(32).toString("base64url");
 }
 const next = fileURLToPath(new URL("../node_modules/next/dist/bin/next", import.meta.url));
-const port = new URL(config.baseUrl).port || (command === "dev" ? "80" : "443");
-const args = command === "dev" ? ["dev", "--hostname", bindingHost, "--port", port] : command === "start" ? ["start", "--hostname", bindingHost] : ["build"];
+const binding = ["dev", "start"].includes(command) ? serverBinding(command, env, config) : null;
+// Use the supported webpack production bundler consistently in CI and deploys.
+// Turbopack's CSS worker exits before connecting on the current Windows runtime.
+const args = binding ? [command, "--hostname", binding.host, "--port", binding.port] : ["build", "--webpack"];
 const warmupEnabled = command === "dev" && env.LOCAL_DEV_WARMUP !== "0";
 const warmupAbort = new AbortController();
 const child = spawn(process.execPath, [next, ...args], { stdio: warmupEnabled ? ["inherit", "pipe", "inherit"] : "inherit", env, windowsHide: true });

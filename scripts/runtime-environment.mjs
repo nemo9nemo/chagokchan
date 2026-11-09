@@ -1,5 +1,4 @@
-import fs from "node:fs";
-const policy = JSON.parse(fs.readFileSync(new URL("../policies/development-policy.json", import.meta.url), "utf8"));
+import policy from "../policies/development-policy.json" with { type: "json" };
 export class ConfigurationError extends Error {}
 const fail = (name) => { throw new ConfigurationError(`Invalid configuration: ${name}`); };
 const localHost = (host) => policy.local_guard.allowed_hosts.includes(host.replace(/^\[|\]$/g, ""));

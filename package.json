@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.19.0",
   "engines": {
-    "node": "24.19.0",
+    "node": ">=24.22.1 <25",
     "pnpm": "11.19.0"
   },
   "scripts": {
@@ -14,7 +14,7 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs scripts/board-loading.test.mjs scripts/dev-warmup.test.mjs scripts/logout-api.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs scripts/board-loading.test.mjs scripts/dev-warmup.test.mjs scripts/logout-api.test.mjs scripts/app-runtime.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",
-    "next": "16.4.2",
+    "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

@@ -1834,7 +1834,29 @@
       "expected": "현재 세션은 해당 기기만, 전체는 현재 사용자의 모든 세션만 폐기한다. 유효 현재 세션 없이 다른 기기를 폐기하지 않는다. 만료 토큰/불확실한 폐기를 성공으로 표시하지 않는다. 실제 제공자·갱신/UI·HTTPS 브라우저 수락은 별도다.",
       "status": "passed",
       "evidence": "reports/w12-c1-logout-check-2026-10-26.json"
+    },
+    {
+      "id": "TC-DEPLOY-RUNTIME-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-004",
+        "NFR-005"
+      ],
+      "policy_ids": [
+        "POL-SEC-001",
+        "POL-OPS-001"
+      ],
+      "level": "runtime_unit_and_isolated_production_http",
+      "title": "보안 런타임 하한·플랫폼 버전/포트·가상 모드 격리",
+      "steps": [
+        "로컬/CI 정확 버전과 배포의 동일 메이저 보안 하한·이후 patch 수락, 구버전/다른 메이저/prerelease 거절 검사",
+        "개발 외부 바인딩·fixture production start 거절과 배포 host/PORT 검증·입력 비노출 검사",
+        "같은 webpack production 빌드에서 nonce/CSP·개인 응답 no-store·비인증 API와 로그아웃의 실제 HTTP 검사"
+      ],
+      "expected": "보안 하한 아래 런타임·fixture 외부 제공을 거절한다. 관리형 플랫폼의 이후 24.x patch와 명시적 내부 포트는 수락한다. CSP/쿠키/캐시 경계를 유지한다. 실제 Google/HTTPS 기기 수락은 별도다.",
+      "status": "passed",
+      "evidence": "reports/w27-b-runtime-security-check-2026-11-09.json"
     }
   ],
-  "updated_on": "2026-10-26"
+  "updated_on": "2026-11-09"
 }
