@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { classifyMutationOutcome, createIdempotentRequest } from "@/client/idempotent-request.mjs";
 import { openBoardView } from "@/client/board-loading.mjs";
+import { sessionMutationFetch, sessionFetch } from "@/client/auth-session";
+import { AccountMenu } from "./auth-screen";
 import GrapeCluster from "./grape-cluster";
 import NewsPanel, { type NewsNotification, type NewsTab, type SentPraise } from "./news-panel";
 import { canOpenConnections } from "./news-labels.mjs";
@@ -178,15 +180,12 @@ function SharedBoardsPanel(props: {
   </section>;
 }
 
-let csrfToken: string | null = null;
-let csrfFetchedAt = 0;
-let csrfRefresh: Promise<string> | null = null;
 const pendingGoalDetails = new Map<string, Promise<GoalDetail>>();
 
 async function apiJson<T>(path: string, init: RequestInit = {}): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(path, { ...init, cache: "no-store", credentials: "same-origin" });
+    response = init.method && init.method !== "GET" ? await sessionMutationFetch(path, init) : await sessionFetch(path, init);
   } catch {
     const offline = typeof navigator !== "undefined" && navigator.onLine === false;
     throw new Error(offline
@@ -214,19 +213,8 @@ function getGoalDetail(goalId: string) {
   return request;
 }
 
-async function getCsrfToken() {
-  if (csrfToken && Date.now() - csrfFetchedAt < 7 * 60 * 1000) return csrfToken;
-  if (!csrfRefresh) {
-    csrfRefresh = apiJson<{ csrf_token: string }>("/api/v1/auth/csrf")
-      .then((response) => { csrfToken = response.csrf_token; csrfFetchedAt = Date.now(); return response.csrf_token; })
-      .finally(() => { csrfRefresh = null; });
-  }
-  return csrfRefresh;
-}
-
 async function mutate<T>(path: string, method: "POST" | "PUT" | "PATCH" | "DELETE", body: Record<string, unknown>, idempotencyKey?: string) {
-  const token = await getCsrfToken();
-  const headers: Record<string, string> = { "Content-Type": "application/json", "X-CSRF-Token": token };
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (idempotencyKey) headers["Idempotency-Key"] = idempotencyKey;
   return apiJson<T>(path, { method, headers, body: JSON.stringify(body) });
 }
@@ -316,7 +304,8 @@ function boardProgress(board: Board | undefined) {
   return `${board.current_bunch.valid_count} / ${board.current_bunch.target_count}`;
 }
 
-export default function ChagokchanApp() {
+export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?: boolean }) {
+  const pendingInviteLoad = useRef<Promise<string | null> | null>(null);
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("goals");
   const [theme, setTheme] = useState<"garden" | "grape">("grape");
   const [nickname, setNickname] = useState<string | null>(null);
@@ -599,18 +588,26 @@ export default function ChagokchanApp() {
   }, [workspaceView, refreshConnectionCenter, loadSharedBoards, loadTrashGoals]);
 
   useEffect(() => {
-    const inviteHash = new URLSearchParams(window.location.hash.slice(1));
-    const token = inviteHash.get("invite");
-    if (!token || !/^[A-Za-z0-9_-]{32}$/.test(token)) return;
-    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
-    setWorkspaceView("connections");
-    setInviteToken(token);
-    setInvitePreviewLoading(true);
-    void mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", { link_token: token })
-      .then(setInvitePreview)
-      .catch((error) => setInvitePreviewError(errorMessage(error)))
-      .finally(() => setInvitePreviewLoading(false));
-  }, []);
+    if (!pendingInviteLoad.current) {
+      const match = /^#invite=([A-Za-z0-9_-]{32})$/.exec(window.location.hash);
+      if (window.location.hash) window.history.replaceState(null, "", window.location.pathname);
+      pendingInviteLoad.current = match ? Promise.resolve(match[1]) : deployedAuth && window.location.pathname === "/connect"
+        ? mutate<{ invite_token: string | null }>("/api/v1/auth/pending-invite", "POST", {}).then(result => result.invite_token)
+        : Promise.resolve(null);
+    }
+    let active = true;
+    async function preview() {
+      const token = await pendingInviteLoad.current;
+      if (!token || !active) return;
+      setWorkspaceView("connections"); setInviteToken(token); setInvitePreviewLoading(true);
+      try {
+        const result = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", { link_token: token });
+        if (active) setInvitePreview(result);
+      } finally { if (active) setInvitePreviewLoading(false); }
+    }
+    void preview().catch(error => { if (active) setInvitePreviewError(errorMessage(error)); });
+    return () => { active = false; };
+  }, [deployedAuth]);
 
   const loadGoals = useCallback(async (cursor: string | null = null, append = false) => {
     setLoadingGoals(true);
@@ -1227,6 +1224,7 @@ export default function ChagokchanApp() {
           ? <button className="badge share-badge" type="button" disabled={interactionLocked} onClick={() => { setShowShare(true); void loadBoardMembers(sharedBoard.id); }}>공유 켬</button>
           : <span className="badge" title="공유판은 판을 만들 때 켤 수 있어요">공유 끔</span>)}
         <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === "garden" ? "grape" : "garden")} aria-label="화면 색상 테마" aria-pressed={theme === "grape"}>테마 · {theme === "garden" ? "정원" : "포도"}</button>
+        {deployedAuth && <AccountMenu />}
       </header>
       {isOnline === false && <div className="offline-banner" role="status" aria-live="polite">오프라인이에요. 다시 연결한 뒤 기록을 확인해 주세요. 오프라인 전송은 저장되거나 성공 처리되지 않아요.</div>}
       <div className="workspace">

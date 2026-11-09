@@ -1,12 +1,16 @@
 import { randomUUID } from "node:crypto";
 import { ApiRequestError, CSRF_COOKIE_NAME, getCsrfSigningSecret, validateMutationRequest } from "./api-security.mjs";
-import { expiredSessionCookieHeader, openSession, resolveVerifiedAuthSession, sessionCookieValue } from "./deployed-session.mjs";
+import { SESSION_COOKIE_NAME, expiredSessionCookieHeader, openSession, resolveVerifiedAuthSession, sessionCookieValue, sessionTokenClaims } from "./deployed-session.mjs";
+import { FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, temporaryCookieHeader } from "./auth-flow-cookie.mjs";
+import { AuthTokenRejectedError, refreshedSession } from "./web-auth-api.mjs";
 
 function json(body, status, requestId, clear = false) {
   const headers = new Headers({ "Cache-Control": "no-store", Pragma: "no-cache", "X-Request-ID": requestId });
   if (clear) {
     headers.append("Set-Cookie", expiredSessionCookieHeader());
     headers.append("Set-Cookie", `${CSRF_COOKIE_NAME}=; Path=/api/v1; Max-Age=0; Secure; HttpOnly; SameSite=Lax`);
+    headers.append("Set-Cookie", temporaryCookieHeader(FLOW_COOKIE_NAME, "", 0));
+    headers.append("Set-Cookie", temporaryCookieHeader(INVITE_COOKIE_NAME, "", 0));
   }
   return Response.json(body, { status, headers });
 }
@@ -19,7 +23,7 @@ function validContext(data, userId) {
     Object.hasOwn(next, data.account_state) && next[data.account_state] === data.next;
 }
 
-export async function logoutResponse(request, { env = process.env, clientFactory, now = Date.now() } = {}) {
+export async function logoutResponse(request, { env = process.env, clientFactory, fetcher, now = Date.now() } = {}) {
   const requestId = randomUUID();
   try {
     const body = await validateMutationRequest(request, { expectedOrigin: new URL(env.APP_BASE_URL).origin, secret: getCsrfSigningSecret(env), env });
@@ -31,14 +35,24 @@ export async function logoutResponse(request, { env = process.env, clientFactory
     }
     const scope = body.scope ?? "current";
     const cookie = request.headers.get("cookie");
-    const session = openSession(sessionCookieValue(cookie), env, now);
+    let session = openSession(sessionCookieValue(cookie), env, now);
     if (!session) {
       if (scope === "all") throw required();
       return json({ ok: true }, 200, requestId, true);
     }
-    const verified = await resolveVerifiedAuthSession(cookie, { env, clientFactory, now });
-    // An expired access token may still have a live refresh token. Keep the
-    // cookie and return 401 until the future refresh flow can verify/revoke it.
+    let currentCookie = cookie;
+    const claims = sessionTokenClaims(session.access_token);
+    if (claims && claims.expiresAt <= Math.floor(now / 1000)) {
+      try {
+        const refreshed = await refreshedSession(cookie, { env, clientFactory, fetcher, now });
+        session = refreshed.tokens;
+        currentCookie = `${SESSION_COOKIE_NAME}=${refreshed.sealed}`;
+      } catch (error) {
+        if (error instanceof AuthTokenRejectedError && scope === "current") return json({ ok: true }, 200, requestId, true);
+        throw error;
+      }
+    }
+    const verified = await resolveVerifiedAuthSession(currentCookie, { env, clientFactory, now });
     if (!verified) throw required();
     const context = await verified.client.rpc("get_auth_context");
     const ended = context.error?.code === "PT401";

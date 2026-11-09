@@ -1,0 +1,409 @@
+{
+  "work_item": "W12-C2a",
+  "checked_at": "2026-11-09T08:07:22.606Z",
+  "base_source": "23d8c7f8d505730db949396fef4b10b641a0aa9b",
+  "source_snapshot": {
+    "format": "sorted_paths_and_LF_normalized_source_scripts_policy_contract_lock",
+    "sha256": "fcabc3c1aa6d92013e6ca404bda45725479d989b9d78df634ebc37c067c848c1",
+    "paths": [
+      "contracts/openapi.json",
+      "package.json",
+      "pnpm-lock.yaml",
+      "policies/app-policy.json",
+      "scripts/api-security.test.mjs",
+      "scripts/app-runtime.mjs",
+      "scripts/app-runtime.test.mjs",
+      "scripts/app.mjs",
+      "scripts/auth-session-client.test.mjs",
+      "scripts/board-api.test.mjs",
+      "scripts/board-loading.test.mjs",
+      "scripts/check-commit-message.mjs",
+      "scripts/connection-api.test.mjs",
+      "scripts/database-task.mjs",
+      "scripts/deployed-session.test.mjs",
+      "scripts/dev-warmup.mjs",
+      "scripts/dev-warmup.test.mjs",
+      "scripts/docker-loopback-proxy.mjs",
+      "scripts/docker-loopback-proxy.test.mjs",
+      "scripts/goal-api.test.mjs",
+      "scripts/grape-layout.test.mjs",
+      "scripts/idempotent-request.test.mjs",
+      "scripts/local-database-tools.mjs",
+      "scripts/local-db.mjs",
+      "scripts/local-fixture-manifest.mjs",
+      "scripts/local-fixture-manifest.test.mjs",
+      "scripts/local-user-session.test.mjs",
+      "scripts/logout-api.test.mjs",
+      "scripts/measure-board-loading.mjs",
+      "scripts/news-api.test.mjs",
+      "scripts/news-labels.test.mjs",
+      "scripts/praise-api.test.mjs",
+      "scripts/praise-tags.test.mjs",
+      "scripts/project.ps1",
+      "scripts/registration-api.test.mjs",
+      "scripts/runtime-environment.mjs",
+      "scripts/runtime-environment.test.mjs",
+      "scripts/security-headers.test.mjs",
+      "scripts/seed-local-fixtures.mjs",
+      "scripts/service-worker.test.mjs",
+      "scripts/test-local-account-deletion.mjs",
+      "scripts/test-local-board-api.mjs",
+      "scripts/test-local-connection-api.mjs",
+      "scripts/test-local-connection-rpc.mjs",
+      "scripts/test-local-deployed-session.mjs",
+      "scripts/test-local-goal-api.mjs",
+      "scripts/test-local-goal-lifecycle-rpc.mjs",
+      "scripts/test-local-goal-list-api.mjs",
+      "scripts/test-local-goal-list-rpc.mjs",
+      "scripts/test-local-goal-management-api.mjs",
+      "scripts/test-local-goal-overviews.mjs",
+      "scripts/test-local-goal-rpc.mjs",
+      "scripts/test-local-lifecycle-rpc.mjs",
+      "scripts/test-local-logout.mjs",
+      "scripts/test-local-me-api.mjs",
+      "scripts/test-local-news-api.mjs",
+      "scripts/test-local-personal-praise-api.mjs",
+      "scripts/test-local-personal-praise-result-rpc.mjs",
+      "scripts/test-local-personal-praise.mjs",
+      "scripts/test-local-praise-tag-api.mjs",
+      "scripts/test-local-registration-api.mjs",
+      "scripts/test-local-registration.mjs",
+      "scripts/test-local-rpc.mjs",
+      "scripts/test-local-shared-board-rpc.mjs",
+      "scripts/test-local-trash-api.mjs",
+      "scripts/test-local-web-auth.mjs",
+      "scripts/test-security-headers-http.mjs",
+      "scripts/verify-artifacts.mjs",
+      "scripts/web-auth-api.test.mjs",
+      "src/app/account/deletion/page.tsx",
+      "src/app/api/v1/auth/callback/route.ts",
+      "src/app/api/v1/auth/csrf/route.ts",
+      "src/app/api/v1/auth/google/start/route.ts",
+      "src/app/api/v1/auth/logout/route.ts",
+      "src/app/api/v1/auth/pending-invite/route.ts",
+      "src/app/api/v1/auth/refresh/route.ts",
+      "src/app/api/v1/auth/session/route.ts",
+      "src/app/api/v1/blocks/[block_id]/route.ts",
+      "src/app/api/v1/blocks/route.ts",
+      "src/app/api/v1/boards/[board_id]/bunches/route.ts",
+      "src/app/api/v1/boards/[board_id]/members/[user_id]/route.ts",
+      "src/app/api/v1/boards/[board_id]/members/route.ts",
+      "src/app/api/v1/boards/[board_id]/praises/route.ts",
+      "src/app/api/v1/boards/[board_id]/route.ts",
+      "src/app/api/v1/connection-invites/[invite_id]/route.ts",
+      "src/app/api/v1/connection-invites/preview/route.ts",
+      "src/app/api/v1/connection-invites/route.ts",
+      "src/app/api/v1/connection-requests/[request_id]/accept/route.ts",
+      "src/app/api/v1/connection-requests/[request_id]/cancel/route.ts",
+      "src/app/api/v1/connection-requests/[request_id]/reject/route.ts",
+      "src/app/api/v1/connection-requests/route.ts",
+      "src/app/api/v1/connections/[connection_id]/route.ts",
+      "src/app/api/v1/connections/route.ts",
+      "src/app/api/v1/goal-overviews/route.ts",
+      "src/app/api/v1/goals/[goal_id]/archive/route.ts",
+      "src/app/api/v1/goals/[goal_id]/complete/route.ts",
+      "src/app/api/v1/goals/[goal_id]/restore/route.ts",
+      "src/app/api/v1/goals/[goal_id]/resume/route.ts",
+      "src/app/api/v1/goals/[goal_id]/route.ts",
+      "src/app/api/v1/goals/route.ts",
+      "src/app/api/v1/me/bootstrap/route.ts",
+      "src/app/api/v1/me/route.ts",
+      "src/app/api/v1/notifications/[notification_id]/route.ts",
+      "src/app/api/v1/notifications/route.ts",
+      "src/app/api/v1/praises/[praise_id]/cancel/route.ts",
+      "src/app/api/v1/praises/[praise_id]/exclude/route.ts",
+      "src/app/api/v1/praises/[praise_id]/hide/route.ts",
+      "src/app/api/v1/praises/[praise_id]/route.ts",
+      "src/app/api/v1/praises/[praise_id]/unhide/route.ts",
+      "src/app/api/v1/sent-praises/route.ts",
+      "src/app/api/v1/shared-boards/route.ts",
+      "src/app/api/v1/trash/goals/route.ts",
+      "src/app/auth-gate.tsx",
+      "src/app/auth-screen.tsx",
+      "src/app/client-app.tsx",
+      "src/app/connect/page.tsx",
+      "src/app/globals.css",
+      "src/app/grape-cluster.tsx",
+      "src/app/grape-layout.mjs",
+      "src/app/layout.tsx",
+      "src/app/manifest.ts",
+      "src/app/news-labels.mjs",
+      "src/app/news-panel.tsx",
+      "src/app/page.tsx",
+      "src/app/praise-sheet.tsx",
+      "src/app/pwa-icons/180/route.tsx",
+      "src/app/pwa-icons/192/route.tsx",
+      "src/app/pwa-icons/512/route.tsx",
+      "src/app/pwa-icons/render-icon.tsx",
+      "src/app/session-boundary.tsx",
+      "src/app/share-panel.tsx",
+      "src/app/signup/page.tsx",
+      "src/app/tag-input.tsx",
+      "src/client/auth-broadcast.ts",
+      "src/client/auth-session.ts",
+      "src/client/board-loading.mjs",
+      "src/client/idempotent-request.mjs",
+      "src/proxy.ts",
+      "src/server/api-security.mjs",
+      "src/server/app-session.ts",
+      "src/server/auth-flow-cookie.mjs",
+      "src/server/board-api.mjs",
+      "src/server/connection-api.mjs",
+      "src/server/deployed-session.mjs",
+      "src/server/goal-api.mjs",
+      "src/server/local-user-session.mjs",
+      "src/server/logout-api.mjs",
+      "src/server/news-api.mjs",
+      "src/server/praise-api.mjs",
+      "src/server/registration-api.mjs",
+      "src/server/security-headers.mjs",
+      "src/server/session-api-route.ts",
+      "src/server/web-auth-api.mjs",
+      "src/shared/praise-tags.mjs"
+    ]
+  },
+  "status": "passed_server_local_auth_http_and_login_render_scope",
+  "node": "24.22.1",
+  "next": "16.4.5",
+  "public_release_ready": false,
+  "real_google_provider_acceptance": false,
+  "commands": [
+    {
+      "command": "scripts/project.ps1 -Task check",
+      "exit_code": 0,
+      "lint": "passed",
+      "typecheck": "passed",
+      "unit": {
+        "passed": 231,
+        "failed": 0
+      }
+    },
+    {
+      "command": "scripts/project.ps1 -Task build:check",
+      "exit_code": 0,
+      "bundler": "webpack"
+    },
+    {
+      "command": "node scripts/test-security-headers-http.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node scripts/test-local-web-auth.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node scripts/test-local-logout.mjs",
+      "exit_code": 0
+    }
+  ],
+  "local_web_auth": {
+    "checked_at": "2026-11-09T07:59:31.402Z",
+    "status": "passed",
+    "failed_phase": null,
+    "executed": 8,
+    "cases": [
+      {
+        "name": "callback_checks_real_issued_auth_and_signup_context_before_cookie",
+        "status": "passed"
+      },
+      {
+        "name": "explicit_confirmation_bootstraps_then_product_session_resolves",
+        "status": "passed"
+      },
+      {
+        "name": "real_refresh_keeps_user_session_and_absolute_cookie_lifetime",
+        "status": "passed"
+      },
+      {
+        "name": "concurrent_refresh_results_remain_usable_for_the_same_session",
+        "status": "passed"
+      },
+      {
+        "name": "logout_revokes_rotated_session_and_preserves_other_devices_and_user",
+        "status": "passed"
+      },
+      {
+        "name": "refresh_after_logout_cannot_restore_product_access",
+        "status": "passed"
+      },
+      {
+        "name": "concurrent_logout_and_refresh_never_restore_the_ended_session",
+        "status": "passed"
+      },
+      {
+        "name": "existing_product_rows_users_and_sessions_preserved",
+        "status": "passed"
+      }
+    ],
+    "synthetic_local_auth_users": 2,
+    "real_local_sessions_issued": 3,
+    "google_pkce_exchange": "stubbed_local_issued_tokens_only",
+    "real_google_tests_executed": 0,
+    "real_local_auth_refresh_and_database_rpc": true,
+    "existing_product_data_auth_users_and_sessions_preserved": true,
+    "local_admin_used_only_for_setup_cleanup": true,
+    "service_role_used_for_application_requests": false
+  },
+  "logout_regression": {
+    "checked_at": "2026-11-09T07:59:47.723Z",
+    "status": "passed",
+    "failed_phase": null,
+    "executed": 6,
+    "cases": [
+      {
+        "name": "cross_origin_cannot_revoke_an_issued_session",
+        "status": "passed"
+      },
+      {
+        "name": "current_revokes_only_current_issued_session",
+        "status": "passed"
+      },
+      {
+        "name": "revoked_cookie_cannot_log_out_other_devices",
+        "status": "passed"
+      },
+      {
+        "name": "all_revokes_own_multiple_sessions_and_preserves_other_user",
+        "status": "passed"
+      },
+      {
+        "name": "signed_out_current_is_idempotent_all_requires_identity",
+        "status": "passed"
+      },
+      {
+        "name": "existing_product_rows_auth_users_and_sessions_preserved",
+        "status": "passed"
+      }
+    ],
+    "real_local_sessions_issued": 4,
+    "synthetic_auth_users_created": 2,
+    "existing_product_data_auth_users_and_sessions_preserved": true,
+    "local_admin_used_only_for_test_identity_setup_cleanup": true,
+    "service_role_used_for_application_requests": false,
+    "real_google_otp_tests_executed": 0,
+    "production_transport_or_browser_tested": false
+  },
+  "http": {
+    "verified_at": "2026-11-09T08:03:29.847Z",
+    "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+    "next": "16.4.5",
+    "passed": 13,
+    "checks": [
+      {
+        "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+        "status": "passed"
+      },
+      {
+        "name": "all generated Next.js script tags carry the response nonce",
+        "status": "passed"
+      },
+      {
+        "name": "HTML nonce changes for every request and documents cannot be cached",
+        "status": "passed"
+      },
+      {
+        "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+        "status": "passed"
+      },
+      {
+        "name": "production rejects missing authentication and keeps API errors out of caches",
+        "status": "passed"
+      },
+      {
+        "name": "service worker is revalidated with a script-free same-origin fetch policy",
+        "status": "passed"
+      },
+      {
+        "name": "only the public offline page is immutable and contains no executable scripts",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out current logout clears separate secure Auth/CSRF cookies with no-store",
+        "status": "passed"
+      },
+      {
+        "name": "all-session logout requires a verified current identity",
+        "status": "passed"
+      },
+      {
+        "name": "logout rejects GET and missing CSRF without removing cookies",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out HTML renders Google login without product records and is noindex",
+        "status": "passed"
+      },
+      {
+        "name": "Google start is a CSRF POST with a fixed PKCE callback and HttpOnly flow cookie",
+        "status": "passed"
+      },
+      {
+        "name": "OAuth cancellation, signed-out refresh and invite entry fail closed without caching",
+        "status": "passed"
+      }
+    ]
+  },
+  "browser_bundle": {
+    "javascript_files_scanned": 70,
+    "server_only_patterns_checked": [
+      "sb_publishable_build_check_only",
+      "AUTH_SESSION_ENCRYPTION_KEY",
+      "code_verifier",
+      "@supabase/supabase-js",
+      "service_role"
+    ],
+    "matches": []
+  },
+  "browser": {
+    "scope": "isolated_signed_out_login_render_only_external_auth_not_connected",
+    "transport": "loopback_http_not_deployed_https",
+    "viewports": [
+      {
+        "requested": "desktop_default",
+        "client_width": 1731,
+        "scroll_width": 1731,
+        "button_min_height": 53.99,
+        "screenshot": "docs/quality/screenshots/w12-c2-login-desktop-2026-11-09.png"
+      },
+      {
+        "requested_width": 320,
+        "actual_client_width": 321,
+        "actual_scroll_width": 321,
+        "button_min_height": 53.99,
+        "screenshot": "docs/quality/screenshots/w12-c2-login-mobile-2026-11-09.png"
+      }
+    ],
+    "console_errors_or_warnings": 0,
+    "real_mobile_device": false,
+    "signup_interactive_acceptance": false,
+    "cross_tab_browser_acceptance": false
+  },
+  "review": {
+    "reviewer": "Codex direct source review; not independent cross-review",
+    "checked": [
+      "PKCE S256 verifier and flow cookie confidentiality/origin/purpose/TTL",
+      "Origin and signed session-bound CSRF; duplicate cookies denied",
+      "fixed callback and strict return paths; changed-session callback denied",
+      "Auth getUser then current DB session/account state before cookie issue",
+      "same UUID/session refresh and original absolute cookie expiry",
+      "request-scoped user-JWT clients; no ordinary admin/service key",
+      "client mutation ordering, idempotent retry preservation, cross-tab identity boundary",
+      "no private/Auth/invite caching or browser Supabase bundle"
+    ]
+  },
+  "environment_recovery": {
+    "initial_local_setup_failed": true,
+    "reason": "Docker Desktop 4.55.0 stale Inference/Secrets Engine AF_UNIX sockets and orphaned docker-ai process",
+    "resolution": "stopped the identified Docker processes, preserved transient socket directories, restarted engine 29.1.3 and existing Supabase on loopback",
+    "database_files_reset_or_modified_for_repair": false,
+    "existing_product_rows_auth_users_sessions_preserved": true
+  },
+  "pending": [
+    "actual Google OAuth client/provider configuration and HTTPS callback acceptance",
+    "actual signup/logout/invite and cross-tab/expiry browser acceptance",
+    "distributed public-request limiter and bot protection",
+    "public policy/support pages and confirmed support address",
+    "deletion reauthentication, independent ledger, worker and restore acceptance",
+    "production DB, Vercel team authorization/free-plan verification and deployment"
+  ]
+}

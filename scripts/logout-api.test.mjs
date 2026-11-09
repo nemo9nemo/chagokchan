@@ -30,7 +30,7 @@ for(const [scope,expected] of [["current","local"],["all","global"]]) {
     assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true});
     assert.deepEqual(calls.at(-1),["revoke",tokens.access_token,expected]);
     assert.equal(calls.filter(([kind])=>kind==="rpc").length,1);
-    const cookies=response.headers.getSetCookie();assert.equal(cookies.length,2);
+    const cookies=response.headers.getSetCookie();assert.equal(cookies.length,4);
     for(const value of cookies)assert.match(value,/Max-Age=0; Secure; HttpOnly; SameSite=Lax/);
     assert.match(response.headers.get("cache-control"),/no-store/);
   });
@@ -62,7 +62,7 @@ test("revoked DB session cannot revoke all other sessions with an unexpired JWT"
 });
 test("current logout retries can clean up a DB-ended session confirmed by Auth",async()=>{
   const {options}=fixture({contextError:{code:"PT401"},revokeError:{status:401}});
-  const response=await logoutResponse(request(),options);assert.equal(response.status,200);assert.equal(response.headers.getSetCookie().length,2);
+  const response=await logoutResponse(request(),options);assert.equal(response.status,200);assert.equal(response.headers.getSetCookie().length,4);
 });
 test("Auth/DB failures retain cookies and return bounded dependency errors",async()=>{
   for(const config of [{revokeError:{status:503,message:"secret provider text"}},{contextError:{code:"PT503",message:"secret database text"}},{userError:{status:500,message:"secret identity text"}},{contextData:{user_id:userId,account_state:"active",next:"/",email:"secret profile text"}}]){
@@ -70,9 +70,21 @@ test("Auth/DB failures retain cookies and return bounded dependency errors",asyn
     assert.equal(response.status,503);assert.equal(response.headers.getSetCookie().length,0);assert.equal(JSON.stringify(await response.json()).includes("secret"),false);
   }
 });
-test("expired access tokens cannot silently clear a possibly live refresh-session cookie",async()=>{
-  const {calls,options}=fixture();const response=await logoutResponse(request(),{...options,now:now+601000});
-  assert.equal(response.status,401);assert.equal(response.headers.getSetCookie().length,0);assert.equal(calls.length,0);
+test("expired access tokens retain cookies when refresh is unavailable",async()=>{
+  const {calls,options}=fixture();const response=await logoutResponse(request(),{...options,now:now+601000,fetcher:async()=>{throw new Error("private provider fault");}});
+  assert.equal(response.status,503);assert.equal(response.headers.getSetCookie().length,0);assert.equal(calls.length,0);
+});
+test("expired access tokens refresh the same session before revocation",async()=>{
+  const {calls,options}=fixture();
+  const refreshed={...tokens,access_token:"header."+Buffer.from(JSON.stringify({sub:userId,session_id:"22222222-2222-4222-8222-222222222222",role:"authenticated",exp:Math.floor(now/1000)+2000})).toString("base64url")+".signature"};
+  const response=await logoutResponse(request(),{...options,now:now+601000,fetcher:async()=>Response.json(refreshed)});
+  assert.equal(response.status,200);assert.deepEqual(calls.at(-1),["revoke",refreshed.access_token,"local"]);
+});
+test("Auth-rejected refresh can clear the ended current session, but never claim global logout",async()=>{
+  for(const [scope,status] of [["current",200],["all",401]]){
+    const {calls,options}=fixture();const response=await logoutResponse(request({scope}),{...options,now:now+601000,fetcher:async()=>Response.json({error:"invalid"},{status:400})});
+    assert.equal(response.status,status);assert.equal(response.headers.getSetCookie().length,scope==="current"?4:0);assert.equal(calls.length,0);
+  }
 });
 test("signup-required and deleting Auth accounts can revoke their own live sessions",async()=>{
   for(const contextState of ["signup_required","deleting"]){const {options}=fixture({contextState});assert.equal((await logoutResponse(request(),options)).status,200);}

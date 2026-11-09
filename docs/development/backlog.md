@@ -186,7 +186,9 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | --- | --- | --- | --- |
 | W12-A | 배포 요청별 서버 세션·쿠키·CSRF 문맥 | DONE | 암호화 Host 쿠키·관리 키 거절·요청별 Auth/get_me·32개 제품 route 공통 어댑터 전환. 새 단위 16개 포함 unit 148/148·로컬 Auth 5/5·고유 API 261/261·build:check 통과. [증거](../quality/reports/w12-a-session-check-2026-10-19.json) |
 | W12-B | 가입 bootstrap·현재 인증 계정 문맥 | DONE | 새 SQL 2개·명시적 확인·정책 버전·원자적 계정/프로필·삭제 표시·최초 값 보존 RPC/API 완료. unit 159·DB 350·로컬 가입 10·A/B/C HTTP 24·세션 회귀 5·빌드 통과. 실제 Google/OTP·가입 UI·운영 정리 경합은 미완료. [증거](../quality/reports/w12-b-registration-check-2026-10-19.json) |
-| W12-C | 실제 Google/OTP·갱신·로그아웃·초대 복귀 | IN_PROGRESS | W12-C1 로그아웃 API부터 진행한다. 실제 제공자/메일 설정·PKCE·CAPTCHA·공유 제한·동시 갱신·서버 쿠키 발급·UI는 미완료다. |
+| W12-C | 실제 Google·갱신·로그아웃·초대 복귀 | IN_PROGRESS | C1·C2a의 서버/로컬 Auth 검증 완료. 초기 베타 OTP는 사용자 결정으로 유예. 실제 Google·HTTPS·다중 탭/사용자 수락·공유 제한/봇 방어는 남아 있다. |
+| W12-C2a | Google 웹 BFF·성인 가입·갱신·로그아웃 UI 기반 | DONE | 단위 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭 확인. 기존 데이터 보존. Google 교환은 대체했으며 실제 Google 0. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json) |
+| W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | Google Cloud 차곡찬 프로젝트/이름 준비. 공개 지원 이메일·OAuth 클라이언트/제공자 설정·Vercel 팀 접근 승인 뒤 실제 콜백·가입·초대·만료/로그아웃·다중 탭을 검증한다. |
 | W12-C1 | 활성 Auth 세션 현재/전체 로그아웃 API | DONE | unit 199(신규 11)·새 로컬 Auth 사용자 2명/발급 세션 4개의 통합 6·production HTTP 10·build 통과. current/all 범위·다른 사용자 보존·폐기 JWT 재사용 거절·기존 데이터/사용자/세션 보존 확인. 갱신/만료 경합·로그아웃 UI·실제 제공자/HTTPS 브라우저 수락은 미완료다. [증거](../quality/reports/w12-c1-logout-check-2026-10-26.json) |
 | W12-D | 재인증·계정 탈퇴 동선 | TODO | W10-C·독립 원장·실제 재인증에 연계 |
 | W22-C | 실제 출시 사례·출시 우선 실행안 | DONE | Daily·ABGT250·Linear의 당사자 회고와 최신 Play/TestFlight 문서 확인. 광고·유료 상품은 출시 후 비교 |

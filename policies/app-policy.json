@@ -1,7 +1,7 @@
 {
   "policy_version": "0.2.0",
   "effective_for": "mvp_development_baseline",
-  "updated_on": "2026-10-20",
+  "updated_on": "2026-11-09",
   "audience": {
     "mode": "adult_personal_beta",
     "initial_market": "KR",
@@ -111,8 +111,7 @@
   },
   "auth": {
     "providers": [
-      "google",
-      "email_otp"
+      "google"
     ],
     "otp_digits": 6,
     "otp_ttl_seconds": 600,
@@ -125,7 +124,11 @@
     "normal_request_service_role": false,
     "cookie_base_name": "grape_auth",
     "cookie_prefix": "__Host-",
-    "cookie_chunking": false
+    "cookie_chunking": false,
+    "deferred_providers": [
+      "email_otp"
+    ],
+    "oauth_flow_ttl_seconds": 600
   },
   "connections": {
     "invite_link_random_bytes": 24,

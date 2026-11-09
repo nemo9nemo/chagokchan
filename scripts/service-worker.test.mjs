@@ -9,6 +9,7 @@ const manifestSource = fs.readFileSync(new URL("../src/app/manifest.ts", import.
 const pageSource = fs.readFileSync(new URL("../src/app/page.tsx", import.meta.url), "utf8");
 const configSource = fs.readFileSync(new URL("../next.config.mjs", import.meta.url), "utf8");
 const clientSource = fs.readFileSync(new URL("../src/app/client-app.tsx", import.meta.url), "utf8");
+const authFetchSource = fs.readFileSync(new URL("../src/client/auth-session.ts", import.meta.url), "utf8");
 
 function response({ body = "static", contentType = "application/javascript", cacheControl = "public, max-age=31536000, immutable", ok = true } = {}) {
   return {
@@ -99,7 +100,8 @@ test("user document and API fetches stay private and uncached; SW installs only 
   assert.match(pageSource, /dynamic = "force-dynamic"/);
   assert.match(configSource, /source: "\/"[\s\S]*?private, no-store, max-age=0, must-revalidate/);
   assert.match(configSource, /source: "\/sw\.js"[\s\S]*?no-cache, no-store, must-revalidate/);
-  assert.match(clientSource, /cache: "no-store", credentials: "same-origin"/);
+  assert.match(clientSource, /await sessionFetch\(path, init\)/);
+  assert.match(authFetchSource, /cache: "no-store", credentials: "same-origin"/);
   assert.match(clientSource, /navigator\.onLine === false/);
   assert.match(clientSource, /process\.env\.NODE_ENV === "production" && "serviceWorker" in navigator/);
 });
