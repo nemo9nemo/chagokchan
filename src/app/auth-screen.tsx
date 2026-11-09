@@ -34,10 +34,10 @@ export function LogoutButtons({ compact = false }: { compact?: boolean }) {
 }
 
 export function AccountMenu() {
-  return <details className="account-menu"><summary>계정</summary><div className="account-menu-panel"><LogoutButtons /></div></details>;
+  return <details className="account-menu"><summary>계정</summary><div className="account-menu-panel"><a href="/account/deletion">계정 삭제</a><LogoutButtons /></div></details>;
 }
 
-export default function AuthScreen({ mode, policyVersion = "0.2.0", next = "/" }: { mode: Mode; policyVersion?: string; next?: "/" | "/connect" }) {
+export default function AuthScreen({ mode, policyVersion = "0.2.0", next = "/" }: { mode: Mode; policyVersion?: string; next?: "/" | "/connect" | "/account/deletion" }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [confirmed, setConfirmed] = useState(false);

@@ -1902,6 +1902,30 @@
       "expected": "실제 로컬 Auth와 DB에서 서버 증명·RLS·최소 권한·10분/1회 경계를 적용한다. Google 제공자/웹 재인증·운영 파기 수락은 별도다.",
       "status": "passed",
       "evidence": "reports/w12-d1-reauth-proof-check-2026-11-09.json"
+    },
+    {
+      "id": "TC-DELETE-BFF-001",
+      "requirement_ids": [
+        "REQ-001",
+        "REQ-010",
+        "NFR-001"
+      ],
+      "policy_ids": [
+        "POL-ACCOUNT-002",
+        "POL-DELETE-002",
+        "POL-SEC-001"
+      ],
+      "level": "bff_unit_local_auth_database",
+      "title": "Google 재인증·탈퇴 웹 BFF의 사용자/세션 경계",
+      "steps": [
+        "동일 UUID 새 세션만 grant 발급·기존 세션 폐기, 다른 UUID/세션은 기존 계정 유지와 보조 세션 폐기를 확인한다.",
+        "CSRF·만료·직접 입력·로그아웃 경합·증명 서버 장애를 거절한다.",
+        "명시적 확인·멱등 키로 삭제 접수하고 쿠키 정리·최소 접수 안내·모든 제품 세션 차단을 확인한다.",
+        "기존 데이터/사용자/세션/키 설정을 보존한다. 실제 Google·브라우저 수락과 실제 파기는 별도다."
+      ],
+      "expected": "BFF·실제 로컬 Auth/DB 경계를 검증하되 실제 Google·HTTPS·운영 파기 완료를 주장하지 않는다.",
+      "status": "passed",
+      "evidence": "reports/w12-d2-deletion-web-check-2026-11-09.json"
     }
   ],
   "updated_on": "2026-11-09"

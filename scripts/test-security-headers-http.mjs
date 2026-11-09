@@ -87,7 +87,7 @@ try {
   const logout = await request("/api/v1/auth/logout", logoutInit);
   check("signed-out current logout clears separate secure Auth/CSRF cookies with no-store", () => {
     assert.equal(logout.status, 200);
-    assert.equal(logout.headers.getSetCookie().length, 4);
+    assert.equal(logout.headers.getSetCookie().length, 6);
     for (const value of logout.headers.getSetCookie()) assert.match(value, /Max-Age=0; Secure; HttpOnly; SameSite=Lax/);
     assert.match(logout.headers.get("cache-control"), /no-store/);
   });
@@ -128,6 +128,18 @@ try {
     assert.equal(refresh.headers.getSetCookie().length, 0);
     assert.equal(connect.status, 200);
     for (const response of [callback, refresh, connect]) assert.match(response.headers.get("cache-control"), /no-store/);
+  });
+  const reauth = await request("/api/v1/auth/reauth/start", { ...logoutInit, body: JSON.stringify({ provider: "google", scope: "account.delete" }) });
+  const deletion = await request("/api/v1/account/deletion-requests", { ...logoutInit, headers: { ...logoutInit.headers, "Idempotency-Key": "55555555-5555-4555-8555-555555555555" }, body: JSON.stringify({ confirm: true, reauth_grant_id: "55555555-5555-4555-8555-555555555555" }) });
+  const reauthState = await request("/api/v1/auth/reauth/55555555-5555-4555-8555-555555555555");
+  check("deletion and reauth routes require a real session without issuing any cookie", () => {
+    for (const response of [reauth, deletion, reauthState]) { assert.equal(response.status, 401); assert.equal(response.headers.getSetCookie().length, 0); assert.match(response.headers.get("cache-control"), /no-store/); }
+  });
+  const reauthCallback = await fetch(base + "/api/v1/auth/reauth/callback?error=access_denied", { redirect: "manual", signal: AbortSignal.timeout(10000) });
+  const deletionPage = await request("/account/deletion");
+  check("reauth cancellation uses a fixed path and signed-out deletion page requires login", () => {
+    assert.equal(reauthCallback.status, 303); assert.equal(reauthCallback.headers.get("location"), env.APP_BASE_URL + "/account/deletion?reauth_error=retry");
+    assert.equal(deletionPage.status, 200); assert.match(deletionPage.headers.get("cache-control"), /no-store/);
   });
   const report = { verified_at: new Date().toISOString(), scope: "isolated_production_http_headers_not_browser_or_real_auth_acceptance", next: JSON.parse(fs.readFileSync(new URL("../node_modules/next/package.json", import.meta.url))).version, passed: checks.length, checks };
   fs.mkdirSync(new URL("../tmp", import.meta.url), { recursive: true });

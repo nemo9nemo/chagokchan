@@ -5,12 +5,14 @@ import { sessionConfiguration } from "./deployed-session.mjs";
 
 export const FLOW_COOKIE_NAME = "__Host-chagokchan_oauth";
 export const INVITE_COOKIE_NAME = "__Host-chagokchan_invite";
+export const REAUTH_COOKIE_NAME = "__Host-chagokchan_reauth";
+export const DELETION_RECEIPT_COOKIE_NAME = "__Host-chagokchan_deletion";
 export const FLOW_TTL = policy.auth.oauth_flow_ttl_seconds;
 const SECRET = /^[A-Za-z0-9_-]{32}$/;
 const HASH = /^[A-Za-z0-9_-]{43}$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-export const allowedNextPath = value => value === "/" || value === "/connect";
+export const allowedNextPath = value => value === "/" || value === "/connect" || value === "/account/deletion";
 export const validInviteToken = value => typeof value === "string" && SECRET.test(value);
 
 export function cookieValue(header, name) {
@@ -19,7 +21,7 @@ export function cookieValue(header, name) {
 }
 
 export function temporaryCookieHeader(name, value = "", maxAge = FLOW_TTL) {
-  if (![FLOW_COOKIE_NAME, INVITE_COOKIE_NAME].includes(name) || !/^[A-Za-z0-9_-]{0,2000}$/.test(value) ||
+  if (![FLOW_COOKIE_NAME, INVITE_COOKIE_NAME, REAUTH_COOKIE_NAME, DELETION_RECEIPT_COOKIE_NAME].includes(name) || !/^[A-Za-z0-9_-]{0,2000}$/.test(value) ||
       !Number.isSafeInteger(maxAge) || maxAge < 0 || maxAge > FLOW_TTL) throw new Error("Invalid auth cookie.");
   return `${name}=${value}; Path=/; Max-Age=${maxAge}; Secure; HttpOnly; SameSite=Lax`;
 }
@@ -74,4 +76,32 @@ export function openPendingInvite(header, claims, env, now = Date.now()) {
   if (!claims || !value || Object.keys(value).sort().join("|") !== "invite_token|issued_at|session_id|user_id|v" ||
       value.user_id !== claims.userId || value.session_id !== claims.sessionId || !validInviteToken(value.invite_token)) return null;
   return value.invite_token;
+}
+
+export function sealReauthFlow(value, env, now = Date.now()) {
+  if (!UUID.test(value.flow_id) || !UUID.test(value.user_id) || !UUID.test(value.session_id) ||
+      !["pending", "verified"].includes(value.phase) ||
+      (value.phase === "pending" && !HASH.test(value.verifier)) ||
+      (value.phase === "verified" && (!UUID.test(value.grant_id) || !Number.isSafeInteger(value.expires_at)))) throw new Error("Invalid reauthentication flow.");
+  return seal(REAUTH_COOKIE_NAME, value, env, now);
+}
+
+export function openReauthFlow(header, env, now = Date.now()) {
+  const value = open(header, REAUTH_COOKIE_NAME, env, now);
+  if (!value || !UUID.test(value.flow_id) || !UUID.test(value.user_id) || !UUID.test(value.session_id)) return null;
+  const keys = Object.keys(value).sort().join("|");
+  if (value.phase === "pending" && keys === "flow_id|issued_at|phase|session_id|user_id|v|verifier" && HASH.test(value.verifier)) return value;
+  if (value.phase === "verified" && keys === "expires_at|flow_id|grant_id|issued_at|phase|session_id|user_id|v" && UUID.test(value.grant_id) &&
+      Number.isSafeInteger(value.expires_at) && value.expires_at > value.issued_at && value.expires_at <= value.issued_at + FLOW_TTL) return value;
+  return null;
+}
+
+export function sealDeletionReceipt(requestId, env, now = Date.now()) {
+  if (!UUID.test(requestId)) throw new Error("Invalid deletion receipt.");
+  return seal(DELETION_RECEIPT_COOKIE_NAME, { request_id: requestId }, env, now);
+}
+
+export function openDeletionReceipt(header, env, now = Date.now()) {
+  const value = open(header, DELETION_RECEIPT_COOKIE_NAME, env, now);
+  return value && Object.keys(value).sort().join("|") === "issued_at|request_id|v" && UUID.test(value.request_id) ? value.request_id : null;
 }

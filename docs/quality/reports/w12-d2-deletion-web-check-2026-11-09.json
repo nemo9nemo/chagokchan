@@ -1,0 +1,328 @@
+{
+  "work_item": "W12-D2",
+  "checked_at": "2026-11-09T09:41:57.095Z",
+  "base_source": "a971802f52017cf46cab2d9d5d96eb07afacf95b",
+  "status": "passed_bff_unit_local_auth_database_build_http_browser_pending",
+  "source_files": [
+    {
+      "path": "src/server/account-deletion-api.mjs",
+      "sha256": "cdbb6695023d95280f95e66fdbfa2ec07b0caecd72ff684e5c36d8726a05e39a"
+    },
+    {
+      "path": "src/server/auth-flow-cookie.mjs",
+      "sha256": "973a7f015ca86b29b2037f4da276c95e850c60cba7c0f1d9aa800fc9fa093638"
+    },
+    {
+      "path": "src/server/web-auth-api.mjs",
+      "sha256": "4d488146f10c35236424a84a93f21fa0f9abb25d8407bc4ff5317fa661ba7452"
+    },
+    {
+      "path": "src/server/logout-api.mjs",
+      "sha256": "f46113263d8852252476df53fe54e5577efae4fd9b2b595e513907f1b14aab6b"
+    },
+    {
+      "path": "src/app/account-deletion-screen.tsx",
+      "sha256": "c8f8367ad91f9d5d14cacc34241180205f574e085a7c6a77663d4ad8515de0d6"
+    },
+    {
+      "path": "src/app/auth-gate.tsx",
+      "sha256": "455a0282b7d0fba02bb90e9a48f2f77a11d41b52ba738b45f4366d7de33f6a9a"
+    },
+    {
+      "path": "src/app/auth-screen.tsx",
+      "sha256": "72fcd5b64ea3f9d296e4676be3d24138f63753806ee0bda66b7583c620ceff67"
+    },
+    {
+      "path": "src/app/api/v1/auth/reauth/start/route.ts",
+      "sha256": "8db79309868165e3e15f39f5fd83ecc819505212c3f580488aea86a1abc451a7"
+    },
+    {
+      "path": "src/app/api/v1/auth/reauth/callback/route.ts",
+      "sha256": "0a83162db1c7f2d325d2566fc8dfa9835899500e0428088ab57ed451b2e830a0"
+    },
+    {
+      "path": "src/app/api/v1/auth/reauth/[flow_id]/route.ts",
+      "sha256": "6fc99c9015ebdd13775347fffe7fdca2a253261fcc5fede8dd87e5be76758640"
+    },
+    {
+      "path": "src/app/api/v1/account/deletion-requests/route.ts",
+      "sha256": "b2fac35de4f62dc77fedc574e925ed5685b2bd2432d86798a5da7a2f5ee504df"
+    },
+    {
+      "path": "scripts/account-deletion-api.test.mjs",
+      "sha256": "daa47251ef0e98ad21224be34478e5f911e6e98386cc08f0acea4fcd899de453"
+    },
+    {
+      "path": "scripts/test-local-account-deletion-api.mjs",
+      "sha256": "c783d3c3db9d0e45ff35429092cfbe773b61c65881db1a4780f0a6fc5fb32d2c"
+    },
+    {
+      "path": "scripts/test-security-headers-http.mjs",
+      "sha256": "d10826a57b60a10849777751c9475292575034b9aa8c3bc0d22a3a4deb95473e"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "9b01727a07640d292de77106b5b78d10bfe67e851261f7355f60f4addd2bf5ed"
+    },
+    {
+      "path": "package.json",
+      "sha256": "7266ed2284c57708823e90c00629ed5f71790a5c79e320f5023317188fff1521"
+    }
+  ],
+  "node": "24.22.1",
+  "unit": {
+    "passed": 249,
+    "failed": 0,
+    "new_deletion_cases": 14
+  },
+  "build": {
+    "status": "passed",
+    "command": "scripts/project.ps1 -Task build:check",
+    "next": "16.4.5",
+    "compiler": "webpack",
+    "initial_sandbox_attempt": "EPERM creating build output; elevated same-source build passed"
+  },
+  "isolated_http": {
+    "verified_at": "2026-11-09T09:33:25.487Z",
+    "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+    "next": "16.4.5",
+    "passed": 15,
+    "checks": [
+      {
+        "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+        "status": "passed"
+      },
+      {
+        "name": "all generated Next.js script tags carry the response nonce",
+        "status": "passed"
+      },
+      {
+        "name": "HTML nonce changes for every request and documents cannot be cached",
+        "status": "passed"
+      },
+      {
+        "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+        "status": "passed"
+      },
+      {
+        "name": "production rejects missing authentication and keeps API errors out of caches",
+        "status": "passed"
+      },
+      {
+        "name": "service worker is revalidated with a script-free same-origin fetch policy",
+        "status": "passed"
+      },
+      {
+        "name": "only the public offline page is immutable and contains no executable scripts",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out current logout clears separate secure Auth/CSRF cookies with no-store",
+        "status": "passed"
+      },
+      {
+        "name": "all-session logout requires a verified current identity",
+        "status": "passed"
+      },
+      {
+        "name": "logout rejects GET and missing CSRF without removing cookies",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out HTML renders Google login without product records and is noindex",
+        "status": "passed"
+      },
+      {
+        "name": "Google start is a CSRF POST with a fixed PKCE callback and HttpOnly flow cookie",
+        "status": "passed"
+      },
+      {
+        "name": "OAuth cancellation, signed-out refresh and invite entry fail closed without caching",
+        "status": "passed"
+      },
+      {
+        "name": "deletion and reauth routes require a real session without issuing any cookie",
+        "status": "passed"
+      },
+      {
+        "name": "reauth cancellation uses a fixed path and signed-out deletion page requires login",
+        "status": "passed"
+      }
+    ]
+  },
+  "local_auth_database": {
+    "checked_at": "2026-11-09T09:39:58.551Z",
+    "status": "passed",
+    "failed_phase": null,
+    "executed": 8,
+    "cases": [
+      {
+        "name": "start_refreshes_real_auth_and_binds_current_live_session",
+        "status": "passed"
+      },
+      {
+        "name": "wrong_google_uuid_preserves_original_and_other_devices",
+        "status": "passed"
+      },
+      {
+        "name": "same_uuid_new_session_issues_real_db_grant_and_ends_previous_session",
+        "status": "passed"
+      },
+      {
+        "name": "state_lookup_requires_current_session_bound_flow",
+        "status": "passed"
+      },
+      {
+        "name": "deletion_refuses_false_confirmation_without_consuming_grant",
+        "status": "passed"
+      },
+      {
+        "name": "real_deletion_rpc_consumes_once_and_blocks_all_product_sessions",
+        "status": "passed"
+      },
+      {
+        "name": "deleting_account_new_login_does_not_reopen_product_access",
+        "status": "passed"
+      },
+      {
+        "name": "existing_product_auth_and_key_configuration_preserved",
+        "status": "passed"
+      }
+    ],
+    "synthetic_local_users": 2,
+    "real_local_sessions_issued": 6,
+    "google_exchange": "stubbed_real_local_tokens_only",
+    "real_google_tests_executed": 0,
+    "physical_erasure_executed": false,
+    "existing_product_auth_and_key_configuration_preserved": true,
+    "privileged_client_used_only_for_setup_cleanup": true,
+    "application_requests_use_user_jwt": true
+  },
+  "actual_google_acceptance": false,
+  "browser_deletion_acceptance": false,
+  "physical_erasure_executed": false,
+  "public_release_ready": false,
+  "staging_database": {
+    "project_ref": "dsjrqipbakluvdvgxide",
+    "migrations_applied": 55,
+    "app_accounts": 0,
+    "verifier_keys_configured": 0,
+    "forced_key_rls": true,
+    "issuer_column_select": [
+      "key_id",
+      "key_bytes",
+      "enabled"
+    ],
+    "issuer_can_modify_keys": false,
+    "issuer_direct_auth_sessions_select": false,
+    "ordinary_grant_direct_dml": false,
+    "anonymous_grant_execution": false,
+    "issuer_login_super_inherit_bypassrls": false,
+    "advisories": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 1,
+        "intent": "audit_events default deny",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "count": 51,
+        "intent": "explicit authenticated business RPC; least privilege and internal guards required; real cloud Auth acceptance pending",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+      }
+    ]
+  },
+  "vercel": {
+    "team_access_approved_by_user": true,
+    "team_id": "team_q7LLsRFNid0SClIXPPtGoMnk",
+    "project_id": "prj_Nyxl41YtjK0oLytrqTrj9XON97nv",
+    "deployments": 0,
+    "plan_confirmation": "pending_tool_response_does_not_include_plan_and_Chrome_connection_unavailable",
+    "paid_changes": false
+  },
+  "review": {
+    "reviewer": "Codex_direct_self_review",
+    "scope": [
+      "same UUID and fresh session only",
+      "old session revocation or fail closed",
+      "failed exchange cleans auxiliary session without ending original reused session",
+      "Origin and CSRF before mutation",
+      "exact RPC request/response fields",
+      "encrypted purpose/origin/TTL-bound cookie",
+      "deleting guard and receipt semantics",
+      "React effect abort/cleanup and explicit confirm",
+      "same idempotency key retained on uncertainty"
+    ],
+    "independent_reviewer": false
+  },
+  "not_run": [
+    "real Google HTTPS callback and reauthentication",
+    "browser deletion submit and cross-tab/account acceptance",
+    "operational independent deletion ledger/worker and physical erasure",
+    "backup restore/replay acceptance"
+  ],
+  "related_requirements": [
+    "REQ-001",
+    "REQ-010",
+    "NFR-001"
+  ],
+  "related_policies": [
+    "POL-ACCOUNT-002",
+    "POL-DELETE-002",
+    "POL-SEC-001"
+  ],
+  "test_case": "TC-DELETE-BFF-001",
+  "logout_regression": {
+    "checked_at": "2026-11-09T09:41:20.358Z",
+    "status": "passed",
+    "failed_phase": null,
+    "executed": 6,
+    "cases": [
+      {
+        "name": "cross_origin_cannot_revoke_an_issued_session",
+        "status": "passed"
+      },
+      {
+        "name": "current_revokes_only_current_issued_session",
+        "status": "passed"
+      },
+      {
+        "name": "revoked_cookie_cannot_log_out_other_devices",
+        "status": "passed"
+      },
+      {
+        "name": "all_revokes_own_multiple_sessions_and_preserves_other_user",
+        "status": "passed"
+      },
+      {
+        "name": "signed_out_current_is_idempotent_all_requires_identity",
+        "status": "passed"
+      },
+      {
+        "name": "existing_product_rows_auth_users_and_sessions_preserved",
+        "status": "passed"
+      }
+    ],
+    "real_local_sessions_issued": 4,
+    "synthetic_auth_users_created": 2,
+    "existing_product_data_auth_users_and_sessions_preserved": true,
+    "local_admin_used_only_for_test_identity_setup_cleanup": true,
+    "service_role_used_for_application_requests": false,
+    "real_google_otp_tests_executed": 0,
+    "production_transport_or_browser_tested": false
+  },
+  "final_checks": {
+    "check": "passed lint/typecheck/unit249/artifact_consistency",
+    "structural_check": "scripts/verify-artifacts.mjs passed after final document and registry updates",
+    "git_diff_check": "passed",
+    "independent_review": false
+  },
+  "environment_recovery": {
+    "initial_local_attempt": "Docker stopped; no identity or product mutation ran",
+    "recovery": "Restarted Docker Desktop and Docker-only WSL; renamed transient socket directories for preservation; no DB/volume/config reset",
+    "final_local_auth": "passed; all synthetic test users/sessions/key removed and baseline preserved"
+  }
+}
