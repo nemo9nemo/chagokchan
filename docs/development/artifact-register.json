@@ -1,7 +1,7 @@
 {
   "version": "0.2.0",
   "updated_on": "2026-11-10",
-  "current_stage": "S07_deletion_bff_implemented_real_google_browser_operations_release_pending",
+  "current_stage": "S07_protected_https_staging_deployed_google_and_operations_acceptance_pending",
   "next_stage": "protected_https_staging_ops_ledger_worker_rate_protection_real_google_and_final_public_policy_pending",
   "implementation_started": true,
   "git_repository_connected": true,
@@ -45,7 +45,7 @@
     {
       "id": "S08",
       "name": "출시",
-      "status": "webapp_release_scope_and_infrastructure_research_documented_deployment_not_started"
+      "status": "protected_staging_deployed_public_release_pending"
     }
   ],
   "unresolved_inputs": [
@@ -91,7 +91,7 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 89,
+    "planned_test_cases": 90,
     "application_tests_executed": 252,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
@@ -1091,6 +1091,17 @@
         "package.json",
         "docs/quality/screenshots/w27-c1-about-desktop-2026-11-10.png",
         "docs/quality/screenshots/w27-c1-privacy-mobile-2026-11-10.png"
+      ]
+    },
+    {
+      "id": "ART-042",
+      "title": "보호된 무료 HTTPS 스테이징 실제 배포",
+      "status": "passed_build_and_read_only_protection_real_google_pending",
+      "paths": [
+        "docs/quality/reports/w14-b-https-staging-check-2026-11-10.json",
+        "docs/development/hosted-staging.md",
+        "docs/changes/2026-11-10-protected-https-staging.md",
+        "docs/quality/screenshots/w14-https-staging-login-2026-11-10.png"
       ]
     }
   ],

@@ -1969,6 +1969,27 @@
       "expected": "화면/접근 경계만 통과로 기록하고 운영 입력·실제 공급자/법적 공개 정책 수락을 구분한다.",
       "status": "passed",
       "evidence": "reports/w27-c1-public-information-check-2026-11-10.json"
+    },
+    {
+      "id": "TC-STAGING-HTTPS-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-SEC-001",
+        "POL-ACCOUNT-002"
+      ],
+      "level": "hosted_build_auth_protection_read_only",
+      "title": "검증 소스의 실제 HTTPS 스테이징과 전체 주소 보호",
+      "steps": [
+        "무료 플랜·환경·고정 소스·실제 빌드와 별도 DB 연결 구성을 확인한다.",
+        "모든 주소 보호를 적용하고 무쿠키 익명 요청의 로그인 전환을 확인한다.",
+        "소유자 브라우저의 공개 화면·앱 세션 거절·CSRF 준비를 확인한다."
+      ],
+      "expected": "인프라/읽기 경계만 검증하며 실제 Google·제품 수락과 공개 완료를 구분한다.",
+      "status": "passed",
+      "evidence": "reports/w14-b-https-staging-check-2026-11-10.json"
     }
   ],
   "updated_on": "2026-11-10"
