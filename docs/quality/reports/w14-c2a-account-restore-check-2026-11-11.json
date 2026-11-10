@@ -1,0 +1,135 @@
+{
+  "checked_at": "2026-11-10T15:17:37.995Z",
+  "work_item": "W14-C2a",
+  "status": "passed_full_local_account_snapshot_restore_and_independent_marker_scope",
+  "source_base_commit": "7740bdea01cc3e339677d2ba127052214ca43da1",
+  "source_sha256_lf_normalized": {
+    "scripts/local-restore-database.mjs": "a33f3e940355e49c4e3c08ff7a0ce4a0a04bda8ce6c743cfa910a548bb2fa501",
+    "scripts/test-local-account-restore.mjs": "9bfba3107cd11ce2e45c75c04d7b4fed25e8f3c486a2cd9cdaf2b1c706557ace",
+    "scripts/encrypted-backup.test.mjs": "b92c9450e8fe4f30039c80bdfea10ba76bdb4bc3431fc82695043758c07a9db4",
+    "src/operations/encrypted-backup.mjs": "9803485339a34bd2fab7d964c4cd0435ace88e2e7b1b1b601b3d1ff79cff5459",
+    "package.json": "cadf5def4d3dc1da02c4bc832beb29a3e85f5e0d06a5f1cfd5d4ed8585201a59",
+    "scripts/project.ps1": "e2b113d0e08fec5833298f7a379eea75dc9c3b5a6fd61b24da7984ba7a03130d"
+  },
+  "runtime": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "postgresql": "17.11",
+    "supabase_cli": "2.120.0",
+    "local_migrations": 56
+  },
+  "checks": {
+    "full_project_check": "passed_264_units_lint_typecheck_artifacts",
+    "new_crypto_unit": 4,
+    "local_restore": {
+      "checked_at": "2026-11-10T15:13:24.786Z",
+      "status": "passed",
+      "failed_phase": null,
+      "executed": 7,
+      "cases": [
+        {
+          "name": "full_local_schema_auth_and_product_snapshot_encrypted_before_erasure",
+          "status": "passed"
+        },
+        {
+          "name": "wrong_backup_key_context_or_tampering_refuses_restore",
+          "status": "passed"
+        },
+        {
+          "name": "real_source_account_auth_and_owned_content_erased_after_snapshot",
+          "status": "passed"
+        },
+        {
+          "name": "restore_old_snapshot_to_unexposed_disposable_database_only",
+          "status": "passed"
+        },
+        {
+          "name": "latest_independent_marker_reapplied_before_any_public_connection",
+          "status": "passed"
+        },
+        {
+          "name": "restored_revoked_session_denied_and_control_goal_praise_preserved",
+          "status": "passed"
+        },
+        {
+          "name": "disposable_database_and_files_removed_existing_source_auth_keys_roles_gate_preserved",
+          "status": "passed"
+        }
+      ],
+      "timings_ms": {
+        "backup_ms": 446,
+        "restore_ms": 1419,
+        "marker_reapply_ms": 1144
+      },
+      "full_local_pg_dump_pg_restore_executed": true,
+      "pg_dump_version": "17.11",
+      "backup_bytes": 1067967,
+      "actual_source_auth_removed_by_worker": true,
+      "independent_latest_account_marker_reapplied": true,
+      "synthetic_users": 2,
+      "original_source_preserved": true,
+      "disposable_target_dropped": true,
+      "archive_data_or_secret_logged": false,
+      "network_exposed_restore": false,
+      "mail_sent_from_restore": false,
+      "hosted_backup_schedule_configured": false,
+      "hosted_restore_acceptance_executed": false,
+      "goal_only_purge_or_praise_cancel_restore_executed": false,
+      "real_google_tests_executed": 0,
+      "production_data_used": false
+    },
+    "build": "required_CI_will_execute_no_web_module_import_changed"
+  },
+  "review": {
+    "by": "Codex_direct",
+    "target_source_isolation": "checked_no_external_or_arbitrary_target_input",
+    "cleanup": "exact_generated_database_and_run_files_only_ownership_marker_checked",
+    "source_privileges": "unchanged_existing_local_admin_only_in_disposable_target",
+    "archive_confidentiality": "AES_256_GCM_separate_key_context_binding_no_dump_or_secret_logging",
+    "source_data_auth_sessions_keys_gate_and_global_roles": "preserved",
+    "restored_auth_administration": "isolated_SQL_only_not_hosted_Auth_API_acceptance"
+  },
+  "cloud_rollout": {
+    "staging_migrations": 56,
+    "staging_app_accounts": 0,
+    "staging_erasure_gate": false,
+    "production_project": "kwzncrefatofwjzrqpma",
+    "production_migrations_applied": 3,
+    "production_auth_users": 0,
+    "production_app_accounts": 0,
+    "production_web_deployed": false,
+    "blocked_migration": "20261008020700_isolate_auth_session_reader.sql",
+    "automatic_approval_rejected": true,
+    "reason": "Permanent_BYPASSRLS_session_reader_role_and_Auth_metadata_grants_in_production_require_explicit_target_and_privilege_approval",
+    "user_approval_requested": true,
+    "rejected_action_bypassed": false,
+    "matching_staging_reader": {
+      "login": false,
+      "superuser": false,
+      "create_role": false,
+      "auth_metadata_columns": 9,
+      "email_password_refresh_token_readable": false,
+      "api_roles_can_assume_reader": false
+    }
+  },
+  "sources": [
+    {
+      "url": "https://supabase.com/docs/guides/self-hosting/restore-from-platform",
+      "use": "hosted_backup_restore_requires_Supabase_specific_filtering_and_separate_roles_schema_data_not_this_local_raw_archive"
+    },
+    {
+      "url": "https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting",
+      "use": "research_only_Hobby_1_rule_1M_included_requests_regional_counters_no_custom_WAF_changes"
+    }
+  ],
+  "scope_limits": [
+    "local same-cluster role catalog exists; no cluster disaster role rebuild",
+    "no hosted backup/retention/schedule/key recovery configured",
+    "no hosted restore or restored scheduler/ledger ACK alignment acceptance",
+    "no goal-only purge or canceled praise restore suppression",
+    "no actual Google login",
+    "no distributed bot/rate enforcement configured",
+    "TC-DELETE-004 remains not_run",
+    "public release not ready"
+  ]
+}

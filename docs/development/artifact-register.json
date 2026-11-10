@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-11-10",
+  "updated_on": "2026-11-11",
   "current_stage": "S07_protected_https_staging_deployed_google_and_operations_acceptance_pending",
   "next_stage": "protected_https_staging_ops_ledger_worker_rate_protection_real_google_and_final_public_policy_pending",
   "implementation_started": true,
@@ -91,8 +91,8 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 91,
-    "application_tests_executed": 260,
+    "planned_test_cases": 92,
+    "application_tests_executed": 264,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
@@ -122,7 +122,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 51,
+    "technical_cases_passed": 52,
     "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
     "w11_b2_mobile_report": "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
     "w11_b2_viewport_screen_views_verified": 30,
@@ -340,6 +340,14 @@
       "hosted_ledger_scheduler_configured": false,
       "full_database_backup_restore_executed": false,
       "real_google_tests_executed": 0
+    },
+    "w14_c2a": {
+      "report": "docs/quality/reports/w14-c2a-account-restore-check-2026-11-11.json",
+      "status": "full_local_account_restore_and_independent_marker_passed_hosted_pending",
+      "local_restore_cases": 7,
+      "new_crypto_units": 4,
+      "hosted_backup_schedule_configured": false,
+      "hosted_restore_acceptance_executed": false
     }
   },
   "artifacts": [
@@ -1129,6 +1137,22 @@
         "package.json",
         "scripts/project.ps1"
       ]
+    },
+    {
+      "id": "ART-044",
+      "title": "암호화 전체 로컬 백업·계정 삭제 원장 복원 검증",
+      "status": "passed_local_scope_hosted_backup_restore_pending",
+      "paths": [
+        "docs/quality/reports/w14-c2a-account-restore-check-2026-11-11.json",
+        "docs/development/account-restore-drill.md",
+        "docs/changes/2026-11-11-account-restore-drill.md",
+        "scripts/local-restore-database.mjs",
+        "scripts/test-local-account-restore.mjs",
+        "scripts/encrypted-backup.test.mjs",
+        "src/operations/encrypted-backup.mjs",
+        "package.json",
+        "scripts/project.ps1"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1290,6 +1314,7 @@
     "email_otp": "deferred_until_sender_setup",
     "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access",
     "vercel_plan": "Hobby_active_verified_Billing_UI_2026-11-10",
-    "production_database": "kwzncrefatofwjzrqpma_free_Seoul_created_empty_no_paid_upgrade"
+    "production_database": "kwzncrefatofwjzrqpma_free_Seoul_3_migrations_then_auto_review_role_grant_approval_pending",
+    "staging_database": "dsjrqipbakluvdvgxide_56_migrations_erasure_gate_false"
   }
 }

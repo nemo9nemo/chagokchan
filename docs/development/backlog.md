@@ -1,6 +1,6 @@
 # 개발 순서와 진행표
 
-갱신일: 2026-11-10 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
+갱신일: 2026-11-11 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
 
 이 표가 **작업별 상태의 기준**이다. 완료할 때마다 상태·결과·근거를 갱신하고 사용자에게 표를 보여준다. 설계 작업의 DONE은 문서와 해당 정적 검사의 완료다. DB 적용·앱 기능·실제 로그인 검증은 각각의 구현 행에서 따로 완료한다.
 
@@ -32,7 +32,7 @@ W01~W03의 설계 완료 기준일은 2026-10-08이며 상호 참조 확인은 [
 | W11 | 테마 분리·오류 UX·접근성·PWA | DONE | W08~W10 | 테마 교체 시 기록 불변, 목록 대안·작은 화면·정적 캐시·개인정보 no-store 검사 | **로컬 구현·검사 범위 완료 2026-10-13.** 실기기 수락 TC-WEB-006·TC-CACHE-001은 로컬 무로그인 모드가 loopback 전용이고 서비스 워커가 가상 로그인이 차단된 production 빌드에서만 등록되어 지금 실행할 수 없으므로 사용자 결정으로 W15로 이관했다(미실행, 통과 아님). W11-A·W11-B1 완료. W11-B2에서 로컬 DB의 합성 fixture API 성공 경로를 붙여 320/345/360/375/412/641px 콘텐츠 폭으로 목표 목록·상세·연결·받은 공유판·휴지통 30/30 화면을 확인했다. 가로 넘침이 없고 노출된 앱 조작부가 모두 44px 이상임을 측정했다. 실제 기기 확대·읽기 도구·터치 TC-WEB-006, A/B 계정 전환·실제 오프라인 TC-CACHE-001은 미실행이다. [W11-B2 모바일 검사](../quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json) · [W11-C 검사](../quality/reports/w11-c-pwa-cache-check-2026-10-08.json) · [기존 W11-B2 검사](../quality/reports/w11-b2-small-screen-contrast-check-2026-10-08.json) |
 | W12 | 실제 로그인 제공자·가입·세션 연동 | IN_PROGRESS | 2차 출시 준비, 운영 입력과 병행 | Google·가입·쿠키·갱신·로그아웃·재인증·초대 복귀 | Google BFF·가입/로그아웃 UI 기반·재인증 증명·탈퇴 BFF의 로컬 Auth 검증 완료. 실제 Google·HTTPS·브라우저 수락과 운영 파기는 남아 있다. 초기 베타 OTP는 유예. [탈퇴 검사](../quality/reports/w12-d2-deletion-web-check-2026-11-09.json) |
 | W13 | 실제 로그인·여러 계정 권한 수락 검사 | TODO | 공개 전 필수, W09~W12·W14 | 실제 계정으로 연결·권한·세션 폐기·캐시·가입·삭제 검사 | 로컬 Auth 발급 세션 결과를 실제 Google/OTP 수락으로 대체하지 않음 |
-| W14 | 운영 입력·공개 정책·스테이징 준비 | IN_PROGRESS | 코드 개발과 병행, 실제 공개 전 필수 | 운영 주체·지원·도메인·예산·처리방침·약관·독립 삭제 원장·별도 환경 | 개인·무료 우선·기본 도메인·지원 이메일 대기. 보호된 HTTPS staging 실제 배포·SQL 55개·재인증 검증 키 구성. 로컬 SQL 56개·삭제 worker 기반 검증은 W14-C1. 별도 무료 운영 DB는 생성/빈 상태 확인이며 운영 배포·원장/복원·실제 인증은 미완료. [HTTPS 근거](../quality/reports/w14-b-https-staging-check-2026-11-10.json) |
+| W14 | 운영 입력·공개 정책·스테이징 준비 | IN_PROGRESS | 코드 개발과 병행, 실제 공개 전 필수 | 운영 주체·지원·도메인·예산·처리방침·약관·독립 삭제 원장·별도 환경 | 개인·무료 우선·기본 도메인·지원 이메일 대기. 보호된 HTTPS staging 실제 배포·SQL 56개·재인증 검증 키 구성. 로컬 SQL 56개·삭제 worker 기반 검증은 W14-C1. 별도 무료 운영 DB는 SQL 3개 뒤 권한 변경 승인 대기이며 운영 배포·원장/복원·실제 인증은 미완료. [HTTPS 근거](../quality/reports/w14-b-https-staging-check-2026-11-10.json) |
 | W15 | 통합·보안·기기·복원·부하 검사 | IN_PROGRESS | W11, W13, W14 | 필수 TC 실행 증거·P0/P1 해결·복원·실측 성능·배포 차단 검사 | W15-A에서 출시 완료 여부·소스/DB/비밀 패턴/의존성을 점검하고 Next.js 보안 패치·nonce CSP·헤더·CI 검사를 추가했다. unit 175·DB 390·로컬 세션 5·태그 HTTP 17·production HTTP 헤더 7·build 통과. 전체 수락과 실제 제공자 로그인, 분산 제한/CAPTCHA·장애 차단, 실기기 TC-WEB-006·TC-CACHE-001·TC-PRAISE-TAG-003, 복원/부하/운영 검증은 미완료다. [점검 보고서](../quality/reports/security-completion-audit-2026-10-20.md) · [검증 계획](../quality/verification-plan.md) |
 | W16 | Git 형상관리·CI 연결 | DONE | **사용자 지정 원격 연결 요청 2026-10-08** | 지정 저장소·문서/소스/lock/SQL/검사 함께 관리·CI 검증 | W16-A/B/C 완료. 기능별 커밋·원격 업로드, GitHub Actions `quality` CI, main PR 보호와 필수 검사·관리자 우회/강제 push/삭제 금지를 적용·확인했다. [W16-C 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) |
 | W17 | 운영 배포·공개·초기 관찰 | TODO | W12~W15. Git 연결 시 W16의 CI 사용 | 검증 소스·호환 DB 적용·운영 빌드·공개·오류/로그인 관찰·릴리스 기록 | 배포·공개 미실행 |
@@ -183,9 +183,10 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W27-C2 | 최종 운영 연락처·처리방침·공개 수락 | IN_PROGRESS | 지원 주소·공개 운영자 표시, 실제 Google 전달 항목·공급자/국외 처리·시행일·운영 삭제/백업 검증 후 문안 확정. 초기 noindex 유지. 임의 개인 메일·허위 연락처 사용하지 않음 |
 | W14-B | 무료·분리된 HTTPS 스테이징 배포/접근 보호 | DONE | Hobby/Active·서울 함수·Node24·검증 main 0143902의 실제 빌드 READY. All Deployments 인증 보호 적용 후 익명 요청 302 로그인 전환. 소유자 브라우저 홈/안내5·앱 세션 차단·CSRF 준비 확인. 실제 Google/제품 수락 0. 초기 기본 보호 범위의 운영 별칭 200과 수정도 기록. [근거](../quality/reports/w14-b-https-staging-check-2026-11-10.json) |
 | W14-C1 | 삭제 작업자·내부 예약·암호화 로컬 원장 검증 기반 | DONE | 로컬 SQL 56개·DB 426·전체 unit 260·실제 로컬 Auth/DB 8 통과. 원장 실패·Auth 장애·완료 확인 재시도·37일 보관·다른 사용자/기존 상태 보존 확인. 호스팅 원장/스케줄과 전체 백업 복원은 미구성. [범위](deletion-worker.md) · [근거](../quality/reports/w14-c1-deletion-worker-check-2026-11-10.json) |
-| W14-C2 | 독립 운영 원장·정기 파기·백업/복원 | IN_PROGRESS | 실제 배포 gate는 false 유지. 계정 외 목표 파기/취소 내용의 복원 차단·요청 접수와 원장의 장애 경계·운영 스케줄·최신 원장 재적용/전체 복원 수락 필요. 새 무료 운영 DB kwzncrefatofwjzrqpma는 빈 상태 확인 |
+| W14-C2 | 독립 운영 원장·정기 파기·백업/복원 | IN_PROGRESS | 실제 배포 gate는 false 유지. 계정 외 목표 파기/취소 내용의 복원 차단·요청 접수와 원장의 장애 경계·운영 스케줄·최신 원장 재적용/전체 복원 수락 필요. 무료 운영 DB kwzncrefatofwjzrqpma는 SQL 3개 뒤 자동 승인 검토 거절로 역할/권한 적용 승인 대기 |
+| W14-C2a | 암호화 전체 로컬 백업·삭제 계정 복원 경계 | DONE | pg_dump/pg_restore·실제 Auth 삭제·독립 원장 재적용 7건·전체 unit 264 통과. 원본/역할 보존·임시 DB/파일 정리 확인. 호스팅 백업/복원·스케줄 재개는 별도. [근거](../quality/reports/w14-c2a-account-restore-check-2026-11-11.json) |
 
-다음 순서: 이메일과 독립적인 W14-C2 운영/원장·W15 분산 제한/복원 검증을 진행하며, 지원 주소 도착 후 W12-C2b 실제 Google·W12-D2 브라우저·W27-C 최종 정책·W13/W15 수락을 마쳐 W17 공개한다. 초기 베타는 Google만 제공한다. Vercel 팀 접근·Hobby Active와 보호된 staging 배포 1건을 확인했다. 스테이징 SQL은 55개, 로컬 56개이며 실제 제공자 통합 수락은 남아 있다.
+다음 순서: 이메일과 독립적인 W14-C2 운영/원장·W15 분산 제한/복원 검증을 진행하며, 지원 주소 도착 후 W12-C2b 실제 Google·W12-D2 브라우저·W27-C 최종 정책·W13/W15 수락을 마쳐 W17 공개한다. 초기 베타는 Google만 제공한다. Vercel 팀 접근·Hobby Active와 보호된 staging 배포 1건을 확인했다. 스테이징/로컬 SQL은 56개이며 실제 제공자 통합 수락은 남아 있다.
 
 ## W12 2차 출시 준비
 
