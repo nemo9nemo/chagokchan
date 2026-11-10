@@ -72,6 +72,6 @@
     "@types/react-dom": "19.3.0",
     "supabase": "2.120.0",
     "tailwindcss": "4.3.3",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }
