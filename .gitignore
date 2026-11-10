@@ -42,3 +42,6 @@ Thumbs.db
 desktop.ini
 .vscode/*
 !.vscode/extensions.json
+
+# Personal machine-specific launch configuration (contains an absolute user path).
+.claude/launch.json

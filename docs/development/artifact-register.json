@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-11-09",
+  "updated_on": "2026-11-10",
   "current_stage": "S07_deletion_bff_implemented_real_google_browser_operations_release_pending",
   "next_stage": "w12_d2_browser_acceptance_w12_c2b_google_setup_w14_operations_w27_c_pages",
   "implementation_started": true,
@@ -91,7 +91,7 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 87,
+    "planned_test_cases": 88,
     "application_tests_executed": 249,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
@@ -1052,6 +1052,22 @@
         "contracts/openapi.json",
         "package.json"
       ]
+    },
+    {
+      "id": "ART-040",
+      "title": "지속적 비밀 탐지·취약점 알림과 Git 반영 확인",
+      "status": "local_verified_remote_ci_pending",
+      "paths": [
+        "docs/quality/reports/w15-b-security-git-check-2026-11-10.json",
+        "docs/changes/2026-11-10-security-git-synchronization.md",
+        "scripts/scan-secrets.mjs",
+        ".gitleaksignore",
+        ".github/actions/scan-secrets/action.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/security-audit.yml",
+        ".github/dependabot.yml",
+        ".gitignore"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1205,7 +1221,7 @@
     "operator": "individual",
     "cost_preference": "zero_operating_cost_first_no_paid_upgrade_or_domain_purchase",
     "domain": "platform_default",
-    "support_email": "pending_user_created_common_mailbox_for_multiple_apps",
+    "support_email": "user_will_provide_new_common_mailbox_per_2026-11-10",
     "supabase_org_free_project_creation": "authorized",
     "initial_auth_providers": [
       "google"

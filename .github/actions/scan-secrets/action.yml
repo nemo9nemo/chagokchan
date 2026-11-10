@@ -1,0 +1,14 @@
+name: Scan Git history for secrets
+description: Verify a pinned scanner checksum and publish finding locations without values.
+runs:
+  using: composite
+  steps:
+    - name: Scan all fetched Git history
+      shell: bash
+      run: |
+        set -euo pipefail
+        archive="${RUNNER_TEMP}/gitleaks-8.30.1.tar.gz"
+        curl --fail --silent --show-error --location --proto '=https' --output "$archive" https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+        printf '%s  %s\n' '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb' "$archive" | sha256sum --check --status
+        tar -xzf "$archive" --directory "$RUNNER_TEMP" gitleaks
+        node scripts/scan-secrets.mjs "${RUNNER_TEMP}/gitleaks"
