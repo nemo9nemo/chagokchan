@@ -1,0 +1,13 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set local search_path=public,extensions,pg_catalog;
+select plan(7);
+select ok((select bool_and(relrowsecurity and relforcerowsecurity) from pg_class where oid in ('private.deletion_ledger_completion_acks'::regclass,'private.deletion_work_leases'::regclass)),'dispatch bookkeeping forces RLS');
+select ok((select bool_and(not has_table_privilege(role,'private.deletion_ledger_completion_acks','SELECT,INSERT,UPDATE,DELETE')) from unnest(array['anon','authenticated','service_role']) roles(role)),'API roles have no direct completion record access');
+select ok((select bool_and(not has_table_privilege(role,'private.deletion_work_leases','SELECT,INSERT,UPDATE,DELETE')) from unnest(array['anon','authenticated','service_role']) roles(role)),'API roles have no direct lease access');
+select ok(has_function_privilege('service_role','public.list_account_deletion_work(integer)','EXECUTE') and not has_function_privilege('authenticated','public.list_account_deletion_work(integer)','EXECUTE'),'dispatch is service-only');
+select ok(has_function_privilege('service_role','public.get_account_deletion_work(uuid)','EXECUTE') and not has_function_privilege('anon','public.get_account_deletion_work(uuid)','EXECUTE'),'work details are service-only');
+select ok(has_function_privilege('service_role','public.ack_account_deletion_ledger(uuid,uuid)','EXECUTE') and not has_function_privilege('authenticated','public.ack_account_deletion_ledger(uuid,uuid)','EXECUTE'),'ledger finalization acknowledgement is service-only');
+select ok((select count(*)=3 and bool_and(prosecdef and 'search_path=pg_catalog'=any(proconfig) and pg_get_userbyid(proowner)='chagokchan_worker') from pg_proc where oid in ('public.list_account_deletion_work(integer)'::regprocedure,'public.get_account_deletion_work(uuid)'::regprocedure,'public.ack_account_deletion_ledger(uuid,uuid)'::regprocedure)),'operations RPCs use the restricted worker and fixed path');
+select * from finish();
+rollback;

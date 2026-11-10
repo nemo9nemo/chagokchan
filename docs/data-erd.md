@@ -407,6 +407,8 @@ reauth_grants.session_id는 Supabase 세션의 수명·정리와 결합하지 �
 
 탈퇴 작업은 사용자 ID가 없어져도 단계 완료·재시도 결과를 기록할 수 있게 user_id를 nullable로 둔다. 완료 작업·독립 최신 삭제 원장은 정리 완료부터 최소 37일, 미완료 작업은 완료까지 보관한다. 원장 저장 위치·접근·암호화·만료 설정은 서비스 개설 때 기록한다. 복원 시점보다 최신인 삭제 이력을 재적용하기 전에 복원 DB를 공개하지 않는다. POL-DELETE-002/003을 따른다.
 
+W14-C1은 제품 18테이블 밖의 private 보조 테이블 `deletion_work_leases`와 `deletion_ledger_completion_acks`를 추가한다. 둘 다 request_id를 PK/FK로 사용하고 account_deletion_requests 정리 시 CASCADE한다. lease_until/last_attempted_at은 제한된 배치 예약·장애 재시도, ledger_reference/acknowledged_at은 독립 원장 완료 확인을 나타낸다. RLS 강제·직접 API 역할 권한 0이며 service-only 업무 함수로만 접근한다. [내부 계약·검증 범위](development/deletion-worker.md)
+
 ## 4. 외래키·유일성·행 제약
 
 | 대상 | 제약 설계 | 목적 |
