@@ -1990,6 +1990,30 @@
       "expected": "인프라/읽기 경계만 검증하며 실제 Google·제품 수락과 공개 완료를 구분한다.",
       "status": "passed",
       "evidence": "reports/w14-b-https-staging-check-2026-11-10.json"
+    },
+    {
+      "id": "TC-DELETE-WORKER-LOCAL-001",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-002",
+        "POL-DELETE-003",
+        "POL-SEC-001"
+      ],
+      "level": "local_real_auth_db_worker_encrypted_file_ledger",
+      "title": "원장 선기록·Auth 삭제·완료 확인의 장애 재시도",
+      "steps": [
+        "일반 사용자 dispatch/작업 조회/ACK를 거절하고 gate false에서 파기를 거절한다.",
+        "원장 기록 실패·Auth 장애·원장 완료 실패를 주입하고 checkpoint에서 재시도한다.",
+        "실제 로컬 Auth 부재와 다른 사용자 보존·암호화 원장 재시작·37일 보관을 확인한다.",
+        "실행별 합성 데이터만 정리하고 기존 데이터·세션·키·gate·내부 상태를 비교한다."
+      ],
+      "expected": "로컬 작업자 기반만 통과로 기록한다. 호스팅 스케줄·접수 write-ahead·전체 백업 복원과 TC-DELETE-003/004는 별도다.",
+      "status": "passed",
+      "evidence": "reports/w14-c1-deletion-worker-check-2026-11-10.json"
     }
   ],
   "updated_on": "2026-11-10"

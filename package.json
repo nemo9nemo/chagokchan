@@ -14,7 +14,7 @@
     "start": "node scripts/app.mjs start",
     "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs scripts/board-loading.test.mjs scripts/dev-warmup.test.mjs scripts/logout-api.test.mjs scripts/app-runtime.test.mjs scripts/web-auth-api.test.mjs scripts/auth-session-client.test.mjs scripts/reauth-proof.test.mjs scripts/account-deletion-api.test.mjs scripts/public-information.test.mjs",
+    "test": "node --test scripts/runtime-environment.test.mjs scripts/docker-loopback-proxy.test.mjs scripts/local-fixture-manifest.test.mjs scripts/local-user-session.test.mjs scripts/api-security.test.mjs scripts/goal-api.test.mjs scripts/praise-api.test.mjs scripts/board-api.test.mjs scripts/connection-api.test.mjs scripts/news-api.test.mjs scripts/idempotent-request.test.mjs scripts/service-worker.test.mjs scripts/grape-layout.test.mjs scripts/news-labels.test.mjs scripts/deployed-session.test.mjs scripts/registration-api.test.mjs scripts/praise-tags.test.mjs scripts/security-headers.test.mjs scripts/board-loading.test.mjs scripts/dev-warmup.test.mjs scripts/logout-api.test.mjs scripts/app-runtime.test.mjs scripts/web-auth-api.test.mjs scripts/auth-session-client.test.mjs scripts/reauth-proof.test.mjs scripts/account-deletion-api.test.mjs scripts/public-information.test.mjs scripts/account-deletion-worker.test.mjs",
     "check:artifacts": "node scripts/verify-artifacts.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:artifacts",
     "db:init": "node scripts/local-db.mjs init",
@@ -54,7 +54,8 @@
     "db:logout-test": "node scripts/test-local-logout.mjs",
     "db:web-auth-test": "node scripts/test-local-web-auth.mjs",
     "db:reauth-proof-test": "node scripts/test-local-reauth-proof.mjs",
-    "db:deletion-api-test": "node scripts/test-local-account-deletion-api.mjs"
+    "db:deletion-api-test": "node scripts/test-local-account-deletion-api.mjs",
+    "db:deletion-worker-test": "node scripts/test-local-deletion-worker.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",

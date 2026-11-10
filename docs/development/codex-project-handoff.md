@@ -1,5 +1,9 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-10 W14-C1: 별도 삭제 worker·private lease/완료 ACK·로컬 암호화 원장 어댑터를 구현했다. 전체 unit 260·DB 426·실제 로컬 Auth 삭제/장애 재시도 8·build 통과. 로컬 SQL은 56개이며 호스팅 staging은 55개다. 다른 계정·기존 데이터/키/gate 보존을 확인했다. [증거](../quality/reports/w14-c1-deletion-worker-check-2026-11-10.json). 호스팅 원장/스케줄·접수 직후 write-ahead 경계·전체 복원은 미완료이고 실제 배포 삭제 gate는 false다. TC-DELETE-003/004는 미실행으로 유지한다. 별도 무료 서울 운영 DB kwzncrefatofwjzrqpma는 생성/빈 상태만 확인했다.
+
+2026-11-10 현재: PR #25 보안/Git 검사·#32 공개 안내 화면·#33 보호된 HTTPS staging 기록을 병합했고 main 8eeef9c다. HTTPS staging의 모든 주소는 Vercel 인증 보호이며 실제 Google 수락은 0이다. 지원 메일은 사용자가 공통 주소 생성 후 제공하기로 했다. 개인 메일/Git 작성자 이메일을 공개 문의처에 자동 대입하지 않는다. 과거 W19 6개 로컬 커밋/stash는 검증한 로컬 bundle로 보관하며 공개 업로드 자동 승인 거절로 해당 과거 초안의 공개 승인만 대기한다. 현 출시 기능과 병합하지 않는다. 다음은 W14-C2 독립 원장/스케줄/백업 복원·W15 분산 제한과 Google 실제 수락이다. 아래 예전 입력 대기/배포 0건/SQL 수치는 각 기록 당시 상태다.
+
 2026-11-09 W12-D1: 목적별 HKDF/HMAC 서버 증명과 비로그인 최소 권한 DB grant 발급을 구현했다. 로컬 SQL은 55개(신규 2)이며 최초 함수 실행 권한 누락을 실제 소유 역할의 후속 grant로 보완했다. 전체 unit 235·DB 419·실제 로컬 Auth 기반 12 통과. 검사 키/사용자/세션/제품 데이터 정리와 기존 상태 보존을 확인했다. [증거](../quality/reports/w12-d1-reauth-proof-check-2026-11-09.json). Google 결과는 합성한 것이므로 실제 Google 수락은 0이다. 다음 W12-D2는 재인증 PKCE·같은 UUID 새 세션과 이전 세션 폐기·탈퇴 API/UI다. 배포 키 설정과 원장/worker/복원은 W14이며 현재 스테이징 SQL은 53개로 로컬 55개와 구분한다. W12-C2a는 커밋 ed296eb·PR #22·quality 42584017524를 통과해 main ddffdf6에 병합했다. 지원 이메일/Google 설정·Vercel 팀 승인 입력은 계속 대기다.
 
 2026-11-09 W12-C2a: Google 시작/PKCE 쿠키/콜백·성인 가입 UI·같은 사용자/세션 갱신·현재/전체 로그아웃 메뉴·초대 복귀·탭 간 계정 경계를 구현했다. 전체 unit 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭을 확인했다. Google 교환은 대체했으므로 실제 Google 통과는 0이다. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json). W12-C2 전체는 진행 중이다. 다음은 W12-C2b의 Google 지원 이메일/클라이언트·Supabase 제공자·Vercel 팀 접근/HTTPS 수락과 독립적인 W12-D·W27-C다. Google Cloud 차곡찬 프로젝트와 브랜드 이름을 준비했으며 지원 주소는 입력 대기다. Vercel 팀 접근은 공급자 승인 대기다. Docker 소켓 장애는 DB 파일을 보존해 복구했으며 로컬 Supabase가 loopback에서 실행된다. 아래 이전 미완료 목록은 각 기록 시점의 상태다.

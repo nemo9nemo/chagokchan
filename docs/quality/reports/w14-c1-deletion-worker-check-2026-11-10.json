@@ -1,0 +1,344 @@
+{
+  "checked_at": "2026-11-10T14:51:48.980Z",
+  "work_item": "W14-C1",
+  "status": "passed_local_worker_and_encrypted_file_adapter_scope",
+  "source_base_commit": "8eeef9c1645a8d9af2c115f2ad4a90aecb0a3e6c",
+  "source_sha256": {
+    "src/operations/account-deletion-worker.mjs": "d109a0125096d0748bef5fb202780078d00544962960db8e904903bbdc4fc616",
+    "src/operations/local-encrypted-ledger.mjs": "6622695245b2fb2c09cf0dcec545ff03fecc0544a203f566a8c3dff2c1ae4a6e",
+    "supabase/migrations/20261110000100_deletion_worker_dispatch.sql": "837ad576a059cefaae7129c01185fdf070515c9a88f3ddbe82fe19130ac6beed",
+    "supabase/tests/021_deletion_worker_dispatch.test.sql": "f6dc8e19e143480ba3dbc235b35c99f4c013760ae269b72a2b719f2c6ced42bc",
+    "scripts/account-deletion-worker.test.mjs": "00dadb74b8d234e70e48547f8fa1b35fcc219df436f34410321dd3056d239356",
+    "scripts/test-local-deletion-worker.mjs": "e1e9f712e9fc22fb28dd11db8a735615be56df50a48a43729392d5f8a24013a8",
+    "package.json": "09df25d8d7cadbbcf312b5893abbfedb275ebf3ae9b4995d9d5d333f3a5b27aa",
+    "scripts/project.ps1": "2fe279e59a14a4e2709567ca749ca6abdf2ade0b9cc5d0cf7720eeb5327bbf0a"
+  },
+  "runtime": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "supabase_cli": "2.120.0",
+    "postgresql": "17.11",
+    "local_migrations_applied": 56
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": 260,
+    "new_worker_unit": 8,
+    "build_check": "passed",
+    "database": {
+      "verified_at": "2026-11-10T14:47:39.729Z",
+      "scope": "configured_database_test_suites",
+      "status": "passed",
+      "suites": [
+        {
+          "file": "001_physical_integrity.test.sql",
+          "category": "physical_integrity",
+          "sha256": "f5f6245459a8e7b986755efe012e0aa20c25eab65d0ddbb57e2d22bd931cce5d",
+          "executed": 51,
+          "passed": 51,
+          "failed": 0,
+          "planned": 51,
+          "status": "passed"
+        },
+        {
+          "file": "002_rpc_boundary.test.sql",
+          "category": "rpc_boundary",
+          "sha256": "356a1ea7a334e4bdb066e8065e7b163c8a8d74f9ac24eabc35d2520c8bdb8fb5",
+          "executed": 21,
+          "passed": 21,
+          "failed": 0,
+          "planned": 21,
+          "status": "passed"
+        },
+        {
+          "file": "003_business_rpc.test.sql",
+          "category": "business_rpc",
+          "sha256": "9a41916a9d3ad769e226c6c410d59138e0139124e942125e8bf456dfd5c62339",
+          "executed": 18,
+          "passed": 18,
+          "failed": 0,
+          "planned": 18,
+          "status": "passed"
+        },
+        {
+          "file": "004_business_rpc_praise.test.sql",
+          "category": "business_rpc",
+          "sha256": "88fe97ff01efce729d4f68d39d8cdbd920c9bb7d6b783420d803022eaa6b7d76",
+          "executed": 26,
+          "passed": 26,
+          "failed": 0,
+          "planned": 26,
+          "status": "passed"
+        },
+        {
+          "file": "005_business_rpc_connections.test.sql",
+          "category": "business_rpc",
+          "sha256": "f3c43a491f49087f298aff44bb5dcfae934484a55f0776ea9a1a5b586beffe21",
+          "executed": 20,
+          "passed": 20,
+          "failed": 0,
+          "planned": 20,
+          "status": "passed"
+        },
+        {
+          "file": "006_business_rpc_shared_board.test.sql",
+          "category": "business_rpc",
+          "sha256": "10a713d235c9e69b6c3eb30fc2dbae69d7ab17d4f8180832220605ea87958f00",
+          "executed": 25,
+          "passed": 25,
+          "failed": 0,
+          "planned": 25,
+          "status": "passed"
+        },
+        {
+          "file": "007_business_rpc_lifecycle.test.sql",
+          "category": "business_rpc",
+          "sha256": "eebc522e8042e2e64b3bf2029375644ac2b13ca77ff139a016bb93722181570f",
+          "executed": 20,
+          "passed": 20,
+          "failed": 0,
+          "planned": 20,
+          "status": "passed"
+        },
+        {
+          "file": "008_business_rpc_account_deletion.test.sql",
+          "category": "business_rpc",
+          "sha256": "73ce3a9d2e4a82366351f3409ed5528e4cbaeda3bc4482039d7de9803bb19eff",
+          "executed": 32,
+          "passed": 32,
+          "failed": 0,
+          "planned": 32,
+          "status": "passed"
+        },
+        {
+          "file": "009_business_rpc_goal_list.test.sql",
+          "category": "business_rpc",
+          "sha256": "cd15cd4237f2c92f47ff576648074730543a0b97e92005e6360ba97a891e19de",
+          "executed": 9,
+          "passed": 9,
+          "failed": 0,
+          "planned": 9,
+          "status": "passed"
+        },
+        {
+          "file": "010_business_rpc_bunch_list.test.sql",
+          "category": "business_rpc",
+          "sha256": "38246527774f356e31c4b26d39d04e6fb20c5f11f212b348630d51b040ee108b",
+          "executed": 9,
+          "passed": 9,
+          "failed": 0,
+          "planned": 9,
+          "status": "passed"
+        },
+        {
+          "file": "011_business_rpc_personal_praise_result.test.sql",
+          "category": "business_rpc",
+          "sha256": "1198944e20fcaf942595fecf61e0965529bfa8aeef2c6837e8e67b40dbcc86c1",
+          "executed": 6,
+          "passed": 6,
+          "failed": 0,
+          "planned": 6,
+          "status": "passed"
+        },
+        {
+          "file": "012_business_rpc_peer_praise_moderation.test.sql",
+          "category": "business_rpc",
+          "sha256": "d58529ff10e7163165150b640a511d9c9eb8aa51e70de7a6d8194c66dc71d021",
+          "executed": 10,
+          "passed": 10,
+          "failed": 0,
+          "planned": 10,
+          "status": "passed"
+        },
+        {
+          "file": "013_business_rpc_shared_board_directory.test.sql",
+          "category": "business_rpc",
+          "sha256": "85343d4e3b6bfb29711e2bb9b0f06c4a0589e66307c9738276e5e05ef6e9596f",
+          "executed": 5,
+          "passed": 5,
+          "failed": 0,
+          "planned": 5,
+          "status": "passed"
+        },
+        {
+          "file": "014_business_rpc_goal_delete_retry.test.sql",
+          "category": "business_rpc",
+          "sha256": "2a2530cdb10c1db756e97e2ce5c619db67400e50280297e222ce0e3ae03c171c",
+          "executed": 5,
+          "passed": 5,
+          "failed": 0,
+          "planned": 5,
+          "status": "passed"
+        },
+        {
+          "file": "015_business_rpc_praise_tag.test.sql",
+          "category": "business_rpc",
+          "sha256": "8312f5b7bc44ab164fd626af813404fea089871c84c496c4cba576077019df10",
+          "executed": 40,
+          "passed": 40,
+          "failed": 0,
+          "planned": 40,
+          "status": "passed"
+        },
+        {
+          "file": "016_business_rpc_shared_count_and_sender_cancel.test.sql",
+          "category": "business_rpc",
+          "sha256": "8e37546ec5f681fdfc92bbe812e9e46e163328fb0141697da5cb1fe4d7bc19d0",
+          "executed": 39,
+          "passed": 39,
+          "failed": 0,
+          "planned": 39,
+          "status": "passed"
+        },
+        {
+          "file": "017_business_rpc_registration.test.sql",
+          "category": "business_rpc",
+          "sha256": "9327b8a4eb6166cbb536ee9327040d8d49b20e7321f38fa138521c8a5b028a76",
+          "executed": 14,
+          "passed": 14,
+          "failed": 0,
+          "planned": 14,
+          "status": "passed"
+        },
+        {
+          "file": "018_business_rpc_custom_tags.test.sql",
+          "category": "business_rpc",
+          "sha256": "f37936190697d070928845ceec10cbc8a97f7229742bcaf88a54c08a472f8e67",
+          "executed": 40,
+          "passed": 40,
+          "failed": 0,
+          "planned": 40,
+          "status": "passed"
+        },
+        {
+          "file": "019_business_rpc_goal_overviews.test.sql",
+          "category": "business_rpc",
+          "sha256": "7071375a4a5ec7de10a0f636907f7b2dbdb67d46d7da2639a1ea3eaad9d0f02e",
+          "executed": 16,
+          "passed": 16,
+          "failed": 0,
+          "planned": 16,
+          "status": "passed"
+        },
+        {
+          "file": "020_reauth_proof_boundary.test.sql",
+          "category": "other",
+          "sha256": "4dc033907334d26756d016e3819b0debecb2d695c0e5590b1dc24299f3cf77b0",
+          "executed": 13,
+          "passed": 13,
+          "failed": 0,
+          "planned": 13,
+          "status": "passed"
+        },
+        {
+          "file": "021_deletion_worker_dispatch.test.sql",
+          "category": "other",
+          "sha256": "f6dc8e19e143480ba3dbc235b35c99f4c013760ae269b72a2b719f2c6ced42bc",
+          "executed": 7,
+          "passed": 7,
+          "failed": 0,
+          "planned": 7,
+          "status": "passed"
+        }
+      ],
+      "executed": 426,
+      "physical_integrity_tests_executed": 51,
+      "rpc_boundary_tests_executed": 21,
+      "business_rpc_tests_executed": 334,
+      "real_login_tests_executed": 0
+    },
+    "local_worker": {
+      "checked_at": "2026-11-10T14:45:55.148Z",
+      "status": "passed",
+      "failed_phase": null,
+      "executed": 8,
+      "cases": [
+        {
+          "name": "ordinary_users_cannot_dispatch_read_or_acknowledge_operations",
+          "status": "passed"
+        },
+        {
+          "name": "disabled_erasure_gate_keeps_user_and_data_even_with_durable_local_intent",
+          "status": "passed"
+        },
+        {
+          "name": "auth_outage_retains_checkpoint_and_unexpired_independent_marker",
+          "status": "passed"
+        },
+        {
+          "name": "real_auth_removal_completes_db_but_failed_ledger_finalization_stays_queued",
+          "status": "passed"
+        },
+        {
+          "name": "leases_prevent_duplicate_dispatch_and_expire_for_retry",
+          "status": "passed"
+        },
+        {
+          "name": "completed_job_finalizes_and_acknowledges_without_another_auth_delete",
+          "status": "passed"
+        },
+        {
+          "name": "independent_encrypted_marker_survives_db_acknowledgement_replay",
+          "status": "passed"
+        },
+        {
+          "name": "existing_data_auth_worker_state_keys_and_gate_preserved",
+          "status": "passed"
+        }
+      ],
+      "synthetic_users": 2,
+      "actual_local_auth_user_removed_by_worker": true,
+      "independent_ledger": "encrypted_local_files_outside_DB_only",
+      "full_database_backup_restore_executed": false,
+      "hosted_ledger_or_scheduler_configured": false,
+      "real_google_tests_executed": 0,
+      "privileged_client_scope": [
+        "synthetic_setup_cleanup",
+        "dedicated_deletion_worker_and_Auth_Admin"
+      ],
+      "service_role_in_ordinary_web": false,
+      "existing_data_keys_gate_auth_and_bookkeeping_preserved": true
+    }
+  },
+  "review": {
+    "by": "Codex_direct",
+    "service_only_rpc_and_no_web_admin_key": "checked",
+    "fixed_search_path_minimal_worker_owner": "checked",
+    "durable_intent_before_erasure": "checked",
+    "target_binding_and_auth_404_confirmation": "checked",
+    "completion_retention_before_ack": "checked",
+    "safe_error_and_count_only_summary": "checked",
+    "cross_process_file_backend": "not_selected_local_adapter_only"
+  },
+  "environment_recovery": {
+    "failure": "Docker_Desktop_project_port_forwarding_closed_connections",
+    "recovery": "only_Chagokchan_local_containers_stopped_started_preserving_volumes",
+    "auth_health_after": 200,
+    "database_reset": false,
+    "other_running_container_restarted": false
+  },
+  "cloud_status": {
+    "staging_migrations": 55,
+    "staging_erasure_gate": false,
+    "production_database": {
+      "project": "kwzncrefatofwjzrqpma",
+      "region": "ap-northeast-2",
+      "status": "ACTIVE_HEALTHY",
+      "public_tables": 0,
+      "schema_applied": false
+    },
+    "production_web_deployed": false
+  },
+  "scope_limits": [
+    "no real Google login acceptance",
+    "no hosted independent ledger or scheduler",
+    "no full database backup/restore",
+    "no account/praise/goal restore suppression acceptance",
+    "no write-ahead ledger at request acceptance",
+    "file adapter single-writer instance only",
+    "no distributed bot/rate limiter acceptance",
+    "TC-DELETE-003 and TC-DELETE-004 remain not_run",
+    "public release not ready"
+  ]
+}
