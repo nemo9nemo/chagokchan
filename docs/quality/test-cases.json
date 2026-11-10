@@ -1946,6 +1946,29 @@
       "expected": "새 비밀은 차단하고 광범위 파일/해시 제외 없이 알려진 과거 오탐만 제외한다. 원격 로그/PR 전체 보안 수락은 별도다.",
       "status": "passed",
       "evidence": "reports/w15-b-security-git-check-2026-11-10.json"
+    },
+    {
+      "id": "TC-PUBLIC-INFO-001",
+      "requirement_ids": [
+        "REQ-011",
+        "NFR-001",
+        "NFR-002",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-SEC-001",
+        "POL-ACCESS-001"
+      ],
+      "level": "public_pages_config_http_browser_read_only",
+      "title": "공개 안내·개인 연락처 비대입·초안/공개 경계",
+      "steps": [
+        "비로그인 5개 route가 쿠키·DB 조회 없이 안내를 제공하고 noindex/no-store인지 확인한다.",
+        "공개 연락처만 읽고 개인 계정 fallback·메일 헤더 주입·placeholder를 거절한다.",
+        "PC/모바일 화면과 정책 초안 표시·연락처 미정 안내를 확인한다."
+      ],
+      "expected": "화면/접근 경계만 통과로 기록하고 운영 입력·실제 공급자/법적 공개 정책 수락을 구분한다.",
+      "status": "passed",
+      "evidence": "reports/w27-c1-public-information-check-2026-11-10.json"
     }
   ],
   "updated_on": "2026-11-10"

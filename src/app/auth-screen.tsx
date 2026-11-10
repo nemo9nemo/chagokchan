@@ -34,7 +34,7 @@ export function LogoutButtons({ compact = false }: { compact?: boolean }) {
 }
 
 export function AccountMenu() {
-  return <details className="account-menu"><summary>계정</summary><div className="account-menu-panel"><a href="/account/deletion">계정 삭제</a><LogoutButtons /></div></details>;
+  return <details className="account-menu"><summary>계정</summary><div className="account-menu-panel"><a href="/help">도움말</a><a href="/support">문의</a><a href="/account/deletion">계정 삭제</a><LogoutButtons /></div></details>;
 }
 
 export default function AuthScreen({ mode, policyVersion = "0.2.0", next = "/" }: { mode: Mode; policyVersion?: string; next?: "/" | "/connect" | "/account/deletion" }) {
@@ -111,6 +111,6 @@ export default function AuthScreen({ mode, policyVersion = "0.2.0", next = "/" }
       {error && mode === "signup" && <a href="/signup">가입 안내 다시 불러오기</a>}
       {["signup", "refresh", "deleting"].includes(mode) && <LogoutButtons />}
     </section>
-    <footer className="auth-footer"><a href="/privacy">개인정보 처리방침</a><a href="/terms">이용 안내</a></footer>
+    <footer className="auth-footer"><a href="/about">소개</a><a href="/help">도움말</a><a href="/privacy">개인정보 처리방침</a><a href="/terms">이용 안내</a><a href="/support">문의</a></footer>
   </main>;
 }

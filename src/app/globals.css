@@ -79,6 +79,17 @@ details > label { margin-top: 12px; }
 .topbar { max-width: 1180px; margin: auto; min-height: 88px; display: flex; gap: 12px; align-items: center; border-bottom: 1.5px solid #000; }
 .brand-lockup { display: flex; align-items: center; text-decoration: none; margin-right: auto; }
 .auth-shell > .brand-lockup { margin-bottom: 28px; }
+.public-shell { max-width: 880px; min-height: 100svh; margin: auto; padding: 32px 20px; }
+.public-nav { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-block: 20px; }
+.public-nav a { display: inline-flex; min-height: 44px; align-items: center; }
+.public-document { overflow-wrap: anywhere; }
+.public-document h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); }
+.public-document h2 { margin-top: 32px; font-size: 1.2rem; }
+.public-document p, .public-document li { line-height: 1.85; }
+.public-document ul, .public-document ol { padding-left: 24px; }
+.public-document a { text-underline-offset: .2em; }
+.notice-draft { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-block: 24px; }
+.notice-draft p { margin-bottom: 0; }
 .brand-name { font-size: 1.35rem; font-weight: 800; white-space: nowrap; }
 .back-link, .text-button { border: 0; text-decoration: underline; text-underline-offset: 4px; }
 .theme-toggle { border-radius: 999px; font-size: .85rem; }

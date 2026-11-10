@@ -1,0 +1,515 @@
+{
+  "checked_at": "2026-11-10T06:20:49.194Z",
+  "work_item": "W27-C1",
+  "base_source": "c8ffdf1db356c78b1ae5a4833c11167a1676a595",
+  "status": "passed_public_pages_configuration_unit_build_http_browser_scope",
+  "source_files": [
+    {
+      "path": "src/server/public-information.mjs",
+      "sha256": "983736afec285df62404b3150add2782791c96b410ff8ddc23d9dbfc6c5416da"
+    },
+    {
+      "path": "src/app/public-information-layout.tsx",
+      "sha256": "091201fff9fb24d444db807221f805019cc866d0256e0574651419393f8af268"
+    },
+    {
+      "path": "src/app/about/page.tsx",
+      "sha256": "a10b0121242881fb9087f7fcc0324c78cfd67f624194f9469d64ff08359e610f"
+    },
+    {
+      "path": "src/app/help/page.tsx",
+      "sha256": "e6a6175f816fa5b26b5d5a0cbf0325bb304447386921f776ed80958057aa35d9"
+    },
+    {
+      "path": "src/app/privacy/page.tsx",
+      "sha256": "f9e7a2d758d13e1664f47b59ce30c144769f9c7f1d140d22295fffb207d4da5d"
+    },
+    {
+      "path": "src/app/terms/page.tsx",
+      "sha256": "4a81b95b651ea3de2c5be1a345520f7b3f889122e39238b409c511f574f52b39"
+    },
+    {
+      "path": "src/app/support/page.tsx",
+      "sha256": "0df8dfdc06f6e471d06c76afba68fba32954a666df59099c775fabce86270232"
+    },
+    {
+      "path": "src/app/auth-screen.tsx",
+      "sha256": "62ac309fa030d5f906d6da6ea228c45c68a385127f52571a06db4a80dc5c20cb"
+    },
+    {
+      "path": "src/app/globals.css",
+      "sha256": "a99c43d5fe63a475b96136d51d12ec15533e0351d1702b6505d14a3897e68e54"
+    },
+    {
+      "path": "scripts/public-information.test.mjs",
+      "sha256": "59b69a7e0c57c95fb3148dd07706613c5234f88efd63197c4a8462c1c42b0b6c"
+    },
+    {
+      "path": "scripts/test-security-headers-http.mjs",
+      "sha256": "afd2dd84ed85f20ebc161c8fbb125672f49d31cb553843cbf0840bad231f9696"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "8fb52b00fbac1f1b1ea89c03f23588437f17a1e84e0981722968a02259d299e6"
+    },
+    {
+      "path": "package.json",
+      "sha256": "b4c083fdf4a0680faf5c7c41bd66b637416482438cbe3a575224a90eac002e94"
+    }
+  ],
+  "unit": {
+    "passed": 252,
+    "failed": 0,
+    "new_public_contact_boundary": 3
+  },
+  "check": "passed",
+  "build": "passed_pinned_node24_22_1_next16_4_5_webpack",
+  "http": {
+    "verified_at": "2026-11-10T06:15:41.626Z",
+    "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+    "next": "16.4.5",
+    "passed": 20,
+    "checks": [
+      {
+        "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+        "status": "passed"
+      },
+      {
+        "name": "all generated Next.js script tags carry the response nonce",
+        "status": "passed"
+      },
+      {
+        "name": "HTML nonce changes for every request and documents cannot be cached",
+        "status": "passed"
+      },
+      {
+        "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+        "status": "passed"
+      },
+      {
+        "name": "production rejects missing authentication and keeps API errors out of caches",
+        "status": "passed"
+      },
+      {
+        "name": "service worker is revalidated with a script-free same-origin fetch policy",
+        "status": "passed"
+      },
+      {
+        "name": "only the public offline page is immutable and contains no executable scripts",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out current logout clears separate secure Auth/CSRF cookies with no-store",
+        "status": "passed"
+      },
+      {
+        "name": "all-session logout requires a verified current identity",
+        "status": "passed"
+      },
+      {
+        "name": "logout rejects GET and missing CSRF without removing cookies",
+        "status": "passed"
+      },
+      {
+        "name": "signed-out HTML renders Google login without product records and is noindex",
+        "status": "passed"
+      },
+      {
+        "name": "Google start is a CSRF POST with a fixed PKCE callback and HttpOnly flow cookie",
+        "status": "passed"
+      },
+      {
+        "name": "OAuth cancellation, signed-out refresh and invite entry fail closed without caching",
+        "status": "passed"
+      },
+      {
+        "name": "deletion and reauth routes require a real session without issuing any cookie",
+        "status": "passed"
+      },
+      {
+        "name": "reauth cancellation uses a fixed path and signed-out deletion page requires login",
+        "status": "passed"
+      },
+      {
+        "name": "public information /about is available without auth, is noindex/no-store and sets no cookie",
+        "status": "passed"
+      },
+      {
+        "name": "public information /help is available without auth, is noindex/no-store and sets no cookie",
+        "status": "passed"
+      },
+      {
+        "name": "public information /privacy is available without auth, is noindex/no-store and sets no cookie",
+        "status": "passed"
+      },
+      {
+        "name": "public information /terms is available without auth, is noindex/no-store and sets no cookie",
+        "status": "passed"
+      },
+      {
+        "name": "public information /support is available without auth, is noindex/no-store and sets no cookie",
+        "status": "passed"
+      }
+    ]
+  },
+  "browser": {
+    "checked_at": "2026-11-10T06:17:05.985Z",
+    "requested_mobile_width": 320,
+    "results": [
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "작은 수고를 차곡차곡",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/about",
+        "scrollWidth": 1715,
+        "title": "차곡찬 소개",
+        "width": 1731
+      },
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "차곡찬 도움말",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/help",
+        "scrollWidth": 1715,
+        "title": "차곡찬 도움말",
+        "width": 1731
+      },
+      {
+        "draft": true,
+        "emailLink": false,
+        "heading": "개인정보 처리방침",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/privacy",
+        "scrollWidth": 1715,
+        "title": "차곡찬 개인정보 처리방침",
+        "width": 1731
+      },
+      {
+        "draft": true,
+        "emailLink": false,
+        "heading": "이용 안내",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/terms",
+        "scrollWidth": 1715,
+        "title": "차곡찬 이용 안내",
+        "width": 1731
+      },
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "문의 안내",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/support",
+        "scrollWidth": 1731,
+        "title": "차곡찬 문의",
+        "width": 1731
+      },
+      {
+        "draft": true,
+        "emailLink": false,
+        "heading": "개인정보 처리방침",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/privacy",
+        "scrollWidth": 320,
+        "title": "차곡찬 개인정보 처리방침",
+        "width": 321
+      },
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "작은 수고를 차곡차곡",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/about",
+        "scrollWidth": 320,
+        "title": "차곡찬 소개",
+        "width": 321
+      },
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "차곡찬 도움말",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/help",
+        "scrollWidth": 320,
+        "title": "차곡찬 도움말",
+        "width": 321
+      },
+      {
+        "draft": true,
+        "emailLink": false,
+        "heading": "이용 안내",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/terms",
+        "scrollWidth": 320,
+        "title": "차곡찬 이용 안내",
+        "width": 321
+      },
+      {
+        "draft": false,
+        "emailLink": false,
+        "heading": "문의 안내",
+        "navTargets": [
+          {
+            "height": 43.98930358886719,
+            "label": "소개"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "도움말"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "개인정보 처리방침"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "이용 안내"
+          },
+          {
+            "height": 43.98930358886719,
+            "label": "문의"
+          }
+        ],
+        "path": "/support",
+        "scrollWidth": 320,
+        "title": "차곡찬 문의",
+        "width": 321
+      }
+    ],
+    "scope": "public_information_read_only_no_auth_or_product_mutations"
+  },
+  "screenshots": [
+    "docs/quality/screenshots/w27-c1-about-desktop-2026-11-10.png",
+    "docs/quality/screenshots/w27-c1-privacy-mobile-2026-11-10.png"
+  ],
+  "public_contact": {
+    "configured": false,
+    "private_identity_fallback": false,
+    "mail_header_injection_rejected": true
+  },
+  "public_policy": {
+    "status": "explicit_draft",
+    "formal_legal_or_public_acceptance": false,
+    "pending": [
+      "operator_public_name_and_support_contact",
+      "real_Google_provider_fields",
+      "processor_transfer_details",
+      "policy_effective_date",
+      "operational_deletion_backup_restore_acceptance"
+    ]
+  },
+  "vercel_plan": {
+    "source": "authenticated_Billing_page_read_only",
+    "team": "team_q7LLsRFNid0SClIXPPtGoMnk",
+    "plan": "Hobby",
+    "status": "Active",
+    "payment_methods": "none",
+    "paid_changes": false
+  },
+  "review": {
+    "reviewer": "Codex_direct",
+    "independent_review": false,
+    "areas": [
+      "server-only public contact with no identity fallback",
+      "React composition and explicit labels",
+      "draft versus published notice",
+      "no auth or product reads",
+      "noindex/no-store/no cookies",
+      "responsive layout"
+    ]
+  },
+  "real_google_acceptance": false,
+  "physical_erasure_acceptance": false,
+  "public_release_ready": false
+}
