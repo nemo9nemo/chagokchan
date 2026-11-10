@@ -1,0 +1,14 @@
+# Reviewed historical false positives only. New commits and changed values scan normally.
+# Explicit synthetic CSRF material in signer unit fixture.
+ab0ffbe5dbe7e88f27ae47ecfd3cf044864baea6:scripts/reauth-proof.test.mjs:generic-api-key:6
+# Constructed non-verifying JWT header plus synthetic refresh token in logout fixture.
+41fa17d4490b54194cc254ba854ec08fbac6cffb:scripts/logout-api.test.mjs:generic-api-key:11
+# File SHA-256 digests in historical verification evidence, not credentials.
+95c03aae4fcdff39665a490b526331ecd9d76ad4:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:419
+95c03aae4fcdff39665a490b526331ecd9d76ad4:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:420
+4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:11
+4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:12
+4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:13
+4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:18
+# operationId duplicate-check programming expression in the old artifact verifier.
+56914bfb78b4bb3c10adc4b8cb50a36f7348a3b5:scripts/verify-artifacts.mjs:generic-api-key:84

@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-11-10T06:05:47.801Z",
+  "work_items": [
+    "W15-B",
+    "W16-D"
+  ],
+  "base_source": "219601f991f93a59205e39b18648f71854c4026b",
+  "status": "local_scanner_canary_and_remote_settings_verified_ci_execution_pending",
+  "source_files": [
+    {
+      "path": "scripts/scan-secrets.mjs",
+      "sha256": "f4945f0a4f311d02f0306094b0f60ac39f6df871fce75b54b3541490d82a1b69"
+    },
+    {
+      "path": ".gitleaksignore",
+      "sha256": "c87c0172c58551131729f37ab6a3565b783e8a0fd8d45cd15a06f7424c949c48"
+    },
+    {
+      "path": ".github/actions/scan-secrets/action.yml",
+      "sha256": "30fc605e9d2206c62a726d6f91efb5ef8913c6857418649d508a532dfb61e332"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "529d60486dcb910ad372806102362ea3923f823677c1948a56cca92c43afa487"
+    },
+    {
+      "path": ".github/workflows/security-audit.yml",
+      "sha256": "6c136eda1a966ad14397ff3601b19cbaaca72f04d9b2344dd148b78f583b7f56"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "sha256": "71b2a915a060f036955375d72029c92d1ff7d07a059974c6f1a44b18c1afe87e"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "98009f84f37d8717a98db8a29846c55777eb73a6439d8e01de449f794e53b515"
+    }
+  ],
+  "git": {
+    "active_head_upstream_and_origin_main_matched": true,
+    "local_main_fast_forwarded": true,
+    "current_release_pr_24_merged": true,
+    "legacy_local_only_commits": 6,
+    "legacy_refs": [
+      "codex/w19-board-centered",
+      "refs/stash"
+    ],
+    "legacy_public_upload": "auto_review_rejected_specific_publication_approval_required",
+    "local_only_bundle_verified": true,
+    "ignored_personal_file": ".claude/launch.json",
+    "future_commit_author_github_noreply": true,
+    "history_rewritten": false,
+    "visibility": "public_unchanged"
+  },
+  "scanner": {
+    "version": "8.30.1",
+    "linux_archive_sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb",
+    "windows_archive_sha256": "d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e",
+    "reachable_commits": 96,
+    "initial_findings": 9,
+    "reviewed_historical_fingerprints": 9,
+    "false_positive_categories": {
+      "synthetic_fixtures": 2,
+      "file_sha256_values": 6,
+      "programming_expression": 1
+    },
+    "reviewed_scan": {
+      "scanner": "gitleaks",
+      "version": "8.30.1",
+      "scope": "all_locally_reachable_git_refs",
+      "status": "passed",
+      "findings": [],
+      "values_and_author_emails_displayed": false
+    },
+    "acceptance_probe": {
+      "status": "passed",
+      "synthetic_credential_detected": true,
+      "credential_not_in_summary": true,
+      "no_network_credential_validation": true
+    },
+    "sensitive_values_logged": false
+  },
+  "github_settings": {
+    "secret_scanning": "enabled",
+    "push_protection": "enabled",
+    "vulnerability_alerts": "enabled_verified_204",
+    "automated_security_fixes": {
+      "enabled": true,
+      "paused": false
+    },
+    "open_dependabot_alerts": 0,
+    "new_token_scopes_requested": false
+  },
+  "local_check": {
+    "unit": 249,
+    "lint": "passed",
+    "typecheck": "passed",
+    "artifact_check": "pending_final_registration"
+  },
+  "remote_workflows": {
+    "quality": "pending_PR",
+    "daily_security": "configured_not_yet_executed"
+  },
+  "not_completed": [
+    "global security acceptance",
+    "remote PR/log/artifact secret audit",
+    "private visibility migration",
+    "public upload of historical local drafts"
+  ],
+  "public_release_ready": false
+}

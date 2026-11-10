@@ -1926,7 +1926,27 @@
       "expected": "BFF·실제 로컬 Auth/DB 경계를 검증하되 실제 Google·HTTPS·운영 파기 완료를 주장하지 않는다.",
       "status": "passed",
       "evidence": "reports/w12-d2-deletion-web-check-2026-11-09.json"
+    },
+    {
+      "id": "TC-SECRET-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-SEC-001"
+      ],
+      "level": "git_history_and_scanner_acceptance",
+      "title": "과거 Git 비밀 탐지와 원문 없는 실패 보고",
+      "steps": [
+        "고정 스캐너/다운로드 SHA를 확인한다.",
+        "접근 가능한 모든 refs를 스캔하고 과거 오탐은 commit fingerprint별로 검토한다.",
+        "독립 로컬 저장소의 합성 자격증명이 실패하며 보고서에 그 값이 없는지 확인한다."
+      ],
+      "expected": "새 비밀은 차단하고 광범위 파일/해시 제외 없이 알려진 과거 오탐만 제외한다. 원격 로그/PR 전체 보안 수락은 별도다.",
+      "status": "passed",
+      "evidence": "reports/w15-b-security-git-check-2026-11-10.json"
     }
   ],
-  "updated_on": "2026-11-09"
+  "updated_on": "2026-11-10"
 }

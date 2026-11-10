@@ -1,6 +1,6 @@
 # 개발 순서와 진행표
 
-갱신일: 2026-11-09 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
+갱신일: 2026-11-10 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
 
 이 표가 **작업별 상태의 기준**이다. 완료할 때마다 상태·결과·근거를 갱신하고 사용자에게 표를 보여준다. 설계 작업의 DONE은 문서와 해당 정적 검사의 완료다. DB 적용·앱 기능·실제 로그인 검증은 각각의 구현 행에서 따로 완료한다.
 
@@ -58,6 +58,8 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W16-A | 로컬 Git·기능 단위 커밋 | DONE | main·메시지 훅 적용. 작업·이유·검증·참조 본문 필수 |
 | W16-B | 지정 GitHub 원격 연결·이력 업로드 | DONE | 2026-10-08. 공개 origin/main·기존 세 커밋 보존·SHA/업스트림 일치. [증거](../quality/reports/git-remote-connection-2026-10-08.json) |
 | W16-C | CI·브랜치 보호 | DONE | GitHub Actions `quality` job에 Node·pnpm 잠금 설치·`pnpm check`·`pnpm build:check`를 구성했다. 첫 실행 오류를 수정한 뒤 원격 run `37783463500`와 기록 PR run `37783959708`의 `quality`·build가 통과했다. main에 PR 필수, strict `quality`, 관리자 포함, 강제 push·삭제 금지를 적용·재조회했다. 1인 개발 기준 승인 리뷰 요구는 0명이다. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) · [CI 변경 기록](../changes/2026-10-08-w16-c-ci.md) |
+| W16-D | 현재 개발 커밋·보관 이력·로컬 설정 원격 반영 확인 | DONE | 시작 시 HEAD/업스트림/origin main 219601f 일치·PR #24 병합 확인. 로컬 main fast-forward·개인 실행 설정 제외·앞으로의 작성자 noreply 적용. 예전 W19 6개 커밋은 로컬 bundle 검증/보관이며 공개 원격 업로드는 자동 승인 검토 거절로 확인 대기. [근거](../quality/reports/w15-b-security-git-check-2026-11-10.json) |
+| W15-B | 전체 Git 비밀 탐지·의존성 지속 검사 | IN_PROGRESS | Gitleaks 8.30.1 전체 로컬 이력 96개 검사·9개 오탐의 특정 과거 위치 검토/제외·잔여 0·합성 비밀 차단 확인. GitHub 취약점 알림/보안 수정 PR 켬·열린 경고 0. CI/일일 검사 구성과 원격 검증 진행 중. [근거](../quality/reports/w15-b-security-git-check-2026-11-10.json) |
 
 ## W05의 완료 범위
 
