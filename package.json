@@ -59,7 +59,7 @@
     "db:account-restore-test": "node scripts/test-local-account-restore.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.117.3",
+    "@supabase/supabase-js": "2.119.0",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
