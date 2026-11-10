@@ -1,0 +1,117 @@
+{
+  "checked_at": "2026-11-10T06:37:49.578Z",
+  "work_item": "W14-B",
+  "status": "passed_protected_https_build_read_only_scope",
+  "source": "0143902993861df83e1d0ef5def78db3f2f1d4e1",
+  "vercel": {
+    "project_id": "prj_fpIFXdqLYrIKI5JgkpCFcVUPrZ4Z",
+    "team_id": "team_q7LLsRFNid0SClIXPPtGoMnk",
+    "plan": "Hobby_Active_Billing_UI_verified",
+    "staging_url": "https://chagokchan-staging.vercel.app",
+    "deployment_id": "dpl_AcXo4dJtMAMN9fYsxnzbSsByZnnr",
+    "state": "READY",
+    "target": "production_target_of_staging_only_project",
+    "function_region": "icn1",
+    "node_major": "24",
+    "pnpm": "11.19.0",
+    "production_project_deployed": false,
+    "paid_changes": false
+  },
+  "protection": {
+    "final": "all",
+    "anonymous_status": 302,
+    "anonymous_redirect_origin": "https://vercel.com",
+    "first_attempt": {
+      "scope": "all_except_custom_domains",
+      "anonymous_status": 200,
+      "corrected": true
+    },
+    "shareable_bypass_created": false,
+    "long_lived_bypass_requested": false
+  },
+  "environment": {
+    "app_env": "staging",
+    "auth_mode": "supabase_session",
+    "configured_variable_names": [
+      "APP_ENV",
+      "APP_AUTH_MODE",
+      "APP_BASE_URL",
+      "SUPABASE_URL",
+      "SUPABASE_PUBLISHABLE_KEY",
+      "AUTH_SESSION_ENCRYPTION_KEY",
+      "CSRF_SIGNING_SECRET"
+    ],
+    "fresh_staging_only_secrets": true,
+    "sensitive_vercel_type_used": true,
+    "secret_values_logged": false,
+    "normal_web_service_role": false
+  },
+  "database": {
+    "project": "dsjrqipbakluvdvgxide",
+    "migrations": 55,
+    "app_accounts": 0,
+    "active_purpose_derived_verifiers": 1,
+    "erasure_enabled": false
+  },
+  "browser": {
+    "checked_at": "2026-11-10T06:32:35.639Z",
+    "scope": "existing_owner_browser_read_only_no_Google_exchange_no_product_data",
+    "results": [
+      {
+        "path": "/",
+        "google_button": true
+      },
+      {
+        "draft": false,
+        "heading": "작은 수고를 차곡차곡",
+        "path": "/about",
+        "public_contact_missing": null
+      },
+      {
+        "draft": false,
+        "heading": "차곡찬 도움말",
+        "path": "/help",
+        "public_contact_missing": null
+      },
+      {
+        "draft": true,
+        "heading": "개인정보 처리방침",
+        "path": "/privacy",
+        "public_contact_missing": null
+      },
+      {
+        "draft": true,
+        "heading": "이용 안내",
+        "path": "/terms",
+        "public_contact_missing": null
+      },
+      {
+        "draft": false,
+        "heading": "문의 안내",
+        "path": "/support",
+        "public_contact_missing": true
+      },
+      {
+        "path": "/api/v1/auth/session",
+        "auth_required": true
+      },
+      {
+        "path": "/api/v1/auth/csrf",
+        "csrf_preparation_succeeded": true,
+        "only_csrf_field": true
+      }
+    ]
+  },
+  "screenshots": [
+    "docs/quality/screenshots/w14-https-staging-login-2026-11-10.png"
+  ],
+  "scope_limits": [
+    "no real Google exchange",
+    "no real signup",
+    "no product mutation or permission acceptance",
+    "no operational erasure/backup/restore acceptance",
+    "not a public release",
+    "not a full access-log audit"
+  ],
+  "public_release_ready": false
+}
