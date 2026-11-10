@@ -2014,7 +2014,31 @@
       "expected": "로컬 작업자 기반만 통과로 기록한다. 호스팅 스케줄·접수 write-ahead·전체 백업 복원과 TC-DELETE-003/004는 별도다.",
       "status": "passed",
       "evidence": "reports/w14-c1-deletion-worker-check-2026-11-10.json"
+    },
+    {
+      "id": "TC-RESTORE-ACCOUNT-LOCAL-001",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-002",
+        "POL-DELETE-003",
+        "POL-SEC-001"
+      ],
+      "level": "full_local_pg_dump_pg_restore_and_independent_account_marker",
+      "title": "암호화 전체 백업·과거 계정 복원·최신 삭제 이력 재적용",
+      "steps": [
+        "실제 합성 Auth/제품 데이터가 있는 삭제 전 전체 DB를 암호화 백업한다.",
+        "잘못된 키·출처·시각·변조를 거절한 뒤 별도 비노출 임시 DB로 전체 복원한다.",
+        "복원에서 되살아난 계정·목표·본문·세션을 확인하고 DB 밖 최신 계정 삭제 원장을 재적용한다.",
+        "삭제 대상 제거·다른 계정 보존·원래 데이터/키/역할 보존과 임시 DB/파일 정리를 확인한다."
+      ],
+      "expected": "로컬 계정 복원 경계만 통과로 기록하고 호스팅 자동 백업·목표/취소 원장·운영 복원/스케줄 재개는 별도다.",
+      "status": "passed",
+      "evidence": "reports/w14-c2a-account-restore-check-2026-11-11.json"
     }
   ],
-  "updated_on": "2026-11-10"
+  "updated_on": "2026-11-11"
 }
