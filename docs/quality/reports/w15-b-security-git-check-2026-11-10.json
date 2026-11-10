@@ -5,7 +5,7 @@
     "W16-D"
   ],
   "base_source": "219601f991f93a59205e39b18648f71854c4026b",
-  "status": "local_scanner_canary_and_remote_settings_verified_ci_execution_pending",
+  "status": "local_and_remote_quality_daily_audit_passed",
   "source_files": [
     {
       "path": "scripts/scan-secrets.mjs",
@@ -95,11 +95,22 @@
     "unit": 249,
     "lint": "passed",
     "typecheck": "passed",
-    "artifact_check": "pending_final_registration"
+    "artifact_check": "passed"
   },
   "remote_workflows": {
-    "quality": "pending_PR",
-    "daily_security": "configured_not_yet_executed"
+    "quality": {
+      "status": "success",
+      "run": 42766313995,
+      "source": "4efdc9e62e35ff1aa1f020408381d3248b253289",
+      "pr": 25,
+      "merged": true
+    },
+    "daily_security": {
+      "status": "success",
+      "run": 42766879058,
+      "source": "c8ffdf1db356c78b1ae5a4833c11167a1676a595",
+      "manual_acceptance_execution": true
+    }
   },
   "not_completed": [
     "global security acceptance",

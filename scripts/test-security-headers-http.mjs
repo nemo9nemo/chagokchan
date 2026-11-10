@@ -141,6 +141,16 @@ try {
     assert.equal(reauthCallback.status, 303); assert.equal(reauthCallback.headers.get("location"), env.APP_BASE_URL + "/account/deletion?reauth_error=retry");
     assert.equal(deletionPage.status, 200); assert.match(deletionPage.headers.get("cache-control"), /no-store/);
   });
+  for (const path of ["/about", "/help", "/privacy", "/terms", "/support"]) {
+    const response = await request(path); const document = await response.text();
+    check(`public information ${path} is available without auth, is noindex/no-store and sets no cookie`, () => {
+      assert.equal(response.status, 200); assert.equal(response.headers.getSetCookie().length, 0);
+      assert.match(response.headers.get("cache-control"), /no-store/); assert.match(document, /name="robots" content="noindex, nofollow"/);
+      assert.ok(document.includes('aria-label="서비스 안내"'));
+      assert.ok(!document.includes("nemo9nemo") && !document.includes("mailto:"));
+      if (["/privacy", "/terms"].includes(path)) assert.ok(document.includes("공개 전 확인 중인 문안입니다."));
+    });
+  }
   const report = { verified_at: new Date().toISOString(), scope: "isolated_production_http_headers_not_browser_or_real_auth_acceptance", next: JSON.parse(fs.readFileSync(new URL("../node_modules/next/package.json", import.meta.url))).version, passed: checks.length, checks };
   fs.mkdirSync(new URL("../tmp", import.meta.url), { recursive: true });
   fs.writeFileSync(new URL("../tmp/security-headers-http.json", import.meta.url), JSON.stringify(report, null, 2) + "\n");

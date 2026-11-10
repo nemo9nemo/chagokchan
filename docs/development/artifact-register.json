@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "updated_on": "2026-11-10",
   "current_stage": "S07_deletion_bff_implemented_real_google_browser_operations_release_pending",
-  "next_stage": "w12_d2_browser_acceptance_w12_c2b_google_setup_w14_operations_w27_c_pages",
+  "next_stage": "protected_https_staging_ops_ledger_worker_rate_protection_real_google_and_final_public_policy_pending",
   "implementation_started": true,
   "git_repository_connected": true,
   "cloud_project_created": true,
@@ -91,8 +91,8 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 88,
-    "application_tests_executed": 249,
+    "planned_test_cases": 89,
+    "application_tests_executed": 252,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
@@ -1056,7 +1056,7 @@
     {
       "id": "ART-040",
       "title": "지속적 비밀 탐지·취약점 알림과 Git 반영 확인",
-      "status": "local_verified_remote_ci_pending",
+      "status": "local_and_remote_quality_daily_audit_verified",
       "paths": [
         "docs/quality/reports/w15-b-security-git-check-2026-11-10.json",
         "docs/changes/2026-11-10-security-git-synchronization.md",
@@ -1067,6 +1067,30 @@
         ".github/workflows/security-audit.yml",
         ".github/dependabot.yml",
         ".gitignore"
+      ]
+    },
+    {
+      "id": "ART-041",
+      "title": "공개 안내·지원 연락처·정책 문안 화면 기반",
+      "status": "passed_local_unit_http_browser_policy_finalization_pending",
+      "paths": [
+        "docs/quality/reports/w27-c1-public-information-check-2026-11-10.json",
+        "docs/changes/2026-11-10-public-web-information.md",
+        "src/server/public-information.mjs",
+        "src/app/public-information-layout.tsx",
+        "src/app/about/page.tsx",
+        "src/app/help/page.tsx",
+        "src/app/privacy/page.tsx",
+        "src/app/terms/page.tsx",
+        "src/app/support/page.tsx",
+        "src/app/auth-screen.tsx",
+        "src/app/globals.css",
+        "scripts/public-information.test.mjs",
+        "scripts/test-security-headers-http.mjs",
+        ".env.example",
+        "package.json",
+        "docs/quality/screenshots/w27-c1-about-desktop-2026-11-10.png",
+        "docs/quality/screenshots/w27-c1-privacy-mobile-2026-11-10.png"
       ]
     }
   ],
@@ -1227,6 +1251,7 @@
       "google"
     ],
     "email_otp": "deferred_until_sender_setup",
-    "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access"
+    "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access",
+    "vercel_plan": "Hobby_active_verified_Billing_UI_2026-11-10"
   }
 }

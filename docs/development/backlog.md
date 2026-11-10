@@ -59,7 +59,7 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W16-B | 지정 GitHub 원격 연결·이력 업로드 | DONE | 2026-10-08. 공개 origin/main·기존 세 커밋 보존·SHA/업스트림 일치. [증거](../quality/reports/git-remote-connection-2026-10-08.json) |
 | W16-C | CI·브랜치 보호 | DONE | GitHub Actions `quality` job에 Node·pnpm 잠금 설치·`pnpm check`·`pnpm build:check`를 구성했다. 첫 실행 오류를 수정한 뒤 원격 run `37783463500`와 기록 PR run `37783959708`의 `quality`·build가 통과했다. main에 PR 필수, strict `quality`, 관리자 포함, 강제 push·삭제 금지를 적용·재조회했다. 1인 개발 기준 승인 리뷰 요구는 0명이다. [검사 증거](../quality/reports/w16-c-ci-check-2026-10-08.json) · [CI 변경 기록](../changes/2026-10-08-w16-c-ci.md) |
 | W16-D | 현재 개발 커밋·보관 이력·로컬 설정 원격 반영 확인 | DONE | 시작 시 HEAD/업스트림/origin main 219601f 일치·PR #24 병합 확인. 로컬 main fast-forward·개인 실행 설정 제외·앞으로의 작성자 noreply 적용. 예전 W19 6개 커밋은 로컬 bundle 검증/보관이며 공개 원격 업로드는 자동 승인 검토 거절로 확인 대기. [근거](../quality/reports/w15-b-security-git-check-2026-11-10.json) |
-| W15-B | 전체 Git 비밀 탐지·의존성 지속 검사 | IN_PROGRESS | Gitleaks 8.30.1 전체 로컬 이력 96개 검사·9개 오탐의 특정 과거 위치 검토/제외·잔여 0·합성 비밀 차단 확인. GitHub 취약점 알림/보안 수정 PR 켬·열린 경고 0. CI/일일 검사 구성과 원격 검증 진행 중. [근거](../quality/reports/w15-b-security-git-check-2026-11-10.json) |
+| W15-B | 전체 Git 비밀 탐지·의존성 지속 검사 | DONE | 전체 로컬 이력 96개·9개 과거 오탐 검토 뒤 잔여 0·합성 비밀 차단 확인. 취약점 알림/보안 수정 PR 켬·열린 경고 0. PR #25 quality 성공/병합·일일 Security audit 42766879058 성공. 전체 서비스 보안 수락과 구분. [근거](../quality/reports/w15-b-security-git-check-2026-11-10.json) |
 
 ## W05의 완료 범위
 
@@ -178,7 +178,9 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | --- | --- | --- | --- |
 | W27-A | 현재 상태 점검·웹앱 전환·서버/DB 시장조사 | DONE | 요구·개발 정책·설계 설명·검증 계획·진행표/등록부 동기화. Vercel/Cloudflare/Lightsail/Render·Supabase/Neon/직접 운영 비교. 문서 정합성·Codex 직접 검토 결과는 [증거](../quality/reports/w27-a-webapp-transition-check-2026-11-03.json). 공급자/예산 확정·서비스 개설·제품 수락과 구분 |
 | W27-B | 배포 후보 빌드·런타임·환경 호환성 | DONE | Node 24.22.1 고정/배포 보안 하한, Next 16.4.5·잠금 파일, webpack·정책 JSON 정적 import, host/PORT·fixture 외부 제공 거절을 구현·검증했다. 전체 unit 206·check/build·격리 production 보안 HTTP 10·audit 통과. 실제 클라우드 빌드/Google/사용자 수락은 별도. [증거](../quality/reports/w27-b-runtime-security-check-2026-11-09.json) |
-| W27-C | 웹 공개 안내·검색/캐시·정책/지원 동선 | TODO | 설치 없는 진입·소개/도움말/공개 정책·비공개 기록/초대/인증 검색 제외와 no-store·로그인 복귀 검증. 최종 도메인·지원은 W14 입력 뒤 적용 |
+| W27-C | 웹 공개 안내·검색/캐시·정책/지원 동선 | IN_PROGRESS | C1의 공개 안내/문안 화면·개인 연락처 비대입·noindex/no-store 로컬 검증 완료. C2 최종 운영·공급자/정책·실제 공개 수락과 로그인 복귀는 후속 |
+| W27-C1 | 공개 안내·연락처 경계·정책 문안 화면 기반 | DONE | 소개/도움말/개인정보/이용 안내/문의 5개 route 구현. unit 252·check/build·HTTP 20·데스크톱/모바일 10개 화면 검증. 개인 계정 연락처 자동 대입 없음. 정책은 공개 전 문안 표시이며 정식 공개 정책 완료와 구분. [근거](../quality/reports/w27-c1-public-information-check-2026-11-10.json) |
+| W27-C2 | 최종 운영 연락처·처리방침·공개 수락 | IN_PROGRESS | 지원 주소·공개 운영자 표시, 실제 Google 전달 항목·공급자/국외 처리·시행일·운영 삭제/백업 검증 후 문안 확정. 초기 noindex 유지. 임의 개인 메일·허위 연락처 사용하지 않음 |
 
 다음 순서: W12-C2b 실제 Google·HTTPS → W12-D2 브라우저 수락·W14 운영/원장 → W27-C·W13/W15 수락 → W17 공개. 사용자 결정으로 초기 베타는 Google만 제공하고 OTP는 후속 준비한다. 운영 주체 개인·무료 우선·플랫폼 기본 주소·계정 보유를 반영하며 여러 앱 공통 지원 메일의 실제 생성 주소를 기다린다. Vercel 팀 접근은 사용자가 승인해 조회를 확인했다. 무료 플랜은 응답에 필드가 없어 추가 확인이 필요하며 배포는 0건이다. 스테이징 SQL 55개 적용/카탈로그 점검은 완료했고 검증 키/실제 제공자 통합 수락은 남아 있다.
 
