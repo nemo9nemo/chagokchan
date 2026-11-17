@@ -1,0 +1,29 @@
+{
+  "work_item": "W12-C2b1",
+  "observed_client_date": "2026-11-18",
+  "source_base": "f642b69951c805986a568ba7c4aa0a19e14c27ff",
+  "status": "project_created_dashboard_verified_oauth_and_real_auth_pending",
+  "user_authorization": "explicit_register_first_using_nemodong.studio_account_2026-11-18",
+  "google_cloud": {
+    "account": "nemodong.studio@gmail.com",
+    "project_name": "Chagokchan",
+    "project_id": "chagokchan",
+    "project_number": "194930525268",
+    "parent": "no_organization",
+    "dashboard": "https://console.cloud.google.com/home/dashboard?project=chagokchan",
+    "creation_completed_notification_observed": true,
+    "project_dashboard_access_verified": true,
+    "billing_account_link_action_performed": false,
+    "free_trial_activation_action_performed": false,
+    "paid_API_or_compute_created": false
+  },
+  "previous_account_project": "ninth-expanse-514206-u0_not_accessible_to_new_account_not_modified",
+  "not_run": [
+    "OAuth_branding_and_consent_configuration",
+    "OAuth_client_and_secret_creation",
+    "Supabase_Google_provider_configuration",
+    "real_Google_login_registration_refresh_logout_reauth_deletion_acceptance",
+    "web_source_upload_and_new_deployment_user_deferred"
+  ],
+  "public_release_ready": false
+}

@@ -1,6 +1,6 @@
 # 개발 순서와 진행표
 
-갱신일: 2026-11-17 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
+갱신일: 2026-11-18 / 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`
 
 이 표가 **작업별 상태의 기준**이다. 완료할 때마다 상태·결과·근거를 갱신하고 사용자에게 표를 보여준다. 설계 작업의 DONE은 문서와 해당 정적 검사의 완료다. DB 적용·앱 기능·실제 로그인 검증은 각각의 구현 행에서 따로 완료한다.
 
@@ -202,7 +202,8 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W12-B | 가입 bootstrap·현재 인증 계정 문맥 | DONE | 새 SQL 2개·명시적 확인·정책 버전·원자적 계정/프로필·삭제 표시·최초 값 보존 RPC/API 완료. unit 159·DB 350·로컬 가입 10·A/B/C HTTP 24·세션 회귀 5·빌드 통과. 실제 Google/OTP·가입 UI·운영 정리 경합은 미완료. [증거](../quality/reports/w12-b-registration-check-2026-10-19.json) |
 | W12-C | 실제 Google·갱신·로그아웃·초대 복귀 | IN_PROGRESS | C1·C2a의 서버/로컬 Auth 검증 완료. 초기 베타 OTP는 사용자 결정으로 유예. 실제 Google·HTTPS·다중 탭/사용자 수락·공유 제한/봇 방어는 남아 있다. |
 | W12-C2a | Google 웹 BFF·성인 가입·갱신·로그아웃 UI 기반 | DONE | 단위 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭 확인. 기존 데이터 보존. Google 교환은 대체했으며 실제 Google 0. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json) |
-| W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | Google Cloud 차곡찬 프로젝트/이름 준비·Vercel 팀 접근 승인/조회 완료. 공개 지원 주소는 nemodong.studio@gmail.com으로 확정. 사용자 일시 유예 후 이 Google 계정으로 재개했으며 로그인/프로젝트 접근 확인 대기. OAuth 클라이언트/제공자·실제 콜백·가입·초대·만료/로그아웃·다중 탭은 미완료. |
+| W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | 지정 계정 nemodong.studio@gmail.com에 신규 Chagokchan 프로젝트 생성·대시보드 접근 확인(project ID chagokchan). 기존 다른 계정 프로젝트는 변경하지 않았다. 과금/체험 활성화 없음. 동의 화면·OAuth 클라이언트·Supabase 제공자·실제 로그인/제품 수락은 미완료 |
+| W12-C2b1 | 지정 계정 Google Cloud 프로젝트 등록 | DONE | **프로젝트 생성/접근 확인 범위 완료 2026-11-18.** Chagokchan / chagokchan / 194930525268. 생성 완료 알림·계정·대시보드 확인. OAuth/실제 로그인은 별도. [근거](../quality/reports/w12-c2b1-google-project-registration-2026-11-18.json) |
 | W12-C1 | 활성 Auth 세션 현재/전체 로그아웃 API | DONE | unit 199(신규 11)·새 로컬 Auth 사용자 2명/발급 세션 4개의 통합 6·production HTTP 10·build 통과. current/all 범위·다른 사용자 보존·폐기 JWT 재사용 거절·기존 데이터/사용자/세션 보존 확인. 갱신/만료 경합·로그아웃 UI·실제 제공자/HTTPS 브라우저 수락은 미완료다. [증거](../quality/reports/w12-c1-logout-check-2026-10-26.json) |
 | W12-D | 재인증·계정 탈퇴 동선 | IN_PROGRESS | D1·D2a의 서버 증명/발급·재인증/탈퇴 BFF 로컬 검증 완료. 확인/접수 화면 구현. D2 브라우저·실제 제공자 수락과 W14 독립 원장/운영 파기는 후속 |
 | W12-D1 | 서명한 재인증 증명의 최소 권한 grant 발급 | DONE | 새 SQL 2개(로컬 총 55)·서명 단위 4 포함 전체 235·DB 419(새 경계 13)·실제 로컬 Auth 기반 12 통과. 기존 데이터/키 설정 보존. 실제 Google 0. [증거](../quality/reports/w12-d1-reauth-proof-check-2026-11-09.json) |
