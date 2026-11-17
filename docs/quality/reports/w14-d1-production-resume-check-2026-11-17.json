@@ -1,0 +1,44 @@
+{
+  "work_item": "W14-D1",
+  "status": "blocked_by_provider_execution_confirmation_expired_not_user_authorization",
+  "production_project": "kwzncrefatofwjzrqpma",
+  "approved_baseline_SQL_files": 56,
+  "applied_from_approved_baseline": 27,
+  "remaining_from_approved_baseline": 29,
+  "next_file": "20261008023100_news_goal_trash_and_purge_rpcs.sql",
+  "same_day_resumed_attempts": 2,
+  "both_results": "provider_confirmation_expired_after_10_minutes",
+  "SQL_application_observed_this_resume": false,
+  "after_attempts_read_only_counts": {
+    "migration_records": 27,
+    "auth_users": 0,
+    "app_accounts": 0
+  },
+  "temporary_permission_restored_and_read_back": "inherit_default_Allow_low_risk_actions",
+  "user_approval_re_requested": false,
+  "provider_confirmation_bypassed": false,
+  "new_profile_SQL_files_applied_to_production": 0,
+  "staging": {
+    "project": "dsjrqipbakluvdvgxide",
+    "resumed_from_paused": true,
+    "state": "ACTIVE_HEALTHY",
+    "new_profile_two_files_applied_as_atomic_bundle": true,
+    "history_records": 57,
+    "source_files_represented": 58,
+    "forced_product_RLS": 18,
+    "new_restricted_rpc_count": 2,
+    "legacy_preview_projection_preserved": true,
+    "ordinary_profile_DML_and_anonymous_new_rpc_execute": false,
+    "auth_users": 0,
+    "app_accounts": 0,
+    "internal_config_RLS_warning": {
+      "table": "private.deletion_worker_config",
+      "RLS_enabled": false,
+      "anon_and_authenticated_schema_usage": false,
+      "anon_and_authenticated_table_privileges": false,
+      "generic_full_exposure_claim_not_supported_by_catalog": true
+    }
+  },
+  "paid_changes": false,
+  "public_release_ready": false
+}

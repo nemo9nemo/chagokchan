@@ -2,7 +2,7 @@
 
 성인 개인 사용자가 목표별 셀프 칭찬과 지인의 칭찬을 개인·공유 칭찬판에 따로 모으는 반응형 웹앱을 개발한다. PC·모바일 브라우저로 이용하며 PWA 설치는 선택이다. 2026-11-03 사용자 결정으로 Android/iOS 스토어는 현재 범위에서 제외했다. 포도는 교체 가능한 표현 테마이며 서비스 브랜드는 테마와 독립적으로 정한다.
 
-현재 단계: **핵심 로컬 기능 완료, 실제 인증·웹앱 운영 준비(W12/W14/W27) 진행**. 요청별 서버 세션·Google/가입/탈퇴 웹 화면·현재/전체 로그아웃·삭제 작업자와 로컬 백업/복원 기반을 구현했다. 2026-11-17 공유 칭찬 대상·초안 복구의 unit 264·DB 426·합성 API 브라우저 26을 검증했다. 실제 Google·호스팅 삭제/복원·전체 수락·실기기·운영 공개는 미완료다. 상세 범위는 [검사 기록](docs/quality/reports/w09-e-shared-praise-recovery-check-2026-11-17.json)을 따른다. 로컬은 로그인 화면 없이 계속 사용하고 수익화는 부차 목표다. [진행표](docs/development/backlog.md) · [웹앱 전환 결정](docs/decisions/ADR-0010-webapp-release.md) · [서버·DB 시장조사](docs/webapp-infrastructure-research-2026-11-03.md).
+현재 단계: **핵심 로컬 기능 완료, 실제 인증·웹앱 운영 준비(W12/W14/W27) 진행**. 요청별 서버 세션·Google/가입/탈퇴 웹 화면·현재/전체 로그아웃·삭제 작업자와 로컬 백업/복원 기반을 구현했다. 2026-11-17 공유/초대 재시도·본인 프로필·복원 세션 안전성을 보완하고 unit 271·DB 437·합성 API 브라우저 72·실제 로컬 Auth 프로필/복원을 각각 검증했다. [프로필 검사](docs/quality/reports/w12-e-profile-settings-check-2026-11-17.json) · [복원 검사](docs/quality/reports/w14-c2b-restore-session-check-2026-11-17.json). 실제 Google·호스팅 삭제/복원·전체 수락·실기기·운영 공개는 미완료다. 새 소스 외부 업로드·배포는 사용자 요청으로 보류 중이며, 공개 연락처 환경값 저장과 실제 페이지 반영을 구분한다. 로컬은 로그인 화면 없이 계속 사용하고 수익화는 부차 목표다. [진행표](docs/development/backlog.md) · [웹앱 전환 결정](docs/decisions/ADR-0010-webapp-release.md) · [서버·DB 시장조사](docs/webapp-infrastructure-research-2026-11-03.md).
 
 개발 기준 경로: `C:\Users\love0\nemo9Dev\chagokchan`. 개발 중에는 로그인 화면 없이 로컬 가상 사용자로 이용하고, 실제 로그인 연동·테스트는 오픈 준비 단계에서 진행한다. DB·업무 권한 검사는 개발 중에도 수행한다.
 
