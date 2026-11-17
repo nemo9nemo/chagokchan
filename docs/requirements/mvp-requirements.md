@@ -14,7 +14,7 @@
 
 | ID | 요구 | 범위 | 관찰 가능한 수락 기준 | 개발 작업 |
 | --- | --- | --- | --- | --- |
-| REQ-001 | 계정과 로그인 | Google·이메일 OTP, 만 19세 이상 자기 확인, 검증된 고정 UUID, 프로필·시간대, 최초 생성·복구·현재/전체 로그아웃 | 확인 전 제품 접근·직접 초기화가 거절됨. 최초 생성·확인 시각 기록은 한 번이며 재로그인으로 바뀌지 않음. UUID가 다른 재인증·deleting 재활성화가 거절됨 | W07/W12/W13 |
+| REQ-001 | 계정과 로그인 | Google·이메일 OTP, 만 19세 이상 자기 확인, 검증된 고정 UUID, 본인 표시 이름·아바타 설정(시간대 변경은 후속), 최초 생성·복구·현재/전체 로그아웃 | 확인 전 제품 접근·직접 초기화가 거절됨. 최초 생성·확인 시각 기록은 한 번이며 재로그인으로 바뀌지 않음. UUID가 다른 재인증·deleting 재활성화가 거절됨. 현재 본인만 부분 수정하며 동명이인은 보조 표시로 구분하고 권한은 UUID로 검사 | W07/W12/W13 |
 | REQ-002 | 목표 관리 | 여러 목표, 소유자, 제목·설명·상태·revision, 보관·재개·삭제·휴지통 복구 | 목표마다 개인판이 있고 다른 사용자가 수정하지 못함. 상태 전이·30일 복구·권한 미복구가 정책과 같음 | W08/W10 |
 | REQ-003 | 셀프 칭찬 | 개인판 기록·메모·실천일·직접 입력 태그·취소·회차 | 7/20에서 self 한 번이면 개인 8/20만 반영, 재시도는 한 건. `#`부터 입력 후 공백으로 칩 확정, 여러 태그 저장·삭제·마지막 토큰 포함 저장. 태그는 집계와 무관 | W08/W20/W25 |
 | REQ-004 | 공유 포도송이 | 선택 공유판·별도 표시 정보·독립 개수·지인의 칭찬 | 개인 7/20·공유 3/10에서 지인 부여는 공유 4/10만, 개인 원본 비공개 | W09 |
@@ -36,12 +36,12 @@
 
 | 요구 ID | 필수 시나리오 |
 | --- | --- |
-| REQ-001 | TC-AUTH-001, TC-AUTH-002, TC-AUTH-003, TC-AUTH-004, TC-UX-002, TC-AUDIENCE-001 |
+| REQ-001 | TC-AUTH-001, TC-AUTH-002, TC-AUTH-003, TC-AUTH-004, TC-UX-002, TC-AUDIENCE-001, TC-PROFILE-001, TC-PROFILE-002 |
 | REQ-002 | TC-GOAL-001, TC-GOAL-002, TC-CYCLE-004, TC-DELETE-001, TC-UI-003 |
 | REQ-003 | TC-CYCLE-001, TC-CYCLE-002, TC-CYCLE-003, TC-TIME-001, TC-UI-003, TC-PRAISE-TAG-001, TC-PRAISE-TAG-002 |
 | REQ-004 | TC-GOAL-001, TC-CYCLE-001, TC-CYCLE-002, TC-CYCLE-003, TC-ACCESS-001, TC-PEER-RETRY-001 |
-| REQ-005 | TC-CONNECT-001, TC-CONNECT-002, TC-CONNECT-003, TC-UX-002, TC-API-007, TC-INVITE-RETRY-001 |
-| REQ-006 | TC-CONNECT-003, TC-ACCESS-001, TC-ACCESS-002, TC-ACCESS-003, TC-API-007, TC-PEER-RETRY-001 |
+| REQ-005 | TC-CONNECT-001, TC-CONNECT-002, TC-CONNECT-003, TC-UX-002, TC-API-007, TC-INVITE-RETRY-001, TC-PROFILE-002 |
+| REQ-006 | TC-CONNECT-003, TC-ACCESS-001, TC-ACCESS-002, TC-ACCESS-003, TC-API-007, TC-PEER-RETRY-001, TC-PROFILE-002 |
 | REQ-007 | TC-CYCLE-002, TC-PRAISE-001, TC-PRAISE-002, TC-TIME-001, TC-UI-003, TC-PRAISE-TAG-001 |
 | REQ-008 | TC-NOTIFY-001 |
 | REQ-009 | TC-PRAISE-002 |

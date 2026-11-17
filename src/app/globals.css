@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   color-scheme: light;
   --text-primary: #000;
@@ -262,3 +263,9 @@ dd { margin: 0; }
 .tag-editor p { margin: 0; }
 .record-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .record-tag { white-space: normal; margin-right: 6px; }
+
+.profile-dialog { width: min(28rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; margin: auto; padding: 1.5rem; border: 1px solid var(--border); border-radius: 1rem; }
+.profile-dialog::backdrop { background: rgb(0 0 0 / 35%); }
+.profile-dialog input, .profile-dialog select { min-height: 44px; width: 100%; }
+.profile-code { display: block; font-size: .75rem; color: var(--text-muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.profile-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }

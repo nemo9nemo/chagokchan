@@ -1,0 +1,266 @@
+{
+  "work_item": "W12-E",
+  "observed_client_date": "2026-11-17",
+  "status": "passed_local_and_staging_catalog_scope_real_Google_and_product_acceptance_pending",
+  "source_base": "0ef5802b702b1d6c9f1f1943ab18582c259761ad",
+  "references": [
+    "F-03",
+    "REQ-001",
+    "REQ-005",
+    "REQ-006",
+    "POL-ACCESS-001",
+    "POL-LIMIT-001",
+    "POL-CONNECT-001",
+    "TC-PROFILE-001",
+    "TC-PROFILE-002"
+  ],
+  "environment": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "next": "16.4.5",
+    "supabase_cli": "2.120.0",
+    "postgres": "17.11",
+    "local_migration_files_applied": 58,
+    "playwright": "1.65.1",
+    "browser": "installed_Microsoft_Edge",
+    "viewports": [
+      "1280x900",
+      "393x852_mobile_touch_emulation",
+      "320x740_dialog"
+    ]
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": {
+      "passed": 271,
+      "failed": 0
+    },
+    "production_check_build": "passed",
+    "artifact_structural_consistency": "passed",
+    "browser_mock": {
+      "passed": 72,
+      "shared_recovery": 26,
+      "invite_recovery": 28,
+      "profile": 18,
+      "actual_product_API_and_DB": false,
+      "screenshots_visually_reviewed": true,
+      "horizontal_dialog_overflow": 0,
+      "minimum_dialog_target_height_px": 44
+    },
+    "local_auth_profile": {
+      "verified_at": "2026-11-17T13:55:40.151Z",
+      "status": "passed",
+      "cases": [
+        {
+          "name": "issued_session_patch_and_partial_field_preservation",
+          "status": "passed"
+        },
+        {
+          "name": "unicode_boundary_and_invalid_values_leave_profile_unchanged",
+          "status": "passed"
+        },
+        {
+          "name": "bff_csrf_identity_rejection_and_real_rpc_save",
+          "status": "passed"
+        },
+        {
+          "name": "duplicate_names_distinct_preview_suffix_and_direct_dml_denial",
+          "status": "passed"
+        },
+        {
+          "name": "concurrent_partial_changes_preserve_both_fields_and_last_commit_wins",
+          "status": "passed"
+        },
+        {
+          "name": "per_user_quota_is_atomic_and_rejection_does_not_write",
+          "status": "passed"
+        },
+        {
+          "name": "revoked_issued_session_cannot_patch_even_with_unexpired_jwt",
+          "status": "passed"
+        },
+        {
+          "name": "rate_limiter_storage_failure_blocks_profile_write_and_rolls_back_permissions",
+          "status": "passed"
+        },
+        {
+          "name": "profile_waits_for_deletion_lock_then_rechecks_active_account",
+          "status": "passed"
+        }
+      ],
+      "executed": 9,
+      "failure": null,
+      "cleanup_passed": true,
+      "existing_data_sessions_and_roles_preserved": true,
+      "sessions_fabricated": false,
+      "service_role_used_for_app_rpc": false,
+      "real_google_tests_executed": 0
+    },
+    "pgTAP": {
+      "passed": 437,
+      "failed": 0,
+      "profile_suite": 11
+    },
+    "local_auth_connection_rpc": {
+      "passed": 13,
+      "existing_fixture_preserved": true
+    },
+    "connection_API_A_B_C": {
+      "passed": 36,
+      "fixture_writes": 0
+    },
+    "isolated_production_security_HTTP": {
+      "verified_at": "2026-11-17T13:52:37.102Z",
+      "scope": "isolated_production_http_headers_not_browser_or_real_auth_acceptance",
+      "next": "16.4.5",
+      "passed": 21,
+      "checks": [
+        {
+          "name": "HTML overwrites forged nonce/CSP and permits no inline scripts or eval",
+          "status": "passed"
+        },
+        {
+          "name": "all generated Next.js script tags carry the response nonce",
+          "status": "passed"
+        },
+        {
+          "name": "HTML nonce changes for every request and documents cannot be cached",
+          "status": "passed"
+        },
+        {
+          "name": "HTTPS deployment headers include HSTS, no-referrer, framing and device restrictions",
+          "status": "passed"
+        },
+        {
+          "name": "production rejects missing authentication and keeps API errors out of caches",
+          "status": "passed"
+        },
+        {
+          "name": "profile PATCH requires a current session before any write and cannot be cached",
+          "status": "passed"
+        },
+        {
+          "name": "service worker is revalidated with a script-free same-origin fetch policy",
+          "status": "passed"
+        },
+        {
+          "name": "only the public offline page is immutable and contains no executable scripts",
+          "status": "passed"
+        },
+        {
+          "name": "signed-out current logout clears separate secure Auth/CSRF cookies with no-store",
+          "status": "passed"
+        },
+        {
+          "name": "all-session logout requires a verified current identity",
+          "status": "passed"
+        },
+        {
+          "name": "logout rejects GET and missing CSRF without removing cookies",
+          "status": "passed"
+        },
+        {
+          "name": "signed-out HTML renders Google login without product records and is noindex",
+          "status": "passed"
+        },
+        {
+          "name": "Google start is a CSRF POST with a fixed PKCE callback and HttpOnly flow cookie",
+          "status": "passed"
+        },
+        {
+          "name": "OAuth cancellation, signed-out refresh and invite entry fail closed without caching",
+          "status": "passed"
+        },
+        {
+          "name": "deletion and reauth routes require a real session without issuing any cookie",
+          "status": "passed"
+        },
+        {
+          "name": "reauth cancellation uses a fixed path and signed-out deletion page requires login",
+          "status": "passed"
+        },
+        {
+          "name": "public information /about is available without auth, is noindex/no-store and sets no cookie",
+          "status": "passed"
+        },
+        {
+          "name": "public information /help is available without auth, is noindex/no-store and sets no cookie",
+          "status": "passed"
+        },
+        {
+          "name": "public information /privacy is available without auth, is noindex/no-store and sets no cookie",
+          "status": "passed"
+        },
+        {
+          "name": "public information /terms is available without auth, is noindex/no-store and sets no cookie",
+          "status": "passed"
+        },
+        {
+          "name": "public information /support is available without auth, is noindex/no-store and sets no cookie",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "issues_found_and_resolved": [
+    "Profile dialog keyboard focus was not restored: captured and restored the connected opener.",
+    "Dialog margin centered explicitly after visual review.",
+    "Test clicked SSR markup before hydration: await first mounted profile request instead of sleeps.",
+    "Invite fixtures corrected from 16 to actual 12 characters and full Me projection.",
+    "Legacy strict preview projection would reject a new field: successor SQL restores old two-field RPC and adds a separate profile preview RPC."
+  ],
+  "deployment_order": {
+    "hosted_SQL_prepared": true,
+    "new_SQL_files": [
+      "20261117112440_self_profile_settings.sql",
+      "20261117124012_profile_preview_backward_compatibility.sql"
+    ],
+    "apply_atomically_before_new_web": true,
+    "do_not_edit_applied_migrations": true
+  },
+  "codex_direct_review": "reviewed_normalization_current_session_identity_projection_columns_RLS_deletion_lock_partial_concurrency_rate_failure_privacy_and_old_new_RPC_compatibility",
+  "not_run": [
+    "real_Google_authentication",
+    "physical_iOS_Android_and_assistive_technology",
+    "public_release",
+    "hosted_profile_BFF_actual_submit",
+    "production_DB_rollout"
+  ],
+  "public_release_ready": false,
+  "source_sha256": {
+    "src/shared/profile.mjs": "be7a51701301b6d5d85afbb53c2bb3c6d7104682f00761cd1f600232159f542c",
+    "src/server/profile-api.mjs": "10f3be7a5fed1b04a4fcecfe19f7e359dfdefe0b134f882c90384619861775fc",
+    "src/server/app-session.ts": "0d083b908ee589cf462677a34af5756f0ea4a38a74c5c5be350dc094ca6227c9",
+    "src/server/connection-api.mjs": "abe594770e5745c6aa9c881435f451c70fbe2008cef83de6e8f162ef14aab5b5",
+    "src/app/api/v1/me/route.ts": "72277fc3d4173d59e0ca22b28d6670ea15d6b232910a28cec44f112eab2eeeaf",
+    "src/app/client-app.tsx": "9661d621379d56689fd44f5dbfd54dbdaaebaa8bf91935cf8ec0301980be52e1",
+    "src/app/profile-settings.tsx": "86322776ff0b8bc0d297a25f7d2ee677885194f20357bbd2ed8f053d077c2feb",
+    "src/app/globals.css": "97b48258bbd3da1ccddba8474dc49185f4d2a9fe19a599a7c37b2535d535e831",
+    "scripts/profile-api.test.mjs": "4aeeda267fa9c3193446bb76e608e965b7bd18c68028989149dfd1b2b2c4aa6e",
+    "scripts/test-local-profile.mjs": "ae27dc926cc8283642fc5f25a57ed2ec27bebac197df6a912cf6e7fbf5cc3d4e",
+    "scripts/ui/fixtures.mjs": "4d1d5bc13c92142b6844967ba5475848d1b5df2077b906afae227d38ce19c678",
+    "scripts/ui/profile-settings.spec.mjs": "0e45270c5dff69164cf3c25125e3993b5abfa8293bab625facfb246193f2768d",
+    "scripts/ui/invite-request.spec.mjs": "aaebd6c6902bb943216aeb2b9dfe61cb9c4ba44fa1f453ddf0f546630c9564d9",
+    "supabase/migrations/20261117112440_self_profile_settings.sql": "bf3ac99cfab1172fc4883f46a0ede284219e0deeb8b9929bbd8fb40489f91345",
+    "supabase/migrations/20261117124012_profile_preview_backward_compatibility.sql": "8b4aebdc3781574c6bbef096b105fb77139cfb38a95222fc6a2a03c2a3082316",
+    "supabase/tests/022_self_profile_settings.test.sql": "23ee3971ea9c444b441e6c156b14295091b43272ad7c0b420c7c99596c44aa9c"
+  },
+  "staging": {
+    "project": "dsjrqipbakluvdvgxide",
+    "resumed_from_paused_to": "ACTIVE_HEALTHY",
+    "atomic_profile_bundle_applied": true,
+    "migration_history_records": 57,
+    "source_migration_files_represented": 58,
+    "new_SQL_in_one_history_record": true,
+    "forced_product_RLS": 18,
+    "restricted_new_RPCs": 2,
+    "anonymous_new_RPC_execute": false,
+    "ordinary_direct_profile_DML": false,
+    "legacy_projection_preserved": true,
+    "auth_users": 0,
+    "app_accounts": 0,
+    "real_profile_BFF_submit_executed": false,
+    "plugin_permission": "inherit_default_Allow_low_risk_actions_no_override_for_profile_bundle"
+  }
+}

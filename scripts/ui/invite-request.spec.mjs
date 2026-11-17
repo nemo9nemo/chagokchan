@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { deferred, fulfill, prepare } from "./fixtures.mjs";
 
-const codeA = "AAAAAAAAAAAAAAAA", codeB = "BBBBBBBBBBBBBBBB", tokenA = "a".repeat(32);
+const codeA = "AAAAAAAAAAAA", codeB = "BBBBBBBBBBBB", tokenA = "a".repeat(32);
 const expires = "2030-01-01T00:00:00Z";
 const panel = page => page.locator(".connection-center");
 const codeInput = page => page.getByRole("textbox", { name: "받은 초대 코드" });
@@ -14,7 +14,7 @@ async function previewCode(page, code = codeA) {
 async function previewResponse({ route, request, path }) {
   if (path !== "/api/v1/connection-invites/preview") return false;
   const body = request.postDataJSON();
-  await fulfill(route, { inviter_nickname: body.code === codeB ? "합성 B" : "합성 A", expires_at: expires }); return true;
+  await fulfill(route, { inviter_nickname: body.code === codeB ? "합성 B" : "합성 A", inviter_display_code: body.code === codeB ? "BBBBBBBBBBBB" : "AAAAAAAAAAAA", expires_at: expires }); return true;
 }
 
 for (const flow of ["code", "link"]) {
@@ -110,7 +110,7 @@ test("a delayed A preview cannot replace the newer B preview", async ({ page }) 
   const entered = deferred(), release = deferred(), completed = deferred(), enteredB = deferred(), releaseB = deferred();
   const fixture = await prepare(page, async args => {
     if (args.path !== "/api/v1/connection-invites/preview") return false;
-    if (args.request.postDataJSON().code === codeA) { entered.resolve(); await release.promise; await fulfill(args.route, { inviter_nickname: "합성 A", expires_at: expires }); completed.resolve(); return true; }
+    if (args.request.postDataJSON().code === codeA) { entered.resolve(); await release.promise; await fulfill(args.route, { inviter_nickname: "합성 A", inviter_display_code: "AAAAAAAAAAAA", expires_at: expires }); completed.resolve(); return true; }
     enteredB.resolve(); await releaseB.promise; return previewResponse(args);
   });
   await page.getByRole("button", { name: "연결 관리", exact: true }).click();

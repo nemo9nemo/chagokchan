@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "local_features_verified_profile_and_product_acceptance_pending"
+      "status": "local_features_profile_and_staging_SQL_verified_product_acceptance_pending"
     },
     {
       "id": "S07",
@@ -91,13 +91,13 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 95,
-    "application_tests_executed": 264,
+    "planned_test_cases": 97,
+    "application_tests_executed": 271,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
     "business_acceptance_cases_executed": 0,
     "local_browser_smoke_cases_executed": 6,
-    "database_tests_executed": 426,
+    "database_tests_executed": 437,
     "rpc_boundary_tests_executed": 21,
     "local_session_tests_executed": 27,
     "local_api_tests_executed": 270,
@@ -1201,6 +1201,23 @@
         "scripts/ui/invite-request.spec.mjs",
         "docs/changes/2026-11-17-invite-request-recovery.md"
       ]
+    },
+    {
+      "id": "ART-048",
+      "title": "본인 표시 이름·아바타 설정과 공유 상대 구분·구버전 RPC 호환",
+      "status": "implemented_local_verified_staging_SQL_applied_real_acceptance_pending",
+      "paths": [
+        "docs/plans/W12-E-profile-settings.md",
+        "docs/decisions/ADR-0012-self-profile-settings.md",
+        "docs/quality/reports/w12-e-profile-settings-check-2026-11-17.json",
+        "scripts/profile-api.test.mjs",
+        "scripts/test-local-profile.mjs",
+        "scripts/ui/profile-settings.spec.mjs",
+        "supabase/migrations/20261117112440_self_profile_settings.sql",
+        "supabase/migrations/20261117124012_profile_preview_backward_compatibility.sql",
+        "supabase/tests/022_self_profile_settings.test.sql",
+        "docs/changes/2026-11-17-profile-settings.md"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1363,6 +1380,6 @@
     "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access",
     "vercel_plan": "Hobby_active_verified_Billing_UI_2026-11-10",
     "production_database": "kwzncrefatofwjzrqpma_free_Seoul_27_of_56_migrations_user_approved_provider_confirmation_expired",
-    "staging_database": "dsjrqipbakluvdvgxide_56_migrations_erasure_gate_false"
+    "staging_database": "dsjrqipbakluvdvgxide_active_57_history_records_58_source_migrations_profile_bundle_applied_erasure_gate_false"
   }
 }
