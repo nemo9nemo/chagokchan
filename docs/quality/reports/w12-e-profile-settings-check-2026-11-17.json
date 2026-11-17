@@ -228,24 +228,72 @@
     "production_DB_rollout"
   ],
   "public_release_ready": false,
-  "source_sha256": {
-    "src/shared/profile.mjs": "be7a51701301b6d5d85afbb53c2bb3c6d7104682f00761cd1f600232159f542c",
-    "src/server/profile-api.mjs": "10f3be7a5fed1b04a4fcecfe19f7e359dfdefe0b134f882c90384619861775fc",
-    "src/server/app-session.ts": "0d083b908ee589cf462677a34af5756f0ea4a38a74c5c5be350dc094ca6227c9",
-    "src/server/connection-api.mjs": "abe594770e5745c6aa9c881435f451c70fbe2008cef83de6e8f162ef14aab5b5",
-    "src/app/api/v1/me/route.ts": "72277fc3d4173d59e0ca22b28d6670ea15d6b232910a28cec44f112eab2eeeaf",
-    "src/app/client-app.tsx": "9661d621379d56689fd44f5dbfd54dbdaaebaa8bf91935cf8ec0301980be52e1",
-    "src/app/profile-settings.tsx": "86322776ff0b8bc0d297a25f7d2ee677885194f20357bbd2ed8f053d077c2feb",
-    "src/app/globals.css": "97b48258bbd3da1ccddba8474dc49185f4d2a9fe19a599a7c37b2535d535e831",
-    "scripts/profile-api.test.mjs": "4aeeda267fa9c3193446bb76e608e965b7bd18c68028989149dfd1b2b2c4aa6e",
-    "scripts/test-local-profile.mjs": "ae27dc926cc8283642fc5f25a57ed2ec27bebac197df6a912cf6e7fbf5cc3d4e",
-    "scripts/ui/fixtures.mjs": "4d1d5bc13c92142b6844967ba5475848d1b5df2077b906afae227d38ce19c678",
-    "scripts/ui/profile-settings.spec.mjs": "0e45270c5dff69164cf3c25125e3993b5abfa8293bab625facfb246193f2768d",
-    "scripts/ui/invite-request.spec.mjs": "aaebd6c6902bb943216aeb2b9dfe61cb9c4ba44fa1f453ddf0f546630c9564d9",
-    "supabase/migrations/20261117112440_self_profile_settings.sql": "bf3ac99cfab1172fc4883f46a0ede284219e0deeb8b9929bbd8fb40489f91345",
-    "supabase/migrations/20261117124012_profile_preview_backward_compatibility.sql": "8b4aebdc3781574c6bbef096b105fb77139cfb38a95222fc6a2a03c2a3082316",
-    "supabase/tests/022_self_profile_settings.test.sql": "23ee3971ea9c444b441e6c156b14295091b43272ad7c0b420c7c99596c44aa9c"
-  },
+  "source_sha256": [
+    {
+      "file": "src/shared/profile.mjs",
+      "sha256": "be7a51701301b6d5d85afbb53c2bb3c6d7104682f00761cd1f600232159f542c"
+    },
+    {
+      "file": "src/server/profile-api.mjs",
+      "sha256": "10f3be7a5fed1b04a4fcecfe19f7e359dfdefe0b134f882c90384619861775fc"
+    },
+    {
+      "file": "src/server/app-session.ts",
+      "sha256": "0d083b908ee589cf462677a34af5756f0ea4a38a74c5c5be350dc094ca6227c9"
+    },
+    {
+      "file": "src/server/connection-api.mjs",
+      "sha256": "abe594770e5745c6aa9c881435f451c70fbe2008cef83de6e8f162ef14aab5b5"
+    },
+    {
+      "file": "src/app/api/v1/me/route.ts",
+      "sha256": "72277fc3d4173d59e0ca22b28d6670ea15d6b232910a28cec44f112eab2eeeaf"
+    },
+    {
+      "file": "src/app/client-app.tsx",
+      "sha256": "9661d621379d56689fd44f5dbfd54dbdaaebaa8bf91935cf8ec0301980be52e1"
+    },
+    {
+      "file": "src/app/profile-settings.tsx",
+      "sha256": "86322776ff0b8bc0d297a25f7d2ee677885194f20357bbd2ed8f053d077c2feb"
+    },
+    {
+      "file": "src/app/globals.css",
+      "sha256": "97b48258bbd3da1ccddba8474dc49185f4d2a9fe19a599a7c37b2535d535e831"
+    },
+    {
+      "file": "scripts/profile-api.test.mjs",
+      "sha256": "4aeeda267fa9c3193446bb76e608e965b7bd18c68028989149dfd1b2b2c4aa6e"
+    },
+    {
+      "file": "scripts/test-local-profile.mjs",
+      "sha256": "ae27dc926cc8283642fc5f25a57ed2ec27bebac197df6a912cf6e7fbf5cc3d4e"
+    },
+    {
+      "file": "scripts/ui/fixtures.mjs",
+      "sha256": "4d1d5bc13c92142b6844967ba5475848d1b5df2077b906afae227d38ce19c678"
+    },
+    {
+      "file": "scripts/ui/profile-settings.spec.mjs",
+      "sha256": "0e45270c5dff69164cf3c25125e3993b5abfa8293bab625facfb246193f2768d"
+    },
+    {
+      "file": "scripts/ui/invite-request.spec.mjs",
+      "sha256": "aaebd6c6902bb943216aeb2b9dfe61cb9c4ba44fa1f453ddf0f546630c9564d9"
+    },
+    {
+      "file": "supabase/migrations/20261117112440_self_profile_settings.sql",
+      "sha256": "bf3ac99cfab1172fc4883f46a0ede284219e0deeb8b9929bbd8fb40489f91345"
+    },
+    {
+      "file": "supabase/migrations/20261117124012_profile_preview_backward_compatibility.sql",
+      "sha256": "8b4aebdc3781574c6bbef096b105fb77139cfb38a95222fc6a2a03c2a3082316"
+    },
+    {
+      "file": "supabase/tests/022_self_profile_settings.test.sql",
+      "sha256": "23ee3971ea9c444b441e6c156b14295091b43272ad7c0b420c7c99596c44aa9c"
+    }
+  ],
   "staging": {
     "project": "dsjrqipbakluvdvgxide",
     "resumed_from_paused_to": "ACTIVE_HEALTHY",
@@ -262,5 +310,15 @@
     "app_accounts": 0,
     "real_profile_BFF_submit_executed": false,
     "plugin_permission": "inherit_default_Allow_low_risk_actions_no_override_for_profile_bundle"
+  },
+  "secret_scan_review": {
+    "historical_commit": "fc62e0929fd9f8c78f9351515d5676ecd41bbb61",
+    "false_positive_lines": [
+      233,
+      235,
+      240
+    ],
+    "classification": "public_source_SHA256_verified_against_files",
+    "exception_scope": "three_exact_historical_fingerprints_only"
   }
 }
