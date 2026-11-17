@@ -5,7 +5,7 @@ export const boardB = { ...boardA, id: "22222222-2222-4222-8222-222222222222", s
 export const deferred = () => { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; };
 export const fulfill = (route, body, status = 200) => route.fulfill({ status, json: body, headers: { "Cache-Control": "no-store" } });
 
-export async function prepare(page, custom = async () => false) {
+export async function prepare(page, custom = async () => false, initialPath = "/") {
   const unexpected = [];
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -29,7 +29,7 @@ export async function prepare(page, custom = async () => false) {
     unexpected.push(`${request.method()} ${path}`);
     await route.abort("blockedbyclient");
   });
-  await page.goto("/");
+  await page.goto(initialPath);
   await expect(page.getByRole("button", { name: "받은 공유판", exact: true })).toBeVisible();
   return { check: () => { expect(unexpected).toEqual([]); expect(errors).toEqual([]); } };
 }

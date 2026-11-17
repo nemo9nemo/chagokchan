@@ -2080,6 +2080,26 @@
       "expected": "판·본문·키가 섞이지 않고 같은 판/키는 한 건만 처리. 이전 조회는 현재 화면을 덮어쓰지 않음. 실제 DB/Google/물리 기기 수락과 별도.",
       "status": "passed",
       "evidence": "reports/w09-e-shared-praise-recovery-check-2026-11-17.json"
+    },
+    {
+      "id": "TC-INVITE-RETRY-001",
+      "requirement_ids": [
+        "REQ-005"
+      ],
+      "policy_ids": [
+        "POL-CONNECT-001",
+        "POL-SEC-001"
+      ],
+      "level": "browser_mock",
+      "title": "초대 코드·링크 요청의 전송/재시도 분리와 대상 확인",
+      "steps": [
+        "합성 API를 사용하는 별도 loopback 브라우저 서버에서 코드/링크 미리보기를 확인한다.",
+        "미도달/응답 유실/429/503 뒤 같은 초대·본문·키로 재시도하고 생성 한 건을 확인한다.",
+        "코드 수정·중복 form 이벤트·불확실 요청 닫기·늦은 미리보기·별도 본인 초대 보존·확정 거절과 기존 공유 칭찬 회귀를 확인한다."
+      ],
+      "expected": "보낼 수 있는 재시도 버튼, 동일 대상/키 한 건 처리, 확인한 미리보기와 요청 대상 일치. 실제 Auth/DB/Google 수락과 별도.",
+      "status": "passed",
+      "evidence": "reports/w09-f-invite-request-recovery-check-2026-11-17.json"
     }
   ],
   "updated_on": "2026-11-17"

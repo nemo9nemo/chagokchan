@@ -1,0 +1,140 @@
+{
+  "work_item": "W09-F",
+  "observed_client_date": "2026-11-17",
+  "status": "passed_local_scope_not_release_acceptance",
+  "source_base": "36fbfafaea138247efefac57fd67a64a60147bb7",
+  "references": [
+    "F-02",
+    "REQ-005",
+    "POL-CONNECT-001",
+    "POL-SEC-001",
+    "TC-INVITE-RETRY-001"
+  ],
+  "environment": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "playwright": "1.65.1",
+    "browser": "installed_Microsoft_Edge_channel",
+    "viewports": [
+      "1280x900",
+      "393x852_mobile_touch_emulation"
+    ]
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": {
+      "passed": 264,
+      "failed": 0
+    },
+    "production_check_build": "passed",
+    "artifact_structural_consistency": "passed_final_document_sync",
+    "browser_mock": {
+      "passed": 54,
+      "invite_recovery": 28,
+      "shared_recovery_regression": 26,
+      "failed": 0,
+      "skipped": 0,
+      "actual_product_API_and_DB": false
+    },
+    "local_auth_connection_rpc": {
+      "verified_at": "2026-11-17T11:15:03.478Z",
+      "scope": "w06_c1_invites_requests_connections_blocks_and_acceptance_capacity_with_issued_auth_sessions",
+      "status": "passed",
+      "executed": 13,
+      "passed": 13,
+      "cases": [
+        {
+          "name": "invite_secret_shape_hash_ttl_preview_and_active_cap",
+          "status": "passed"
+        },
+        {
+          "name": "invite_daily_quota_is_atomic_and_revocation_releases_active_slot",
+          "status": "passed"
+        },
+        {
+          "name": "request_rate_limits_rollback_receipt_and_preserve_invite_for_retry",
+          "status": "passed"
+        },
+        {
+          "name": "single_use_invite_request_idempotency_and_approval_boundary",
+          "status": "passed"
+        },
+        {
+          "name": "accept_replay_generation_and_safe_connected_profile_projection",
+          "status": "passed"
+        },
+        {
+          "name": "active_connection_rejects_new_request_without_consuming_invite",
+          "status": "passed"
+        },
+        {
+          "name": "disconnect_is_idempotent_and_reconnect_increments_generation",
+          "status": "passed"
+        },
+        {
+          "name": "block_closes_relation_hides_invite_and_unblock_never_restores",
+          "status": "passed"
+        },
+        {
+          "name": "blocking_pending_request_cancels_it_and_unblock_does_not_reopen",
+          "status": "passed"
+        },
+        {
+          "name": "reverse_direction_concurrent_requests_keep_one_pending_and_rollback_loser_invite",
+          "status": "passed"
+        },
+        {
+          "name": "one_invite_competed_by_two_users_is_consumed_once",
+          "status": "passed"
+        },
+        {
+          "name": "notification_and_relationship_lists_are_recipient_and_party_scoped",
+          "status": "passed"
+        },
+        {
+          "name": "active_connection_ceiling_serializes_two_competing_accepts",
+          "status": "passed"
+        }
+      ],
+      "failure_detail": null,
+      "cleanup_passed": true,
+      "existing_fixture_data_preserved": true,
+      "synthetic_probe_accounts_and_sessions_removed": true,
+      "sessions_fabricated": false,
+      "service_role_used_for_app_rpc": false,
+      "provider_login_tests_executed": 0
+    },
+    "unchanged_backend_baseline": "W09-E_DB426_API_board42_praise10_connection36_HTTP20"
+  },
+  "resolved_existing_findings": [
+    "attempt_retention_disabled_retry_button",
+    "editing_code_after_preview_changed_request_target_without_reconfirmation",
+    "late_preview_could_replace_new_code_or_cancelled_view"
+  ],
+  "reviewed_regression_boundaries": [
+    "same_tick_submit_guard_and_finally_release",
+    "successful_request_cleanup_preserves_separately_created_invite_secret",
+    "closing_uncertain_request_does_not_withdraw_it",
+    "temporary_pending_invite_reference_cleared_on_success_or_explicit_close",
+    "shared_praise_state_is_unchanged_by_invite_request_lifecycle"
+  ],
+  "code_sha256": {
+    "src/app/client-app.tsx": "4beb9cd298e0bfa6d49f1526969206ac575a7e94b660260e65cce2245b695d63",
+    "scripts/ui/fixtures.mjs": "256f322f9b8569d956031cb767939a1c143168277868a6e2593d257bcfc2cc95",
+    "scripts/ui/invite-request.spec.mjs": "c4c632e92ce0006e18765b5e1f89a2bef9b24b0bd697723970d78c9d68e567af"
+  },
+  "review": {
+    "reviewer": "Codex_direct",
+    "unresolved_change_scope_defect_found": false
+  },
+  "not_run": [
+    "real_Google_authentication",
+    "deployed_HTTPS_browser_acceptance",
+    "physical_mobile_devices",
+    "hosted_backup_restore"
+  ],
+  "schema_or_API_contract_changed": false,
+  "production_database_changed": false,
+  "public_release_ready": false
+}
