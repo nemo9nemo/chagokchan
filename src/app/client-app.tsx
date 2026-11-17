@@ -48,7 +48,7 @@ class ApiFailure extends Error {
 function ConnectionsPanel(props: {
   loading: boolean; error: string; connections: Connection[]; invites: InviteMeta[]; requests: ConnectionRequest[]; blocks: Block[];
   inviteResult: ConnectionInvite | null; invitePreview: { inviter_nickname: string; expires_at: string } | null;
-  inviteToken: string; inviteCode: string; previewError: string; previewLoading: boolean; requestAttempt: boolean;
+  inviteToken: string; inviteCode: string; previewError: string; previewLoading: boolean; requestAttempt: boolean; requestSending: boolean;
   onCreateInvite: () => void; onRefresh: () => void; onPreview: (secret: { link_token: string } | { code: string }) => void; onInviteCodeChange: (value: string) => void;
   onRequest: (event?: FormEvent<HTMLFormElement>) => void; onClearInvite: () => void;
   onResolveRequest: (item: ConnectionRequest, action: "accept" | "reject" | "cancel") => void;
@@ -63,28 +63,28 @@ function ConnectionsPanel(props: {
     void navigator.clipboard?.writeText(`${window.location.origin}${props.inviteResult.link_path}`);
   };
 
-  return <section className="content-card connection-center" aria-labelledby="connections-heading" aria-busy={props.loading || props.previewLoading}>
+  return <section className="content-card connection-center" aria-labelledby="connections-heading" aria-busy={props.loading || props.previewLoading || props.requestSending}>
     <p className="eyebrow">PEOPLE & PERMISSIONS</p><h2 id="connections-heading">연결 관리</h2>
     <p className="section-intro">연결을 맺은 것만으로 목표가 공유되지는 않아요. 공유판마다 따로 권한을 선택해요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
     {props.previewError && <p className="form-error" role="alert">{props.previewError}</p>}
 
     <section className="connection-section" aria-labelledby="invite-heading">
-      <div className="settings-title invite-heading-row"><div><p className="eyebrow">ONE-TIME INVITE</p><h3 id="invite-heading">초대 링크 만들기</h3></div><button className="button button-primary" type="button" onClick={props.onCreateInvite}>초대 만들기</button></div>
+      <div className="settings-title invite-heading-row"><div><p className="eyebrow">ONE-TIME INVITE</p><h3 id="invite-heading">초대 링크 만들기</h3></div><button className="button button-primary" type="button" disabled={props.requestSending} onClick={props.onCreateInvite}>초대 만들기</button></div>
       <p className="field-hint">링크나 코드로 요청을 보낼 수 있어요. 사용 기한은 초대 응답에 표시돼요.</p>
       {props.inviteResult && <div className="invite-secret" role="status">
         <b>이번 탭에서만 확인할 수 있는 초대예요</b>
         <label htmlFor="invite-link">초대 링크</label><div className="invite-link-row"><input id="invite-link" readOnly value={`${typeof window === "undefined" ? "" : window.location.origin}${props.inviteResult.link_path}`} /><button className="button button-secondary" type="button" onClick={copyInvite}>링크 복사</button></div>
         <p>초대 코드 <strong>{props.inviteResult.code}</strong> · {shortDate(props.inviteResult.expires_at)}까지</p>
-        <div className="form-actions"><a className="button button-secondary" href={props.inviteResult.link_path} target="_blank" rel="noreferrer">초대 링크 열기</a><button className="text-button" type="button" onClick={props.onClearInvite}>초대 정보 닫기</button></div>
+        <div className="form-actions"><a className="button button-secondary" href={props.inviteResult.link_path} target="_blank" rel="noreferrer">초대 링크 열기</a><button className="text-button" type="button" disabled={props.requestSending} onClick={props.onClearInvite}>초대 정보 닫기</button></div>
       </div>}
       <form className="invite-code-form" onSubmit={(event) => { event.preventDefault(); props.onPreview({ code: props.inviteCode.trim().replaceAll("-", "") }); }}>
-        <label htmlFor="connection-invite-code">받은 초대 코드</label><div className="invite-link-row"><input id="connection-invite-code" autoComplete="off" maxLength={17} value={props.inviteCode} onChange={(event) => props.onInviteCodeChange(event.target.value)} placeholder="초대 코드 입력" /><button className="button button-secondary" type="submit" disabled={!props.inviteCode.trim() || props.previewLoading}>초대 확인</button></div>
+        <label htmlFor="connection-invite-code">받은 초대 코드</label><div className="invite-link-row"><input id="connection-invite-code" disabled={props.requestSending || props.requestAttempt} autoComplete="off" maxLength={17} value={props.inviteCode} onChange={(event) => props.onInviteCodeChange(event.target.value)} placeholder="초대 코드 입력" /><button className="button button-secondary" type="submit" disabled={!props.inviteCode.trim() || props.previewLoading || props.requestSending || props.requestAttempt}>초대 확인</button></div>
       </form>
       {props.previewLoading && <p className="loading-inline" role="status">초대를 확인하고 있어요.</p>}
       {props.invitePreview && <form className="invite-preview" onSubmit={props.onRequest}>
         <p><b>{props.invitePreview.inviter_nickname}</b> 님의 초대예요.</p><p>만료 {shortDate(props.invitePreview.expires_at)} · 연결 요청을 보내면 상대가 수락할 때 연결돼요.</p>
-        <div className="form-actions"><button className="button button-secondary" type="button" onClick={props.onClearInvite}>취소</button><button className="button button-primary" type="submit" disabled={props.requestAttempt}>{props.requestAttempt ? "같은 요청 다시 보내기" : "연결 요청 보내기"}</button></div>
+        <div className="form-actions"><button className="button button-secondary" type="button" disabled={props.requestSending} onClick={props.onClearInvite}>취소</button><button className="button button-primary" type="submit" disabled={props.requestSending || props.previewLoading}>{props.requestSending ? "요청 보내는 중…" : props.requestAttempt ? "같은 요청 다시 보내기" : "연결 요청 보내기"}</button></div>
       </form>}
     </section>
 
@@ -379,6 +379,11 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   const [invitePreviewError, setInvitePreviewError] = useState("");
   const [invitePreviewLoading, setInvitePreviewLoading] = useState(false);
   const [inviteRequestAttempt, setInviteRequestAttempt] = useState<IdempotentAttempt | null>(null);
+  const inviteAttemptRef = useRef<IdempotentAttempt | null>(null);
+  const invitePreviewSecret = useRef<{ link_token: string } | { code: string } | null>(null);
+  const invitePreviewSequence = useRef(0);
+  const inviteOperation = useRef(false);
+  const [inviteRequestSending, setInviteRequestSending] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const [managingBoardId, setManagingBoardId] = useState("");
   const [boardMembers, setBoardMembers] = useState<BoardMember[]>([]);
@@ -415,6 +420,9 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
       mounted.current = false;
       sharedBoardRequestSeq.current++;
       sharedListRequestSeq.current++;
+      invitePreviewSequence.current++;
+      invitePreviewSecret.current = null;
+      inviteAttemptRef.current = null;
       peerDraftsRef.current = {};
     };
   }, []);
@@ -428,7 +436,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }
 
   const closeSharedBoard = useCallback(() => {
-    if (peerOperation.current) return;
+    if (peerOperation.current || inviteOperation.current) return;
     sharedBoardRequestSeq.current++;
     praiseRequestSeq.current++;
     sharedBoardOpening.current = false;
@@ -441,7 +449,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }, []);
 
   const navigateWorkspace = useCallback((view: WorkspaceView) => {
-    if (peerOperation.current) return;
+    if (peerOperation.current || inviteOperation.current) return;
     closeSharedBoard();
     setWorkspaceView(view);
   }, [closeSharedBoard]);
@@ -642,6 +650,28 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     if (workspaceView === "trash") void loadTrashGoals();
   }, [workspaceView, refreshConnectionCenter, loadSharedBoards, loadTrashGoals]);
 
+  const previewInvite = useCallback(async (secret: { link_token: string } | { code: string }) => {
+    if (inviteOperation.current || inviteAttemptRef.current) return;
+    const sequence = ++invitePreviewSequence.current;
+    invitePreviewSecret.current = null;
+    setInvitePreview(null);
+    setInvitePreviewError("");
+    setInvitePreviewLoading(true);
+    if ("link_token" in secret) { setInviteToken(secret.link_token); setInviteCode(""); }
+    else { setInviteToken(""); setInviteCode(secret.code); }
+    try {
+      const preview = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", secret);
+      if (!mounted.current || sequence !== invitePreviewSequence.current) return;
+      invitePreviewSecret.current = { ...secret };
+      setInvitePreview(preview);
+      setConnectionError("");
+    } catch (error) {
+      if (mounted.current && sequence === invitePreviewSequence.current) setInvitePreviewError(errorMessage(error));
+    } finally {
+      if (mounted.current && sequence === invitePreviewSequence.current) setInvitePreviewLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!pendingInviteLoad.current) {
       const match = /^#invite=([A-Za-z0-9_-]{32})$/.exec(window.location.hash);
@@ -654,15 +684,12 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     async function preview() {
       const token = await pendingInviteLoad.current;
       if (!token || !active) return;
-      navigateWorkspace("connections"); setInviteToken(token); setInvitePreviewLoading(true);
-      try {
-        const result = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", { link_token: token });
-        if (active) setInvitePreview(result);
-      } finally { if (active) setInvitePreviewLoading(false); }
+      navigateWorkspace("connections");
+      await previewInvite({ link_token: token });
     }
     void preview().catch(error => { if (active) setInvitePreviewError(errorMessage(error)); });
     return () => { active = false; };
-  }, [deployedAuth, navigateWorkspace]);
+  }, [deployedAuth, navigateWorkspace, previewInvite]);
 
   const loadGoals = useCallback(async (cursor: string | null = null, append = false) => {
     setLoadingGoals(true);
@@ -790,25 +817,8 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     }
   }
 
-  async function previewInvite(secret: { link_token: string } | { code: string }) {
-    setInvitePreview(null);
-    setInvitePreviewError("");
-    setInviteRequestAttempt(null);
-    setInvitePreviewLoading(true);
-    try {
-      if ("link_token" in secret) { setInviteToken(secret.link_token); setInviteCode(""); }
-      else setInviteToken("");
-      const preview = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", secret);
-      setInvitePreview(preview);
-      setConnectionError("");
-    } catch (error) {
-      setInvitePreviewError(errorMessage(error));
-    } finally {
-      setInvitePreviewLoading(false);
-    }
-  }
-
   async function createInvite() {
+    if (inviteOperation.current) return;
     setConnectionError("");
     setInviteResult(null);
     try {
@@ -821,40 +831,76 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     }
   }
 
-  async function requestConnection(event?: FormEvent<HTMLFormElement>) {
-    event?.preventDefault();
-    const secret = inviteToken ? { link_token: inviteToken } : { code: inviteCode.trim().replaceAll("-", "") };
-    if (!("link_token" in secret) && !secret.code) return;
-    const payload = inviteRequestAttempt?.body ?? secret;
-    const attempt = createIdempotentRequest(payload, inviteRequestAttempt, newRequestKey);
+  function setInviteAttempt(attempt: IdempotentAttempt | null) {
+    inviteAttemptRef.current = attempt;
     setInviteRequestAttempt(attempt);
-    setInvitePreviewError("");
-    try {
-      await mutate("/api/v1/connection-requests", "POST", attempt.body, attempt.key);
-      setInviteRequestAttempt(null);
-      setInviteToken("");
-      setInviteCode("");
-      setInvitePreview(null);
-      setInvitePreviewError("");
-      setNotice("연결 요청을 보냈어요. 상대가 수락하면 연결돼요.");
-      await refreshConnectionCenter();
-    } catch (error) {
-      if (mutationOutcome(error) === "retry_same_key") {
-        setInvitePreviewError(`${errorMessage(error)} 같은 요청 키와 내용을 유지했어요.`);
-      } else {
-        setInviteRequestAttempt(null);
-        setInvitePreviewError(errorMessage(error));
-      }
-    }
   }
 
-  function clearInviteSecret() {
+  function resetInviteSecret(clearCreated = false) {
+    pendingInviteLoad.current = Promise.resolve(null);
+    invitePreviewSequence.current++;
+    invitePreviewSecret.current = null;
+    setInviteAttempt(null);
     setInviteToken("");
     setInviteCode("");
     setInvitePreview(null);
     setInvitePreviewError("");
-    setInviteRequestAttempt(null);
-    setInviteResult(null);
+    setInvitePreviewLoading(false);
+    if (clearCreated) setInviteResult(null);
+  }
+
+  async function requestConnection(event?: FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
+    if (inviteOperation.current) return;
+    const payload = inviteAttemptRef.current?.body ?? invitePreviewSecret.current;
+    if (!payload) return;
+    const attempt = createIdempotentRequest(payload, inviteAttemptRef.current, newRequestKey);
+    inviteOperation.current = true;
+    setInviteAttempt(attempt);
+    setInviteRequestSending(true);
+    setInvitePreviewError("");
+    let succeeded = false;
+    try {
+      await mutate("/api/v1/connection-requests", "POST", attempt.body, attempt.key);
+      if (!mounted.current) return;
+      succeeded = true;
+      resetInviteSecret();
+      setNotice("연결 요청을 보냈어요. 상대가 수락하면 연결돼요.");
+    } catch (error) {
+      if (!mounted.current) return;
+      if (mutationOutcome(error) === "retry_same_key") {
+        setInvitePreviewError(`${errorMessage(error)} 같은 초대로 요청 결과를 다시 확인할 수 있어요.`);
+      } else {
+        setInviteAttempt(null);
+        setInvitePreviewError(errorMessage(error));
+      }
+    } finally {
+      inviteOperation.current = false;
+      if (mounted.current) setInviteRequestSending(false);
+    }
+    if (succeeded && mounted.current) await refreshConnectionCenter();
+  }
+
+  function clearInviteSecret() {
+    if (inviteOperation.current) return;
+    const uncertain = inviteAttemptRef.current !== null;
+    if (uncertain && !window.confirm("요청 결과를 아직 확인하지 못했어요. 초대 정보를 닫아도 이미 접수된 요청은 철회되지 않아요. 닫을까요?")) return;
+    resetInviteSecret(true);
+    if (uncertain) {
+      setNotice("초대 정보를 닫았어요. 접수된 요청은 연결 요청 목록에서 확인하고 철회할 수 있어요.");
+      void refreshConnectionCenter();
+    }
+  }
+
+  function changeInviteCode(value: string) {
+    if (inviteOperation.current || inviteAttemptRef.current) return;
+    invitePreviewSequence.current++;
+    invitePreviewSecret.current = null;
+    setInviteCode(value);
+    setInviteToken("");
+    setInvitePreview(null);
+    setInvitePreviewError("");
+    setInvitePreviewLoading(false);
   }
 
   async function resolveConnectionRequest(request: ConnectionRequest, action: "accept" | "reject" | "cancel") {
@@ -934,7 +980,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }
 
   async function openSharedBoard(boardId: string, preferredBunchId?: string) {
-    if (peerOperation.current) return;
+    if (peerOperation.current || inviteOperation.current) return;
     const sequence = ++sharedBoardRequestSeq.current;
     praiseRequestSeq.current++;
     sharedBoardOpening.current = true;
@@ -1281,7 +1327,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }
 
   function returnToBoards() {
-    if (peerOperation.current) return;
+    if (peerOperation.current || inviteOperation.current) return;
     goalRequestSeq.current += 1; praiseRequestSeq.current += 1;
     selectedGoalIdRef.current = null;
     setSelectedGoalId(null); setDetail(null); setLoadingDetail(false);
@@ -1294,7 +1340,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     setSavedPraise(null); setShowPraise(true);
   }
 
-  const interactionLocked = loadingDetail || praiseSending || Boolean(praiseAttempt) || peerSending;
+  const interactionLocked = loadingDetail || praiseSending || Boolean(praiseAttempt) || peerSending || inviteRequestSending;
   const sharedBoard = detail?.boards.find((board) => board.kind === "shared");
   const canAddPraise = !loadingDetail && detail?.goal.id === selectedGoalId && selectedBoard?.kind === "personal" && selectedGoal?.status === "active" &&
     (!selectedBunch || selectedBunch.id === selectedBoard.current_bunch?.id);
@@ -1340,9 +1386,9 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
             loading={connectionLoading} error={connectionError} connections={connections} invites={connectionInvites}
             requests={connectionRequests} blocks={blocks} inviteResult={inviteResult} invitePreview={invitePreview}
             inviteToken={inviteToken} inviteCode={inviteCode} previewError={invitePreviewError}
-            previewLoading={invitePreviewLoading} requestAttempt={inviteRequestAttempt !== null}
+            previewLoading={invitePreviewLoading} requestAttempt={inviteRequestAttempt !== null} requestSending={inviteRequestSending}
             onCreateInvite={() => void createInvite()} onPreview={(secret) => void previewInvite(secret)}
-            onRefresh={() => void refreshConnectionCenter()} onInviteCodeChange={setInviteCode} onRequest={requestConnection} onClearInvite={clearInviteSecret}
+            onRefresh={() => void refreshConnectionCenter()} onInviteCodeChange={changeInviteCode} onRequest={requestConnection} onClearInvite={clearInviteSecret}
             onResolveRequest={(item, action) => void resolveConnectionRequest(item, action)}
             onDisconnect={(item) => void disconnectConnection(item)} onBlock={(userId) => void blockUser(userId)}
             onRevokeBlock={(item) => void revokeBlock(item)} onRevokeInvite={(item) => void revokeInvite(item)}

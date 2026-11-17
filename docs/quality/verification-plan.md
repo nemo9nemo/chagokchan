@@ -1,5 +1,7 @@
 # 검증 계획과 증거 기준
 
+2026-11-17 W09-F: TC-INVITE-RETRY-001 합성 API 브라우저 28건과 W09-E 회귀 26건(합계 54)·unit 264·실제 로컬 연결 RPC 13·check/build를 통과했다. 실제 Google/운영 수락과 별도다. [증거](reports/w09-f-invite-request-recovery-check-2026-11-17.json).
+
 2026-11-17 W09-E: TC-PEER-RETRY-001은 실제 브라우저와 합성 API를 사용하는 대상·초안·재시도 회귀다. 실제 Auth/DB E2E·Google·물리 기기 검사를 대체하지 않는다. [범위](../plans/W09-E-shared-praise-recovery.md).
 
 2026-11-09 W27-B: TC 84개 중 범위 한정 passed 45·not_run 39. 보안 런타임/포트/가상 모드 격리 TC-DEPLOY-RUNTIME-001을 추가했고 전체 unit 206·production-check 빌드·보안 HTTP 10·audit를 검증했다. 실제 Google·클라우드 세션/기기·복원·제품 수락 상태는 올리지 않는다. [증거](reports/w27-b-runtime-security-check-2026-11-09.json)
