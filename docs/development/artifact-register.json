@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-11-11",
+  "updated_on": "2026-11-17",
   "current_stage": "S07_protected_https_staging_deployed_google_and_operations_acceptance_pending",
   "next_stage": "protected_https_staging_ops_ledger_worker_rate_protection_real_google_and_final_public_policy_pending",
   "implementation_started": true,
@@ -91,7 +91,7 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 92,
+    "planned_test_cases": 93,
     "application_tests_executed": 264,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
@@ -122,7 +122,7 @@
     "w06_d2_pgtap_tests_executed": 32,
     "w06_d2_local_session_tests_executed": 6,
     "w06_d2_report": "docs/quality/reports/w06-d2-account-deletion-check-2026-10-08.json",
-    "technical_cases_passed": 52,
+    "technical_cases_passed": 53,
     "w11_c_report": "docs/quality/reports/w11-c-pwa-cache-check-2026-10-08.json",
     "w11_b2_mobile_report": "docs/quality/reports/w11-b2-mobile-emulation-check-2026-10-09.json",
     "w11_b2_viewport_screen_views_verified": 30,
@@ -348,6 +348,13 @@
       "new_crypto_units": 4,
       "hosted_backup_schedule_configured": false,
       "hosted_restore_acceptance_executed": false
+    },
+    "w14_d1": {
+      "status": "production_27_of_56_read_only_catalog_verified_provider_confirmation_expired",
+      "report": "docs/quality/reports/w14-d1-production-progress-check-2026-11-17.json",
+      "user_role_and_sql_approval_received": true,
+      "temporary_plugin_permission_restored": true,
+      "public_release_ready": false
     }
   },
   "artifacts": [
@@ -1153,6 +1160,17 @@
         "package.json",
         "scripts/project.ps1"
       ]
+    },
+    {
+      "id": "ART-045",
+      "title": "승인된 운영 DB 부분 적용·읽기 전용 권한 점검·공개 잔여 순서",
+      "status": "catalog_verified_production_27_of_56_rollout_incomplete",
+      "paths": [
+        "docs/quality/reports/w14-d1-production-progress-check-2026-11-17.json",
+        "scripts/inspect-hosted-database.sql",
+        "docs/development/release-next-steps.md",
+        "docs/changes/2026-11-17-production-schema-progress.md"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1314,7 +1332,7 @@
     "email_otp": "deferred_until_sender_setup",
     "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access",
     "vercel_plan": "Hobby_active_verified_Billing_UI_2026-11-10",
-    "production_database": "kwzncrefatofwjzrqpma_free_Seoul_3_migrations_then_auto_review_role_grant_approval_pending",
+    "production_database": "kwzncrefatofwjzrqpma_free_Seoul_27_of_56_migrations_user_approved_provider_confirmation_expired",
     "staging_database": "dsjrqipbakluvdvgxide_56_migrations_erasure_gate_false"
   }
 }

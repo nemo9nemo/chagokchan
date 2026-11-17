@@ -2038,7 +2038,28 @@
       "expected": "로컬 계정 복원 경계만 통과로 기록하고 호스팅 자동 백업·목표/취소 원장·운영 복원/스케줄 재개는 별도다.",
       "status": "passed",
       "evidence": "reports/w14-c2a-account-restore-check-2026-11-11.json"
+    },
+    {
+      "id": "TC-OPS-CATALOG-001",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-SEC-001",
+        "POL-DELETE-003"
+      ],
+      "level": "read_only_hosted_catalog_partial_rollout_detection",
+      "title": "부분 적용 운영 DB와 완성 스테이징의 권한/준비 상태 구분",
+      "steps": [
+        "실제 적용 이력과 사용자 수·제품 RLS·직접 DML·함수 소유자/경로·내부 역할 전환을 읽기 전용 조회한다.",
+        "운영 worker 구성 부재를 허위 gate 검증 완료로 바꾸지 않고 남은 SQL을 기록한다.",
+        "임시 Supabase 권한이 기본 설정 상속으로 돌아왔는지 확인한다."
+      ],
+      "expected": "메타데이터 범위만 통과로 기록한다. 나머지 적용·실제 Google/제품·운영 원장/복원·공개 수락은 별도다.",
+      "status": "passed",
+      "evidence": "reports/w14-d1-production-progress-check-2026-11-17.json"
     }
   ],
-  "updated_on": "2026-11-11"
+  "updated_on": "2026-11-17"
 }

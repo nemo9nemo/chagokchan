@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-17 W14-D1: 사용자 작업 승인과 Supabase 임시 전체 허용 후 원복 승인을 받았다. 같은 권한·대상·검토 목록의 승인을 다시 묻지 않는다. 실제 운영 DB는 27/56개까지 적용됐고 다음 20261008023100 SQL의 공급자 확인이 10분 뒤 만료되어 29개 남았다. 사용자에게 별도 확인 창이 보이지 않는다는 답변을 받았다. 재개 전과 마지막 실행 finally의 권한 원복을 조회 확인했다. 처음 중단 시 즉시 원복은 미관측이다. readonly catalog에서 운영/staging 27/56, 양쪽 RLS 18/18·직접 DML/익명 definer/내부 역할 전환 0을 확인했고 운영 worker 구성은 아직 없다. [근거](../quality/reports/w14-d1-production-progress-check-2026-11-17.json) · [잔여 순서](release-next-steps.md). 지원 이메일과 실제 Google, 호스팅 원장/백업/복원·분산 제한·공개 수락은 남는다. main의 기존 기능/로컬 복원 변경은 PR #35까지 병합된 2ade280 기준이다.
+
 2026-11-11 W14-C2a: 암호화 전체 로컬 백업을 별도 임시 DB로 복원하고 최신 계정 삭제 원장을 재적용하는 통합 7건·암호화 4건(전체 unit 264)을 통과했다. 원본 데이터/세션/키/gate/역할과 다른 계정 보존·임시 DB/파일 제거 확인. 호스팅 복원/백업 주기·목표/취소 원장·작업자 재개는 미완료이며 TC-DELETE-004는 not_run이다. [근거](../quality/reports/w14-c2a-account-restore-check-2026-11-11.json). W14-C1 PR #34(08cf6ea)는 quality 42838520121 성공 뒤 main 7740bde로 병합했다. 스테이징 SQL 56개 적용/파기 gate false. 운영 DB는 SQL 3개 뒤 세션 검사 BYPASSRLS 역할/메타데이터 권한 추가를 자동 승인 검토가 거절하여 명시적 승인을 요청했다. 재시도/다른 도구 우회는 하지 않았고 사용자 0명·운영 웹 배포 없음이다. 지원 메일은 계속 입력 대기다.
 
 2026-11-10 W14-C1: 별도 삭제 worker·private lease/완료 ACK·로컬 암호화 원장 어댑터를 구현했다. 전체 unit 260·DB 426·실제 로컬 Auth 삭제/장애 재시도 8·build 통과. 로컬 SQL은 56개이며 호스팅 staging은 55개다. 다른 계정·기존 데이터/키/gate 보존을 확인했다. [증거](../quality/reports/w14-c1-deletion-worker-check-2026-11-10.json). 호스팅 원장/스케줄·접수 직후 write-ahead 경계·전체 복원은 미완료이고 실제 배포 삭제 gate는 false다. TC-DELETE-003/004는 미실행으로 유지한다. 별도 무료 서울 운영 DB kwzncrefatofwjzrqpma는 생성/빈 상태만 확인했다.

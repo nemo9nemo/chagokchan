@@ -1,0 +1,211 @@
+{
+  "observed_client_date": "2026-11-17",
+  "work_item": "W14-D1",
+  "status": "partial_rollout_read_only_catalog_verified_not_release_ready",
+  "source_commit": "2ade280a85f3c2dae64f02a012eae68d3bed8062",
+  "authorization": {
+    "database_role_and_53_migrations": "explicit_user_approval_received_2026-11-12",
+    "temporary_plugin_full_access": "explicit_user_choice_for_SQL_application_only_then_restore",
+    "repeat_permission_request_needed": false
+  },
+  "production": {
+    "project": "kwzncrefatofwjzrqpma",
+    "catalog": {
+      "auth_users": 0,
+      "migrations": 27,
+      "app_accounts": 0,
+      "product_tables": 18,
+      "postgres_version": "17.11",
+      "rls_enabled_forced": 18,
+      "ordinary_direct_dml": 0,
+      "reader_email_allowed": false,
+      "reader_password_allowed": false,
+      "internal_roles_can_login": 0,
+      "anonymous_definer_execute": 0,
+      "private_worker_rls_forced": 0,
+      "definers_without_fixed_path": 0,
+      "api_can_assume_internal_role": 0,
+      "worker_configuration_present": false,
+      "api_direct_worker_bookkeeping": 0,
+      "reader_refresh_tokens_allowed": false,
+      "login_or_superuser_definer_owners": 0
+    },
+    "applied_migrations": [
+      {
+        "version": "20261110145851",
+        "name": "20261008013000_product_schema"
+      },
+      {
+        "version": "20261110145858",
+        "name": "20261008020500_session_rpc_boundary"
+      },
+      {
+        "version": "20261110145905",
+        "name": "20261008020600_grant_auth_schema_usage"
+      },
+      {
+        "version": "20261113103904",
+        "name": "20261008020700_isolate_auth_session_reader"
+      },
+      {
+        "version": "20261113103911",
+        "name": "20261008020800_revoke_auth_columns_from_guard"
+      },
+      {
+        "version": "20261113103917",
+        "name": "20261008020900_revoke_auth_schema_from_guard"
+      },
+      {
+        "version": "20261113103924",
+        "name": "20261008021000_goal_rpc"
+      },
+      {
+        "version": "20261113103930",
+        "name": "20261008021100_narrow_goal_rpc_privileges"
+      },
+      {
+        "version": "20261113103937",
+        "name": "20261008021200_goal_receipt_lookup_columns"
+      },
+      {
+        "version": "20261113103944",
+        "name": "20261008021300_receipt_retry_lock_privilege"
+      },
+      {
+        "version": "20261113103952",
+        "name": "20261008021400_personal_praise_cycle_rpcs"
+      },
+      {
+        "version": "20261113103958",
+        "name": "20261008021500_qualify_praise_cycle_number"
+      },
+      {
+        "version": "20261113104003",
+        "name": "20261008021600_verified_actor_completion_notice"
+      },
+      {
+        "version": "20261113104009",
+        "name": "20261008021700_notification_conflict_select_policy"
+      },
+      {
+        "version": "20261113104017",
+        "name": "20261008021800_connection_invite_request_rpcs"
+      },
+      {
+        "version": "20261113104024",
+        "name": "20261008021900_connection_secret_validation_fix"
+      },
+      {
+        "version": "20261113104030",
+        "name": "20261008022000_connection_notification_conflict_select"
+      },
+      {
+        "version": "20261113104154",
+        "name": "20261008022100_acceptance_notification_target"
+      },
+      {
+        "version": "20261116123711",
+        "name": "20261008022200_shared_board_access_and_peer_praise"
+      },
+      {
+        "version": "20261116123718",
+        "name": "20261008022300_shared_board_rpc_row_lock_rls"
+      },
+      {
+        "version": "20261116123724",
+        "name": "20261008022400_shared_praise_write_policies"
+      },
+      {
+        "version": "20261116123730",
+        "name": "20261008022500_shared_praise_cycle_column_fix"
+      },
+      {
+        "version": "20261116123737",
+        "name": "20261008022600_peer_praise_receipt_shape"
+      },
+      {
+        "version": "20261116123744",
+        "name": "20261008022700_shared_praise_owner_state_projection"
+      },
+      {
+        "version": "20261116123750",
+        "name": "20261008022800_relationship_cursor_line_wrap_fix"
+      },
+      {
+        "version": "20261116123755",
+        "name": "20261008022900_shared_list_cursor_boundary_fix"
+      },
+      {
+        "version": "20261116123801",
+        "name": "20261008023000_connection_list_cursor_boundary_fix"
+      }
+    ],
+    "remaining_migrations": 29,
+    "stop_before": "20261008023100_news_goal_trash_and_purge_rpcs.sql",
+    "last_result": "provider_confirmation_expired_after_10_minutes",
+    "schema_rollout_complete": false,
+    "worker_configuration_applied": false,
+    "web_deployed": false
+  },
+  "staging": {
+    "project": "dsjrqipbakluvdvgxide",
+    "catalog": {
+      "auth_users": 0,
+      "migrations": 56,
+      "app_accounts": 0,
+      "product_tables": 18,
+      "postgres_version": "17.11",
+      "rls_enabled_forced": 18,
+      "ordinary_direct_dml": 0,
+      "reader_email_allowed": false,
+      "reader_password_allowed": false,
+      "internal_roles_can_login": 0,
+      "anonymous_definer_execute": 0,
+      "private_worker_rls_forced": 2,
+      "definers_without_fixed_path": 0,
+      "api_can_assume_internal_role": 0,
+      "worker_configuration_present": true,
+      "api_direct_worker_bookkeeping": 0,
+      "reader_refresh_tokens_allowed": false,
+      "login_or_superuser_definer_owners": 0
+    }
+  },
+  "permission_restoration": {
+    "after_interruption": "restored_and_verified_2026-11-16",
+    "after_resumed_attempt": "finally_restored_and_verified_original_inherit_default_low_risk_actions",
+    "initial_interrupted_attempt_immediate_restoration": "not_observed_do_not_claim_always_restricted"
+  },
+  "safety": {
+    "user_rows_returned": false,
+    "keys_or_tokens_returned": false,
+    "source_migrations_modified": false,
+    "production_test_users_created": false,
+    "paid_services_enabled": false,
+    "other_projects_targeted_by_this_rollout": false,
+    "destructive_confirmation_bypassed": false
+  },
+  "advisors_summary": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    }
+  ],
+  "advisor_review": "Notices are not marked fixed. Authenticated business SECURITY DEFINER entry points and denied audit rows require the documented role/path/catalog review; full cloud authorization acceptance remains pending.",
+  "not_run": [
+    "remaining_29_migrations",
+    "real_Google_authentication",
+    "hosted_independent_ledger_scheduler",
+    "hosted_backup_restore",
+    "distributed_rate_bot_protection",
+    "production_release"
+  ],
+  "public_release_ready": false
+}
