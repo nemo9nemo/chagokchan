@@ -48,6 +48,12 @@ jobs:
       - name: Run project checks
         run: pnpm check
 
+      - name: Install browser for isolated UI regression
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Verify UI recovery with synthetic API responses
+        run: pnpm test:ui
+
       - name: Build production-check output
         run: pnpm build:check
 
