@@ -5,3 +5,5 @@
 기존 보호된 Vercel chagokchan-staging 프로젝트의 APP_PUBLIC_OPERATOR_NAME·APP_SUPPORT_EMAIL에 저장하고 읽어 값/대상을 확인했다. 기존 검증 함수도 두 값을 정상 연락처로 판정한다. 환경변수 저장과 새 배포의 실제 페이지 표시 완료는 별개다. 외부 소스 업로드·새 배포는 사용자 요청으로 보류되어 기존 웹 배포가 새 값을 표시한다고 주장하지 않는다.
 
 Google 설정은 한 차례 유예 뒤 이 계정으로 재개 요청됐다. Cloud Console의 기존 Chagokchan 프로젝트는 확인했지만 지정 계정 로그인·프로젝트 접근·브랜딩·OAuth 클라이언트/제공자·실제 콜백/가입/탈퇴 수락은 미완료다. 비밀번호/인증번호를 문서나 채팅으로 받지 않는다. 공개 정책의 공급자·기록 범위·시행일·운영 파기/복원 수락도 후속이다. [검사](../quality/reports/w27-c2a-public-contact-settings-check-2026-11-17.json).
+
+2026-11-18 후속: 지정 계정 로그인 확인 후 신규 Google Cloud 프로젝트 Chagokchan(project ID chagokchan)을 생성했다. 완료 알림과 대시보드 접근을 확인했으며, Google 로그인 제공자·동의 화면·클라이언트 등록은 아직 미완료다. 기존 다른 계정 프로젝트와 구분한다. [등록 근거](../quality/reports/w12-c2b1-google-project-registration-2026-11-18.json).

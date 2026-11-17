@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "updated_on": "2026-11-17",
+  "updated_on": "2026-11-18",
   "current_stage": "S07_protected_https_staging_deployed_google_and_operations_acceptance_pending",
   "next_stage": "protected_https_staging_ops_ledger_worker_rate_protection_real_google_and_final_public_policy_pending",
   "implementation_started": true,
@@ -1249,6 +1249,15 @@
       "paths": [
         "docs/plans/W15-B-auth-abuse-protection.md"
       ]
+    },
+    {
+      "id": "ART-052",
+      "title": "지정 공개 계정 Google Cloud 프로젝트 생성/접근 확인",
+      "status": "project_created_verified_oauth_and_release_acceptance_pending",
+      "paths": [
+        "docs/quality/reports/w12-c2b1-google-project-registration-2026-11-18.json",
+        "docs/changes/2026-11-18-google-project-registration.md"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1414,6 +1423,12 @@
     "staging_database": "dsjrqipbakluvdvgxide_active_57_history_records_58_source_migrations_profile_bundle_applied_erasure_gate_false",
     "public_operator_name": "네모동",
     "new_staging_source_deployment": "deferred_by_user_2026-11-17",
-    "google_configuration": "resumed_with_nemodong.studio_account_login_pending"
+    "google_configuration": "project_chagokchan_created_in_nemodong.studio_account_oauth_pending_2026-11-18",
+    "google_cloud_project": {
+      "id": "chagokchan",
+      "number": "194930525268",
+      "account": "nemodong.studio@gmail.com",
+      "registration_report": "docs/quality/reports/w12-c2b1-google-project-registration-2026-11-18.json"
+    }
   }
 }
