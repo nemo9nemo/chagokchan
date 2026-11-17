@@ -1,5 +1,7 @@
 # 검증 계획과 증거 기준
 
+2026-11-17 W09-E: TC-PEER-RETRY-001은 실제 브라우저와 합성 API를 사용하는 대상·초안·재시도 회귀다. 실제 Auth/DB E2E·Google·물리 기기 검사를 대체하지 않는다. [범위](../plans/W09-E-shared-praise-recovery.md).
+
 2026-11-09 W27-B: TC 84개 중 범위 한정 passed 45·not_run 39. 보안 런타임/포트/가상 모드 격리 TC-DEPLOY-RUNTIME-001을 추가했고 전체 unit 206·production-check 빌드·보안 HTTP 10·audit를 검증했다. 실제 Google·클라우드 세션/기기·복원·제품 수락 상태는 올리지 않는다. [증거](reports/w27-b-runtime-security-check-2026-11-09.json)
 
 2026-11-03 W27-A: 반응형 웹앱 공개·PWA 선택 설치로 검증 범위를 정리했다. PC Chrome/Edge/Safari와 iOS Safari·Android Chrome에서 설치 없는 진입·Google/OTP 복귀·한글 입력/키보드·권한 회수·로그아웃/계정 전환·오프라인 캐시를 확인한다. 공급자 빌드/런타임과 독립 원장을 적용한 복원은 W27-B·W14/W15에서 검증한다. W23/W24 스토어 테스트/심사/결제는 현행 출시 게이트에서 제외한다. 기존 TC 상태(83개·범위 한정 passed 44·not_run 39)를 바꾸지 않으며 이번 문서 검사는 제품 수락 통과가 아니다. [조사](../webapp-infrastructure-research-2026-11-03.md) · [증거](reports/w27-a-webapp-transition-check-2026-11-03.json)

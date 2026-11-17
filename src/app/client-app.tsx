@@ -29,6 +29,8 @@ type ConnectionRequest = { id: string; direction: "incoming" | "outgoing"; other
 type Block = { id: string; blocked_user: Profile; created_at: string };
 type BoardMember = { user: Profile; role: "contributor"; status: "active" | "revoked"; connection_generation: number };
 type ConnectionInvite = { id: string; link_path: string; code: string; expires_at: string };
+type PeerAttempt = IdempotentAttempt & { boardId: string };
+type PeerDraft = { message: string; attempt: PeerAttempt | null; error: string };
 type WorkspaceView = "goals" | "connections" | "shared" | "trash" | "news";
 type NewsPage<T> = Page<T> & { loading: boolean; error: string };
 
@@ -144,12 +146,12 @@ function TrashPanel(props: {
 function SharedBoardsPanel(props: {
   boards: ContributorBoard[]; cursor: string | null; loading: boolean; error: string; selectedBoard: ContributorBoard | null; bunches: Bunch[];
   bunchCursor: string | null; selectedBunchId: string; praises: Praise[]; praiseCursor: string | null; loadingPraises: boolean;
-  message: string; attempt: boolean; sending: boolean; formError: string; onSelect: (board: ContributorBoard) => void; onBack: () => void;
+  message: string; attempt: boolean; sending: boolean; opening: boolean; formError: string; onSelect: (board: ContributorBoard) => void; onBack: () => void;
   onRefresh: () => void; onMoreBoards: () => void; onBunch: (id: string) => void; onMoreBunches: () => void; onMessage: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void; onRetryPraises: () => void; onMorePraises: () => void;
 }) {
   const currentBunch = props.bunches.find((item) => item.id === props.selectedBunchId) ?? props.selectedBoard?.current_bunch ?? null;
-  return <section className="shared-board-center" aria-labelledby="shared-boards-heading" aria-busy={props.loading || props.loadingPraises}>
+  return <section className="shared-board-center" aria-labelledby="shared-boards-heading" aria-busy={props.loading || props.loadingPraises || props.opening}>
     <p className="eyebrow">SHARED WITH ME</p><h2 id="shared-boards-heading">지인의 공유판</h2>
     <p className="section-intro">공유판에 보낸 칭찬과 회차 개수를 확인해요. 개인 목표와 개인 기록은 이 화면에 표시되지 않아요.</p>
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
@@ -158,12 +160,12 @@ function SharedBoardsPanel(props: {
         <div className="settings-title"><h3>참여 중</h3><button className="text-button" type="button" onClick={props.onRefresh}>새로고침</button></div>
         {props.loading && props.boards.length === 0 ? <p className="loading-inline" role="status">공유판을 불러오고 있어요.</p> : null}
         {props.boards.length === 0 && !props.loading ? <p className="history-empty">현재 참여 중인 공유판이 없어요.</p> : null}
-        <ul className="shared-board-list">{props.boards.map((board) => <li key={board.id}><button className={`shared-board-card ${props.selectedBoard?.id === board.id ? "selected" : ""}`} type="button" aria-pressed={props.selectedBoard?.id === board.id} onClick={() => props.onSelect(board)}><b>{board.shared_title}</b><span>{board.owner.nickname ?? "공유판 주인"} 님</span><span>{board.current_bunch ? `${board.current_bunch.valid_count} / ${board.current_bunch.target_count} · ${board.current_bunch.cycle_no}회차` : "첫 회차 전"}</span></button></li>)}</ul>
+        <ul className="shared-board-list">{props.boards.map((board) => <li key={board.id}><button className={`shared-board-card ${props.selectedBoard?.id === board.id ? "selected" : ""}`} type="button" aria-pressed={props.selectedBoard?.id === board.id} disabled={props.sending} onClick={() => props.onSelect(board)}><b>{board.shared_title}</b><span>{board.owner.nickname ?? "공유판 주인"} 님</span><span>{board.current_bunch ? `${board.current_bunch.valid_count} / ${board.current_bunch.target_count} · ${board.current_bunch.cycle_no}회차` : "첫 회차 전"}</span></button></li>)}</ul>
         {props.cursor && <button className="text-button history-more" type="button" onClick={props.onMoreBoards}>공유판 더 보기</button>}
       </nav>
       <div className="shared-board-detail">
-        {!props.selectedBoard ? <div className="empty-records"><h3>함께할 공유판을 골라 주세요</h3><p>지인이 권한을 준 공유판만 목록에 보여요.</p></div> : <>
-          <div className="goal-header"><div className="goal-heading-copy"><p className="eyebrow">{props.selectedBoard.owner.nickname ?? "지인"} 님의 공유판</p><div className="title-row"><h3>{props.selectedBoard.shared_title}</h3><span className={`status-pill status-${props.selectedBoard.goal_state}`}>{goalStatusLabel(props.selectedBoard.goal_state)}</span></div>{props.selectedBoard.shared_description && <p className="goal-description">{props.selectedBoard.shared_description}</p>}</div><button className="button button-secondary" type="button" onClick={props.onBack}>목록으로</button></div>
+        {!props.selectedBoard ? <div className="empty-records"><h3>{props.opening ? "공유판을 불러오고 있어요" : "함께할 공유판을 골라 주세요"}</h3><p>지인이 권한을 준 공유판만 목록에 보여요.</p></div> : <>
+          <div className="goal-header"><div className="goal-heading-copy"><p className="eyebrow">{props.selectedBoard.owner.nickname ?? "지인"} 님의 공유판</p><div className="title-row"><h3>{props.selectedBoard.shared_title}</h3><span className={`status-pill status-${props.selectedBoard.goal_state}`}>{goalStatusLabel(props.selectedBoard.goal_state)}</span></div>{props.selectedBoard.shared_description && <p className="goal-description">{props.selectedBoard.shared_description}</p>}</div><button className="button button-secondary" type="button" disabled={props.sending} onClick={props.onBack}>목록으로</button></div>
           {props.selectedBoard.current_bunch && <section className="shared-progress" aria-label="공유판 현재 회차"><div className="board-progress-top"><span className="board-label">현재 회차 진행</span><span className="board-count">{props.selectedBoard.current_bunch.valid_count} / {props.selectedBoard.current_bunch.target_count}</span></div><span className="progress-track" role="progressbar" aria-label="공유판 현재 회차 진행" aria-valuemin={0} aria-valuemax={props.selectedBoard.current_bunch.target_count} aria-valuenow={props.selectedBoard.current_bunch.valid_count}><span style={{ width: `${Math.min(100, props.selectedBoard.current_bunch.valid_count / props.selectedBoard.current_bunch.target_count * 100)}%` }} /></span><span className="progress-caption">개인 기록과 개수를 합산하지 않아요.</span></section>}
           {currentBunch && <GrapeCluster target={currentBunch.target_count} filled={currentBunch.valid_count} />}
           {props.selectedBoard.can_praise ? <section className="praise-composer" aria-labelledby="peer-composer-heading"><div className="composer-heading"><div><p className="eyebrow">A WORD FOR YOUR FRIEND</p><h3 id="peer-composer-heading">응원 한마디 보내기</h3></div></div><form onSubmit={props.onSubmit}><fieldset disabled={props.sending || props.attempt}><label className="visually-hidden" htmlFor="peer-praise-message">공유판에 보낼 칭찬</label><textarea id="peer-praise-message" maxLength={1000} rows={3} value={props.message} onChange={(event) => props.onMessage(event.target.value)} placeholder="작은 응원도 큰 힘이 돼요." /></fieldset>{props.formError && <p className="form-error" role="alert">{props.formError}</p>}{props.attempt ? <div className="composer-retry"><p>결과가 불확실해 같은 요청으로 확인해요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "확인 중…" : "같은 칭찬 다시 확인"}</button><button className="text-button" type="button" onClick={props.onRetryPraises}>기록 새로고침</button></div> : <div className="composer-submit"><p>성공 확인 후 공유판 개수에만 반영돼요.</p><button className="button button-primary" type="submit" disabled={props.sending}>{props.sending ? "보내는 중…" : "칭찬 보내기"}</button></div>}</form></section> : <div className="locked-note"><div><b>{props.selectedBoard.goal_state === "completed" ? "완료된 목표예요" : "보관한 목표예요"}</b><p>이전 기록은 읽을 수 있고 새 칭찬은 보낼 수 없어요.</p></div></div>}
@@ -392,10 +394,57 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   const [sharedBunches, setSharedBunches] = useState<Bunch[]>([]);
   const [sharedBunchCursor, setSharedBunchCursor] = useState<string | null>(null);
   const [selectedSharedBunchId, setSelectedSharedBunchId] = useState("");
-  const [peerMessage, setPeerMessage] = useState("");
-  const [peerAttempt, setPeerAttempt] = useState<IdempotentAttempt | null>(null);
+  const [peerDrafts, setPeerDrafts] = useState<Record<string, PeerDraft>>({});
+  const peerDraftsRef = useRef<Record<string, PeerDraft>>({});
+  const peerOperation = useRef(false);
+  const mounted = useRef(true);
+  const selectedSharedBoardRef = useRef<ContributorBoard | null>(null);
+  const sharedBoardRequestSeq = useRef(0);
+  const sharedListRequestSeq = useRef(0);
+  const sharedBoardOpening = useRef(false);
+  const [openingSharedBoard, setOpeningSharedBoard] = useState(false);
   const [peerSending, setPeerSending] = useState(false);
-  const [peerError, setPeerError] = useState("");
+  const peerDraft = selectedSharedBoard ? peerDrafts[selectedSharedBoard.id] : undefined;
+  const peerMessage = peerDraft?.message ?? "";
+  const peerAttempt = peerDraft?.attempt ?? null;
+  const peerError = peerDraft?.error ?? "";
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      sharedBoardRequestSeq.current++;
+      sharedListRequestSeq.current++;
+      peerDraftsRef.current = {};
+    };
+  }, []);
+
+  function updatePeerDraft(boardId: string, change: Partial<PeerDraft>) {
+    if (!mounted.current) return;
+    const previous = peerDraftsRef.current[boardId] ?? { message: "", attempt: null, error: "" };
+    const next = { ...peerDraftsRef.current, [boardId]: { ...previous, ...change } };
+    peerDraftsRef.current = next;
+    setPeerDrafts(next);
+  }
+
+  const closeSharedBoard = useCallback(() => {
+    if (peerOperation.current) return;
+    sharedBoardRequestSeq.current++;
+    praiseRequestSeq.current++;
+    sharedBoardOpening.current = false;
+    selectedSharedBoardRef.current = null;
+    setOpeningSharedBoard(false);
+    setSelectedSharedBoard(null);
+    setPraises([]);
+    setPraiseCursor(null);
+    setLoadingPraises(false);
+  }, []);
+
+  const navigateWorkspace = useCallback((view: WorkspaceView) => {
+    if (peerOperation.current) return;
+    closeSharedBoard();
+    setWorkspaceView(view);
+  }, [closeSharedBoard]);
   const [newsTab, setNewsTab] = useState<NewsTab>("received");
   const [notifications, setNotifications] = useState<NewsPage<NewsNotification>>({ items: [], next_cursor: null, loading: true, error: "" });
   const [sentPraises, setSentPraises] = useState<NewsPage<SentPraise>>({ items: [], next_cursor: null, loading: true, error: "" });
@@ -469,7 +518,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     } finally {
       notificationOperation.current = false;
       setNotificationBusyId("");
-      if (openConnections) setWorkspaceView("connections");
+      if (openConnections) navigateWorkspace("connections");
     }
   }
 
@@ -541,27 +590,33 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     }
   }, []);
 
-  const loadSharedBoards = useCallback(async (cursor: string | null = null, append = false) => {
+  const loadSharedBoards = useCallback(async (cursor: string | null = null, append = false, preserveError = false) => {
+    const sequence = ++sharedListRequestSeq.current;
     setSharedBoardsLoading(true);
-    setSharedBoardError("");
+    if (!preserveError) setSharedBoardError("");
     try {
       const query = new URLSearchParams({ limit: "50" });
       if (cursor) query.set("cursor", cursor);
       const page = await apiJson<Page<ContributorBoard>>(`/api/v1/shared-boards?${query.toString()}`);
+      if (!mounted.current || sequence !== sharedListRequestSeq.current) return;
       const visibleBoards = append ? [...sharedBoardsRef.current, ...page.items] : page.items;
       sharedBoardsRef.current = visibleBoards;
       setSharedBoards(visibleBoards);
       setSharedBoardsCursor(page.next_cursor);
-      if (selectedSharedBoard && !visibleBoards.some((board) => board.id === selectedSharedBoard.id)) {
+      const selected = selectedSharedBoardRef.current;
+      if (selected && !page.next_cursor && !visibleBoards.some((board) => board.id === selected.id) && !peerOperation.current) {
+        sharedBoardRequestSeq.current++;
+        praiseRequestSeq.current++;
+        selectedSharedBoardRef.current = null;
         setSelectedSharedBoard(null);
         setPraises([]);
       }
     } catch (error) {
-      setSharedBoardError(errorMessage(error));
+      if (mounted.current && sequence === sharedListRequestSeq.current) setSharedBoardError(errorMessage(error));
     } finally {
-      setSharedBoardsLoading(false);
+      if (mounted.current && sequence === sharedListRequestSeq.current) setSharedBoardsLoading(false);
     }
-  }, [selectedSharedBoard]);
+  }, []);
 
   const loadTrashGoals = useCallback(async (cursor: string | null = null, append = false) => {
     setTrashLoading(true);
@@ -599,7 +654,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     async function preview() {
       const token = await pendingInviteLoad.current;
       if (!token || !active) return;
-      setWorkspaceView("connections"); setInviteToken(token); setInvitePreviewLoading(true);
+      navigateWorkspace("connections"); setInviteToken(token); setInvitePreviewLoading(true);
       try {
         const result = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", { link_token: token });
         if (active) setInvitePreview(result);
@@ -607,7 +662,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     }
     void preview().catch(error => { if (active) setInvitePreviewError(errorMessage(error)); });
     return () => { active = false; };
-  }, [deployedAuth]);
+  }, [deployedAuth, navigateWorkspace]);
 
   const loadGoals = useCallback(async (cursor: string | null = null, append = false) => {
     setLoadingGoals(true);
@@ -879,15 +934,27 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }
 
   async function openSharedBoard(boardId: string, preferredBunchId?: string) {
+    if (peerOperation.current) return;
+    const sequence = ++sharedBoardRequestSeq.current;
+    praiseRequestSeq.current++;
+    sharedBoardOpening.current = true;
+    selectedSharedBoardRef.current = null;
+    setSelectedSharedBoard(null);
+    setPraises([]);
+    setPraiseCursor(null);
+    setLoadingPraises(false);
+    setOpeningSharedBoard(true);
     setSharedBoardError("");
-    setPeerError("");
     try {
       const board = await apiJson<ContributorBoard>(`/api/v1/boards/${boardId}`);
-      if (board.viewer_role !== "contributor") throw new Error("현재 공유 권한을 확인할 수 없어요.");
+      if (!mounted.current || sequence !== sharedBoardRequestSeq.current) return;
+      if (board.viewer_role !== "contributor" || board.id !== boardId) throw new Error("현재 공유 권한을 확인할 수 없어요.");
       const query = new URLSearchParams({ limit: "50" });
       const bunchPage = await apiJson<Page<Bunch>>(`/api/v1/boards/${boardId}/bunches?${query.toString()}`);
+      if (!mounted.current || sequence !== sharedBoardRequestSeq.current) return;
       const bunchId = (preferredBunchId && bunchPage.items.some((bunch) => bunch.id === preferredBunchId) ? preferredBunchId : null)
         ?? board.current_bunch?.id ?? bunchPage.items[0]?.id ?? "";
+      selectedSharedBoardRef.current = board;
       setSelectedSharedBoard(board);
       setSharedBunches(bunchPage.items);
       setSharedBunchCursor(bunchPage.next_cursor);
@@ -896,41 +963,60 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
       setSelectedBunchId(bunchId);
       await loadPraises(board.id, bunchId);
     } catch (error) {
+      if (!mounted.current || sequence !== sharedBoardRequestSeq.current) return;
+      selectedSharedBoardRef.current = null;
       setSelectedSharedBoard(null);
       setSharedBoardError(errorMessage(error));
-      void loadSharedBoards();
+      void loadSharedBoards(null, false, true);
+    } finally {
+      if (mounted.current && sequence === sharedBoardRequestSeq.current) {
+        sharedBoardOpening.current = false;
+        setOpeningSharedBoard(false);
+      }
     }
   }
 
   async function submitPeerPraise(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selectedSharedBoard?.can_praise) return;
-    setPeerError("");
-    const payload = peerAttempt?.body ?? { message: peerMessage.trim() || null };
-    const attempt = createIdempotentRequest(payload, peerAttempt, newRequestKey);
-    setPeerAttempt(attempt);
+    const board = selectedSharedBoardRef.current;
+    if (peerOperation.current || sharedBoardOpening.current || !board?.can_praise) return;
+    const draft = peerDraftsRef.current[board.id];
+    const attempt: PeerAttempt = draft?.attempt ?? { ...createIdempotentRequest({ message: draft?.message.trim() || null }, null, newRequestKey), boardId: board.id };
+    if (attempt.boardId !== board.id) return;
+    peerOperation.current = true;
+    updatePeerDraft(board.id, { attempt, error: "" });
     setPeerSending(true);
+    let saved: { id: string; bunch_id: string; replayed: boolean } | null = null;
     try {
-      const result = await mutate<{ id: string; bunch_id: string; replayed: boolean }>(`/api/v1/boards/${selectedSharedBoard.id}/praises`, "POST", attempt.body, attempt.key);
-      setPeerAttempt(null);
-      setPeerMessage("");
-      setNotice(result.replayed ? "이전에 보낸 칭찬이 기록된 것을 확인했어요." : "공유판에 칭찬을 보냈어요.");
-      await loadSharedBoards();
-      await openSharedBoard(selectedSharedBoard.id, result.bunch_id);
+      saved = await mutate<{ id: string; bunch_id: string; replayed: boolean }>(`/api/v1/boards/${attempt.boardId}/praises`, "POST", attempt.body, attempt.key);
+      if (!mounted.current) return;
+      updatePeerDraft(attempt.boardId, { message: "", attempt: null, error: "" });
+      if (selectedSharedBoardRef.current?.id === attempt.boardId) setNotice(saved.replayed ? "이전에 보낸 칭찬이 기록된 것을 확인했어요." : "공유판에 칭찬을 보냈어요.");
     } catch (error) {
-      if (mutationOutcome(error) === "retry_same_key") setPeerError(`${errorMessage(error)} 같은 요청 키와 내용을 유지했어요.`);
-      else { setPeerAttempt(null); setPeerError(errorMessage(error)); }
-    } finally { setPeerSending(false); }
+      updatePeerDraft(attempt.boardId, mutationOutcome(error) === "retry_same_key"
+        ? { error: `${errorMessage(error)} 이 판에 보낸 같은 칭찬으로 다시 확인해 주세요.` }
+        : { attempt: null, error: errorMessage(error) });
+    } finally {
+      peerOperation.current = false;
+      if (mounted.current) setPeerSending(false);
+    }
+    if (saved && mounted.current) {
+      await loadSharedBoards();
+      if (mounted.current && selectedSharedBoardRef.current?.id === attempt.boardId) await openSharedBoard(attempt.boardId, saved.bunch_id);
+    }
   }
 
   async function loadMoreSharedBunches() {
-    if (!selectedSharedBoard || !sharedBunchCursor) return;
+    if (peerOperation.current || !selectedSharedBoard || !sharedBunchCursor) return;
+    const boardId = selectedSharedBoard.id;
+    const sequence = sharedBoardRequestSeq.current;
     try {
       const query = new URLSearchParams({ limit: "50", cursor: sharedBunchCursor });
       const page = await apiJson<Page<Bunch>>(`/api/v1/boards/${selectedSharedBoard.id}/bunches?${query.toString()}`);
+      if (!mounted.current || sequence !== sharedBoardRequestSeq.current || selectedSharedBoardRef.current?.id !== boardId) return;
       setSharedBunches((previous) => [...previous, ...page.items]);
       setSharedBunchCursor(page.next_cursor);
-    } catch (error) { setSharedBoardError(errorMessage(error)); }
+    } catch (error) { if (mounted.current && sequence === sharedBoardRequestSeq.current) setSharedBoardError(errorMessage(error)); }
   }
 
   async function loadMoreSharedBoards() {
@@ -1108,7 +1194,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
       setSelectedGoalId(null);
       setDetail(null);
       setShowSettings(false);
-      setWorkspaceView("trash");
+      navigateWorkspace("trash");
       setNotice("목표를 휴지통으로 옮겼어요. 공유판 권한은 회수되어 복구되지 않습니다.");
       await Promise.all([loadGoals(), loadTrashGoals()]);
     } catch (error) {
@@ -1195,11 +1281,12 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   }
 
   function returnToBoards() {
+    if (peerOperation.current) return;
     goalRequestSeq.current += 1; praiseRequestSeq.current += 1;
     selectedGoalIdRef.current = null;
     setSelectedGoalId(null); setDetail(null); setLoadingDetail(false);
     setShowCreate(false); setShowPraise(false); setShowShare(false); setDetailError("");
-    setWorkspaceView("goals");
+    navigateWorkspace("goals");
   }
 
   function openPraiseComposer() {
@@ -1207,7 +1294,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     setSavedPraise(null); setShowPraise(true);
   }
 
-  const interactionLocked = loadingDetail || praiseSending || Boolean(praiseAttempt);
+  const interactionLocked = loadingDetail || praiseSending || Boolean(praiseAttempt) || peerSending;
   const sharedBoard = detail?.boards.find((board) => board.kind === "shared");
   const canAddPraise = !loadingDetail && detail?.goal.id === selectedGoalId && selectedBoard?.kind === "personal" && selectedGoal?.status === "active" &&
     (!selectedBunch || selectedBunch.id === selectedBoard.current_bunch?.id);
@@ -1230,10 +1317,10 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
       <div className="workspace">
         <aside className="goal-sidebar" aria-label="차곡찬 메뉴"><nav className="workspace-nav" aria-label="주요 화면">
           <button type="button" disabled={interactionLocked} aria-current={workspaceView === "goals" ? "page" : undefined} onClick={returnToBoards}>내 판</button>
-          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "connections" ? "page" : undefined} onClick={() => { setWorkspaceView("connections"); setShowPraise(false); }}>연결 관리</button>
-          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "shared" ? "page" : undefined} onClick={() => { setWorkspaceView("shared"); setSelectedSharedBoard(null); setShowPraise(false); }}>받은 공유판</button>
-          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "trash" ? "page" : undefined} onClick={() => { setWorkspaceView("trash"); setShowPraise(false); }}>휴지통</button>
-          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "news" ? "page" : undefined} onClick={() => { setWorkspaceView("news"); setShowPraise(false); }}>소식{hasUnreadNews && <><span className="news-unread-dot" aria-hidden="true" /><span className="visually-hidden">읽지 않은 소식 있음</span></>}</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "connections" ? "page" : undefined} onClick={() => { navigateWorkspace("connections"); setShowPraise(false); }}>연결 관리</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "shared" ? "page" : undefined} onClick={() => { navigateWorkspace("shared"); setShowPraise(false); }}>받은 공유판</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "trash" ? "page" : undefined} onClick={() => { navigateWorkspace("trash"); setShowPraise(false); }}>휴지통</button>
+          <button type="button" disabled={interactionLocked} aria-current={workspaceView === "news" ? "page" : undefined} onClick={() => { navigateWorkspace("news"); setShowPraise(false); }}>소식{hasUnreadNews && <><span className="news-unread-dot" aria-hidden="true" /><span className="visually-hidden">읽지 않은 소식 있음</span></>}</button>
         </nav></aside>
         <section id="workspace-content" className="main-panel" tabIndex={-1} aria-busy={loadingDetail || praiseSending}>
           <div className="status-region" aria-live="polite">{praiseSending && <p role="status">저장 중…</p>}{notice && <p className="notice-banner" role="status">{notice}<button type="button" aria-label="알림 닫기" onClick={() => setNotice("")}>닫기</button></p>}</div>
@@ -1263,10 +1350,10 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
             boards={sharedBoards} cursor={sharedBoardsCursor} loading={sharedBoardsLoading} error={sharedBoardError} selectedBoard={selectedSharedBoard}
             bunches={sharedBunches} bunchCursor={sharedBunchCursor} selectedBunchId={selectedSharedBunchId}
             praises={praises} praiseCursor={praiseCursor} loadingPraises={loadingPraises} message={peerMessage}
-            attempt={peerAttempt !== null} sending={peerSending} formError={peerError}
-            onSelect={(board) => void openSharedBoard(board.id)} onBack={() => { setSelectedSharedBoard(null); setPraises([]); }}
-            onRefresh={() => void loadSharedBoards()} onMoreBoards={() => void loadMoreSharedBoards()} onBunch={(bunchId) => { setSelectedSharedBunchId(bunchId); setSelectedBunchId(bunchId); void loadPraises(selectedSharedBoard?.id ?? "", bunchId); }}
-            onMoreBunches={() => void loadMoreSharedBunches()} onMessage={setPeerMessage} onSubmit={submitPeerPraise}
+            attempt={peerAttempt !== null} sending={peerSending} opening={openingSharedBoard} formError={peerError}
+            onSelect={(board) => void openSharedBoard(board.id)} onBack={closeSharedBoard}
+            onRefresh={() => void loadSharedBoards()} onMoreBoards={() => void loadMoreSharedBoards()} onBunch={(bunchId) => { if (peerOperation.current || sharedBoardOpening.current) return; setSelectedSharedBunchId(bunchId); setSelectedBunchId(bunchId); void loadPraises(selectedSharedBoard?.id ?? "", bunchId); }}
+            onMoreBunches={() => void loadMoreSharedBunches()} onMessage={(message) => { const board = selectedSharedBoardRef.current; if (board && !peerOperation.current && !peerDraftsRef.current[board.id]?.attempt) updatePeerDraft(board.id, { message }); }} onSubmit={submitPeerPraise}
             onRetryPraises={() => void loadPraises(selectedSharedBoard?.id ?? "", selectedSharedBunchId)}
             onMorePraises={() => void loadPraises(selectedSharedBoard?.id ?? "", selectedSharedBunchId, praiseCursor, true)}
           /> : workspaceView === "trash" ? <TrashPanel

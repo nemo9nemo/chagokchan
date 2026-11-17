@@ -56,7 +56,8 @@
     "db:reauth-proof-test": "node scripts/test-local-reauth-proof.mjs",
     "db:deletion-api-test": "node scripts/test-local-account-deletion-api.mjs",
     "db:deletion-worker-test": "node scripts/test-local-deletion-worker.mjs",
-    "db:account-restore-test": "node scripts/test-local-account-restore.mjs"
+    "db:account-restore-test": "node scripts/test-local-account-restore.mjs",
+    "test:ui": "playwright test"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",
@@ -66,6 +67,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
+    "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "24.19.1",
     "@types/react": "19.3.0",

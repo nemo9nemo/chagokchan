@@ -35,7 +35,7 @@
     {
       "id": "S06",
       "name": "사용자 기능",
-      "status": "local_features_verified_w21_and_w25_product_acceptance_pending"
+      "status": "local_features_verified_invite_retry_profile_and_product_acceptance_pending"
     },
     {
       "id": "S07",
@@ -91,7 +91,7 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 93,
+    "planned_test_cases": 94,
     "application_tests_executed": 264,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
@@ -355,7 +355,9 @@
       "user_role_and_sql_approval_received": true,
       "temporary_plugin_permission_restored": true,
       "public_release_ready": false
-    }
+    },
+    "peer_praise_recovery_browser_mock_tests": 26,
+    "peer_praise_recovery_report": "docs/quality/reports/w09-e-shared-praise-recovery-check-2026-11-17.json"
   },
   "artifacts": [
     {
@@ -1170,6 +1172,20 @@
         "scripts/inspect-hosted-database.sql",
         "docs/development/release-next-steps.md",
         "docs/changes/2026-11-17-production-schema-progress.md"
+      ]
+    },
+    {
+      "id": "ART-046",
+      "title": "공유 칭찬 대상·초안·복구와 브라우저 회귀",
+      "status": "implemented_and_verified_local_scope",
+      "paths": [
+        "docs/plans/W09-E-shared-praise-recovery.md",
+        "docs/quality/reports/w09-e-shared-praise-recovery-check-2026-11-17.json",
+        "scripts/ui-test-server.mjs",
+        "playwright.config.mjs",
+        "scripts/ui/fixtures.mjs",
+        "scripts/ui/shared-praise.spec.mjs",
+        "docs/changes/2026-11-17-shared-praise-target-recovery.md"
       ]
     }
   ],

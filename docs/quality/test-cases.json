@@ -2059,6 +2059,27 @@
       "expected": "메타데이터 범위만 통과로 기록한다. 나머지 적용·실제 Google/제품·운영 원장/복원·공개 수락은 별도다.",
       "status": "passed",
       "evidence": "reports/w14-d1-production-progress-check-2026-11-17.json"
+    },
+    {
+      "id": "TC-PEER-RETRY-001",
+      "requirement_ids": [
+        "REQ-004",
+        "REQ-006"
+      ],
+      "policy_ids": [
+        "POL-PRAISE-001",
+        "POL-SEC-001"
+      ],
+      "level": "browser_mock",
+      "title": "공유 칭찬의 대상 고정·판별 초안·재시도·늦은 응답 회귀",
+      "steps": [
+        "별도 loopback UI 서버에서 합성 A/B 판과 모든 제품 API를 가로챈다.",
+        "전송 전 A/B 초안, 최초 실패/응답 유실/429/503 후 원래 판 재시도와 다른 판의 별도 전송을 확인한다.",
+        "중복 submit·늦은 판/성공 후 조회·권한 회수·확정 거절·페이지 재진입을 데스크톱/모바일 폭에서 확인한다."
+      ],
+      "expected": "판·본문·키가 섞이지 않고 같은 판/키는 한 건만 처리. 이전 조회는 현재 화면을 덮어쓰지 않음. 실제 DB/Google/물리 기기 수락과 별도.",
+      "status": "passed",
+      "evidence": "reports/w09-e-shared-praise-recovery-check-2026-11-17.json"
     }
   ],
   "updated_on": "2026-11-17"

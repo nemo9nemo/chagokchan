@@ -7,6 +7,7 @@ export default function configureNext(phase) {
     bindingHost: process.env.CHAGOKCHAN_BIND_HOST,
   });
   return {
+    distDir: phase === PHASE_DEVELOPMENT_SERVER && process.env.CHAGOKCHAN_UI_TEST === "1" ? ".next-ui-test" : ".next",
     agentRules: false,
     poweredByHeader: false,
     reactStrictMode: true,

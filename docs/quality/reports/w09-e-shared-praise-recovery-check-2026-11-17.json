@@ -1,0 +1,147 @@
+{
+  "work_item": "W09-E",
+  "observed_client_date": "2026-11-17",
+  "status": "passed_local_scope_not_release_acceptance",
+  "source_base": "a4e24bc0eb81e1cad90d0a4f9fbd09a7e6bc4e37",
+  "references": [
+    "F-01",
+    "G-07_minimum",
+    "REQ-004",
+    "REQ-006",
+    "POL-PRAISE-001",
+    "POL-SEC-001",
+    "TC-PEER-RETRY-001"
+  ],
+  "environment": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "playwright": "1.65.1",
+    "browser": "installed_Microsoft_Edge_channel",
+    "docker": "29.1.3",
+    "viewports": [
+      "1280x900",
+      "393x852_mobile_touch_emulation"
+    ]
+  },
+  "checks": {
+    "lint": "passed_183_files",
+    "typecheck": "passed",
+    "unit": {
+      "passed": 264,
+      "failed": 0
+    },
+    "artifact_structural_consistency": "passed_final_document_sync",
+    "production_check_build": "passed",
+    "isolated_security_http": {
+      "passed": 20
+    },
+    "browser_mock": {
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "scenarios_per_viewport": 13,
+      "actual_server_and_browser": true,
+      "actual_product_API_and_DB": false
+    },
+    "database_pgtap": {
+      "passed": 426,
+      "suites": 21
+    },
+    "local_auth_shared_rpc": {
+      "verified_at": "2026-11-17T11:01:57.359Z",
+      "work_item": "W09-C",
+      "scope": "shared_board_directory_and_w09_b_access_regression_with_issued_auth_sessions",
+      "status": "passed",
+      "executed": 8,
+      "passed": 8,
+      "cases": [
+        {
+          "name": "owner_and_ungranted_views_have_separate_safe_projection",
+          "status": "passed"
+        },
+        {
+          "name": "explicit_grant_revoke_and_minimal_owner_member_list",
+          "status": "passed"
+        },
+        {
+          "name": "shared_board_directory_lists_only_current_grants",
+          "status": "passed"
+        },
+        {
+          "name": "peer_praise_is_atomic_idempotent_and_role_scoped",
+          "status": "passed"
+        },
+        {
+          "name": "peer_praise_owner_moderation_is_idempotent_and_recounts_atomically",
+          "status": "passed"
+        },
+        {
+          "name": "peer_rate_limits_and_completion_failure_roll_back_every_write",
+          "status": "passed"
+        },
+        {
+          "name": "concurrent_member_grants_never_exceed_fifty",
+          "status": "passed"
+        },
+        {
+          "name": "revoke_disconnect_block_races_and_reconnect_requires_new_grant",
+          "status": "passed"
+        }
+      ],
+      "failure_detail": null,
+      "cleanup_passed": true,
+      "existing_fixture_data_preserved": true,
+      "synthetic_probe_accounts_and_sessions_removed": true,
+      "sessions_fabricated": false,
+      "service_role_used_for_app_rpc": false,
+      "provider_login_tests_executed": 0
+    },
+    "local_api_regressions": {
+      "api-board-test": [
+        "A: 14/14 board/praise/directory role and mutation-boundary checks passed; product fixture writes 0",
+        "B: 14/14 board/praise/directory role and mutation-boundary checks passed; product fixture writes 0",
+        "C: 14/14 board/praise/directory role and mutation-boundary checks passed; product fixture writes 0"
+      ],
+      "api-praise-test": [
+        "{\"status\":\"passed\",\"actor\":\"A\",\"checks\":10,\"cases\":[\"server_actor_ignores_client_identity_inputs\",\"unavailable_board_uses_hidden_no_store_response\",\"malformed_board_id_is_rejected\",\"bunch_limit_hidden_and_actor_query_inputs_are_bounded\",\"create_requires_csrf_before_rpc\",\"edit_requires_csrf_before_rpc\",\"cancel_requires_csrf_before_rpc\",\"valid_csrf_create_maps_missing_personal_board_without_exposing_database_detail\",\"valid_csrf_edit_maps_missing_praise_safely\",\"valid_csrf_cancel_maps_missing_praise_safely\"],\"fixture_credentials_printed\":false,\"auth_tokens_returned\":false,\"product_database_mutation\":false}"
+      ],
+      "api-connection-test": [
+        "A: 12/12 connection API read and boundary checks passed; fixture writes 0",
+        "B: 12/12 connection API read and boundary checks passed; fixture writes 0",
+        "C: 12/12 connection API read and boundary checks passed; fixture writes 0"
+      ]
+    }
+  },
+  "code_sha256": {
+    "src/app/client-app.tsx": "139afe017798738d4ee9906de0a575acddd619f998656a38f85d8a913d13e4d8",
+    "scripts/ui-test-server.mjs": "3915abb553ac9310e8c6a2ae84d5a39b00721d19d1d7c0087d201588443f2673",
+    "scripts/ui/fixtures.mjs": "ea36a257a0bf9f59e1d23004219708d27eb6c1a517875f6784a0a2fca22bd4d8",
+    "scripts/ui/shared-praise.spec.mjs": "bb31447125c4c7fbc5e8b1b3631dbeedd62ec28bb54fa26df1be888371f976e8",
+    "playwright.config.mjs": "92692d11008c86cc9fcb6c8c1637edace473d59355fa23ba3c73e703ec0bd080",
+    "next.config.mjs": "7040356dec5af4952c6992e63c03fc4787daf6ffc889915b8191167ef49274dc"
+  },
+  "resolved_secondary_findings": [
+    "out_of_order_board_reads_and_post_success_refresh_could_overwrite_current_view",
+    "automatic_directory_refresh_cleared_access_revocation_error",
+    "UI_test_output_nested_under_production_output_was_deleted_during_parallel_build_now_separate_root"
+  ],
+  "execution_corrections": [
+    "sandbox_socket_and_build_mkdir_denied_then_executed_with_authorized_local_permissions",
+    "test_alert_selector_scoped_to_product_panel_to_exclude_Next_route_announcer",
+    "Docker_was_stopped_started_existing_engine_without_resetting_containers_or_volumes"
+  ],
+  "review": {
+    "reviewer": "Codex_direct",
+    "scope": "changed_source_callers_async_ordering_idempotency_isolation_and_test_environment",
+    "unresolved_change_scope_defect_found": false
+  },
+  "not_run": [
+    "real_Google_authentication",
+    "deployed_HTTPS_browser_acceptance",
+    "physical_mobile_devices",
+    "hosted_ledger_backup_restore"
+  ],
+  "public_release_ready": false,
+  "schema_or_API_contract_changed": false,
+  "production_database_changed": false
+}
