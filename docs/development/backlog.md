@@ -188,6 +188,7 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W14-C1 | 삭제 작업자·내부 예약·암호화 로컬 원장 검증 기반 | DONE | 로컬 SQL 56개·DB 426·전체 unit 260·실제 로컬 Auth/DB 8 통과. 원장 실패·Auth 장애·완료 확인 재시도·37일 보관·다른 사용자/기존 상태 보존 확인. 호스팅 원장/스케줄과 전체 백업 복원은 미구성. [범위](deletion-worker.md) · [근거](../quality/reports/w14-c1-deletion-worker-check-2026-11-10.json) |
 | W14-C2 | 독립 운영 원장·정기 파기·백업/복원 | IN_PROGRESS | 실제 배포 gate는 false 유지. 계정 외 목표 파기/취소 내용의 복원 차단·요청 접수와 원장의 장애 경계·운영 스케줄·최신 원장 재적용/전체 복원 수락 필요. 운영 DB는 사용자 승인 후 27/56개 적용. 공급자 확인 만료로 29개 남음. 임시 플러그인 권한 원복/조회 완료 |
 | W14-C2a | 암호화 전체 로컬 백업·삭제 계정 복원 경계 | DONE | pg_dump/pg_restore·실제 Auth 삭제·독립 원장 재적용 7건·전체 unit 264 통과. 원본/역할 보존·임시 DB/파일 정리 확인. 호스팅 백업/복원·스케줄 재개는 별도. [근거](../quality/reports/w14-c2a-account-restore-check-2026-11-11.json) |
+| W14-C2b | 복원 사본의 전체 세션·인증 흐름 무효화 | DONE | **로컬 복원 안전성 보완 완료.** 백업 뒤 실제 로그아웃한 비탈퇴 사용자의 과거 세션 복원을 재현하고 전원 세션/토큰/인증 흐름·앱 grant 무효화·guard 거절·삭제 원장 재적용·원본/역할 보존/정리 9건·check/unit 271 통과. 호스팅 복원은 별도. [근거](../quality/reports/w14-c2b-restore-session-check-2026-11-17.json) |
 | W14-D1 | 승인된 운영 DB 적용·권한 카탈로그·권한 원복 | IN_PROGRESS | 운영 SQL 27/56·29개 남음. 사용자 승인 완료, 공급자 확인 창 만료로 중단. 읽기 전용 RLS 18/18·직접 DML/익명 definer/내부 역할 전환 0. 실제 Google/운영 수락과 별도. [근거](../quality/reports/w14-d1-production-progress-check-2026-11-17.json) |
 
 다음 순서: 이메일과 독립적인 W14-C2 운영/원장·W15 분산 제한/복원 검증을 진행하며, 지원 주소 도착 후 W12-C2b 실제 Google·W12-D2 브라우저·W27-C 최종 정책·W13/W15 수락을 마쳐 W17 공개한다. 초기 베타는 Google만 제공한다. Vercel 팀 접근·Hobby Active와 보호된 staging 배포 1건을 확인했다. 스테이징/로컬 SQL은 56개이며 실제 제공자 통합 수락은 남아 있다.

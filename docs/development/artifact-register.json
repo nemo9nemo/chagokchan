@@ -91,7 +91,7 @@
     "artifact_report": "docs/quality/reports/security-completion-audit-2026-10-20.json",
     "full_openapi_validator": "not_run",
     "mermaid_render": "not_run",
-    "planned_test_cases": 97,
+    "planned_test_cases": 98,
     "application_tests_executed": 271,
     "application_test_scope": "runtime_ports_fixture_manifest_me_api_security_goal_board_lifecycle_personal_praise_board_connection_shared_board_directory_news_goal_trash_idempotent_retry_service_worker_pwa_cache_units_self_praise_tags_grape_layout_news_labels deployed_session_and_registration_api",
     "database_connectivity_verified": true,
@@ -1217,6 +1217,18 @@
         "supabase/migrations/20261117124012_profile_preview_backward_compatibility.sql",
         "supabase/tests/022_self_profile_settings.test.sql",
         "docs/changes/2026-11-17-profile-settings.md"
+      ]
+    },
+    {
+      "id": "ART-049",
+      "title": "격리 복원 사본의 전체 과거 인증 상태 무효화",
+      "status": "implemented_and_verified_local_restore_scope",
+      "paths": [
+        "docs/plans/W14-C2b-restore-session-invalidation.md",
+        "scripts/local-restore-database.mjs",
+        "scripts/test-local-account-restore.mjs",
+        "docs/quality/reports/w14-c2b-restore-session-check-2026-11-17.json",
+        "docs/changes/2026-11-17-restore-session-invalidation.md"
       ]
     }
   ],

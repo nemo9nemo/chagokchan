@@ -2142,6 +2142,29 @@
       "expected": "보조 표시는 권한 판단을 바꾸지 않으며 본인 설정·공유 대상이 혼동되지 않음. 실제 Google/HTTPS 수락과 별도.",
       "status": "passed",
       "evidence": "reports/w12-e-profile-settings-check-2026-11-17.json"
+    },
+    {
+      "id": "TC-RESTORE-SESSION-001",
+      "requirement_ids": [
+        "REQ-010",
+        "NFR-001",
+        "NFR-004"
+      ],
+      "policy_ids": [
+        "POL-DELETE-003",
+        "POL-ACCESS-001"
+      ],
+      "level": "integration",
+      "title": "백업 뒤 로그아웃한 비탈퇴 사용자의 과거 세션 복원 차단",
+      "steps": [
+        "실제 로컬 Auth 합성 사용자·목표·칭찬·재인증 grant를 전체 암호화 백업한다.",
+        "백업 뒤 한 계정을 실제 삭제하고 비탈퇴 대조 사용자는 Auth 로그아웃한다.",
+        "표시된 미노출 임시 DB에 복원해 폐기된 대조 세션이 다시 존재함을 확인한다.",
+        "전체 복원 인증 상태를 무효화하고 실제 발급 세션 메타데이터의 DB guard 거절·최신 삭제 원장 재적용·대조 목표/칭찬 보존·원본/역할 보존·정리를 확인한다."
+      ],
+      "expected": "탈퇴 여부와 무관하게 과거 세션·갱신/인증 흐름·재인증 grant를 재사용할 수 없다. 실제 호스팅 복원/Google 수락과 구분한다.",
+      "status": "passed",
+      "evidence": "reports/w14-c2b-restore-session-check-2026-11-17.json"
     }
   ],
   "updated_on": "2026-11-17"
