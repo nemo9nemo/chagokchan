@@ -52,7 +52,7 @@
     {
       "id": "OPS-INPUT-01",
       "subject": "운영 주체·지원 연락처·도메인·월 예산",
-      "status": "personal_free_first_platform_domain_confirmed_support_email_pending",
+      "status": "personal_free_first_platform_domain_public_contact_confirmed",
       "required_before": "service_provisioning_and_release"
     },
     {
@@ -1230,6 +1230,25 @@
         "docs/quality/reports/w14-c2b-restore-session-check-2026-11-17.json",
         "docs/changes/2026-11-17-restore-session-invalidation.md"
       ]
+    },
+    {
+      "id": "ART-050",
+      "title": "확정 공개 연락처·스테이징 설정과 사용자 배포 보류 기록",
+      "status": "contact_configuration_verified_new_deployment_deferred_by_user",
+      "paths": [
+        "docs/development/public-contact-settings.md",
+        "docs/quality/reports/w27-c2a-public-contact-settings-check-2026-11-17.json",
+        "docs/deployment/staging-source-upload-2026-11-17.md",
+        "docs/deployment/staging-source-manifest-2026-11-17.json"
+      ]
+    },
+    {
+      "id": "ART-051",
+      "title": "인증·초대 남용 방어 현재 점검과 관찰 규칙 초안",
+      "status": "read_only_review_and_local_draft_not_enforced",
+      "paths": [
+        "docs/plans/W15-B-auth-abuse-protection.md"
+      ]
     }
   ],
   "resolved_inputs": [
@@ -1354,7 +1373,7 @@
     "monetization": "secondary_after_launch_not_a_release_gate",
     "workflow": "codex_only_per_user_2026-10-19",
     "primary_objective": "public_web_app_launch",
-    "operator_input_status": "individual_free_first_no_domain_support_pending_accounts_owned_per_user_2026-11-03",
+    "operator_input_status": "individual_free_first_platform_domain_public_support_and_operator_confirmed_2026-11-17",
     "web_only_assessment": {
       "work_item": "W22-D",
       "status": "conditional_review_documented_local_read_only_checks_passed",
@@ -1383,7 +1402,7 @@
     "operator": "individual",
     "cost_preference": "zero_operating_cost_first_no_paid_upgrade_or_domain_purchase",
     "domain": "platform_default",
-    "support_email": "user_will_provide_new_common_mailbox_per_2026-11-10",
+    "support_email": "nemodong.studio@gmail.com_user_explicit_final_2026-11-17",
     "supabase_org_free_project_creation": "authorized",
     "initial_auth_providers": [
       "google"
@@ -1392,6 +1411,9 @@
     "vercel_team_access": "approved_by_user_2026-11-09_verified_connector_access",
     "vercel_plan": "Hobby_active_verified_Billing_UI_2026-11-10",
     "production_database": "kwzncrefatofwjzrqpma_free_Seoul_27_of_56_migrations_user_approved_provider_confirmation_expired",
-    "staging_database": "dsjrqipbakluvdvgxide_active_57_history_records_58_source_migrations_profile_bundle_applied_erasure_gate_false"
+    "staging_database": "dsjrqipbakluvdvgxide_active_57_history_records_58_source_migrations_profile_bundle_applied_erasure_gate_false",
+    "public_operator_name": "네모동",
+    "new_staging_source_deployment": "deferred_by_user_2026-11-17",
+    "google_configuration": "resumed_with_nemodong.studio_account_login_pending"
   }
 }

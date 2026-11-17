@@ -183,15 +183,16 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W27-B | 배포 후보 빌드·런타임·환경 호환성 | DONE | Node 24.22.1 고정/배포 보안 하한, Next 16.4.5·잠금 파일, webpack·정책 JSON 정적 import, host/PORT·fixture 외부 제공 거절을 구현·검증했다. 전체 unit 206·check/build·격리 production 보안 HTTP 10·audit 통과. 실제 클라우드 빌드/Google/사용자 수락은 별도. [증거](../quality/reports/w27-b-runtime-security-check-2026-11-09.json) |
 | W27-C | 웹 공개 안내·검색/캐시·정책/지원 동선 | IN_PROGRESS | C1의 공개 안내/문안 화면·개인 연락처 비대입·noindex/no-store 로컬 검증 완료. C2 최종 운영·공급자/정책·실제 공개 수락과 로그인 복귀는 후속 |
 | W27-C1 | 공개 안내·연락처 경계·정책 문안 화면 기반 | DONE | 소개/도움말/개인정보/이용 안내/문의 5개 route 구현. unit 252·check/build·HTTP 20·데스크톱/모바일 10개 화면 검증. 개인 계정 연락처 자동 대입 없음. 정책은 공개 전 문안 표시이며 정식 공개 정책 완료와 구분. [근거](../quality/reports/w27-c1-public-information-check-2026-11-10.json) |
-| W27-C2 | 최종 운영 연락처·처리방침·공개 수락 | IN_PROGRESS | 지원 주소·공개 운영자 표시, 실제 Google 전달 항목·공급자/국외 처리·시행일·운영 삭제/백업 검증 후 문안 확정. 초기 noindex 유지. 임의 개인 메일·허위 연락처 사용하지 않음 |
+| W27-C2 | 최종 운영 연락처·처리방침·공개 수락 | IN_PROGRESS | 지원 주소 nemodong.studio@gmail.com·공개 운영자 네모동 확정/스테이징 환경 저장. 새 웹 배포는 사용자 보류. 실제 Google 전달 항목·공급자/국외 처리·시행일·운영 삭제/백업 검증 후 문안 확정. 초기 noindex 유지. 임의 개인 메일·허위 연락처 사용하지 않음 |
+| W27-C2a | 확정 공개 연락처·스테이징 환경 설정 | DONE | **설정 저장/재조회·입력 검증 범위 완료.** 네모동·nemodong.studio@gmail.com. 새 배포와 실제 페이지 표시는 사용자 배포 보류로 미완료. [근거](../quality/reports/w27-c2a-public-contact-settings-check-2026-11-17.json) |
 | W14-B | 무료·분리된 HTTPS 스테이징 배포/접근 보호 | DONE | Hobby/Active·서울 함수·Node24·검증 main 0143902의 실제 빌드 READY. All Deployments 인증 보호 적용 후 익명 요청 302 로그인 전환. 소유자 브라우저 홈/안내5·앱 세션 차단·CSRF 준비 확인. 실제 Google/제품 수락 0. 초기 기본 보호 범위의 운영 별칭 200과 수정도 기록. [근거](../quality/reports/w14-b-https-staging-check-2026-11-10.json) |
 | W14-C1 | 삭제 작업자·내부 예약·암호화 로컬 원장 검증 기반 | DONE | 로컬 SQL 56개·DB 426·전체 unit 260·실제 로컬 Auth/DB 8 통과. 원장 실패·Auth 장애·완료 확인 재시도·37일 보관·다른 사용자/기존 상태 보존 확인. 호스팅 원장/스케줄과 전체 백업 복원은 미구성. [범위](deletion-worker.md) · [근거](../quality/reports/w14-c1-deletion-worker-check-2026-11-10.json) |
 | W14-C2 | 독립 운영 원장·정기 파기·백업/복원 | IN_PROGRESS | 실제 배포 gate는 false 유지. 계정 외 목표 파기/취소 내용의 복원 차단·요청 접수와 원장의 장애 경계·운영 스케줄·최신 원장 재적용/전체 복원 수락 필요. 운영 DB는 사용자 승인 후 27/56개 적용. 공급자 확인 만료로 29개 남음. 임시 플러그인 권한 원복/조회 완료 |
 | W14-C2a | 암호화 전체 로컬 백업·삭제 계정 복원 경계 | DONE | pg_dump/pg_restore·실제 Auth 삭제·독립 원장 재적용 7건·전체 unit 264 통과. 원본/역할 보존·임시 DB/파일 정리 확인. 호스팅 백업/복원·스케줄 재개는 별도. [근거](../quality/reports/w14-c2a-account-restore-check-2026-11-11.json) |
 | W14-C2b | 복원 사본의 전체 세션·인증 흐름 무효화 | DONE | **로컬 복원 안전성 보완 완료.** 백업 뒤 실제 로그아웃한 비탈퇴 사용자의 과거 세션 복원을 재현하고 전원 세션/토큰/인증 흐름·앱 grant 무효화·guard 거절·삭제 원장 재적용·원본/역할 보존/정리 9건·check/unit 271 통과. 호스팅 복원은 별도. [근거](../quality/reports/w14-c2b-restore-session-check-2026-11-17.json) |
-| W14-D1 | 승인된 운영 DB 적용·권한 카탈로그·권한 원복 | IN_PROGRESS | 운영 SQL 27/56·29개 남음. 사용자 승인 완료, 공급자 확인 창 만료로 중단. 읽기 전용 RLS 18/18·직접 DML/익명 definer/내부 역할 전환 0. 실제 Google/운영 수락과 별도. [근거](../quality/reports/w14-d1-production-progress-check-2026-11-17.json) |
+| W14-D1 | 승인된 운영 DB 적용·권한 카탈로그·권한 원복 | BLOCKED | 운영 SQL 27/56·29개 남음. 사용자 승인 완료, 공급자 확인 창 만료로 중단. 읽기 전용 RLS 18/18·직접 DML/익명 definer/내부 역할 전환 0. 실제 Google/운영 수락과 별도. [재개 근거](../quality/reports/w14-d1-production-resume-check-2026-11-17.json) |
 
-다음 순서: 이메일과 독립적인 W14-C2 운영/원장·W15 분산 제한/복원 검증을 진행하며, 지원 주소 도착 후 W12-C2b 실제 Google·W12-D2 브라우저·W27-C 최종 정책·W13/W15 수락을 마쳐 W17 공개한다. 초기 베타는 Google만 제공한다. Vercel 팀 접근·Hobby Active와 보호된 staging 배포 1건을 확인했다. 스테이징/로컬 SQL은 56개이며 실제 제공자 통합 수락은 남아 있다.
+현재 다음 작업은 W14-C2 호스팅 원장/정기 실행·목표/취소 파기 복원, W15 분산 제한·직접 Auth 남용 방어, 지정 Google 계정의 로그인/제공자 수락이다. 공개 연락처는 확정됐다. 로컬 SQL 58개, 스테이징은 57개 이력에 58개 소스가 대응한다. 운영 DB 기존 승인 목록은 27/56개로 공급자 확인 만료가 남아 있다. 새 소스 외부 업로드·배포는 사용자 요청으로 보류이며, 기존 보호된 staging 배포와 이번 로컬/DB 완료를 구분한다.
 
 ## W12 2차 출시 준비
 
@@ -201,7 +202,7 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | W12-B | 가입 bootstrap·현재 인증 계정 문맥 | DONE | 새 SQL 2개·명시적 확인·정책 버전·원자적 계정/프로필·삭제 표시·최초 값 보존 RPC/API 완료. unit 159·DB 350·로컬 가입 10·A/B/C HTTP 24·세션 회귀 5·빌드 통과. 실제 Google/OTP·가입 UI·운영 정리 경합은 미완료. [증거](../quality/reports/w12-b-registration-check-2026-10-19.json) |
 | W12-C | 실제 Google·갱신·로그아웃·초대 복귀 | IN_PROGRESS | C1·C2a의 서버/로컬 Auth 검증 완료. 초기 베타 OTP는 사용자 결정으로 유예. 실제 Google·HTTPS·다중 탭/사용자 수락·공유 제한/봇 방어는 남아 있다. |
 | W12-C2a | Google 웹 BFF·성인 가입·갱신·로그아웃 UI 기반 | DONE | 단위 231·check/build·격리 HTTP 13·실제 로컬 Auth/DB 8·로그아웃 회귀 6·비로그인 화면 2개 폭 확인. 기존 데이터 보존. Google 교환은 대체했으며 실제 Google 0. [증거](../quality/reports/w12-c2-google-web-auth-check-2026-11-09.json) |
-| W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | Google Cloud 차곡찬 프로젝트/이름 준비·Vercel 팀 접근 승인/조회 완료. 공통 지원 이메일·OAuth 클라이언트/제공자 설정·무료 플랜 확인 뒤 실제 콜백·가입·초대·만료/로그아웃·다중 탭을 검증한다. |
+| W12-C2b | 실제 Google 제공자·HTTPS 브라우저 수락 | IN_PROGRESS | Google Cloud 차곡찬 프로젝트/이름 준비·Vercel 팀 접근 승인/조회 완료. 공개 지원 주소는 nemodong.studio@gmail.com으로 확정. 사용자 일시 유예 후 이 Google 계정으로 재개했으며 로그인/프로젝트 접근 확인 대기. OAuth 클라이언트/제공자·실제 콜백·가입·초대·만료/로그아웃·다중 탭은 미완료. |
 | W12-C1 | 활성 Auth 세션 현재/전체 로그아웃 API | DONE | unit 199(신규 11)·새 로컬 Auth 사용자 2명/발급 세션 4개의 통합 6·production HTTP 10·build 통과. current/all 범위·다른 사용자 보존·폐기 JWT 재사용 거절·기존 데이터/사용자/세션 보존 확인. 갱신/만료 경합·로그아웃 UI·실제 제공자/HTTPS 브라우저 수락은 미완료다. [증거](../quality/reports/w12-c1-logout-check-2026-10-26.json) |
 | W12-D | 재인증·계정 탈퇴 동선 | IN_PROGRESS | D1·D2a의 서버 증명/발급·재인증/탈퇴 BFF 로컬 검증 완료. 확인/접수 화면 구현. D2 브라우저·실제 제공자 수락과 W14 독립 원장/운영 파기는 후속 |
 | W12-D1 | 서명한 재인증 증명의 최소 권한 grant 발급 | DONE | 새 SQL 2개(로컬 총 55)·서명 단위 4 포함 전체 235·DB 419(새 경계 13)·실제 로컬 Auth 기반 12 통과. 기존 데이터/키 설정 보존. 실제 Google 0. [증거](../quality/reports/w12-d1-reauth-proof-check-2026-11-09.json) |
@@ -214,3 +215,7 @@ W14는 서비스 개설을 준비할 때 진행하며 W16 Git/CI는 완료했다
 | ID | 기능 단위 | 상태 | 결과·다음 행동 |
 | --- | --- | --- | --- |
 | W12-E | 본인 표시 이름 설정·공유 상대 구분 | DONE | **로컬 구현·검증 완료.** PATCH /me·최소 권한 RPC·동명이인 보조 표시·구버전 미리보기 호환. unit 271·DB 437·실제 로컬 Auth 프로필 9/연결 13·연결 API 36·합성 브라우저 72·보안 HTTP 21·check/build 통과. 스테이징 SQL 2개 원자 적용·카탈로그 통과(57이력/58소스). 운영 DB 적용·새 웹의 실제 Google 수락은 별도 대기. [근거](../quality/reports/w12-e-profile-settings-check-2026-11-17.json) |
+
+## W15-B 인증·초대 남용 방어 후속
+
+실제 staging custom WAF 구성 없음·Google 시작 경로의 IP 공유 제한 미연결을 확인했다. 단일 관찰 규칙·단계별 검증·직접 Auth/지역별 카운터/15분 정책 경계를 [실행 초안](../plans/W15-B-auth-abuse-protection.md)에 정리했다. 외부 규칙 생성·게시·차단/부하 수락은 미실행이며 W15와 TC-RATE-001은 완료로 올리지 않는다.

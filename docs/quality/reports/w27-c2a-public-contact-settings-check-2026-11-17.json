@@ -1,0 +1,53 @@
+{
+  "work_item": "W27-C2a",
+  "source_base": "342d96e",
+  "status": "public_contact_configuration_verified_new_deployment_deferred_by_user",
+  "public_operator": "네모동",
+  "public_support_email": "nemodong.studio@gmail.com",
+  "user_confirmation_date": "2026-11-17",
+  "provider": {
+    "team": "team_q7LLsRFNid0SClIXPPtGoMnk",
+    "project": "prj_fpIFXdqLYrIKI5JgkpCFcVUPrZ4Z",
+    "name": "chagokchan-staging",
+    "environment_target": "production_of_staging_only_project",
+    "APP_PUBLIC_OPERATOR_NAME": "네모동",
+    "APP_SUPPORT_EMAIL": "nemodong.studio@gmail.com",
+    "values_read_back_and_matched": true,
+    "existing_deployment_protection": "all",
+    "plan_changed": false
+  },
+  "checks": {
+    "existing_public_information_validation": "passed_explicit_final_values_missing_fields_zero",
+    "new_deployment_created": false,
+    "live_new_contact_render_verified": false,
+    "google_provider_configured": false,
+    "real_google_acceptance": false
+  },
+  "deployment": {
+    "fixed_source_commit": "70105860b9f8b3ef1d1e3de406615a1b9559dc11",
+    "public_source_unauthenticated_HTTP_status": 200,
+    "public_files_verified_byte_identical": 202,
+    "source_bytes": 1144019,
+    "files_uploaded_before_review_block": 57,
+    "review_rejection": "file_source_external_transfer_explicit_approval_required_despite_public_source_evidence",
+    "user_choice": "external_source_upload_and_deploy_deferred",
+    "manifest": "docs/deployment/staging-source-manifest-2026-11-17.json",
+    "credentials_and_local_data_excluded": true,
+    "alternative_transfer_route_used": false
+  },
+  "google": {
+    "initial_deferral": "superseded_by_user_resume_with_explicit_studio_account",
+    "intended_account": "nemodong.studio@gmail.com",
+    "existing_project": "ninth-expanse-514206-u0",
+    "app_branding_and_client": "not_created",
+    "pending": "user_login_to_specified_account_and_project_access_check",
+    "personal_existing_login_email_persisted_to_public_docs": false
+  },
+  "not_run": [
+    "new_hosted_contact_render",
+    "Google_provider_and_real_auth",
+    "final_privacy_policy_acceptance",
+    "production_release"
+  ],
+  "public_release_ready": false
+}
