@@ -97,9 +97,9 @@ test("invite preview checks CSRF before RPC and forwards only a normalized secre
   let called = false;
   const client = { rpc: async (name, value) => {
     called = true;
-    assert.equal(name, "preview_connection_invite");
+    assert.equal(name, "preview_connection_invite_with_profile");
     args = value;
-    return { data: { inviter_nickname: "초대한이", expires_at: "2026-10-09T00:00:00Z" }, error: null };
+    return { data: { inviter_nickname: "초대한이", inviter_display_code: "0123456789AB", expires_at: "2026-10-09T00:00:00Z" }, error: null };
   } };
   const denied = await previewConnectionInviteResponse(mutationRequest("/api/v1/connection-invites/preview", { code: "0123456789ab" }, { includeCsrf: false }), client, opts);
   assert.equal(denied.status, 403);

@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-17 W12-E: 본인 프로필 PATCH /me·최소 권한 RPC·동명이인 보조 표시를 로컬 구현/검증했다. unit 271·pgTAP 437·실제 로컬 Auth 프로필 9/기존 연결 13·A/B/C 연결 API 36·합성 브라우저 72·production 보안 HTTP 21·check/build 통과. SQL은 2개 추가해 로컬 총 58개다. 기존 미리보기 RPC 두 필드를 보존하는 후속 SQL을 포함하며 호스팅에 두 신규 파일을 원자적으로 준비하기 전 의존 웹을 배포하지 않는다. 스테이징 DB를 재개하고 신규 SQL 2개를 단일 트랜잭션으로 적용했다(57개 이력/58개 소스). 신규 RPC 2개 최소 권한·RLS 18·기존 응답 호환 카탈로그 통과. 실제 Google/호스팅 BFF 수락은 미완료. [근거](../quality/reports/w12-e-profile-settings-check-2026-11-17.json). W09-F는 PR #38·quality 44073459547 성공 뒤 main 0ef5802로 병합됐다.
+
 2026-11-17 W09-F: 초대 전송 중/재시도 보유 상태와 동기 가드를 분리하고 확인한 초대 스냅샷에 요청을 고정했다. 코드 변경 후 재확인·늦은 미리보기 무시·불확실 요청 닫기 확인·별도 발급 초대 보존을 검증했다. 브라우저 합성 API 54(초대 28+공유 26)·unit 264·로컬 연결 RPC 13·check/build 통과. [근거](../quality/reports/w09-f-invite-request-recovery-check-2026-11-17.json). W09-E는 기능 36fbfaf·PR #37·필수 quality 44071061315 성공 후 main 4ad747d로 병합됐다. 다음은 W12-E 본인 프로필/상대 구분이며 실제 Google/HTTPS/기기 수락·운영 DB/원장·분산 제한·공개는 계속 남는다.
 
 2026-11-17 W09-E: F-01과 G-07의 최소 초안 보호를 구현했다. 판별 메모리 상태·판 ID/본문/키 고정·동기 submit 가드·늦은 응답 무시·권한 회수 오류 보존. 브라우저 합성 API 26·unit 264·DB 426·로컬 공유 RPC/판/개인 칭찬/연결 API·빌드·보안 HTTP 20 통과. 실제 Google/HTTPS/기기 수락은 별도다. [근거](../quality/reports/w09-e-shared-praise-recovery-check-2026-11-17.json). 다음은 W09-F 초대 재시도, W12-E 프로필, 기존 W14/W15/W12 실제 수락 순서다. 기존 W09-A~D 완료 기록은 보존한다.

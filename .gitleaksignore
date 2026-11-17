@@ -12,3 +12,8 @@ ab0ffbe5dbe7e88f27ae47ecfd3cf044864baea6:scripts/reauth-proof.test.mjs:generic-a
 4313d2b2bdcf8a0a5bea0bcb9116d44253ab40bb:docs/quality/reports/w20-a-praise-tag-check-2026-10-15.json:generic-api-key:18
 # operationId duplicate-check programming expression in the old artifact verifier.
 56914bfb78b4bb3c10adc4b8cb50a36f7348a3b5:scripts/verify-artifacts.mjs:generic-api-key:84
+
+# Verified source SHA-256 values in W12-E evidence; exact historical locations only.
+fc62e0929fd9f8c78f9351515d5676ecd41bbb61:docs/quality/reports/w12-e-profile-settings-check-2026-11-17.json:generic-api-key:233
+fc62e0929fd9f8c78f9351515d5676ecd41bbb61:docs/quality/reports/w12-e-profile-settings-check-2026-11-17.json:generic-api-key:235
+fc62e0929fd9f8c78f9351515d5676ecd41bbb61:docs/quality/reports/w12-e-profile-settings-check-2026-11-17.json:generic-api-key:240

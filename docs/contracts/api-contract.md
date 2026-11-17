@@ -76,3 +76,7 @@ GET은 사용자 세션과 RLS/제한 projection, 변경은 지정 업무 RPC로
 # Google 재인증·탈퇴 웹 구현 후속 (2026-11-09)
 
 초기 베타의 재인증은 Google·account.delete만 허용한다. 별도 `/auth/reauth/callback`에서 기존 사용자/세션과 새 PKCE 결과의 동일 UUID·새 세션을 확인하고 기존 세션을 폐기한다. GET 흐름 조회와 POST 탈퇴 접수는 암호화한 결과 쿠키의 UUID·세션도 검사한다. 탈퇴 접수 202의 status는 같은 멱등 요청을 재조회할 때 pending/running/completed/failed 중 현재 상태이며, access_revoked=true는 제품 접근 차단을 뜻한다. 접수 안내 쿠키만으로 실제 파기 완료를 주장하지 않는다. 일반 로그인 next는 /·/connect·/account/deletion만 허용한다. 실제 제공자·운영 파기 수락은 별도다.
+
+## 본인 프로필 설정 (W12-E)
+
+PATCH /me는 검증된 현재 사용자 문맥에서 update_my_profile RPC를 호출하고 기존 Me projection을 반환한다. nickname·avatar_key 중 변경한 필드만 받으며 NFC/ASCII 경계 공백 정리·1~20 코드포인트·허용 아바타를 검사한다. timezone·user_id·가입/성인 정보는 입력할 수 없다. CSRF·현재 세션·active 계정·분당 10회/제한기 장애 차단과 no-store를 유지한다. 새 초대 BFF는 preview_connection_invite_with_profile RPC를 사용하며 구버전 preview_connection_invite는 기존 두 필드 응답을 유지한다. 호스팅의 신규 SQL 2개를 원자적으로 준비하기 전 새 웹을 배포하지 않는다. [결정](../decisions/ADR-0012-self-profile-settings.md).

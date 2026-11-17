@@ -4,19 +4,22 @@ export const boardA = { viewer_role: "contributor", id: "11111111-1111-4111-8111
 export const boardB = { ...boardA, id: "22222222-2222-4222-8222-222222222222", shared_title: "합성 공유판 B", owner: { ...boardA.owner, user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nickname: "합성 B" }, current_bunch: { ...boardA.current_bunch, id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd" } };
 export const deferred = () => { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; };
 export const fulfill = (route, body, status = 200) => route.fulfill({ status, json: body, headers: { "Cache-Control": "no-store" } });
+export const syntheticMe = { user_id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", profile: { user_id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", nickname: "합성 사용자", avatar_key: "star" }, timezone: "Asia/Seoul", account_status: "active", adult_confirmed_at: "2026-11-17T00:00:00Z", registration_policy_version: "0.2.0" };
 
 export async function prepare(page, custom = async () => false, initialPath = "/") {
   const unexpected = [];
   const errors = [];
+  let initialProfileRequested = false;
   page.on("pageerror", error => errors.push(error.message));
   await page.route("**/api/v1/**", async route => {
     const request = route.request();
     const url = new URL(request.url());
     expect(url.origin).toBe("http://127.0.0.1:3417");
     const path = url.pathname;
+    if (request.method() === "GET" && path === "/api/v1/me") initialProfileRequested = true;
     if (await custom({ route, request, path })) return;
     if (path === "/api/v1/auth/csrf") return fulfill(route, { csrf_token: "synthetic-ui-csrf" });
-    if (request.method() === "GET" && path === "/api/v1/me") return fulfill(route, { profile: { user_id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", nickname: "합성 사용자", avatar_key: "star" } });
+    if (request.method() === "GET" && path === "/api/v1/me") return fulfill(route, syntheticMe);
     if (request.method() === "GET" && path === "/api/v1/shared-boards") return fulfill(route, { items: [boardA, boardB], next_cursor: null });
     for (const board of [boardA, boardB]) {
       if (request.method() !== "GET") break;
@@ -31,6 +34,8 @@ export async function prepare(page, custom = async () => false, initialPath = "/
   });
   await page.goto(initialPath);
   await expect(page.getByRole("button", { name: "받은 공유판", exact: true })).toBeVisible();
+  // SSR already contains buttons. Wait for the mounted client effect before clicking them.
+  await expect.poll(() => initialProfileRequested).toBe(true);
   return { check: () => { expect(unexpected).toEqual([]); expect(errors).toEqual([]); } };
 }
 

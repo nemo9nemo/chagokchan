@@ -11,6 +11,8 @@ import { canOpenConnections } from "./news-labels.mjs";
 import PraiseSheet from "./praise-sheet";
 import TagInput, { type TagInputHandle } from "./tag-input";
 import SharePanel from "./share-panel";
+import ProfileSettings from "./profile-settings";
+import { defaultNickname, formatDisplayCode, profileDisplayCode } from "@/shared/profile.mjs";
 
 type GoalStatus = "active" | "completed" | "archived";
 type Bunch = { id: string; cycle_no: number; target_count: number; valid_count: number; progress_state: "incomplete" | "complete"; completed_at: string | null };
@@ -28,6 +30,7 @@ type InviteMeta = { id: string; created_at: string; expires_at: string; redeemed
 type ConnectionRequest = { id: string; direction: "incoming" | "outgoing"; other_user: Profile | null; status: "pending" | "accepted" | "rejected" | "cancelled" | "expired"; created_at: string; expires_at: string };
 type Block = { id: string; blocked_user: Profile; created_at: string };
 type BoardMember = { user: Profile; role: "contributor"; status: "active" | "revoked"; connection_generation: number };
+type InvitePreview = { inviter_nickname: string; inviter_display_code: string; expires_at: string };
 type ConnectionInvite = { id: string; link_path: string; code: string; expires_at: string };
 type PeerAttempt = IdempotentAttempt & { boardId: string };
 type PeerDraft = { message: string; attempt: PeerAttempt | null; error: string };
@@ -47,7 +50,7 @@ class ApiFailure extends Error {
 
 function ConnectionsPanel(props: {
   loading: boolean; error: string; connections: Connection[]; invites: InviteMeta[]; requests: ConnectionRequest[]; blocks: Block[];
-  inviteResult: ConnectionInvite | null; invitePreview: { inviter_nickname: string; expires_at: string } | null;
+  inviteResult: ConnectionInvite | null; invitePreview: InvitePreview | null; ownProfile: Profile | null; onEditProfile: () => void;
   inviteToken: string; inviteCode: string; previewError: string; previewLoading: boolean; requestAttempt: boolean; requestSending: boolean;
   onCreateInvite: () => void; onRefresh: () => void; onPreview: (secret: { link_token: string } | { code: string }) => void; onInviteCodeChange: (value: string) => void;
   onRequest: (event?: FormEvent<HTMLFormElement>) => void; onClearInvite: () => void;
@@ -66,6 +69,7 @@ function ConnectionsPanel(props: {
   return <section className="content-card connection-center" aria-labelledby="connections-heading" aria-busy={props.loading || props.previewLoading || props.requestSending}>
     <p className="eyebrow">PEOPLE & PERMISSIONS</p><h2 id="connections-heading">연결 관리</h2>
     <p className="section-intro">연결을 맺은 것만으로 목표가 공유되지는 않아요. 공유판마다 따로 권한을 선택해요.</p>
+    {props.ownProfile && <div className="profile-toolbar"><p>요청에 표시될 내 이름: <b>{props.ownProfile.nickname}</b><span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(props.ownProfile.user_id))}</span></p><button className="button button-secondary" type="button" disabled={props.requestSending} onClick={props.onEditProfile}>내 이름 바꾸기</button></div>}
     {props.error && <div className="inline-alert" role="alert"><span>{props.error}</span><button type="button" onClick={props.onRefresh}>다시 불러오기</button></div>}
     {props.previewError && <p className="form-error" role="alert">{props.previewError}</p>}
 
@@ -83,7 +87,7 @@ function ConnectionsPanel(props: {
       </form>
       {props.previewLoading && <p className="loading-inline" role="status">초대를 확인하고 있어요.</p>}
       {props.invitePreview && <form className="invite-preview" onSubmit={props.onRequest}>
-        <p><b>{props.invitePreview.inviter_nickname}</b> 님의 초대예요.</p><p>만료 {shortDate(props.invitePreview.expires_at)} · 연결 요청을 보내면 상대가 수락할 때 연결돼요.</p>
+        <p><b>{props.invitePreview.inviter_nickname}</b> 님의 초대예요.<span className="profile-code">구분 {formatDisplayCode(props.invitePreview.inviter_display_code)}</span></p><p>만료 {shortDate(props.invitePreview.expires_at)} · 연결 요청을 보내면 상대가 수락할 때 연결돼요.</p>
         <div className="form-actions"><button className="button button-secondary" type="button" disabled={props.requestSending} onClick={props.onClearInvite}>취소</button><button className="button button-primary" type="submit" disabled={props.requestSending || props.previewLoading}>{props.requestSending ? "요청 보내는 중…" : props.requestAttempt ? "같은 요청 다시 보내기" : "연결 요청 보내기"}</button></div>
       </form>}
     </section>
@@ -92,8 +96,8 @@ function ConnectionsPanel(props: {
       <div className="settings-title"><div><p className="eyebrow">REQUESTS</p><h3 id="requests-heading">연결 요청</h3></div></div>
       {props.loading && props.requests.length === 0 ? <p className="loading-inline" role="status">요청을 불러오고 있어요.</p> : null}
       {incoming.length + outgoing.length === 0 ? <p className="history-empty">대기 중인 연결 요청이 없어요.</p> : <ul className="relationship-list">
-        {incoming.map((item) => <li key={item.id}><div><b>{displayName(item.other_user)}</b><span>보낸 요청 · {shortDate(item.expires_at)}까지</span></div><div className="relationship-actions"><button className="button button-primary" type="button" onClick={() => props.onResolveRequest(item, "accept")}>수락</button><button className="button button-secondary" type="button" onClick={() => props.onResolveRequest(item, "reject")}>거절</button></div></li>)}
-        {outgoing.map((item) => <li key={item.id}><div><b>{displayName(item.other_user)}</b><span>내가 보낸 요청 · {shortDate(item.expires_at)}까지</span></div><button className="text-button" type="button" onClick={() => props.onResolveRequest(item, "cancel")}>요청 철회</button></li>)}
+        {incoming.map((item) => <li key={item.id}><div><b>{displayName(item.other_user)}</b>{item.other_user && <span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(item.other_user.user_id))}</span>}<span>보낸 요청 · {shortDate(item.expires_at)}까지</span></div><div className="relationship-actions"><button className="button button-primary" type="button" onClick={() => props.onResolveRequest(item, "accept")}>수락</button><button className="button button-secondary" type="button" onClick={() => props.onResolveRequest(item, "reject")}>거절</button></div></li>)}
+        {outgoing.map((item) => <li key={item.id}><div><b>{displayName(item.other_user)}</b>{item.other_user && <span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(item.other_user.user_id))}</span>}<span>내가 보낸 요청 · {shortDate(item.expires_at)}까지</span></div><button className="text-button" type="button" onClick={() => props.onResolveRequest(item, "cancel")}>요청 철회</button></li>)}
       </ul>}
     </section>
 
@@ -101,7 +105,7 @@ function ConnectionsPanel(props: {
       <div className="settings-title"><div><p className="eyebrow">CONNECTIONS</p><h3 id="connected-heading">연결된 사람</h3></div><span className="history-count">{activeConnections.length}</span></div>
       {props.loading && props.connections.length === 0 ? <p className="loading-inline" role="status">연결을 불러오고 있어요.</p> : null}
       {activeConnections.length === 0 ? <p className="history-empty">아직 연결된 사람이 없어요. 초대 링크를 만들어 시작해 보세요.</p> : <ul className="relationship-list">
-        {activeConnections.map((item) => { const person = item.other_user; return <li key={item.id}><div><b>{displayName(person)}</b><span>사람 연결됨 · 공유판 권한은 목표 설정에서 따로 선택</span></div>{person && <div className="relationship-actions"><button className="text-button" type="button" onClick={() => props.onDisconnect(item)}>연결 해제</button><button className="text-button danger-link" type="button" onClick={() => props.onBlock(person.user_id)}>차단</button></div>}</li>; })}
+        {activeConnections.map((item) => { const person = item.other_user; return <li key={item.id}><div><b>{displayName(person)}</b>{person && <span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(person.user_id))}</span>}<span>사람 연결됨 · 공유판 권한은 목표 설정에서 따로 선택</span></div>{person && <div className="relationship-actions"><button className="text-button" type="button" onClick={() => props.onDisconnect(item)}>연결 해제</button><button className="text-button danger-link" type="button" onClick={() => props.onBlock(person.user_id)}>차단</button></div>}</li>; })}
       </ul>}
     </section>
 
@@ -119,7 +123,7 @@ function ConnectionsPanel(props: {
     <section className="connection-section" aria-labelledby="blocks-heading">
       <div className="settings-title"><div><p className="eyebrow">BLOCKED</p><h3 id="blocks-heading">차단한 사람</h3></div></div>
       {props.blocks.length === 0 ? <p className="history-empty">차단한 사람이 없어요.</p> : <ul className="relationship-list">
-        {props.blocks.map((item) => <li key={item.id}><div><b>{displayName(item.blocked_user)}</b><span>차단 중</span></div><button className="text-button" type="button" onClick={() => props.onRevokeBlock(item)}>차단 해제</button></li>)}
+        {props.blocks.map((item) => <li key={item.id}><div><b>{displayName(item.blocked_user)}</b>{item.blocked_user && <span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(item.blocked_user.user_id))}</span>}<span>차단 중</span></div><button className="text-button" type="button" onClick={() => props.onRevokeBlock(item)}>차단 해제</button></li>)}
       </ul>}
     </section>
   </section>;
@@ -160,7 +164,7 @@ function SharedBoardsPanel(props: {
         <div className="settings-title"><h3>참여 중</h3><button className="text-button" type="button" onClick={props.onRefresh}>새로고침</button></div>
         {props.loading && props.boards.length === 0 ? <p className="loading-inline" role="status">공유판을 불러오고 있어요.</p> : null}
         {props.boards.length === 0 && !props.loading ? <p className="history-empty">현재 참여 중인 공유판이 없어요.</p> : null}
-        <ul className="shared-board-list">{props.boards.map((board) => <li key={board.id}><button className={`shared-board-card ${props.selectedBoard?.id === board.id ? "selected" : ""}`} type="button" aria-pressed={props.selectedBoard?.id === board.id} disabled={props.sending} onClick={() => props.onSelect(board)}><b>{board.shared_title}</b><span>{board.owner.nickname ?? "공유판 주인"} 님</span><span>{board.current_bunch ? `${board.current_bunch.valid_count} / ${board.current_bunch.target_count} · ${board.current_bunch.cycle_no}회차` : "첫 회차 전"}</span></button></li>)}</ul>
+        <ul className="shared-board-list">{props.boards.map((board) => <li key={board.id}><button className={`shared-board-card ${props.selectedBoard?.id === board.id ? "selected" : ""}`} type="button" aria-pressed={props.selectedBoard?.id === board.id} disabled={props.sending} onClick={() => props.onSelect(board)}><b>{board.shared_title}</b><span>{board.owner.nickname ?? "공유판 주인"} 님</span><span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(board.owner.user_id))}</span><span>{board.current_bunch ? `${board.current_bunch.valid_count} / ${board.current_bunch.target_count} · ${board.current_bunch.cycle_no}회차` : "첫 회차 전"}</span></button></li>)}</ul>
         {props.cursor && <button className="text-button history-more" type="button" onClick={props.onMoreBoards}>공유판 더 보기</button>}
       </nav>
       <div className="shared-board-detail">
@@ -310,7 +314,9 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   const pendingInviteLoad = useRef<Promise<string | null> | null>(null);
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("goals");
   const [theme, setTheme] = useState<"garden" | "grape">("grape");
-  const [nickname, setNickname] = useState<string | null>(null);
+  const [ownProfile, setOwnProfile] = useState<Profile | null>(null);
+  const nickname = ownProfile?.nickname ?? null;
+  const [showProfile, setShowProfile] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [showPraise, setShowPraise] = useState(false);
   const [showShare, setShowShare] = useState(false);
@@ -375,7 +381,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
   const [connectionError, setConnectionError] = useState("");
   const [inviteResult, setInviteResult] = useState<ConnectionInvite | null>(null);
   const [inviteToken, setInviteToken] = useState("");
-  const [invitePreview, setInvitePreview] = useState<{ inviter_nickname: string; expires_at: string } | null>(null);
+  const [invitePreview, setInvitePreview] = useState<InvitePreview | null>(null);
   const [invitePreviewError, setInvitePreviewError] = useState("");
   const [invitePreviewLoading, setInvitePreviewLoading] = useState(false);
   const [inviteRequestAttempt, setInviteRequestAttempt] = useState<IdempotentAttempt | null>(null);
@@ -555,7 +561,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
 
   const loadProfile = useCallback(async () => {
     setProfileError("");
-    try { const me = await apiJson<{ profile: Profile }>("/api/v1/me"); setNickname(me.profile.nickname ?? "나"); }
+    try { const me = await apiJson<{ profile: Profile }>("/api/v1/me"); setOwnProfile(me.profile); }
     catch { setProfileError("작성자 정보를 불러오지 못했어요."); }
   }, []);
   useEffect(() => { void loadProfile(); }, [loadProfile]);
@@ -660,7 +666,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
     if ("link_token" in secret) { setInviteToken(secret.link_token); setInviteCode(""); }
     else { setInviteToken(""); setInviteCode(secret.code); }
     try {
-      const preview = await mutate<{ inviter_nickname: string; expires_at: string }>("/api/v1/connection-invites/preview", "POST", secret);
+      const preview = await mutate<InvitePreview>("/api/v1/connection-invites/preview", "POST", secret);
       if (!mounted.current || sequence !== invitePreviewSequence.current) return;
       invitePreviewSecret.current = { ...secret };
       setInvitePreview(preview);
@@ -1357,8 +1363,15 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
           ? <button className="badge share-badge" type="button" disabled={interactionLocked} onClick={() => { setShowShare(true); void loadBoardMembers(sharedBoard.id); }}>공유 켬</button>
           : <span className="badge" title="공유판은 판을 만들 때 켤 수 있어요">공유 끔</span>)}
         <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === "garden" ? "grape" : "garden")} aria-label="화면 색상 테마" aria-pressed={theme === "grape"}>테마 · {theme === "garden" ? "정원" : "포도"}</button>
+        <button className="button button-secondary" type="button" disabled={interactionLocked || !ownProfile} onClick={() => setShowProfile(true)}>표시 이름 설정</button>
         {deployedAuth && <AccountMenu />}
       </header>
+      {ownProfile?.nickname === defaultNickname && <p className="notice-banner">지인과 연결하기 전에 표시 이름과 구분 표시를 확인해 주세요. 표시 이름 설정에서 바꿀 수 있어요.</p>}
+      {!showPraise && profileError && <div className="inline-alert" role="alert">{profileError}<button type="button" onClick={() => void loadProfile()}>계정 정보 다시 불러오기</button></div>}
+      {showProfile && ownProfile && <ProfileSettings profile={ownProfile} describeError={errorMessage} onClose={() => setShowProfile(false)} onSave={async patch => {
+        const me = await mutate<{ profile: Profile }>("/api/v1/me", "PATCH", patch);
+        if (mounted.current) { setOwnProfile(me.profile); setProfileError(""); setNotice("표시 이름과 아바타를 저장했어요."); }
+      }} />}
       {isOnline === false && <div className="offline-banner" role="status" aria-live="polite">오프라인이에요. 다시 연결한 뒤 기록을 확인해 주세요. 오프라인 전송은 저장되거나 성공 처리되지 않아요.</div>}
       <div className="workspace">
         <aside className="goal-sidebar" aria-label="차곡찬 메뉴"><nav className="workspace-nav" aria-label="주요 화면">
@@ -1383,7 +1396,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
             onRetrySent={() => void loadSentPraises(sentRetry.current.cursor, sentRetry.current.pageCount)}
             onMoreSent={() => { if (sentPraises.next_cursor) void loadSentPraises(sentPraises.next_cursor); }}
           /> : workspaceView === "connections" ? <ConnectionsPanel
-            loading={connectionLoading} error={connectionError} connections={connections} invites={connectionInvites}
+            loading={connectionLoading} error={connectionError} ownProfile={ownProfile} onEditProfile={() => setShowProfile(true)} connections={connections} invites={connectionInvites}
             requests={connectionRequests} blocks={blocks} inviteResult={inviteResult} invitePreview={invitePreview}
             inviteToken={inviteToken} inviteCode={inviteCode} previewError={invitePreviewError}
             previewLoading={invitePreviewLoading} requestAttempt={inviteRequestAttempt !== null} requestSending={inviteRequestSending}
@@ -1505,7 +1518,7 @@ export default function ChagokchanApp({ deployedAuth = false }: { deployedAuth?:
           if (!person) return null;
           const member = boardMembers.find((entry) => entry.user.user_id === person.user_id);
           const granted = member?.status === "active";
-          return <li key={person.user_id}><div><b>{person.nickname ?? "연결된 사용자"}</b><span>{granted ? "이 판에 칭찬할 수 있어요" : "아직 허용하지 않았어요"}</span></div><button className="button button-secondary" type="button" disabled={memberLoading || Boolean(memberSaving) || Boolean(memberError)} onClick={() => void changeBoardMember(sharedBoard.id, person.user_id, granted)}>{memberSaving === `${sharedBoard.id}:${person.user_id}` ? "저장 중…" : granted ? "권한 회수" : "공유 허용"}</button></li>;
+          return <li key={person.user_id}><div><b>{person.nickname ?? "연결된 사용자"}</b><span className="profile-code">구분 {formatDisplayCode(profileDisplayCode(person.user_id))}</span><span>{granted ? "이 판에 칭찬할 수 있어요" : "아직 허용하지 않았어요"}</span></div><button className="button button-secondary" type="button" disabled={memberLoading || Boolean(memberSaving) || Boolean(memberError)} onClick={() => void changeBoardMember(sharedBoard.id, person.user_id, granted)}>{memberSaving === `${sharedBoard.id}:${person.user_id}` ? "저장 중…" : granted ? "권한 회수" : "공유 허용"}</button></li>;
         })}</ul>
       </SharePanel>}
       {recordDetail && <dialog ref={recordDialog} className="modal-panel record-detail" aria-labelledby="record-detail-heading" onCancel={(event) => { event.preventDefault(); setRecordDetail(null); }}>

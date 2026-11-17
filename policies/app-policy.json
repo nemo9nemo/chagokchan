@@ -1,7 +1,7 @@
 {
   "policy_version": "0.2.0",
   "effective_for": "mvp_development_baseline",
-  "updated_on": "2026-11-09",
+  "updated_on": "2026-11-17",
   "audience": {
     "mode": "adult_personal_beta",
     "initial_market": "KR",
@@ -154,7 +154,8 @@
     "peer_praise_sender_recipient_board_per_day": 30,
     "critical_write_limiter_failure": "deny_503",
     "praise_state_change_user_per_minute": 60,
-    "praise_write_daily_scope": "creation_only"
+    "praise_write_daily_scope": "creation_only",
+    "profile_update_user_per_minute": 10
   },
   "lifecycle": {
     "goal_restore_window_days": 30,
@@ -182,6 +183,9 @@
       "grape",
       "leaf",
       "star"
-    ]
+    ],
+    "nickname_normalization": "NFC_then_trim_ASCII_space_reject_control_or_all_whitespace",
+    "duplicate_nicknames_allowed": true,
+    "display_discriminator": "last_12_uuid_hex_uppercase_grouped_by_4_assistance_only_not_authentication"
   }
 }

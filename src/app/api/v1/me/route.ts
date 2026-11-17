@@ -1,6 +1,7 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { readAppMe } from "@/server/app-session";
+import { getAppSessionContext, readAppMe } from "@/server/app-session";
+import { updateMeResponse } from "@/server/profile-api.mjs";
 import { SessionAccountError } from "@/server/deployed-session.mjs";
 import { sessionFailureResponse } from "@/server/session-api-route";
 
@@ -41,4 +42,13 @@ export async function GET() {
     if (databaseCode === "PT403") return apiError("ACTION_FORBIDDEN", "요청을 수행할 수 없습니다.", 403, requestId);
     return apiError("DEPENDENCY_UNAVAILABLE", "요청을 처리할 수 없습니다.", 503, requestId);
   }
+}
+
+export async function PATCH(request: Request) {
+  const requestId = randomUUID();
+  try {
+    const context = await getAppSessionContext();
+    if (!context) return apiError("AUTH_REQUIRED", "현재 세션이 필요합니다.", 401, requestId);
+    return await updateMeResponse(request, context.client, context.userId);
+  } catch (error) { return sessionFailureResponse(error, requestId); }
 }

@@ -228,10 +228,11 @@ export function previewConnectionInviteResponse(request, client, options = {}) {
     try {
       const body = await validateMutationRequest(request, { expectedOrigin: options.expectedOrigin ?? process.env.APP_BASE_URL, secret: options.secret ?? getCsrfSigningSecret() });
       const p_secret = validateInviteSecret(body);
-      const { data, error } = await client.rpc("preview_connection_invite", { p_secret });
+      const { data, error } = await client.rpc("preview_connection_invite_with_profile", { p_secret });
       throwRpcError(error);
-      if (!exactObject(data, ["inviter_nickname", "expires_at"]) || Object.keys(data).length !== 2 ||
+      if (!exactObject(data, ["inviter_nickname", "expires_at", "inviter_display_code"]) || Object.keys(data).length !== 3 ||
           typeof data.inviter_nickname !== "string" || [...data.inviter_nickname].length < 1 || [...data.inviter_nickname].length > 20 ||
+          typeof data.inviter_display_code !== "string" || !/^[0-9A-F]{12}$/.test(data.inviter_display_code) ||
           !validTimestamp(data.expires_at)) throw new Error("Invite preview did not match its minimal allowlist.");
       return jsonResponse(data, 200, requestId);
     } catch (error) { return errorResponse(error, requestId); }

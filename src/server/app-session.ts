@@ -27,6 +27,16 @@ export async function getAppSessionClient() {
   return (await deployedContext())?.client ?? null;
 }
 
+// Profile writes also need the verified actor ID to validate their returned Me.
+export async function getAppSessionContext() {
+  if (process.env.APP_AUTH_MODE === "local_fixture") {
+    const client = await getLocalSessionClient();
+    const me = await readLocalMe();
+    return client && me ? { client, userId: me.user_id as string, me } : null;
+  }
+  return deployedContext();
+}
+
 export async function readAppMe() {
   if (process.env.APP_AUTH_MODE === "local_fixture") return readLocalMe();
   return (await deployedContext())?.me ?? null;

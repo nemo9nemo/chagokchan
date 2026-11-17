@@ -66,6 +66,11 @@ try {
     assert.equal(api.status, 401);
     assert.match(api.headers.get("cache-control"), /no-store/);
   });
+  const profilePatch = await request("/api/v1/me", { method: "PATCH", headers: { origin: env.APP_BASE_URL, "content-type": "application/json" }, body: '{"nickname":"unauthorized probe"}' });
+  check("profile PATCH requires a current session before any write and cannot be cached", () => {
+    assert.equal(profilePatch.status, 401);
+    assert.match(profilePatch.headers.get("cache-control"), /no-store/);
+  });
   const sw = await request("/sw.js");
   check("service worker is revalidated with a script-free same-origin fetch policy", () => {
     assert.equal(sw.status, 200);

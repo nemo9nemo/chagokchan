@@ -1084,19 +1084,20 @@
       },
       "patch": {
         "operationId": "updateMe",
-        "summary": "내 공개 프로필·표시 시간대 변경",
+        "summary": "내 닉네임·아바타 변경",
         "tags": [
           "me"
         ],
-        "description": "내 공개 프로필·표시 시간대 변경",
-        "x-implementation-status": "not_implemented",
+        "description": "검증된 현재 세션의 본인 nickname·avatar_key만 부분 갱신. NFC/ASCII 양끝 공백 정리·1~20 코드포인트·제어 문자/공백만 금지, 기존 아바타 목록. 미지정 필드 보존, 분당 10회. UUID·권한·성인 확인·정책 버전·timezone 변경은 입력 금지. 시간대 변경은 후속.",
+        "x-implementation-status": "implemented_local_verified_staging_SQL_applied",
         "x-requirements": [
           "REQ-001"
         ],
         "x-policy-ids": [
           "POL-ACCESS-001",
           "POL-TIME-001",
-          "POL-AUDIENCE-001"
+          "POL-AUDIENCE-001",
+          "POL-LIMIT-001"
         ],
         "x-test-cases": [
           "TC-AUTH-001",
@@ -1104,7 +1105,8 @@
           "TC-AUTH-003",
           "TC-UX-002",
           "TC-AUDIENCE-001",
-          "TC-AUTH-004"
+          "TC-AUTH-004",
+          "TC-PROFILE-001"
         ],
         "parameters": [
           {
@@ -4280,7 +4282,8 @@
           "TC-CONNECT-001",
           "TC-CONNECT-002",
           "TC-CONNECT-003",
-          "TC-UX-002"
+          "TC-UX-002",
+          "TC-PROFILE-002"
         ],
         "parameters": [
           {
@@ -6044,7 +6047,8 @@
           "nickname": {
             "type": "string",
             "maxLength": 20,
-            "minLength": 1
+            "minLength": 1,
+            "description": "NFC 후 양끝 ASCII 공백 정리, 제어 문자·공백만 금지"
           },
           "avatar_key": {
             "type": "string",
@@ -6053,11 +6057,6 @@
               "leaf",
               "star"
             ]
-          },
-          "timezone": {
-            "type": "string",
-            "maxLength": 80,
-            "description": "서버의 IANA 시간대 허용 검사"
           }
         },
         "minProperties": 1
@@ -7206,11 +7205,17 @@
           "expires_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "inviter_display_code": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{12}$",
+            "description": "UUID 마지막 12자리의 보조 구분 표시. 신원/권한 증명·전역 고유성 보장·초대 비밀이 아님."
           }
         },
         "required": [
           "inviter_nickname",
-          "expires_at"
+          "expires_at",
+          "inviter_display_code"
         ]
       },
       "ConnectionRequest": {
