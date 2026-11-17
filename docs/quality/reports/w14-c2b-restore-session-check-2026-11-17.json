@@ -1,0 +1,119 @@
+{
+  "work_item": "W14-C2b",
+  "source_base": "70105860b9f8b3ef1d1e3de406615a1b9559dc11",
+  "status": "passed_local_restore_scope_hosted_acceptance_pending",
+  "references": [
+    "REQ-010",
+    "NFR-001",
+    "NFR-004",
+    "POL-DELETE-003",
+    "POL-ACCESS-001",
+    "TC-RESTORE-SESSION-001"
+  ],
+  "environment": {
+    "node": "24.22.1",
+    "pnpm": "11.19.0",
+    "postgres": "17.11",
+    "local_source_migration_records": 58
+  },
+  "integration": {
+    "checked_at": "2026-11-17T14:04:22.351Z",
+    "status": "passed",
+    "failed_phase": null,
+    "executed": 9,
+    "cases": [
+      {
+        "name": "full_local_schema_auth_and_product_snapshot_encrypted_before_erasure",
+        "status": "passed"
+      },
+      {
+        "name": "wrong_backup_key_context_or_tampering_refuses_restore",
+        "status": "passed"
+      },
+      {
+        "name": "real_source_account_auth_and_owned_content_erased_after_snapshot",
+        "status": "passed"
+      },
+      {
+        "name": "nondeleted_control_session_actually_logged_out_after_snapshot",
+        "status": "passed"
+      },
+      {
+        "name": "restore_old_snapshot_to_unexposed_disposable_database_only",
+        "status": "passed"
+      },
+      {
+        "name": "all_restored_sessions_refresh_flows_and_reauth_grants_invalidated",
+        "status": "passed"
+      },
+      {
+        "name": "latest_independent_marker_reapplied_before_any_public_connection",
+        "status": "passed"
+      },
+      {
+        "name": "restored_revoked_session_denied_and_control_goal_praise_preserved",
+        "status": "passed"
+      },
+      {
+        "name": "disposable_database_and_files_removed_existing_source_auth_keys_roles_gate_preserved",
+        "status": "passed"
+      }
+    ],
+    "timings_ms": {
+      "backup_ms": 483,
+      "restore_ms": 1693,
+      "marker_reapply_ms": 1454
+    },
+    "full_local_pg_dump_pg_restore_executed": true,
+    "pg_dump_version": "17.11",
+    "backup_bytes": 1148645,
+    "snapshot_migration_records": 58,
+    "actual_source_auth_removed_by_worker": true,
+    "independent_latest_account_marker_reapplied": true,
+    "nondeleted_source_session_revoked": true,
+    "all_restored_auth_state_invalidated": true,
+    "synthetic_users": 2,
+    "original_source_preserved": true,
+    "disposable_target_dropped": true,
+    "archive_data_or_secret_logged": false,
+    "network_exposed_restore": false,
+    "mail_sent_from_restore": false,
+    "hosted_backup_schedule_configured": false,
+    "hosted_restore_acceptance_executed": false,
+    "goal_only_purge_or_praise_cancel_restore_executed": false,
+    "real_google_tests_executed": 0,
+    "production_data_used": false
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": {
+      "passed": 271,
+      "failed": 0
+    },
+    "artifact_structural_consistency": "passed",
+    "source_review": "local_target_name_creation_marker_and_no_arbitrary_host_source_guard_transactional_auth_invalidation_current_issued_session_metadata_source_preservation_reviewed"
+  },
+  "new_findings": [
+    "An old backup contains a nondeleted users session that was really revoked after the snapshot.",
+    "Invalidate all restored sessions/refresh tokens/auth flows/one-time tokens/app reauth grants before any external connection, separately from deletion marker replay.",
+    "The old integration fixed migration count at 56; compare the actual snapshot history to avoid a false regression after adding SQL."
+  ],
+  "source_sha256": [
+    {
+      "file": "scripts/local-restore-database.mjs",
+      "sha256": "e6eeb7b1fbb9085acd502016b823ac0b50f1ab23c076ffea007ac0732d66e8c6"
+    },
+    {
+      "file": "scripts/test-local-account-restore.mjs",
+      "sha256": "832d2ba79e251ddc13f49bc80cb1dd37f0d825acba4d6c9532e5f6a3015f6188"
+    }
+  ],
+  "not_run": [
+    "hosted_independent_ledger_and_scheduler",
+    "goal_only_purge_and_cancelled_body_ledger_replay",
+    "hosted_full_restore_current_Google_and_Auth_configuration",
+    "real_Google_relogin_and_public_acceptance"
+  ],
+  "public_release_ready": false
+}

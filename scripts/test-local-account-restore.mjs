@@ -17,7 +17,7 @@ const env = { APP_ENV: "staging", APP_AUTH_MODE: "supabase_session", NODE_ENV: "
 const verifier = reauthVerifierConfiguration(env), directory = path.resolve(".cache", `restore-ledger-${runId}`), ledgerKey = crypto.randomBytes(32);
 const ledger = new LocalEncryptedDeletionLedger({ directory, key: ledgerKey, source: "isolated-local-restore" });
 const backupPath = path.resolve(".cache", `restore-backup-${runId}.enc`), backupOptions = { key: crypto.randomBytes(32), source: "isolated-local-source", createdAt: new Date().toISOString() };
-let admin, restore, before, originalUsers, originalSessions, originalGate, originalRoles, installed = false, failed, phase = "setup", preserved = false, targetDropped = false, archive, backupBytes = 0, actualAuthRemoved = false;
+let admin, restore, before, originalUsers, originalSessions, originalGate, originalRoles, snapshotMigrationCount, installed = false, failed, phase = "setup", preserved = false, targetDropped = false, archive, backupBytes = 0, actualAuthRemoved = false;
 const checked = result => { if (result.error || !result.data) throw new Error("Synthetic RPC failed."); return result.data; };
 async function record(name, action) { phase = name; await action(); cases.push({ name, status: "passed" }); }
 function sourceSnapshot() {
@@ -37,13 +37,14 @@ async function requestDeletion(user) {
   const result = checked(await user.client.rpc("request_account_deletion", { p_request_key: crypto.randomUUID(), p_reauth_grant_id: proof.grant_id, p_confirm: true })); requestIds.push(result.id); return result.id;
 }
 try {
-  const status = assertLocalDatabase(); before = sourceSnapshot(); originalUsers = usersState(); originalSessions = sessionsState(); originalGate = sql("select independent_ledger_enabled from private.deletion_worker_config where singleton;\n").trim(); originalRoles = rolesState();
+  const status = assertLocalDatabase(); before = sourceSnapshot(); originalUsers = usersState(); originalSessions = sessionsState(); originalGate = sql("select independent_ledger_enabled from private.deletion_worker_config where singleton;\n").trim(); originalRoles = rolesState(); snapshotMigrationCount = Number(sql("select count(*) from supabase_migrations.schema_migrations;\n"));
   admin = createClient(status.API_URL, status.SECRET_KEY ?? status.SERVICE_ROLE_KEY, sdk); restore = new LocalRestoreDatabase();
   for (const label of ["deleted", "control"]) {
     const credentials = { email: `${label}-${runId}@restore.chagokchan.invalid`, password: crypto.randomBytes(32).toString("base64url") };
     const created = checked(await admin.auth.admin.createUser({ ...credentials, email_confirm: true, app_metadata: { isolated_restore_probe: runId } }));
     const user = { id: created.user.id }; users.push(user);
-    const login = checked(await createClient(status.API_URL, status.PUBLISHABLE_KEY ?? status.ANON_KEY, sdk).auth.signInWithPassword(credentials));
+    user.loginClient = createClient(status.API_URL, status.PUBLISHABLE_KEY ?? status.ANON_KEY, sdk);
+    const login = checked(await user.loginClient.auth.signInWithPassword(credentials));
     user.claims = sessionTokenClaims(login.session.access_token); user.client = createClient(status.API_URL, status.PUBLISHABLE_KEY ?? status.ANON_KEY, { ...sdk, global: { ...sdk.global, headers: { Authorization: `Bearer ${login.session.access_token}` } } });
     checked(await user.client.rpc("bootstrap_account", { p_adult_confirmed: true, p_registration_policy_version: "0.2.0" }));
     const goal = checked(await user.client.rpc("create_goal", { p_request_key: crypto.randomUUID(), p_title: `restore-${label}-${runId}`, p_personal_target_count: 2 })); user.goalId = goal.id;
@@ -52,6 +53,8 @@ try {
     checked(await user.client.rpc("create_praise", { p_request_key: crypto.randomUUID(), p_board_id: board, p_message: `synthetic-private-${label}-${runId}`, p_occurred_on: day }));
   }
   sql("insert into private.reauth_proof_keys(key_id,key_bytes) values(:'kid',decode(:'key','hex'));\n", { kid: verifier.keyId, key: verifier.keyBytes.toString("hex") }); installed = true;
+  // Include an actually issued, unconsumed control grant in the old snapshot.
+  checked(await users[1].client.rpc("issue_reauth_grant", createReauthProof({ userId: users[1].id, sessionId: users[1].claims.sessionId, flowId: crypto.randomUUID() }, env)));
   await record("full_local_schema_auth_and_product_snapshot_encrypted_before_erasure", async () => {
     const start = performance.now(); archive = restore.dumpSource(); backupBytes = archive.length;
     const sealed = encryptBackupArchive(archive, backupOptions), handle = await fs.open(backupPath, "wx", 0o600);
@@ -70,11 +73,30 @@ try {
     assert.equal(Number(sql("select count(*) from public.goals where id=:'goal'::uuid;\n", { goal: users[0].goalId })), 0); marker = await ledger.readForRestore(requestId); assert.ok(marker.completed_at);
     assert.equal(Date.parse(marker.retain_until) - Date.parse(marker.completed_at), 37 * 86400000); assert.equal((await users[1].client.rpc("get_me")).error, null);
   });
+  await record("nondeleted_control_session_actually_logged_out_after_snapshot", async () => {
+    assert.equal((await users[1].loginClient.auth.signOut({ scope: "local" })).error, null);
+    assert.equal((await users[1].client.rpc("get_me")).error?.code, "PT401");
+    assert.equal(sql("select account_status='active' from public.app_users where id=:'actor'::uuid;\n", { actor: users[1].id }).trim(), "t");
+  });
   await record("restore_old_snapshot_to_unexposed_disposable_database_only", async () => {
     const start = performance.now(); await restore.create(); restore.restore(decryptBackupArchive(await fs.readFile(backupPath), backupOptions)); timings.restore_ms = Math.round(performance.now() - start);
     const a = restoredSubjectCounts(users[0].id); assert.equal(a.auth, 1); assert.equal(a.app, 1); assert.equal(a.profile, 1); assert.equal(a.goal, 1); assert.equal(a.praise, 1); assert.ok(a.session >= 1);
-    assert.equal(Number(restore.query("select count(*) from supabase_migrations.schema_migrations;\n")), 56);
+    assert.equal(Number(restore.query("select count(*) from supabase_migrations.schema_migrations;\n")), snapshotMigrationCount);
     assert.equal(Number(restore.query("select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and c.relrowsecurity and c.relforcerowsecurity;\n")), 18);
+    assert.ok(restoredSubjectCounts(users[1].id).session > 0, "Old snapshot contains the now-revoked nondeleted session");
+    assert.ok(Number(restore.query("select count(*) from public.reauth_grants;\n")) > 0);
+  });
+  await record("all_restored_sessions_refresh_flows_and_reauth_grants_invalidated", async () => {
+    const beforeControl = restoredSubjectCounts(users[1].id);
+    restore.invalidateRestoredAuthState();
+    for (const table of ["auth.sessions", "auth.refresh_tokens", "auth.flow_state", "auth.one_time_tokens", "public.reauth_grants", "auth.mfa_challenges", "auth.webauthn_challenges", "auth.oauth_authorizations", "auth.oauth_client_states", "auth.saml_relay_states"]) {
+      assert.equal(Number(restore.query("select count(*) from " + table + ";\n")), 0);
+    }
+    assert.equal(Number(restore.query("select count(*) from auth.users where coalesce(confirmation_token,'')<>'' or coalesce(recovery_token,'')<>'' or coalesce(email_change_token_new,'')<>'' or coalesce(email_change_token_current,'')<>'' or coalesce(phone_change_token,'')<>'' or coalesce(reauthentication_token,'')<>'';\n")), 0);
+    assert.deepEqual(restoredSubjectCounts(users[1].id), { ...beforeControl, session: 0 });
+    const claims = JSON.stringify({ role: "authenticated", sub: users[1].id, session_id: users[1].claims.sessionId, exp: users[1].claims.expiresAt });
+    const denial = restore.query("begin;\nset local role authenticated;\nselect set_config('request.jwt.claims',:'claims',true) is not null;\ndo $$ begin perform public.get_me(); raise exception 'expected_control_denial'; exception when sqlstate 'PT401' then null; end $$;\nrollback;\n", { claims });
+    assert.ok(denial.includes("t"));
   });
   await record("latest_independent_marker_reapplied_before_any_public_connection", async () => {
     const start = performance.now(), bBefore = restoredSubjectCounts(users[1].id);
@@ -87,7 +109,7 @@ try {
     const a = restoredSubjectCounts(users[0].id); assert.ok(Object.values(a).every(value => value === 0)); assert.deepEqual(restoredSubjectCounts(users[1].id), bBefore); timings.marker_reapply_ms = Math.round(performance.now() - start);
   });
   await record("restored_revoked_session_denied_and_control_goal_praise_preserved", async () => {
-    const claims = JSON.stringify({ role: "authenticated", sub: users[0].id, session_id: users[0].claims.sessionId, exp: Math.floor(Date.now() / 1000) + 60 });
+    const claims = JSON.stringify({ role: "authenticated", sub: users[0].id, session_id: users[0].claims.sessionId, exp: users[0].claims.expiresAt });
     // Administrative SQL supplies restored session metadata to the DB guard.
     // No JWT is minted or sent to any Auth/API endpoint for this assertion.
     const denial = restore.query("begin;\nset local role authenticated;\nselect set_config('request.jwt.claims',:'claims',true) is not null;\ndo $$ begin perform public.get_me(); raise exception 'expected_denial'; exception when sqlstate 'PT401' then null; end $$;\nrollback;\n", { claims }); assert.ok(denial.includes("t"));
@@ -110,5 +132,5 @@ finally {
     if (before) { preserved = before === sourceSnapshot() && originalUsers === usersState() && originalSessions === sessionsState() && originalRoles === rolesState(); assert.ok(preserved); cases.push({ name: "disposable_database_and_files_removed_existing_source_auth_keys_roles_gate_preserved", status: "passed" }); }
   } catch { failed ??= "cleanup"; }
 }
-const report = { checked_at: new Date().toISOString(), status: !failed && preserved && targetDropped ? "passed" : "failed", failed_phase: failed ?? null, executed: cases.length, cases, timings_ms: timings, full_local_pg_dump_pg_restore_executed: cases.some(item => item.name === "restore_old_snapshot_to_unexposed_disposable_database_only"), pg_dump_version: "17.11", backup_bytes: backupBytes, actual_source_auth_removed_by_worker: actualAuthRemoved, independent_latest_account_marker_reapplied: cases.some(item => item.name === "latest_independent_marker_reapplied_before_any_public_connection"), synthetic_users: users.length, original_source_preserved: preserved, disposable_target_dropped: targetDropped, archive_data_or_secret_logged: false, network_exposed_restore: false, mail_sent_from_restore: false, hosted_backup_schedule_configured: false, hosted_restore_acceptance_executed: false, goal_only_purge_or_praise_cancel_restore_executed: false, real_google_tests_executed: 0, production_data_used: false };
+const report = { checked_at: new Date().toISOString(), status: !failed && preserved && targetDropped ? "passed" : "failed", failed_phase: failed ?? null, executed: cases.length, cases, timings_ms: timings, full_local_pg_dump_pg_restore_executed: cases.some(item => item.name === "restore_old_snapshot_to_unexposed_disposable_database_only"), pg_dump_version: "17.11", backup_bytes: backupBytes, snapshot_migration_records: snapshotMigrationCount, actual_source_auth_removed_by_worker: actualAuthRemoved, independent_latest_account_marker_reapplied: cases.some(item => item.name === "latest_independent_marker_reapplied_before_any_public_connection"), nondeleted_source_session_revoked: cases.some(item => item.name === "nondeleted_control_session_actually_logged_out_after_snapshot"), all_restored_auth_state_invalidated: cases.some(item => item.name === "all_restored_sessions_refresh_flows_and_reauth_grants_invalidated"), synthetic_users: users.length, original_source_preserved: preserved, disposable_target_dropped: targetDropped, archive_data_or_secret_logged: false, network_exposed_restore: false, mail_sent_from_restore: false, hosted_backup_schedule_configured: false, hosted_restore_acceptance_executed: false, goal_only_purge_or_praise_cancel_restore_executed: false, real_google_tests_executed: 0, production_data_used: false };
 await fs.writeFile("tmp/w14-c2a-local-restore.json", JSON.stringify(report, null, 2) + "\n"); process.stdout.write(JSON.stringify(report) + "\n"); if (report.status !== "passed") process.exitCode = 1;

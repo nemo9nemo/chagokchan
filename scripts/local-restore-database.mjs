@@ -42,6 +42,13 @@ export class LocalRestoreDatabase {
     // weakening ownership with --no-owner. It never targets the source database.
     runQuiet("docker", ["exec", "-i", databaseContainer, "pg_restore", "-U", "supabase_admin", "-d", this.#name, "--single-transaction", "--exit-on-error"], { input: archive, encoding: null, timeout: 120000, maxBuffer: 4 * 1024 * 1024 });
   }
+  invalidateRestoredAuthState() {
+    // This connection is restricted to the marked, unexposed disposable target.
+    // A snapshot can resurrect sessions revoked after its creation, including
+    // sessions of users who never requested account deletion. Force fresh login
+    // for everyone, independently of the latest account-erasure ledger.
+    this.query("begin;\ndelete from public.reauth_grants;\ndelete from auth.refresh_tokens;\ndelete from auth.sessions;\ndelete from auth.flow_state;\ndelete from auth.one_time_tokens;\ndelete from auth.mfa_challenges;\ndelete from auth.webauthn_challenges;\ndelete from auth.oauth_authorizations;\ndelete from auth.oauth_client_states;\ndelete from auth.saml_relay_states;\nupdate auth.users set confirmation_token='',recovery_token='',email_change_token_new='',email_change_token_current='',phone_change_token='',reauthentication_token='';\ncommit;\n");
+  }
   drop() {
     this.#guard(); if (!this.#created) return;
     const actual = sql("select shobj_description(oid,'pg_database') from pg_database where datname=:'target';\n", { target: this.#name }).trim();
