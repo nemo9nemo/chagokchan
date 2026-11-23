@@ -7,11 +7,11 @@
   "google_oauth_consent": {
     "project_id": "chagokchan",
     "console": "https://console.cloud.google.com/auth/overview?project=chagokchan",
-    "app_name_entered": "차곡찬",
-    "support_email_entered": "nemodong.studio@gmail.com",
+    "app_name_observed": "차곡찬",
+    "support_email_observed": "nemodong.studio@gmail.com",
     "developer_contact_entered": "nemodong.studio@gmail.com",
-    "audience_selected": "external",
-    "publication_mode_expected": "testing",
+    "audience_observed": "external",
+    "publication_mode_observed": "testing",
     "user_completed_policy_consent": true,
     "observed_result": "OAuth 구성 생성됨"
   },
