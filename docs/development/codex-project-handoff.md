@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-23 W12-C2b2: 새 Chagokchan 프로젝트에서 사용자 정책 동의 후 ‘OAuth 구성 생성됨’을 확인했다. 등록 입력값은 차곡찬, 공개 지원·개발자 연락처 nemodong.studio@gmail.com, 외부 대상이다. 스테이징 웹 클라이언트 폼의 웹 주소와 Supabase 콜백을 확인했다. 기존 Vercel 스테이징에는 0143902가 배포되어 있다. W12-C2b의 남은 근거는 클라이언트 발급, 스테이징 제공자 설정, 실제 HTTPS 로그인 및 제품 수락이다. [근거](../quality/reports/w12-c2b2-google-oauth-consent-2026-11-23.json)
+
 2026-11-18 W12-C2b1: 사용자 요청으로 nemodong.studio@gmail.com 계정에 신규 Google Cloud 프로젝트 **Chagokchan / chagokchan / 194930525268**을 생성하고 완료 알림·계정·대시보드 접근을 확인했다. 기존 ninth-expanse-514206-u0는 새 계정에 접근 권한이 없어 변경하지 않았다. 과금 계정 연결·무료 체험·유료 API/컴퓨트 생성은 수행하지 않았다. 다음은 이 새 프로젝트의 동의 화면·OAuth 웹 클라이언트·Supabase Google 설정과 실제 인증 수락이다. 프로젝트 등록을 실제 로그인 검증 완료로 표시하지 않는다. 외부 소스 업로드/새 웹 배포 보류는 유지한다. [근거](../quality/reports/w12-c2b1-google-project-registration-2026-11-18.json).
 
 2026-11-17 최신 후속: 공개 운영자 **네모동**, 공통 지원·Google 계정 **nemodong.studio@gmail.com** 최종 확정. 기존 Vercel chagokchan-staging의 두 공개 환경값 저장/재조회·입력 검증 완료. 새 웹 배포는 미실행이다. 202개 공개 소스의 바이트 일치 증거를 준비했지만 업로드 자동 검토가 57개에서 다시 차단했고 사용자가 **외부 업로드·배포 보류**를 선택했다. 이 보류는 이후 Google 설정 재개와 별개로 유지한다. Google은 한 차례 유예 뒤 지정 계정으로 재개됐으며 사용자 로그인/프로젝트 접근 확인 중이다. 개인 로그인 이메일을 공개 지원 주소로 대입하지 않는다. [상태](public-contact-settings.md).
