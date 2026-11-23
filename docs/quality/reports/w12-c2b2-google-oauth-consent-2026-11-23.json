@@ -1,0 +1,32 @@
+{
+  "work_item": "W12-C2b2",
+  "parent_work_item": "W12-C2b",
+  "requirement": "REQ-001",
+  "observed_client_date": "2026-11-23",
+  "source_base": "10289ae5a770b0b00bebd17c1b169c52bc3abb4d",
+  "google_oauth_consent": {
+    "project_id": "chagokchan",
+    "console": "https://console.cloud.google.com/auth/overview?project=chagokchan",
+    "app_name_observed": "차곡찬",
+    "support_email_observed": "nemodong.studio@gmail.com",
+    "developer_contact_entered": "nemodong.studio@gmail.com",
+    "audience_observed": "external",
+    "publication_mode_observed": "testing",
+    "user_completed_policy_consent": true,
+    "observed_result": "OAuth 구성 생성됨"
+  },
+  "staging_client_form": {
+    "type": "web",
+    "name": "Chagokchan Staging Web",
+    "javascript_origin": "https://chagokchan-staging.vercel.app",
+    "redirect_uri": "https://dsjrqipbakluvdvgxide.supabase.co/auth/v1/callback",
+    "observed_status": "form_ready_for_credential_creation_confirmation"
+  },
+  "existing_staging_deployment": {
+    "observed_state": "READY",
+    "deployed_commit": "0143902993861df83e1d0ef5def78db3f2f1d4e1",
+    "new_source_upload_and_deployment": "deferred_by_user"
+  },
+  "real_google_login_verified": false,
+  "public_release_ready": false
+}
