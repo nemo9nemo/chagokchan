@@ -1,0 +1,36 @@
+{
+  "work_item": "W12-C2b3",
+  "parent_work_item": "W12-C2b",
+  "requirement": "REQ-001",
+  "observed_client_date": "2026-11-24",
+  "source_base": "a1d29112cbca1db3e2d1ba9924d2c8d6be5a7d06",
+  "google": {
+    "project_id": "chagokchan",
+    "client_type": "web",
+    "client_name": "Chagokchan Staging Web",
+    "javascript_origin": "https://chagokchan-staging.vercel.app",
+    "redirect_uri": "https://dsjrqipbakluvdvgxide.supabase.co/auth/v1/callback",
+    "creation_confirmed": true
+  },
+  "supabase": {
+    "project_ref": "dsjrqipbakluvdvgxide",
+    "google_provider_observed": "ENABLED",
+    "nonce_skip_enabled": false,
+    "allow_users_without_email": false,
+    "site_url_observed": "https://chagokchan-staging.vercel.app",
+    "redirect_urls_observed": [
+      "https://chagokchan-staging.vercel.app/api/v1/auth/callback",
+      "https://chagokchan-staging.vercel.app/api/v1/auth/reauth/callback"
+    ]
+  },
+  "https_browser": {
+    "deployment_commit": "0143902993861df83e1d0ef5def78db3f2f1d4e1",
+    "app_login_button_used": true,
+    "google_sign_in_origin_observed": "https://accounts.google.com",
+    "supabase_callback_matched": true,
+    "google_account_authentication_and_application_callback_verified": false,
+    "session_and_product_acceptance_verified": false
+  },
+  "new_source_upload_and_deployment": "deferred_by_user",
+  "public_release_ready": false
+}

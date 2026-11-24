@@ -1,5 +1,7 @@
 # 차곡찬 프로젝트 개발 인계
 
+2026-11-24 W12-C2b3: 사용자 승인으로 Google Cloud의 `Chagokchan Staging Web`을 발급해 스테이징 Supabase Google 제공자에 저장했고, 제공자 활성화와 HTTPS 기본 주소·두 콜백의 재조회를 확인했다. 기존 스테이징 0143902의 ‘Google로 계속하기’가 지정 스테이징 Supabase 콜백을 사용하는 Google 로그인 화면에 도달했다. 실제 Google 계정 로그인·앱 복귀 및 제품 수락을 W12-C2b에서 이어서 검증한다. [근거](../quality/reports/w12-c2b3-staging-google-oauth-2026-11-24.json)
+
 2026-11-23 W12-C2b2: 새 Chagokchan 프로젝트에서 사용자 정책 동의 후 ‘OAuth 구성 생성됨’을 확인했다. 브랜딩에 차곡찬과 공개 지원 주소 nemodong.studio@gmail.com이 저장되어 있고 대상은 외부, 게시 상태는 테스트 중이다. 스테이징 웹 클라이언트 폼의 웹 주소와 Supabase 콜백을 확인했다. 기존 Vercel 스테이징에는 0143902가 배포되어 있다. W12-C2b의 남은 근거는 클라이언트 발급, 스테이징 제공자 설정, 실제 HTTPS 로그인 및 제품 수락이다. [근거](../quality/reports/w12-c2b2-google-oauth-consent-2026-11-23.json)
 
 2026-11-18 W12-C2b1: 사용자 요청으로 nemodong.studio@gmail.com 계정에 신규 Google Cloud 프로젝트 **Chagokchan / chagokchan / 194930525268**을 생성하고 완료 알림·계정·대시보드 접근을 확인했다. 기존 ninth-expanse-514206-u0는 새 계정에 접근 권한이 없어 변경하지 않았다. 과금 계정 연결·무료 체험·유료 API/컴퓨트 생성은 수행하지 않았다. 다음은 이 새 프로젝트의 동의 화면·OAuth 웹 클라이언트·Supabase Google 설정과 실제 인증 수락이다. 프로젝트 등록을 실제 로그인 검증 완료로 표시하지 않는다. 외부 소스 업로드/새 웹 배포 보류는 유지한다. [근거](../quality/reports/w12-c2b1-google-project-registration-2026-11-18.json).
