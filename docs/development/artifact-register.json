@@ -1423,13 +1423,14 @@
     "staging_database": "dsjrqipbakluvdvgxide_active_57_history_records_58_source_migrations_profile_bundle_applied_erasure_gate_false",
     "public_operator_name": "네모동",
     "new_staging_source_deployment": "deferred_by_user_2026-11-17",
-    "google_configuration": "project_chagokchan_oauth_consent_registered_2026-11-23_staging_auth_acceptance_pending",
+    "google_configuration": "staging_google_provider_connected_2026-11-24_google_sign_in_screen_verified_auth_acceptance_pending",
     "google_cloud_project": {
       "id": "chagokchan",
       "number": "194930525268",
       "account": "nemodong.studio@gmail.com",
       "registration_report": "docs/quality/reports/w12-c2b1-google-project-registration-2026-11-18.json",
-      "oauth_consent_report": "docs/quality/reports/w12-c2b2-google-oauth-consent-2026-11-23.json"
+      "oauth_consent_report": "docs/quality/reports/w12-c2b2-google-oauth-consent-2026-11-23.json",
+      "staging_oauth_report": "docs/quality/reports/w12-c2b3-staging-google-oauth-2026-11-24.json"
     }
   }
 }
